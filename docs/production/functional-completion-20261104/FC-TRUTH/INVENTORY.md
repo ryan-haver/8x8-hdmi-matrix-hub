@@ -51,7 +51,7 @@ The packet's own `complete_final_plan_text_sha256` is the same value as the file
 | WS wording independent re-review | `9817554ed6d7` | NOT-ancestor |
 | WS component author base | `460a190575e9` | ancestor |
 | privacy C1 | `11f305b16c4c` | NOT-ancestor |
-| privacy C2 | `615d3c8403b2` | unknown-object |
+| privacy C2 | `615d3c8403b237dd117c8032697c9b58895f9217` | NOT-ancestor of `a07cf94`; **is** an ancestor of privacy C3 `2d02004d…`; the object is present in this checkout |
 | privacy C3 | `2d02004d3108` | NOT-ancestor |
 | privacy Opus judge | `e8ce39660a37` | NOT-ancestor |
 | privacy M3 judge | `1b2b7c5f0ff8` | NOT-ancestor |
@@ -66,7 +66,7 @@ The packet's own `complete_final_plan_text_sha256` is the same value as the file
 Two ancestry facts deserve emphasis because several findings depend on them:
 
 * **The accepted SW-FINDINGS-01 triage report is integrated as identical bytes.** The accepted author commit `a2dab11cdc871d6a98c563b019a361371a9af710` is *not* an ancestor, but the blob for `docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md` is **byte-identical** at that commit and at `HEAD` (git blob `f09c333636cb0d562806140b28b34568c3ae406d`). The content entered this history through the coordinator's integration commits (`7e21ed2b` report, `2862835c` R1–R8 corrections, `aeb906a3` R3/R5 residual correction, `22fd6d10` accepted correction 02 review). This is the protocol's *documented inspected equivalent commit mapping* case for an intentional squash/re-commit, not a content divergence.
-* **The retained privacy C2 commit object is not present in this checkout's object database.** `refs/heads/ryan-haver/wp-sec-data-02-c2` and `refs/remotes/origin/ryan-haver/wp-sec-data-02-c2` both still point at `615d3c8403b237dd117c803269c7b9b58895f9217`, and its worktree still reports that HEAD, but `git cat-file -t 615d3c84...` fails with *Not a valid object name*. The commit is therefore **unreadable and unverifiable here**; this is recorded as an evidence-availability limit, not as a defect claim about the chain. The repository is **not** a partial clone (`remote.origin.promisor` and `extensions.partialclone` are unset), so the cause is a local object gap. Restoring that object is a coordinator action, not a worker action.
+* **The retained privacy C2 commit object is present in this checkout; the identifier this report originally tested was mistyped.** `git rev-parse 615d3c84` resolves to `615d3c8403b237dd117c8032697c9b58895f9217`; `git cat-file -t` on that full SHA returns `commit`; and **both** `refs/heads/ryan-haver/wp-sec-data-02-c2` and `refs/remotes/origin/ryan-haver/wp-sec-data-02-c2` point at that same valid SHA. The string `615d3c8403b237dd117c803269c7b9b58895f9217` — note `…269c7b9…` where the valid object has `…2697c9b…` — is **not** a valid object name; `git cat-file -t` on it exits 128 with *Not a valid object name*. The earlier "the object is absent" conclusion was therefore a **transcription error in the identifier under test**, not evidence of loss: **no fetch, no prune and no history repair is required or proposed.** What remains true is the separate **integration** fact: C2 is **not** an ancestor of this base (`git merge-base --is-ancestor` exits 1 *without* an object error) and **is** an ancestor of privacy C3 `2d02004d3108953a302e1a49aab9a5f24e944136` (exit 0), so the C1→C2→C3 chain is intact and the chain is simply **not integrated here**. The repository is not a partial clone (`remote.origin.promisor` and `extensions.partialclone` are unset), so nothing about the object store itself was misreported. The original failed command and its captured bytes are **preserved unchanged** as the historical record of the error; the corrected observation above is a **supplemental** measurement recorded in the correction receipt, not a rewrite of that original.
 
 ## 2. Method, actual reads and honest limits
 
@@ -105,7 +105,21 @@ The project owns the parser and the level semantics; this report **used those so
 
 * **No runtime defect was reproduced.** No product test, scenario, browser session, container, device, simulator campaign, HIL session or image campaign was executed for any finding. "Source present" is a file/line observation, not an executed behaviour.
 * **Hashes and counters are identity, not semantics.** Where a count is cited it identifies a population; it does not establish assertion strength. Assertion strength is stated separately for every finding.
-* **The 47 no-material-delta register rows are inherited, not re-qualified.** Their disposition is carried from the accepted SW-FINDINGS-01 triage, which was accepted *as triage only, with limits*. This report re-verified the register-row byte-identity and the scoped source diff for them; it did not re-run their evidence, did not renew any acceptance, and did not re-qualify their evidence bytes.
+* **The read-scope populations are six different sets. They must not be used interchangeably, and none of them is "the number of rows whose semantics were re-read".** Each is defined below with its own criterion and its own membership; the counts 47, 14, 17, 44, 24/29 and 37/32 measure **different things**.
+
+| Population | Criterion | Count | Per-ID membership |
+| --- | --- | ---: | --- |
+| **P1 — inherited no-material-delta rows** | the rows the accepted SW-FINDINGS-01 triage carries forward unchanged in its §6 (*"Carried 59 — no material delta (**47 rows**)"*), i.e. the register rows whose text is byte-identical to the accepted triage base | **47** | BE-14, BE-15, BE-16, BE-20, BE-23, BE-24, BE-25, BE-33, API-07, API-12, API-16, API-18, API-20, API-21, PER-04, DEP-07, TST-03, TST-04, UI-05, UI-06, UI-07, UI-08, UI-10, UI-11, UI-12, UI-14, UI-15, UI-18, UI-19, UI-20, UI-21, UI-33, UI-34, UI-35, UI-36, UI-38, UI-39, UI-40, UI-41, UI-42, UC-11, UC-12, UC-13, UC-18, UC-28, HIL-03, HIL-14 |
+| **P2 — the complement of P1 inside the 61 parser-open rows** | 61 − P1 = the accepted triage's **12** material-delta rows (§5) **plus** the **2** pending rows `VAL-14` and `VAL-15`, which no accepted triage covered | **14** | BE-22, BE-26, API-19, API-25, SEC-14, SEC-15, DEP-05, UI-09, UI-13, UI-16, UC-10, HIL-09, VAL-14, VAL-15 |
+| **P3 — rows expanded field-by-field in §4.3** | the rows this report gives the full eight-field treatment in §4.3; a **superset** of the accepted triage's 12 material-delta rows, adding five inherited no-delta rows that the accepted triage had already flagged as material to their own conditions | **17** | SEC-14, SEC-15, DEP-05, UI-06, UI-09, UI-13, UI-16, UC-10, UC-18, BE-22, BE-26, API-19, API-25, HIL-09, TST-03, TST-04, API-07 |
+| **P4 — the complement of P3** | 61 − P3 = the 42 P1 rows not expanded in §4.3, plus `VAL-14` and `VAL-15` | **44** | exactly P1 minus {UI-06, UC-18, TST-03, TST-04, API-07}, plus VAL-14 and VAL-15 |
+| **P5 — §4.2 rows with a positive "re-verified" strength cell** | the §4.2 *assertion-strength* cells that **begin** with "re-verified" | **29** in this corrected report (**24** on the reviewed commit `99e72bd9…`, before the R2 correction restored the five `S` rows below) | BE-14, BE-15, BE-20, BE-22, BE-25, BE-26, API-07, API-16, API-18, API-19, API-21, SEC-14, SEC-15, DEP-05, TST-03, TST-04, UI-05, UI-06, UI-09, UI-13, UI-16, UC-10, UC-18, HIL-03, HIL-09, VAL-14, VAL-15 |
+| **P6 — §4.2 rows whose strength cell begins "inherited triage"** | the remaining §4.2 cells | **32** in this corrected report (**37** on the reviewed commit `99e72bd9…`) | the complement of P5 inside the 61 rows |
+
+* **P1 is inherited, not re-qualified.** The disposition of every P1 row is carried from the accepted SW-FINDINGS-01 triage, which was accepted *as triage only, with limits*. This report re-verified the register-row byte-identity and the scoped source diff for them; it did not re-run their evidence, did not renew any acceptance, and did not re-qualify their evidence bytes. Unchanged bytes renew no acceptance.
+* **P2 is the "14 independently re-verified" figure of the original completion receipt, and it is the *complement* of P1 — not a second count of P1.** The receipt's `read_limits.rows_independently_re_verified_at_this_base: 14` is this report's P2: the 14 rows that could not be carried unchanged and therefore had to be examined directly at this base. It is **not** a count of rows whose semantics were re-read end-to-end, and it is **not** the number of rows whose source was re-read (that is P5).
+* **P3 and P4 are the §4.3 expansion populations.** They say nothing about how much was re-read: a row can be expanded in §4.3 and still rest on inherited evidence (see UC-18 and API-07).
+* **P5 and P6 are per-cell strength labels** and are the only populations that describe what was re-read. A naive string search for "re-verified" over the **reviewed** commit returns **27**, not 24, because three *inherited* cells (BE-24, DEP-07, UC-11) contain the phrase only to say the surviving element was **not** re-verified. After the R2 correction the five `S` rows (API-16, API-18, API-21, UI-05, UI-08) carry a positive re-read cell, which moves them from P6 to P5 and makes the two populations 29 and 32.
 * **Imported private/native evidence stays private.** No credential, token, private prompt, raw account dump, raw validation payload, image payload or archive payload was read. Only sanitised model/session/task/source references and hashes needed for review appear here.
 * **This report makes no host-wide write claim, no route-coverage claim and no qualification claim.** It describes scoped metadata only.
 
@@ -119,7 +133,7 @@ The project owns the parser and the level semantics; this report **used those so
 | **210** | rows whose **effective level** is below the target, using the project's own `ledger.compute()` rule (proven level if there is fresh passing evidence, else the recorded baseline, capped at V1 by an open critical/high finding) | 268 | the frozen per-package `below_target` values in `REMEDIATION_PLAN.json` (sum = 210) and the audit baseline | **Reproduced exactly**: 210/268 at this base, and every one of the 30 package aggregates recomputes to its published value (§3.4). |
 | **203** | rows below target **as recorded in the last accepted wave02 ledger** | 268 | `docs/agent-process/REPO_CONFIG.json` → `readiness.current_values.below_target`, whose own `source` field says *"Last accepted wave02 ledger; wave03 qualification/evidence not yet applied. Adoption makes no readiness changes."* | **Superseded but still accurate as a dated snapshot.** It is a different measurement date and a different rule (the ledger as committed then), so it is neither wrong nor comparable to 210 without that context. |
 
-**The rule this report uses.** `current != target` is *not* a below-target test. The ordered level ladder is V0 (Claimed) < V1 (Unit) < V2 (Simulated integration) < V3 (End-to-end) < V4 (Hardware) < V5 (Field). A feature is **below target** only when its effective level is strictly lower on that ladder than its target. At this base the two happen to coincide numerically at the *registry* level — 227 rows with `current != target` and 227 rows with `current < target`, because **no** registry row is above its target (the registry validator rejects `current > target`) — but they diverge at the *effective* level, where two features exceed their target (§3.3).
+**The rule this report uses.** `current != target` is *not* a below-target test. The ordered level ladder is V0 (Claimed) < V1 (Unit) < V2 (Simulated integration) < V3 (End-to-end) < V4 (Hardware) < V5 (Field). A feature is **below target** only when its effective level is strictly lower on that ladder than its target. At this base the two happen to coincide numerically at the *registry* level — 227 rows with `current != target` and 227 rows with `current < target`, because **no** registry row is above its target (the registry validator rejects `current > target`) — but they diverge at the *effective* level, where two features exceed their target (§3.3). The **effective** inequality control is **212**, not 210: reading the same effective levels with `!=` instead of the ordered `<` wrongly adds the two above-target rows (`F-API-032`, `F-API-040`) to the "below target" population. That control is recorded here so the 210 figure cannot be quoted without its rule, and so the 212 figure is not mistaken for a second, competing measurement.
 
 ### 3.2 Exact numerators and denominators at `a07cf94`
 
@@ -130,6 +144,7 @@ The project owns the parser and the level semantics; this report **used those so
 | Registry rows with `current < target` (ordered) | 227 | 268 | `Level.parse` ordering |
 | Registry rows with `current > target` | 0 | 268 | `Level.parse` ordering |
 | **Effective level below target** (the project's rule) | **210** | 268 | `ledger.compute()` |
+| Effective level **not equal** to target (inequality control — **not** the project's rule) | **212** | 268 | the same effective levels read with `!=` instead of the ordered `<`; it wrongly counts the two above-target rows (`F-API-032`, `F-API-040`) as gaps, which is why it is 212 and not 210 |
 | … software targets (V2 or V3) below target | 89 | 147 | `ledger.compute()` |
 | … hardware targets (V4) below target | 120 | 120 | `ledger.compute()` |
 | … field target (V5) below target | 1 | 1 | `ledger.compute()` |
@@ -137,7 +152,7 @@ The project owns the parser and the level semantics; this report **used those so
 | … stale-only (stale records exist, none fresh) | 96 | 268 | `ledger.compute()` |
 | … no committed record of any kind | 102 | 268 | `ledger.compute()` |
 | Features **capped at V1** by an open critical/high finding | 12 | 268 | `ledger.compute()` (`Finding.blocking`) |
-| Features **at or above** target | 58 | 268 | `ledger.compute()` |
+| Features **at or above** target | 58 | 268 | `ledger.compute()` (56 exactly at target + 2 above it) |
 | … of those, without a fresh passing record | 16 | 268 | `ledger.compute()` |
 | Features **above** target (over-achievement) | 2 | 268 | `ledger.compute()` |
 | Features with fresh **failing** evidence | 0 | 268 | `ledger.compute()` |
@@ -219,7 +234,7 @@ All **30** package aggregates reproduce exactly at this base. **Seven** packages
 ### 3.5 Unknown policy
 
 * **Unknown is a value, not a zero.** A feature with no committed record of any kind is reported as *no record* (102 features), not as *failed* and not as *passing*.
-* **Stale is distinct from missing and from failing.** A stale record is evidence that existed and whose covered paths changed afterwards; it is neither current proof nor absence of proof.
+* **Stale is distinct from missing and from failing — and it is broader than "the covered paths changed".** The project's ledger files a record under `FeatureRow.stale` whenever the record's freshness is **not** `fresh`. That covers **two** cases: (a) the evidence commit is an ancestor of HEAD but a path in the record's `covers` changed after it, and (b) the evidence commit is **not** an ancestor of HEAD (or is otherwise unknown to this history), where `gitinfo.freshness` returns `unknown`. **Non-ancestor / unknown-ancestry records therefore count inside the `stale` aggregate as well**; the aggregate is not "only ancestor records whose covered files changed". At this base exactly **one** non-ancestor evidence commit appears among the stale records — `d6668000167b259a4a285541fc1bb58fa30ac6f2`, carried by `F-UI-024`, `F-REL-008` and `F-REL-009` — and every other stale record is an ancestor whose `covers` paths changed afterwards. A stale record is neither current proof nor absence of proof.
 * **A missing status is not an exit.** No record was read as "the work did not happen".
 * **Raw CI evidence is not canonical freshness.** The audit found that 1,536 CI validation/HA/deployment records name a synthetic PR merge commit (`c9dac37abccbe66cfed383379c44cf6061cbc787`) that is not an ancestor of the branch head, although the two full file trees are identical. Those records are **not** counted as fresh canonical proof here, and **green CI is not closure**.
 * **A merged PR is not a feature acceptance.** Merge evidence is not relabelled as proof.
@@ -243,7 +258,7 @@ Severity distribution of the 61 (as recorded by the parser): **1 critical, 2 hig
 | **hardware** | requires physical HIL / real Remote / real SDK observation |
 | **owner** | requires an explicit owner action or decision |
 
-**Strength labels.** *re-verified* means I re-read the cited source at this base. *inherited* means the disposition is carried from the accepted SW-FINDINGS-01 triage (accepted as triage only, with limits) and was **not** re-qualified here — unchanged bytes renew no acceptance.
+**Strength labels.** *re-verified* means I re-read the cited source at this base. *inherited* means the disposition is carried from the accepted SW-FINDINGS-01 triage (accepted as triage only, with limits) and was **not** re-qualified here — unchanged bytes renew no acceptance. These are **per-cell labels on a row**, not counts over a population: §2.3 defines the six distinct read-scope populations (P1–P6) and their per-ID membership so that the 47 / 14 / 17 / 44 / 24-or-29 / 37-or-32 figures are never quoted interchangeably. A positive "re-verified" cell states that the cited source was re-read at this base; it does **not** state that the behaviour was reproduced, that the row's evidence was re-run, or that the inherited disposition was re-qualified.
 
 ### 4.2 Disposition table for all 61 parser-open IDs
 
@@ -261,11 +276,11 @@ Severity distribution of the 61 (as recorded by the parser): **1 critical, 2 hig
 | **BE-33** | L | With the Remote integration on, two pollers read the matrix: the hub's event stream and the driver's entity poller (`POLLING_INTERVAL`). They share the status caches (a `get video status` read by the driver now refreshes the cache the hub reads), but the driver should consume the hub's view instead of polling on its own (found in WP-C2) | Inherited accepted disposition: the driver still polls on its own POLLING_INTERVAL while the hub also holds the shared status caches; the driver should consume the hub's view. | src/driver.py status_polling_loop, src/rest_api/events.py; inherited from SW-FINDINGS-01 §6 | inherited triage; not re-qualified here | **partial** |
 | **API-07** | M | LCD timeout mode map in shortcuts contradicts device mapping ("Always on" sets 60 s) | The shortcut map uses the device codes (0 off, 1 always, 2/3/4 = 15/30/60 s); the old {"time": N} payload is rejected and the hub sends {"lcd on time": N}. The label was renamed 'LCD: 15s' in WP-C1 and proven by scenario shortcuts.lcd_15s. The row's own close condition is an explicit owner approval of the affected catalogue visual diff. | src/orei_matrix.py:2755-2780 (LCD_TIMEOUT_MODES = dict(DEVICE_LCD_MODES); set_lcd_timeout sends the value under the key "lcd on time"), src/rest_api/audio.py:365-400 (handle_lcd_timeout_modes / handle_set_lcd_timeout); the register's own location anchors (system_shortcuts.py:22-34 vs orei_matrix.py:1972) are historical and carry no LCD map at this base; linked features carry 12 fresh-pass and 35 stale records; register row docs/REMEDIATION_PLAN.md §4.2 line 153; linked features: F-MTX-020, F-DOM-028; fresh-pass example docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_15s-api.json @ 1baac3dec660 (api V2); stale records: 35 | re-verified at this base for the register condition; the owner-approval element is an owner action, not a source defect | **owner** |
 | **API-12** | M | v1 and v2 scenes share `scenes.json` with different schemas; profile "migration" can ingest v2 scenes | Inherited accepted disposition: the v1/v2 scenes.json schema split and the profile 'migration' that can ingest v2 scenes were resolved in source; register text has not been reconciled. | src/scene_manager.py:28 (the file exists at this base, 967 lines), src/config.py:221,486; linked features carry 1 fresh-pass and 133 stale records; inherited from SW-FINDINGS-01 §6; linked features: F-API-020, F-DOM-009, F-DOM-010, F-DOM-018, F-OPS-017; fresh-pass example docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profile_state.alias_recall-api.json @ 1baac3dec660 (api V2); stale records: 133 | inherited triage; not re-qualified here | **resolved** |
-| **API-16** | L | `sys.path.insert` on every request (9 handlers) | Inherited accepted disposition: the nine `sys.path.insert` handlers were resolved; register text has not been reconciled. | src/rest_api/{audio.py,outputs.py,cec.py}; inherited from SW-FINDINGS-01 §6 | inherited triage; not re-qualified here | **resolved** |
-| **API-18** | L | `config.SceneManager` (v1) dead | Inherited accepted disposition: config.SceneManager (v1) was resolved as dead code; register text has not been reconciled. | src/config.py, src/rest_api/utils.py:388-395; inherited from SW-FINDINGS-01 §6 | inherited triage; not re-qualified here | **resolved** |
+| **API-16** | L | `sys.path.insert` on every request (9 handlers) | **Inherited classification restored: `S` — source-inspection candidate, behaviour not reproduced.** The `sys.path.insert` calls are still present in nine request handlers: `src/rest_api/audio.py:45,82,105,371,394`, `src/rest_api/outputs.py:263,293,316` and `src/rest_api/cec.py:314`. The audio handler bodies perform the insertion per request. No behavioural reproduction was done here, so this is **neither** a resolved condition **nor** a reproduced defect. | src/rest_api/{audio.py:45,82,105,371,394; outputs.py:263,293,316; cec.py:314} — the nine call sites read directly; the accepted triage class `S` is recorded in docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md §6 ("Carried 59 — no material delta (47 rows)", class `S`: "API-16 (5+3+1 = 9 handlers)"); inherited from SW-FINDINGS-01 §6 | **re-verified at this base for the source condition only**: the nine call sites were read directly; the behaviour was **not** exercised, the inherited `S` label is unchanged, and the register text is **not** reconciled by this report | **reproduce** |
+| **API-18** | L | `config.SceneManager` (v1) dead | **Inherited classification restored: `S` — source-inspection candidate, behaviour not reproduced.** `src/config.py:258` still defines the legacy `SceneManager`, including its legacy scenes reader and writer (`load()` at :277 reads only the legacy output-state scene shape). No accepted deletion is identified. Class presence is **not** proof of active runtime use, and no runtime use was reproduced here. | src/config.py:258 (class `SceneManager`) and :277 (`load`); src/rest_api/utils.py:388-395; the accepted triage class `S` is recorded in docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md §6; inherited from SW-FINDINGS-01 §6 | **re-verified at this base for the source condition only**: the class and its reader were read directly; the behaviour was **not** exercised and the inherited `S` label is unchanged | **reproduce** |
 | **API-19** | M | Three divergent "apply profile" paths (recall handler, scene executor, shortcut executor) | Inherited accepted disposition: the three divergent 'apply profile' paths were resolved in source (run_rest_action is present twice in src/rest_api/control.py at this base); register text has not been reconciled. | src/rest_api/control.py (run_rest_action x2) and src/rest_api/profiles.py (run_rest_action x2); linked feature carries 6 fresh-pass and 17 stale records; inherited from SW-FINDINGS-01 §5; linked features: F-DOM-002; fresh-pass example docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profile_state.alias_recall-api.json @ 1baac3dec660 (api V2); stale records: 17 | re-verified at this base that the cited source is present; unchanged bytes support source presence only and renew no acceptance | **resolved** |
 | **API-20** | M | Dashboard layout claims to be source of truth, but 5 entity types carry their own favorite/dashboard flags; deletes orphan cards | Inherited accepted disposition: dashboard layout as source of truth versus the five entity types with their own favourite/dashboard flags was resolved in source; register text has not been reconciled. | src/rest_api/dashboard_layout.py and the managers; linked features carry 0 fresh-pass and 31 stale records; inherited from SW-FINDINGS-01 §6; linked features: F-API-025, F-DOM-006, F-DOM-022, F-DOM-030, F-DOM-031, F-UI-009; stale records: 31 | inherited triage; not re-qualified here | **resolved** |
-| **API-21** | L | Two response envelope implementations (sync `_json_response` vs async in `scenes_v2`) | Inherited accepted disposition: the two response-envelope implementations were resolved; register text has not been reconciled. | src/rest_api/utils.py, src/rest_api/scenes_v2.py; linked feature has 0 fresh-pass and 1 stale record; inherited from SW-FINDINGS-01 §6; linked features: F-API-022; stale records: 1 | inherited triage; not re-qualified here | **resolved** |
+| **API-21** | L | Two response envelope implementations (sync `_json_response` vs async in `scenes_v2`) | **Inherited classification restored: `S` — source-inspection candidate, behaviour not reproduced.** `src/rest_api/scenes_v2.py:212` defines its **own** `async def _json_response(...)` and its handlers await it (about 50 awaited call sites in that file), while the shared **sync** helper remains at `src/rest_api/utils.py:336`. Both implementations are present at this base. No behavioural reproduction was done here. | src/rest_api/scenes_v2.py:212 (its own async helper) and its awaited call sites; src/rest_api/utils.py:336 (the shared sync helper); linked feature has 0 fresh-pass and 1 stale record; the accepted triage class `S` is recorded in docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md §6; inherited from SW-FINDINGS-01 §6; linked features: F-API-022; stale records: 1 | **re-verified at this base for the source condition only**: both helper definitions and the awaited call sites were read directly; the behaviour was **not** exercised and the inherited `S` label is unchanged | **reproduce** |
 | **API-25** | M | Profile CEC targets have two formats: `config.CecConfig` documents (and its tests use) `"input:3"`, the resolver, CEC macros and the web UI use `"input_3"`, and the hub validates neither; the e2e fixture profile uses the colon form, which the CEC dialog shows as "Output NaN". Found in WP-E1 | The original condition has two elements: two CEC target formats in use, and 'the hub validates neither'. Element 1 still holds in the inspected scope; element 2 holds only partially, because _validate_cec_config checks known fields, string arrays and the auto_resolved boolean but not target syntax in that function. | src/rest_api/profiles.py:192 `_validate_cec_config`, called at :516; `input_` x4 and `input:` x0 in that file; the colon form appears in src/config.py and src/rest_api/static.py; register row §4.2 line 171 | re-verified at this base; the accepted `R` label does not meet the register's stated condition, so this stays a scoped source-inspection lead and not a resolution | **reproduce** |
 | **PER-04** | M | No `schema_version` / migration framework for persisted JSON | Inherited accepted disposition: a schema_version / migration framework for persisted JSON was resolved in source; register text has not been reconciled. | all managers; linked feature has 0 fresh-pass and 0 stale records; inherited from SW-FINDINGS-01 §6; linked features: F-OPS-017 | inherited triage; not re-qualified here | **resolved** |
 | **SEC-14** | H | Vendor firmware, `XP3.exe`, Control4/RTI drivers, and copyrighted manual committed (public) since the first commit; LICENSE is a stub | The register's element 'LICENSE is a stub' is obsolete at this base: LICENSE is the full Mozilla Public License 2.0. The vendor-firmware/manual element was purged from the tracked tree; the remaining owner action (GitHub-Support cache purge of public history) is unchanged. No legal conclusion is drawn here. | LICENSE (16726 bytes, contains 'Mozilla Public License', contains no 'stub'); no tracked .exe/.pdf and no docs/BK-808* payload at this base (only tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/http/*.json HTTP capture fixtures); register row §4.3 line 200; inherited from SW-FINDINGS-01 §5 | re-verified at this base for the licence clause and the tracked-tree absence; the public-history purge verification is inherited and was not re-run (no exhaustive history or secret-scan authority); no credentials, raw validation, image or archive payload read | **owner** |
@@ -274,10 +289,10 @@ Severity distribution of the 61 (as recorded by the parser): **1 critical, 2 hig
 | **DEP-07** | M | Env-var surface inconsistent: `API_PORT` vs `REST_API_PORT`, `MATRIX_HOST` ignored in default mode, `WEBUI_ENABLED` no-op, `USE_MODULAR` | Inherited accepted disposition with a surviving element: run.py reads one set of env names and warns the old names as aliases, but with the UC integration enabled driver.py takes the matrix address from the Remote setup rather than MATRIX_HOST. | run.py, src/driver.py:60; linked features carry 0 fresh-pass and 5 stale records; inherited from SW-FINDINGS-01 §6; linked features: F-OPS-006, F-OPS-007, F-OPS-011, F-OPS-015; stale records: 5 | inherited triage; the surviving element is source presence only and was not re-verified here | **partial** |
 | **TST-03** | M | No tests: `/api/v2/scenes*`, `/api/integrations`, `/api/settings`, `_task_supervisor`, UC setup handler, poller, WS broadcast/state push, `api_client`/`entities` | The register's 'no tests' list is substantially obsolete at this base: the named surfaces now appear in the test tree (api/v2/scenes 151 occurrences, /api/integrations 91, /api/settings 40, _task_supervisor 7). Occurrence counts are not behavioural proof, so the claim 'these surfaces have no tests' is stale while 'these surfaces have adequate assertions' is not established here. | tests/ tree; linked features carry 2 fresh-pass and 48 stale records; register row §4.6 line 248; linked features: F-API-021, F-API-027, F-API-028, F-OPS-012; fresh-pass example docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json @ 1baac3dec660 (api V2); stale records: 48 | re-verified at this base by counting occurrences; counts are identity/coverage hints, not semantic coverage - no assertion strength was reviewed per surface | **reproduce** |
 | **TST-04** | M | No JS tests of any kind | The register's 'No JS tests of any kind' is obsolete in its literal form: the repository carries Playwright end-to-end specifications (tests/e2e/*.spec.ts, playwright.config.ts). There are still no JavaScript unit-test files under tests/ outside tests/e2e (0 .js/.mjs/.ts files). | tests/e2e/{smoke,flows,c4-flows,kiosk-security,security-auth}.spec.ts + playwright.config.ts; 0 JS/TS unit-test files outside tests/e2e; register row §4.6 line 249 | re-verified at this base by file inventory; the presence of e2e specs is not proof that the named product behaviours are asserted | **reproduce** |
-| **UI-05** | M | New settings drawers drive a hidden legacy `#settings-modal` via synthetic `change` events | Inherited accepted disposition: the new settings drawers no longer drive the hidden legacy #settings-modal via synthetic change events; register text has not been reconciled. | web/js/components/hardware-drawer.js (the register's 145-178 anchor now carries form forwarding comments, not the synthetic-change mechanism), general-drawer.js, interface-drawer.js, web/index.html:352-598 (the register's anchors are historical); linked features carry 0 fresh-pass records; inherited from SW-FINDINGS-01 §6; linked features: F-UI-019, F-UI-020, F-UI-021 | inherited triage; not re-qualified here | **resolved** |
+| **UI-05** | M | New settings drawers drive a hidden legacy `#settings-modal` via synthetic `change` events | **Inherited classification restored: `S` — source-inspection candidate, behaviour not reproduced.** The mechanism this row names **is** present at this base: `web/js/components/hardware-drawer.js:145-168` forwards the drawer controls to the legacy elements and dispatches `new Event("change")` on them (`#hardware-lcd-timeout` → `#lcd-timeout`, `#hardware-beep-enabled` → `#beep-enabled`, `#hardware-ext-audio-mode` → `#ext-audio-mode`), and :170-178 forwards the legacy buttons. The register's own 145-178 range therefore carries the mechanism, **not** merely unrelated comments — the earlier anchor explanation in this report was wrong and is withdrawn here. No browser behaviour was exercised. | web/js/components/hardware-drawer.js:145-168 (the forwarding handlers and the synthetic `change` dispatch) and :170-178 (legacy button forwarding); general-drawer.js, interface-drawer.js; web/index.html:352-598 (the register's anchors are historical); linked features carry 0 fresh-pass records; the accepted triage class `S` is recorded in docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md §6; inherited from SW-FINDINGS-01 §6; linked features: F-UI-019, F-UI-020, F-UI-021 | **re-verified at this base for the source condition only**: the cited range was read directly and **does** contain the synthetic-change forwarding; the behaviour was **not** exercised in a browser and the inherited `S` label is unchanged | **reproduce** |
 | **UI-06** | M | Keyboard shortcuts broken (`scenes` tab id, `window.settingsPanel` never set) | Both elements of the condition still hold in source at this base: shortcut '4' still targets `[data-tab="scenes"]` (web/js/components/keyboard-shortcuts.js:34) and the application exposes no such top-level tab (web/index.html data-tab values are dashboard, matrix, inputs, outputs, profiles plus drawer-local general/hardware/interface), and shortcut 's' still tests `window.settingsPanel` (keyboard-shortcuts.js:42-43) while no file under web/ assigns `window.settingsPanel =` (0 matches). | web/js/components/keyboard-shortcuts.js:34,42,43; web/index.html data-tab inventory; linked feature has 0 fresh-pass records; register row §4.7 line 275; also re-confirmed independently as CR-03 in docs/audits/COMPREHENSIVE_PROJECT_REVIEW_20261104.md; linked features: F-UI-028 | re-verified at this base by reading the handler and the DOM identifiers; no browser behaviour was executed - this is a source-confirmed wiring defect, not a full browser acceptance | **reproduce** |
 | **UI-07** | M | Accessibility: 27 independent Escape listeners; few `role="dialog"`/`aria-modal`; focus trap missing on 9+ overlays; kiosk has no ARIA and `div onclick` tiles; `user-scalable=no`; 22 px hover-only preset actions; one reduced-motion rule | Inherited accepted disposition: the accessibility condition (27 Escape listeners, missing role=dialog/aria-modal, missing focus traps, kiosk ARIA, user-scalable=no, hover-only actions) was NOT reproduced in this inventory and is not a current confirmed defect; it remains a source-inspection candidate. | web/ (many files); linked features carry 0 fresh-pass records; inherited from SW-FINDINGS-01 §6; linked features: F-UI-029, F-KIO-014 | inherited triage as source-presence only; behaviour not exercised - NOT a current reproduced defect | **reproduce** |
-| **UI-08** | M | Dashboard config in two stores (localStorage key still live after "migration"); kiosk pins localStorage-only | Inherited accepted disposition: the two dashboard-config stores and the localStorage-only kiosk pins were resolved in source; register text has not been reconciled. | web/js/app.js (the register's 74-78 anchor now shows a favourites loop), web/js/utils/dashboard-manager.js (1215 lines; the register's 71/1102/1126 anchors are historical), web/kiosk.html:2164; linked features carry 0 fresh-pass and 2 stale records; inherited from SW-FINDINGS-01 §6; linked features: F-DOM-031, F-UI-009, F-KIO-006, F-KIO-012; stale records: 2 | inherited triage; not re-qualified here | **resolved** |
+| **UI-08** | M | Dashboard config in two stores (localStorage key still live after "migration"); kiosk pins localStorage-only | **Inherited classification restored: `S` — source-inspection candidate, behaviour not reproduced.** The stores this row names are still present at this base: `web/js/utils/dashboard-manager.js:1113-1140` reads and writes the dashboard configuration in `localStorage` (`loadConfig()` / `saveConfig()`), and `web/kiosk.html:2856-2883` loads, migrates (`kiosk_quick_actions` → `kiosk_shortcuts`) and defaults the local shortcut and profile pin arrays and writes them back to `localStorage`. No browser behaviour was exercised. | web/js/utils/dashboard-manager.js:1113-1140 (the localStorage read/write pair); web/kiosk.html:2856-2883 (the `kiosk_shortcuts` / `kiosk_quick_actions` / `kiosk_profiles` localStorage load, migration and default write); web/js/app.js (the register's 74-78 anchor now shows a favourites loop); linked features carry 0 fresh-pass and 2 stale records; the accepted triage class `S` is recorded in docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md §6; inherited from SW-FINDINGS-01 §6; linked features: F-DOM-031, F-UI-009, F-KIO-006, F-KIO-012; stale records: 2 | **re-verified at this base for the source condition only**: both localStorage sites were read directly; the behaviour was **not** exercised in a browser and the inherited `S` label is unchanged | **reproduce** |
 | **UI-09** | M | ~2,800 lines of dead JS: `quick-actions-drawer.js`, `floatable.js`, `presets-panel.js`, `system-shortcuts-panel.js`, `about-dialog.js`, `setup-wizard.js`, `empty-state.js`, `context-menu.js` (mostly), `settings-panel.js` + hidden modal | The register's nine named dead-JS files are all present at this base, so the register text is not a file-absence claim; 'dead' is a behaviour claim that was not reproduced. The historical ~2,800-line figure was not re-measured here. | web/js/components/{quick-actions-drawer,presets-panel,system-shortcuts-panel,about-dialog,setup-wizard,empty-state,context-menu,settings-panel}.js and web/js/utils/floatable.js; linked feature has 0 fresh-pass records; register row §4.7 line 278; inherited from SW-FINDINGS-01 §5; linked features: F-UI-036 | re-verified at this base for file presence; file presence is not evidence of deadness and no dead-code behaviour was exercised | **reproduce** |
 | **UI-10** | L | 15-25% of ~12k CSS lines unused; `components.css` is 6.8k lines | Inherited accepted disposition: the unused-CSS fraction and the components.css size are a source-inspection candidate whose behaviour was not reproduced; not a current confirmed defect. | web/css/; register row §4.7 line 279; inherited from SW-FINDINGS-01 §6 | inherited triage as source-presence only; behaviour not exercised | **reproduce** |
 | **UI-11** | M | Kiosk is a parallel app (own API client, WS, theme, CEC remote, `escapeHtml`) | Inherited accepted disposition: the kiosk-as-parallel-app condition (own API client, WS, theme, CEC remote, escapeHtml) is a source-inspection candidate whose behaviour was not reproduced; not a current confirmed defect. | web/kiosk.html:1464-2754; register row §4.7 line 280; inherited from SW-FINDINGS-01 §6 | inherited triage as source-presence only; behaviour not exercised | **reproduce** |
@@ -309,11 +324,11 @@ Severity distribution of the 61 (as recorded by the parser): **1 critical, 2 hig
 | **HIL-09** | C | ✅ Fixed and proven on hardware 2026-09-25 (WP-A4 part 2, `write` run with read-back). Every output/input setting command the hub sends is unknown to this firmware: `set output stream/hdcp/hdr/scaler/arc/mute`, `set input edid`, `copy edid`, `set output exa*` get **no answer** and change nothing; `set lcd on time` with `time` is rejected. The device's own web interface uses different commands and `[port, value]` payloads (`tx hdcp`, `tx stream`, `set output audio mute`, `set arc`, `set hdr conversion`, `set video scaler`, `set edid`, `"lcd on time"` …). Output settings, EDID, external audio and LCD have never worked on this hardware | The register row's own cells are contradictory: the description cell begins 'Fixed and proven on hardware 2026-09-25' while the Phase cell says 'open until the capture tool's write run proves them on hardware'. The web-interface command family IS in source at this base (tx stream, tx hdcp, set hdr conversion, set video scaler, set arc, set output audio mute, set edid, lcd on time, set ext-audio) and part of the obsolete family also remains (copy edid x2, copy_edid_from_output x2, edid_copy_from_output x6); the only 'set output stream' occurrence is inside a comment at src/orei_matrix.py:2550. Source presence cannot decide which commands the firmware answers. This row caps 12 features at V1 and its twelve caps are preserved, not removed. | src/orei_matrix.py:2550 (the only 'set output stream' occurrence in src/, inside a comment), :2575/:2583 (tx stream), :2588/:2599 (tx hdcp), :2604/:2616 (set hdr conversion), :2621/:2634 (set video scaler), :2642/:2650 (set arc), :2655/:2663 (set output audio mute), :2852/:2865 (set edid), :2771/:2774/:2782 (lcd on time), :2916/:2924/:2929 (set ext-audio), :2809/:2872 (comments recording that there is no `copy edid`); across src/ the obsolete literals `set output hdcp\|hdr\|scaler\|arc\|mute`, `set input edid` and `set output exa` occur 0 times, while `copy_edid_from_output` occurs 2 times and `edid_copy_from_output` 6 times; tools/hil/README.md (capture-tool write run with read-back); linked features F-MTX-007..F-MTX-020 (12) carry 1 fresh-pass and 174 stale records; register row §4.11 line 413; inherited from SW-FINDINGS-01 §5 (label R+HW); linked features: F-MTX-007, F-MTX-008, F-MTX-009, F-MTX-010, F-MTX-011, F-MTX-012, F-MTX-013, F-MTX-014, F-MTX-015, F-MTX-016, F-MTX-017, F-MTX-020; fresh-pass example docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json @ 1baac3dec660 (api V2); stale records: 174 | re-verified at this base for the command families; the register's 'Fixed and proven' wording is NOT hardware proof and the twelve V1 caps stand | **hardware** |
 | **HIL-14** | L | Reads answered without a login from the capture PC, and sessions stayed alive over 300 s idle; whether a login is needed at all is unconfirmed | Whether a login is needed at all is still unconfirmed: the capture PC read without a login and sessions stayed alive over 300 s idle. | src/orei_matrix.py login/session handling; probes tests/fixtures/device/BK-808_V1.10.01_web-V2.00.03/probe/{http_no_session,session_idle_expiry}.json exist (source presence); register row §4.11 line 418; inherited from SW-FINDINGS-01 §6 (label PHY) | inherited triage; fixture presence is not a fresh observation | **hardware** |
 | **VAL-14** | M | Already-disconnected routing requests omitted documented failure events | Already-disconnected routing requests omitted the documented failure events. The source correction is integrated at this base: the correction commit 3788353e, its independent review 0bd3d76f and the fresh source 310d8b65 are all ancestors of a07cf94, and src/rest_api/control.py contains switch_failed and switch_all_failed. The row's own disposition keeps it open: 'formal closeout awaits final assembly review and combined CI/publication. No V3 target promotion or historical failure waiver.' | src/rest_api/control.py (switch_failed x4, switch_all_failed x2); commits 3788353e, 0bd3d76f, 310d8b65 - all ancestors of a07cf94; docs/production/software-waves/SW-API-CLIENT-02-C1/FINDING.md; original failed CI bytes preserved under docs/validation/runs/software-waves/SW-API-CLIENT-02-C1/failed-ci; linked features F-API-033, F-API-034, F-REL-009 | re-verified at this base: integrated correction plus an independent review are ancestors; the combined CI/publication closeout has not happened, so this is not a closure | **partial** |
-| **VAL-15** | M | Validation request artifacts and action descriptions do not redact X-Admin-PIN | Validation request artifacts and action descriptions do not redact X-Admin-PIN. The fix exists only in the retained, unintegrated privacy chain: privacy C1 (11f305b1) and C3 (2d02004d) are NOT ancestors of this base, and privacy C2 (615d3c84) is not even present as an object in this checkout's object database although both refs still point at it. | tools/validate/evidence.py at this base (132 lines): _SECRET_KEYS is defined at line 113, _SECRET_QUERY at line 117 and redact() at line 123; the string 'x-admin-pin' occurs 0 times in that file, so the anchored dictionary-key mechanism does not match the header name while _SECRET_QUERY is the separate query-parameter string redaction; tools/validate/model.py Response.describe; docs/production/software-waves/SW-SEC-DATA-02-C1/FINDING.md; linked feature F-SEC-014; no owner credential leak was observed - the reproduction used synthetic markers only | re-verified at this base for the unredacted header-key mechanism and the chain ancestry; the historical synthetic-marker reproduction is NOT a current reproduction | **partial** |
+| **VAL-15** | M | Validation request artifacts and action descriptions do not redact X-Admin-PIN | Validation request artifacts and action descriptions do not redact X-Admin-PIN. The fix exists only in the retained, unintegrated privacy chain: privacy C1 (11f305b1) and C3 (2d02004d) are NOT ancestors of this base, and privacy C2 (`615d3c8403b237dd117c8032697c9b58895f9217`) is **present** in this checkout and **is** an ancestor of C3, but is **not** an ancestor of this base — so the chain remains unintegrated, not unavailable. | tools/validate/evidence.py at this base (132 lines): _SECRET_KEYS is defined at line 113, _SECRET_QUERY at line 117 and redact() at line 123; the string 'x-admin-pin' occurs 0 times in that file, so the anchored dictionary-key mechanism does not match the header name while _SECRET_QUERY is the separate query-parameter string redaction; tools/validate/model.py Response.describe; docs/production/software-waves/SW-SEC-DATA-02-C1/FINDING.md; linked feature F-SEC-014; no owner credential leak was observed - the reproduction used synthetic markers only | re-verified at this base for the unredacted header-key mechanism and the chain ancestry; the historical synthetic-marker reproduction is NOT a current reproduction | **partial** |
 
 ### 4.3 Material-delta rows — the detail the table compresses
 
-For these seventeen rows the register text itself is stale or self-contradictory, so the exact original wording and the exact observed state are given here in full. The other 44 rows are inherited dispositions whose register text is byte-identical to the accepted triage base.
+For these seventeen rows the register text itself is stale or self-contradictory, so the exact original wording and the exact observed state are given here in full. The other **44** rows are **not** all inherited dispositions: they are the **42** P1 rows (the accepted triage's no-material-delta set) that are not expanded here, **plus** the two pending rows `VAL-14` and `VAL-15`, which no accepted triage covered (§2.3). Five rows that *are* inherited no-material-delta rows — UI-06, UC-18, TST-03, TST-04 and API-07 — are expanded here anyway, because the accepted triage had already identified their register text as material to their own close conditions.
 
 #### SEC-14 — owner
 
@@ -530,11 +545,13 @@ These are not findings to close or re-open; they are current-state facts that th
 | **M-1 / F-SEC-007 freshness** | **Still open and separate.** At exact `caaa`, the C2 edits stale all 16 `F-SEC-007` V3 records, leaving four fresh V2 records, while the registry records `F-SEC-007` at `current: V3`. The actual global gate observed `V2 < recorded V3` and exited 1. That numeric mismatch is **unresolved**; an exit 1 with V2 below a recorded V3 does **not** by itself establish a level-freshness defect, and the recorded FSEC007 diagnosis/refresh remains owed in its own parallel scope. No unchanged failed gate was retried here. |
 | **RV-WS040** | **A separate retained-source review package, still open.** The corrective plan (`docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md:13`) lists `RV-PRIVACY-CHAIN`, `RV-WS040` and the remaining `RV-API034` report evaluation as three distinct items. `RV-WS040` is not discharged by the WS component work, by the RV-API034 review or by this inventory. |
 | **Accepted UNWIRED WS component** | **Integrated, reviewed, and still unwired.** `e54228c0e3a9451f39b27caeef6aa77e1e1fa59a` ("feat(rest): integrate independently reviewed WS request-work component") added `src/rest_api/ws_request_work.py` (519 lines) and `tests/test_ws_request_work.py` (1502 lines); it **is** an ancestor of this base. The module is referenced by **no** other file under `src/`, `run.py` or `run_server.py` — it is accepted, unwired, and does not by itself discharge CR-01. It is also the **only** product-source delta between the accepted triage base `3602a4e` and this base. |
-| **Privacy chain C1–C4** | **Unaccepted.** C1 (`11f305b16c4c95e27682d13df4b02c8de33354d7`) and C3 (`2d02004d3108953a302e1a49aab9a5f24e944136`) exist as objects but are **not** ancestors of this base; C2 (`615d3c8403b237dd117c803269c7b9b58895f9217`) is **not present in the local object database** at all (§1.2). The chain therefore remains delivered-but-unintegrated and unaccepted. |
+| **Privacy chain C1–C4** | **Unaccepted.** C1 (`11f305b16c4c95e27682d13df4b02c8de33354d7`), C2 (`615d3c8403b237dd117c8032697c9b58895f9217`) and C3 (`2d02004d3108953a302e1a49aab9a5f24e944136`) all **exist as objects in this checkout**; **none** of them is an ancestor of this base, and C2 **is** an ancestor of C3, so the chain itself is intact (§1.2). The chain therefore remains delivered-but-unintegrated and unaccepted. |
 | **Privacy qualification** | **Terminal FAIL for both attempted families; no automatic retake.** The Opus 5.5 privacy assessment is recorded `FAIL; mandatory six-axis competence not earned`; the MiniMax privacy review domain is recorded `FAIL/NOT_QUALIFIED; one first candidate / one judge exhausted; no automatic retry / extra judge` (axes: provenance PASS, dataflow_invariants FAIL, counterexamples PASS, behaviour_and_tools FAIL, calibration FAIL, review_quality FAIL). `automatic_retakes` is `false`. The lost original bytes and the failed-run outputs stay as recorded; nothing was reconstructed. |
 | **WS first authorship** | **NOT_GRANTED / WSR03** — unchanged. The Opus 5.5 WS component is recorded as *bounded correction candidate*, not as granted first authorship, and the acceptance chain for it is separate from this inventory. |
 
-## 5. All 268 canonical feature contracts
+## 5. All 268 canonical feature contracts — the ledger index
+
+**This section is an index, not the contract map.** It says what the project's own ledger computes for each canonical row — the target, the recorded baseline, the effective level, the cap, the freshness bucket, the proof binding and the package. It does **not** carry the registry's claim, the registry's recorded basis, the named assertion that basis rests on, what that assertion establishes, the evidence's own source/client/image/covers attribution, or the residual acceptance. **That map is §5A**, which covers all 268 rows.
 
 One row per canonical registry entry. Columns:
 
@@ -876,6 +893,4064 @@ One row per canonical registry entry. Columns:
 | F-REL-017 | No leaked sessions, sockets or tasks after reconfiguration | V4 | V0 | V0 | — | — | **no committed record of any kind** | **yes** | yes | SW-RUNTIME-PREP |
 | F-REL-018 | 72-hour soak with flat memory, tasks and sockets | V5 | V0 | V0 | — | — | **no committed record of any kind** | **yes** | yes | SW-SOAK-PREP |
 
+## 5A. Semantic source / assertion / acceptance map for all 268 feature contracts
+
+### 5A.0 What this map is, how it was produced, and what it does not claim
+
+Section 5 is an **index**: it says what the project's own ledger computes for each canonical row. It is not a contract map, because it never states the registry's *claim*, the registry's *recorded basis*, the named assertion that basis rests on, what that assertion observably establishes, whether the evidence behind it carries its own source/client/image/covers attribution, or what is still missing before the row's target is reached. This section supplies that map for **all 268** rows.
+
+**Method.** For every row this map carries: (1) the registry `claim` and `interfaces` verbatim; (2) the registry `basis` verbatim; (3) the **named source/assertion scope actually read at this base** — the `file::function` the basis names, with its line range and the assertion statements inside it, or the named test module/class; (4) what that observable assertion **does** and **does not** establish; (5) the evidence attribution — the committed record's own path, evidence commit, level, client, scenario, target, image digest and `covers` set — or an explicit **unknown** where no committed record exists; (6) the level, the cap, the ancestry of every cited commit and the freshness bucket; (7) the exact residual acceptance.
+
+**The assertion text in this map was read, not counted.** Every `file::function` below was opened and its `assert` statements read; the recorded `checks` of every cited evidence record were read from the record itself. A file name, a scenario id, a link, a hash count or an occurrence total is never used here as a substitute for an assertion.
+
+**Honest limits of this map.**
+
+* No product test, scenario, browser session, container, device, simulator campaign or HIL session was executed for any row of this map. Every statement about behaviour is a statement about an **assertion that exists in the tree** or about a **record that was committed**, not about behaviour this package observed.
+* The assertion bodies were read for the **52 distinct named test functions** and the **named test modules and classes** that the registry bases cite. Where a basis names a module or a class rather than a function, the scope is recorded at that granularity and the row says so; no per-assertion claim is made beyond it.
+* Where a registry basis names **no test at all**, the row says so explicitly rather than implying a checked scope. **125** of the 268 rows have no named test in their recorded basis: for **45** of them no committed evidence record exists either, so the assertion scope is recorded as **unknown**; for the other **80** the only available observable assertion is the committed record's own recorded `checks`, which the row reproduces and labels as such. None of these 125 rows is presented as having had its semantics read.
+* The `covers` set of a record is the record's **own** claim about which source it exercised. It is reproduced as the record's attribution; this package did not re-derive the mapping and does not upgrade it to an independent attribution.
+* Every committed evidence record in this tree that this map cites was produced against `target: sim` — the simulator. **No committed evidence record in this tree was produced against physical hardware.** A V2 or V3 row therefore never carries a physical claim.
+* This map changes no registry row, promotes no level, admits no evidence, closes no finding and accepts no source, feature or model gate. It is a factual inventory for the coordinator and the reserved independent different-family reviewer.
+
+### 5A.1 Assertion-scope legend
+
+Each `A` key below is a named assertion scope that this package read at this base. The *establishes* column states the observable effect the assertion pins; the *does not establish* column states the boundary the assertion itself cannot cross. Feature rows cite these keys.
+
+| Key | Named scope (read at this base) | Observable effect asserted | Establishes | Does **not** establish |
+| --- | --- | --- | --- | --- |
+| A1 | `tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy` | the packaged image's Docker healthcheck | the packaged container reports Docker health `healthy` within 60 s | any REST route, product feature or physical device effect |
+| A2 | `tests/ha/test_init.py::test_manifest_and_hacs` | the component manifest and the HACS metadata | `manifest.json` declares `integration_type: hub` and `iot_class: local_polling` with no zeroconf dependency, and `hacs.json` names the integration and the minimum Home Assistant `2025.1.0` | that a Home Assistant container loads the component, or that any entity, service or config flow works |
+| A3 | `tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read` | the preset-read path against the golden MCU byte capture | `get_preset_info(1)` returns `None` and the simulator log contains no `preset get` / `get routing status` command, i.e. the hub does **not** use an HTTP preset read on this firmware | the stored routing of any real preset slot, and any physical effect |
+| A4 | `tests/sim/test_golden_hub.py::test_login_and_status_reads_parse_the_device_bytes` | login and status parsing against the captured MCU V1.10.01 bytes | the login is served verbatim from the capture and the parsed status yields routing `[7]*8`, the captured input/output names and `power: on`, with firmware/web/model read back as `V1.10.01` / `V2.00.03` / `BK-808` | live hardware state beyond the replayed capture |
+| A5 | `tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers` | GET /api/status over the real hub against the golden capture | the REST status response reports `connected: true`, the captured eight-slot routing, the captured input/output names, `power: on` and eight output descriptors | live device state beyond the replayed read capture |
+| A6 | `tests/sim/test_golden_hub.py::test_telnet_banner_cables_and_presets_from_real_device_bytes` | the Telnet banner handshake against the captured MCU bytes | the handshake yields `telnet_connected`, firmware `1.10.01`, and the captured input/output cable sets, with per-port cable reads consistent with them | live cable presence or a live device |
+| A7 | `tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime` | GET /api/health over the real REST app | the health document reports `status: healthy`, `matrix.connected: true`, the matrix host, a non-null `last_successful_poll` and `telnet_connected: false` | the integration-lifecycle mapping, the OpenAPI document, or any real device |
+| A8 | `tests/sim/test_sim_e2e.py::test_output_setting_via_rest` | POST /api/output/{n}/mute over the real REST app | the REST call returns 200 and the simulator's output 1 `audio_mute` becomes 1 | that the firmware accepts the mute (HIL-09), and the UI/kiosk/HA/Flic path to it |
+| A9 | `tests/sim/test_sim_e2e.py::test_status_reflects_simulator` | GET /api/status over the real REST app | the status payload equals the simulator state (connected, input names, output names, routing, preset names) | device reads beyond the simulator, and any client rendering |
+| A10 | `tests/sim/test_sim_e2e.py::test_switch_all_and_preset` | POST /api/switch (no output) and POST /api/preset/{n} over the real REST app | route-all sets all eight simulator outputs to the input, and recalling preset 3 sets all eight outputs to the stored routing | physical routing, and the UI/kiosk/HA/Flic paths |
+| A11 | `tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state` | POST /api/switch over the real REST app | the REST call returns 200, output 0's source becomes 6, and GET /api/status reports the same routing | physical routing, and the UI/kiosk/HA/Flic paths |
+| A12 | `tests/sim/test_sim_faults.py::test_dropped_connection_clears_connected` | the driver's connection flag after a dropped link | after the drop the video-status read returns `None` and `matrix.connected` becomes `False` | any physical link fault, and the client-visible consequence |
+| A13 | `tests/sim/test_sim_faults.py::test_latency_within_client_timeout` | a forced status refresh against the simulator | the refreshed status carries a non-empty routing within the client timeout | any latency figure for real hardware |
+| A14 | `tests/sim/test_sim_faults.py::test_malformed_json_is_reported` | a malformed device answer | the read returns `None` and the last error records `Unparseable`, and the next read recovers | any physical malformed answer, and the client's handling |
+| A15 | `tests/sim/test_sim_faults.py::test_rejected_output_setting_reports_failure` | a refused output setting against the simulator | the setter returns `False` instead of raising when the simulator refuses the write | that the real firmware refuses the same write (HIL-09) |
+| A16 | `tests/sim/test_sim_faults.py::test_rejected_switch_all_reports_failure` | a refused route-all write | `switch_input_to_all(4)` returns `False` instead of raising when the simulator refuses writes | that the real device refuses the same write |
+| A17 | `tests/sim/test_sim_faults.py::test_session_expiry_triggers_relogin` | session expiry and re-login against the simulator | after expiry and re-login the status routing equals the simulator routing | real session behaviour on the device |
+| A18 | `tests/sim/test_sim_faults.py::test_telnet_disconnect_completes` | a Telnet disconnect | the disconnect completes, the listener finishes and `telnet_connected` becomes `False` | real-device disconnect timing |
+| A19 | `tests/sim/test_sim_faults.py::test_telnet_drop_mid_command_is_detected` | a Telnet drop in the middle of a command | the drop is detected (`telnet_connected: false`), output cable state is still reported and unknown input cable values stay `None`, with probe lag under 0.2 s | real-device mid-command behaviour |
+| A20 | `tests/sim/test_sim_faults.py::test_timeout_clears_connected` | a read that times out | the timeout clears the connected state so the hub does not keep reporting a live matrix | real-device timeout behaviour |
+| A21 | `tests/sim/test_sim_faults.py::test_wrong_password_is_not_connected` | a wrong device password | `connect()` returns `False` and the matrix stays disconnected | real-device authentication behaviour |
+| A22 | `tests/sim/test_sim_hub.py::test_capabilities` | the driver's capabilities read | the capabilities document reports input 1 `signal_detected: true` and output 0 `connected: true` with `arc_enabled: true` | the REST status surface, and any physical input/output state |
+| A23 | `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port` | a CEC send from the driver | sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings | that the television reacts, and the REST/UI/HA/Flic paths |
+| A24 | `tests/sim/test_sim_hub.py::test_edid` | the driver's EDID setters | `set_input_edid(4, 12)` and `copy_edid_from_output(5, 1)` change the simulator's input EDID values to 12 and 40, and the EDID read reports mode 12 | that the firmware answers `set edid` or `copy edid` (HIL-09, BE-25) |
+| A25 | `tests/sim/test_sim_hub.py::test_ext_audio` | the driver's external-audio setters | mode/enable/source set the simulator's external-audio state and the status read returns mode 2, `allout[3] == 1` and `allsource[3] == 6` | that the firmware answers the external-audio commands (HIL-09) |
+| A26 | `tests/sim/test_sim_hub.py::test_output_settings` | the driver's output setters | enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success | that the firmware answers the corresponding commands (HIL-09) |
+| A27 | `tests/sim/test_sim_hub.py::test_power` | the driver's power calls | power off/on change the simulator's system power and the forced status read returns `off` then `on` | the physical power cycle, and the client paths |
+| A28 | `tests/sim/test_sim_hub.py::test_recall_and_save_preset` | the driver's preset recall/save | recalling preset 2 sets all eight simulator outputs and `current_scene`; switching one input and saving preset 7 stores the resulting routing in that simulator slot | that the matrix stores the preset (hardware), and the client paths |
+| A29 | `tests/sim/test_sim_hub.py::test_set_names` | the driver's name setters | the input and output names are written to the simulator and the status read returns the same names | that the matrix stores the names (hardware), and cross-client rename propagation |
+| A30 | `tests/sim/test_sim_hub.py::test_system_settings` | the driver's system setters | beep, panel lock and LCD timeout change the simulator's system state | that the front panel applies them, and the firmware's answers (HIL-09) |
+| A31 | `tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status` | the driver's cable and full-status reads | the cable read equals the simulator's cable state, per-port cable reads agree with it, and the full status returns the routing and the preset info | real cable state; `GET /api/status/cables` is not exercised by this test |
+| A32 | `tests/sim/test_sim_hub.py::test_telnet_cec` | the driver's CEC send | the send produces the telnet command `s cec hdmi out 1 on` | that the television reacts, and the REST/UI/HA/Flic paths |
+| A33 | `tests/sim/test_sim_hub.py::test_telnet_connects_and_reads_firmware` | the driver's Telnet connect | the Telnet connect succeeds, `telnet_connected` is true and the firmware version reads back `1.10.01` | a live device, and the firmware's answers |
+| A34 | `tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation` | the input cycle endpoint over the real REST app | the endpoint returns 200 and reports previous/current input and output; the status read and the simulator state both show the clamped or wrapped value | the Flic Twist path and any physical effect |
+| A35 | `tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping` | the integration-lifecycle mapping inside /api/health | the `integrations` map is empty before any integration and then carries each integration's `running` state, and reading health performs no device write | that an integration actually starts, and any physical effect |
+| A36 | `tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads` | the OpenAPI document served by the hub | the document is served as JSON, declares `openapi: 3.1.0`, validates against the project's own validator with no errors and lists `/api/openapi.json` among its paths | that every route is described, and any product behaviour |
+| A37 | `tests/sim/test_sim_rest_reads.py::test_profile_read_exception_is_opaque_and_preserves_saved_data` | a profile read that raises | the private detail is logged server-side with an exception, the private value never appears in the JSON response, the stored files are byte-identical before and after, and no device write occurs | any write path, and the other endpoints |
+| A38 | `tests/sim/test_sim_rest_reads.py::test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write` | a preset operation that raises | the response is HTTP 500 with exactly the `success`/`data`/`error` envelope, `data` is null, the private value is absent from the body, and no device write occurs | the success path, and any device effect |
+| A39 | `tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload` | a public scene edit against a scene with private extensions | the public edit keeps the scene's private credential/override extensions intact across save and reload, and the public payload carries only the public override | the editing UI, and any physical effect |
+| A40 | `tests/sim/test_sim_rest_reads.py::test_shared_runtime_preset_catalog_after_explicit_ws_refresh` | GET /api/presets against the shared runtime | the catalog returns the warm slots, each populated slot reports `routing_source: matrix` with the captured routing, an unreadable slot is `{}`, and exactly the eight `r preset N` reads are issued | the real device's slot contents (V4), and the preset editor UI |
+| A41 | `tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code` | the LCD shortcut over the real REST app | the shortcut returns 200 and sets the simulator's `lcd_timeout` to the device code | the firmware's answer (HIL-09) and the catalogue label's owner approval (API-07) |
+| A42 | `tests/sim/test_sim_shortcuts.py::test_other_shortcuts` | the remaining shortcut set over the real REST app | each shortcut returns 200 and the per-shortcut `check` helper asserts the corresponding simulator state | any firmware answer and the shortcut catalogue's visual state |
+| A43 | `tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command` | the power-off-all shortcut over the real REST app | the shortcut returns 200, the simulator's system power becomes 0, and exactly one `set poweronoff` write reaches the simulator | the physical power-off, and the confirmation UI |
+| A44 | `tests/sim/test_sim_ws_contract.py::test_a_stalled_client_cannot_hold_up_a_command` | a stalled WebSocket client during a command | the command still returns 200 in under 2 s and the routing change lands on the simulator | behaviour under sustained load, and any client beyond this one |
+| A45 | `tests/sim/test_sim_ws_contract.py::test_get_status_answers_a_status_snapshot` | the `get_status` request on the WebSocket | a `get_status` request is answered with a status snapshot whose `input_names` carry the real names, and the answer satisfies the WebSocket schema | the welcome frame itself, and any physical effect |
+| A46 | `tests/sim/test_sim_ws_contract.py::test_ping_is_answered_in_both_the_contract_and_the_old_client_form` | the WebSocket ping in both request forms | the ping is answered in the contract form and in the legacy client form, and no error event is emitted | behaviour of any other WebSocket message, and any physical effect |
+| A47 | `tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows` | the preset-recall announcement on the WebSocket | after a successful recall the WebSocket announces the preset (no `optimistic` marker) and the routing that follows matches | the failure announcement and the client-side rendering |
+| A48 | `tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed` | the route-all announcements on the WebSocket | route-all emits one `routing_change` per changed output and every one names the same input | the physical routing and the client-side rendering |
+| A49 | `tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails` | a failed status read on the WebSocket/HTTP surface | the API returns HTTP 503 with `success: false` and `connected: true`, and no `input_names` are fabricated | the recovery path, and any physical effect |
+| A50 | `tests/sim/test_sim_ws_contract.py::test_the_server_keeps_idle_clients_alive_with_protocol_pings` | the WebSocket protocol heartbeat | the server sends protocol-level PING frames and the client answers them, keeping an idle connection alive | any application-level message behaviour, and any physical effect |
+| A51 | `tests/sim/test_sim_ws_contract.py::test_welcome_carries_the_protocol_and_the_matrix_link_then_a_snapshot` | the WebSocket welcome and status snapshot | the welcome carries `protocol: 1` and the matrix link state, the snapshot's routing equals the simulator routing, the output details carry the real names, `connected` is true, and every message satisfies `docs/api/websocket.schema.json` | the `get_status` request path (a separate test), and any physical effect |
+| A52 | `tests/test_driver.py::TestDriverMetadata` | the `driver.json` metadata class | the driver identity (`hdmi_matrix`, port 9095), `min_core_api: 0.20.0`, a release date between 2026-09-25 and today, and the host field's validation are asserted | that the driver runs on a real Remote, or any entity behaviour |
+| A53 | `tests/test_driver.py::TestEntityStateSync` | the UC entity state-sync class | only changed attributes are pushed to the Remote, an outage keeps the last known values, and the standby state is published | that a real Remote applies the pushes, or any physical effect |
+| A54 | `tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi` | the live scene-v2 responses against the OpenAPI schema | the execute path declares a 207 response, the live response status matches the declared status, the envelope `$ref` is `SceneV2ResponseEnvelope`, and `data`/`error` presence follows the 404 rule | any product behaviour beyond the declared envelope shape |
+| A55 | `tests/test_orei_matrix.py::test_telnet_port_is_per_matrix` | the per-matrix Telnet port | a configured Telnet port 23 is kept, the default is 2323, and a matrix constructed without configuration uses 23 | any live connection, and the multi-matrix topology |
+| A56 | `tests/test_run_entry.py::test_core_only_start_serves_ui_and_never_imports_ucapi` | the core-only start path | the start imports `rest_api` and never `ucapi`, prints `ucapi imported: False`, prints the deprecation notice exactly once and names the `REST_API_PORT -> use API_PORT` rename | the UC integration path, and any runtime behaviour beyond the import set |
+| A57 | `tests/test_run_entry.py::test_saved_telnet_port` | the saved Telnet port in the saved config | the saved port is read from and written to the saved configuration (`None` to 2323 back to `None`) | a live connection to that port |
+| A58 | `tests/test_security_v3_hardening_scenarios.py::test_uc_auth_token_guards_setup_and_reconfigure` | the UC auth token in setup and reconfigure | the token never reaches the log file, the setup metadata marks the password present and exposes an `auth_token` field, no `login` command reaches the simulator, and the setup call succeeds | that the token authenticates against a real UC core, or any physical effect |
+
+### 5A.2 Named module and class scopes
+
+| Key | Named scope | Observable effect asserted |
+| --- | --- | --- |
+| M1 | `tests/e2e/flows.spec.ts` | the Playwright flow specification — a real browser performs the flow and the simulator state or the REST response is asserted afterwards |
+| M2 | `tests/e2e/smoke.spec.ts` | the Playwright smoke specification — a real browser drives the UI and the simulator state is asserted afterwards |
+| M3 | `tests/sim/test_sim_real_captures.py` | the real-capture replay module — the captured device bytes are replayed against the real client |
+| M4 | `tests/sim/test_sim_real_commands.py` | the simulator's recorded command log — the exact command strings and payloads the hub sends are asserted against the simulator log |
+| M5 | `tests/sim/test_sim_status_broadcast.py` | the status-broadcast module (WP-E1) — repeated warm-cache reads send no further status and no output is named `Output N` |
+| M6 | `tests/sim/test_sim_ws_contract.py` | the WebSocket contract module — the welcome, the status snapshot, the `get_status` answer, route-all and preset-recall announcements, the link loss/recovery, the failed-status-read answer and the stalled-client case are asserted against the real hub app and the simulator, and every message is checked against `docs/api/websocket.schema.json` |
+| M7 | `tests/test_health.py` | the health unit-test module — the health document's field presence is asserted in isolation |
+| M8 | `tests/test_openapi_and_config_docs.py` | the OpenAPI/config documentation module — the served OpenAPI document and the documented configuration are asserted against the schema |
+| M9 | `tests/test_rest_api.py` | the mocked REST test classes — the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is |
+| M10 | `tests/test_runtime_preset_cache_r1e.py` | the runtime preset-cache module — ordinary preset reads keep the normal TTL and an explicit client status refresh expires slots without prefetching or writing |
+| M11 | `tests/test_telnet_real_captures.py` | the real-capture Telnet replay module — the captured V1.10.01 banner, echo, status dump and `r link` segments are replayed through the real TelnetClient |
+| M12 | `tests/validation/test_flic_replay_live_r6.py` | the live Flic replay module — the generated SDK callback replay is exercised against Node stubs |
+| M13 | `tests/validation/test_flic_replay_r6.py` | the Flic replay module — the dedicated Flic client is driven against Node stubs |
+| M14 | `tests/validation/test_flic_templates_r6.py` | the Flic template module — the generated Flic templates are asserted against Node stubs |
+| M15 | `tests/deploy/` | the deployment test package (`tests/deploy/test_*.py`) — the packaged container is started and the integration is reached at the advertised URL; the Docker healthcheck and the compose/runtime wiring are asserted |
+| M16 | `tests/uc/` | the scripted Remote 3 suite (`tests/uc/test_*.py`) — a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process |
+
+Class scopes are read from the tree itself: the line range, the class's own docstring and its test methods with their assertion counts.
+
+| Key | Named class scope (read at this base) | Line range | Test methods / assertions | Establishes | Does **not** establish |
+| --- | --- | --- | --- | --- | --- |
+| C1 | `tests/sim/test_sim_hub.py Telnet` | — | — | the named class is **not present** in this file at this base (class not present in this file) | nothing |
+| C2 | `tests/test_concurrency.py` `TestRateLimitUnderConcurrency` — Verify the rate limiter doesn't corrupt under high concurrency. | 30–53 | 2 method(s), 2 assertion(s): `test_rate_limit_under_concurrent_requests`, `test_rate_limit_same_ip_many_requests` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fixtures**, so the rate limiter's behaviour is asserted, but no deployed traffic is |
+| C3 | `tests/test_config.py` `TestProfileManager` — Tests for ProfileManager class. | 719–941 | 14 method(s), 46 assertion(s): `test_init_empty`, `test_create_profile_minimal`, `test_create_profile_full`, `test_get_profile`, `test_get_profile_not_found`, `test_list_profiles`, `test_update_profile`, `test_update_profile_partial` (+6 more) | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **local fixtures**, so the profile manager's contract is asserted, but no deployed configuration is |
+| C4 | `tests/test_driver.py` `TestCecCommandResolution` — Test the CEC command index lookup functions. | 318–402 | 6 method(s), 8 assertion(s): `test_get_input_cec_method_no_matrix`, `test_get_input_cec_method_invalid_command`, `test_get_output_cec_method_no_matrix`, `test_get_output_cec_method_invalid_command`, `test_get_input_cec_method_valid_command`, `test_get_output_cec_method_uses_the_display_table` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fakes**, so the driver's lookup and bookkeeping are asserted, but no Remote and no device are involved |
+| C5 | `tests/test_driver.py` `TestConfigPersistence` — Test the JSON-based configuration save/load functions. | 188–266 | 5 method(s), 11 assertion(s): `test_save_config_creates_file`, `test_save_and_load_config_roundtrip`, `test_load_config_no_file`, `test_load_config_corrupted_file`, `test_save_config_empty_output_names` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fakes**, so the driver's lookup and bookkeeping are asserted, but no Remote and no device are involved |
+| C6 | `tests/test_driver.py` `TestLockFileManagement` — Test the file lock mechanism for single-instance enforcement. | 108–180 | 6 method(s), 12 assertion(s): `test_acquire_lock_creates_file`, `test_release_lock_removes_file`, `test_acquire_lock_when_already_held`, `test_acquire_lock_with_stale_lock`, `test_acquire_lock_is_idempotent_for_holder`, `test_release_lock_when_no_file` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fakes**, so the driver's lookup and bookkeeping are asserted, but no Remote and no device are involved |
+| C7 | `tests/test_error_paths.py` `TestProfileMigrationErrors` — Test profile/scene migration edge cases. | 278–304 | 2 method(s), 2 assertion(s): `test_missing_profiles_file_uses_defaults`, `test_corrupted_profiles_file_returns_empty` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **local fixtures**, so the error branch is asserted, but no deployed failure is |
+| C8 | `tests/test_orei_matrix.py` `TestRetryLogic` — Tests for connection retry with exponential backoff. | 105–128 | 3 method(s), 4 assertion(s): `test_calculate_retry_delay_initial`, `test_calculate_retry_delay_exponential`, `test_calculate_retry_delay_max_cap` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fakes**, so the retry and cache logic is asserted, but no device session is |
+| C9 | `tests/test_orei_matrix.py` `TestStatusCaching` — Tests for status caching and cache invalidation/busting. | 444–583 | 5 method(s), 18 assertion(s): `test_status_cache_hit`, `test_status_cache_busting`, `test_output_status_cache_hit`, `test_input_status_cache_hit`, `test_all_caches_busted_on_write` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fakes**, so the retry and cache logic is asserted, but no device session is |
+| C10 | `tests/test_persistence.py` `TestLegacyMigration` — ``migrate_legacy_file`` copies legacy data to the new location. | 157–203 | 3 method(s), 7 assertion(s): `test_migrates_existing_legacy_file`, `test_no_op_when_target_exists`, `test_no_op_when_legacy_absent` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against a **local temporary directory**, so file layout and round-trip behaviour are asserted, but no deployed storage behaviour is |
+| C11 | `tests/test_persistence.py` `TestPersistenceRoundTrip` — End-to-end: write a value, re-init in the same dir, read it back. | 485–534 | 2 method(s), 4 assertion(s): `test_themes_persist_across_init`, `test_ui_preferences_persist_across_init` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against a **local temporary directory**, so file layout and round-trip behaviour are asserted, but no deployed storage behaviour is |
+| C12 | `tests/test_persistence.py` `TestStorageEndpoint` — The ``/api/system/storage`` diagnostic endpoint (SEC-11: no paths, no file names). | 542–640 | 4 method(s), 20 assertion(s): `test_storage_endpoint_returns_sanitized_layout`, `test_storage_endpoint_discloses_no_paths_or_file_names`, `test_storage_source_follows_resolution_order`, `test_info_endpoint_includes_sanitized_storage` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against a **local temporary directory**, so file layout and round-trip behaviour are asserted, but no deployed storage behaviour is |
+| C13 | `tests/test_rest_api.py` `TestAdvancedOutputControl` — Tests for Sprint 2 advanced output control endpoints. | 278–361 | 10 method(s), 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr`, `test_output_scaler`, `test_output_arc`, `test_output_mute`, `test_cec_enable` (+2 more) | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C14 | `tests/test_rest_api.py` `TestCecCommandEndpoints` — Tests for CEC-related endpoints that were missing coverage. | 1688–1821 | 12 method(s), 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities`, `test_cec_input_command_power_on`, `test_cec_input_command_power_off`, `test_cec_output_command_power_on`, `test_cec_output_command_power_off` (+4 more) | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C15 | `tests/test_rest_api.py` `TestControlEndpoints` — Tests for control endpoints. | 168–233 | 7 method(s), 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input`, `test_switch_to_all_outputs`, `test_power_on`, `test_power_off` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C16 | `tests/test_rest_api.py` `TestDashboardLayoutAPI` — Tests for /api/dashboard/layout and /api/dashboard/cards endpoints (Phase 7). | 2266–2427 | 10 method(s), 20 assertion(s): `test_get_layout_starts_empty`, `test_widget_cards_are_refused`, `test_put_layout_replaces_layout`, `test_put_layout_skips_invalid_cards`, `test_put_layout_deduplicates`, `test_add_card`, `test_add_card_duplicate_returns_409`, `test_add_card_invalid_type_returns_400` (+2 more) | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C17 | `tests/test_rest_api.py` `TestEdidControl` — Tests for Sprint 4 EDID control endpoints. | 369–472 | 8 method(s), 30 assertion(s): `test_get_edid_modes`, `test_get_edid_status`, `test_set_input_edid`, `test_set_input_edid_invalid_input`, `test_set_input_edid_missing_mode`, `test_set_input_edid_copy_from_output`, `test_set_input_edid_old_copy_ids_are_plain_edids`, `test_set_input_edid_rejects_unknown_ids` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C18 | `tests/test_rest_api.py` `TestErrorHandling` — Tests for error handling. | 777–810 | 4 method(s), 6 assertion(s): `test_invalid_json_returns_400`, `test_invalid_output_number`, `test_matrix_not_connected`, `test_cors_headers_present` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C19 | `tests/test_rest_api.py` `TestExtAudioControl` — Tests for Sprint 4 external audio control endpoints. | 537–632 | 8 method(s), 29 assertion(s): `test_get_ext_audio_status`, `test_get_ext_audio_modes`, `test_set_ext_audio_mode`, `test_set_ext_audio_mode_invalid`, `test_set_ext_audio_enable`, `test_set_ext_audio_source`, `test_set_ext_audio_source_invalid_output`, `test_set_ext_audio_source_invalid_input` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C20 | `tests/test_rest_api.py` `TestHealthEndpoints` — Tests for health and status endpoints. | 80–160 | 6 method(s), 23 assertion(s): `test_health_endpoint`, `test_api_root_documentation`, `test_info_endpoint`, `test_info_reads_driver_json_next_to_the_package`, `test_status_endpoint`, `test_presets_endpoint` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C21 | `tests/test_rest_api.py` `TestInputCycling` — Tests for input cycling endpoints. | 241–270 | 3 method(s), 7 assertion(s): `test_input_next`, `test_input_previous`, `test_output_source` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C22 | `tests/test_rest_api.py` `TestLcdTimeoutControl` — Tests for Sprint 4 LCD timeout control endpoints. | 480–529 | 4 method(s), 15 assertion(s): `test_get_lcd_timeout_modes`, `test_set_lcd_timeout`, `test_set_lcd_timeout_invalid_mode`, `test_set_lcd_timeout_missing_mode` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C23 | `tests/test_rest_api.py` `TestRateLimiting` — Tests for rate limiting functionality. | 813–830 | 2 method(s), 2 assertion(s): `test_rate_limit_allows_normal_traffic`, `test_health_endpoint_not_rate_limited` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C24 | `tests/test_rest_api.py` `TestStatusEndpoints` — Tests for status-related endpoints that were missing coverage. | 1592–1680 | 7 method(s), 31 assertion(s): `test_inputs_endpoint`, `test_outputs_endpoint`, `test_full_status_endpoint`, `test_output_status_endpoint`, `test_input_status_endpoint`, `test_system_status_endpoint`, `test_device_info_endpoint` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C25 | `tests/test_rest_api.py` `TestSystemSettingsEndpoints` — Tests for system settings endpoints that were missing coverage. | 1829–1878 | 4 method(s), 12 assertion(s): `test_set_beep_enabled`, `test_set_beep_disabled`, `test_set_panel_lock_locked`, `test_set_panel_lock_unlocked` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C26 | `tests/test_rest_api.py` `TestSystemShortcutsAPI` — Tests for /api/system-shortcuts endpoints (Phase 7). | 2043–2258 | 18 method(s), 40 assertion(s): `test_list_shortcuts_returns_5_defaults`, `test_list_shortcuts_enabled_only`, `test_list_favorites`, `test_list_dashboard_empty_by_default`, `test_get_shortcut_by_id`, `test_get_shortcut_not_found`, `test_update_shortcut_rename`, `test_update_shortcut_disable` (+10 more) | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C27 | `tests/test_rest_api.py` `TestWebSocket` — Tests for WebSocket functionality (contract: docs/api/WEBSOCKET.md). | 867–910 | 4 method(s), 7 assertion(s): `test_websocket_connection`, `test_websocket_ping_pong`, `test_websocket_get_status`, `test_websocket_unknown_command` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C28 | `tests/test_rest_api.py` `TestWebUI` — Tests for Web UI static file serving. | 918–974 | 7 method(s), 13 assertion(s): `test_web_ui_endpoint`, `test_web_ui_with_trailing_slash`, `test_static_css`, `test_static_js`, `test_static_asset`, `test_static_file_not_found`, `test_directory_traversal_blocked` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the REST surface is driven against a **mocked** matrix, so request/response shape and the command the handler would issue are asserted, but no device or client effect is |
+| C29 | `tests/test_rest_themes_ui.py` `TestThemesHandlers` — Test theme preferences handlers. | 26–117 | 5 method(s), 19 assertion(s): `test_get_themes_returns_valid_structure`, `test_get_themes_default_presets_have_valid_structure`, `test_put_themes_accepts_valid_data`, `test_put_themes_rejects_wrong_preset_count`, `test_reset_themes_returns_defaults` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fixtures**, so the handler contract is asserted, but no browser is |
+| C30 | `tests/test_rest_themes_ui.py` `TestUiPreferencesHandlers` — Test UI preferences handlers. | 125–176 | 3 method(s), 10 assertion(s): `test_get_ui_preferences_returns_defaults`, `test_ui_preferences_includes_matrix_tab`, `test_set_ui_preferences_updates_tabs` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fixtures**, so the handler contract is asserted, but no browser is |
+| C31 | `tests/test_scene_execution.py` `TestSceneExecutorPassword` — Tests for SceneExecutor password protection. | 214–249 | 3 method(s), 5 assertion(s): `test_protected_scene_requires_passcode`, `test_protected_scene_wrong_passcode`, `test_protected_scene_correct_passcode` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fixtures**, so the executor's password branch is asserted, but no deployed scene run is |
+| C32 | `tests/test_system_shortcuts.py` `TestSystemShortcutManager` — Tests for SystemShortcutManager. | 49–105 | 8 method(s), 11 assertion(s): `test_list_shortcuts_returns_builtins`, `test_list_shortcuts_sorted_by_order`, `test_list_shortcuts_keys_unique`, `test_get_shortcut_existing`, `test_get_shortcut_unknown`, `test_update_prefs`, `test_update_prefs_invalid_key`, `test_persistence` | the behaviours named in those methods are asserted at the scope the class' fixture provides | the assertions run against **in-process fixtures**, so the shortcut manager's contract is asserted, but no deployed shortcut list is |
+
+### 5A.3 Per-feature map
+
+#### 5A.3.1 Matrix control (31 features)
+
+##### F-MTX-001 — Route one input to one output
+
+* **Registry claim:** README "Full matrix control via HTTP endpoints"; docs/API_REFERENCE.md POST /api/switch
+* **Interfaces:** device: video switch; telnet: s output {n} in source {m}; rest: POST /api/switch, POST /api/output/{output}/source; ws: routing_change, switch_failed; ui: matrix/grid/default, matrix/cards/routing-sheet; kiosk: kiosk/routing-modal/step-2; uc: media_player.output_N select_source; ha: select.output_N_source, service hdmi_matrix.switch_input; flic: POST /api/output/{n}/source
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts 'routing an input to an output in the matrix grid changes the simulator' (browser click -> simulator state asserted). V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state.
+* **Named assertion scope read:** `A11` — `tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (11 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-008/2026-10-19-V3-1baac3de-remote.select_source-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.select_source`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 6; device otherwise unchanged (allowed: outputs[0].source, routing[0]); device received http 'video switch' with {'source': [1, 6]} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the REST call returns 200, output 0's source becomes 6, and GET /api/status reports the same routing; a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-002 — Route one input to every output
+
+* **Registry claim:** README "Full matrix control"; kiosk "Route to all"; built-in shortcut route_all_to_output
+* **Interfaces:** device: video switch (output 0); telnet: s output 0 in source {m}; rest: POST /api/switch (no output); ws: routing_change, switch_all_failed; ui: drawer/routing/default, drawer/routing/all-active; kiosk: kiosk/routing/all-to-one; ha: service hdmi_matrix.switch_input (per output)
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts 'routing an input to all outputs from the kiosk changes the simulator' (asserts simulator routing). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset.
+* **Named assertion scope read:** `A10` — `tests/sim/test_sim_e2e.py::test_switch_all_and_preset`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `routing.route_all`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 19 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** route-all sets all eight simulator outputs to the input, and recalling preset 3 sets all eight outputs to the stored routing; a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-003 — Recall a matrix preset (1-8)
+
+* **Registry claim:** README "8 preset buttons"; docs/API_REFERENCE.md POST /api/preset/{n}; docs/FLIC_SETUP.md
+* **Interfaces:** device: preset set; telnet: s recall preset {n}; rest: POST /api/preset/{preset}; ws: preset_recall, preset_recall_failed; ui: drawer/presets/expanded, dashboard/cards/all-types; kiosk: kiosk/presets/default; uc: button.preset_N, remote.orei_matrix PRESET_N; ha: button.preset_N, service hdmi_matrix.recall_preset; flic: POST /api/preset/{n}
+* **Recorded basis (registry, verbatim):** V3: ha.preset_button (ha client: a real Home Assistant container drives it; simulator state read back). V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset (POST /api/preset/3 -> simulator routing asserted).
+* **Named assertion scope read:** `A10` — `tests/sim/test_sim_e2e.py::test_switch_all_and_preset`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (13 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_button-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.preset_button`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device routing == [6, 6, 6, 6, 6, 6, 6, 6]; device otherwise unchanged (allowed: outputs[*].source, routing); device received http 'preset set' with {'index': 3} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** route-all sets all eight simulator outputs to the input, and recalling preset 3 sets all eight outputs to the stored routing.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-004 — Save the current routing to a matrix preset
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/preset/{n}/save; docs/FLIC_SETUP.md
+* **Interfaces:** device: preset save; telnet: s save preset {n}; rest: POST /api/preset/{preset}/save; ui: drawer/presets/expanded; kiosk: kiosk/preset-config; flic: POST /api/preset/{n}/save
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_recall_and_save_preset (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked matrix).
+* **Named assertion scope read:** `A28` — `tests/sim/test_sim_hub.py::test_recall_and_save_preset`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C15` — `tests/test_rest_api.py TestControlEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (27 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 27 stale record(s) include `docs/validation/evidence/F-MTX-004/2026-10-04-V2-7dbc4dc7-matrix.preset_invalid_slot-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.preset_invalid_slot`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** recalling preset 2 sets all eight simulator outputs and `current_scene`; switching one input and saving preset 7 stores the resulting routing in that simulator slot; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestControlEndpoints` asserts 7 method(s) / 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-005 — Name presets in the web app (names shown by the API, UI, kiosk)
+
+* **Registry claim:** web UI presets drawer rename; POST /api/device-settings/preset/{n}/name
+* **Interfaces:** device: preset name (OreiMatrix.set_preset_name; the REST rename keeps hub-local names); rest: POST /api/device-settings/preset/{preset}/name, GET /api/presets; ws: device_settings; ui: drawer/presets/rename; kiosk: kiosk/presets/default; uc: button.preset_N name
+* **Recorded basis (registry, verbatim):** No test renames a preset (route not exercised by any test); the visual catalog entry drawer/presets/rename only captures the edit field.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V2-1baac3de-presets.rename-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `presets.rename`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V3-1baac3de-presets.rename-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `presets.rename`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; hub GET /api/presets -> data.presets[3].name == 'Validation Night' (HTTP 200); WebSocket event 'device_settings' with {'type': 'preset', 'number': 4, 'name': 'Validation Night'}; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-006 — Matrix power on / standby
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/power/on|off; README HA switch; docs/FLIC_SETUP.md
+* **Interfaces:** device: set poweronoff; telnet: power {0|1}; rest: POST /api/power/on, POST /api/power/off; ui: dialog/confirm/power-cycle; uc: switch.matrix_power; ha: switch.matrix_power; flic: POST /api/power/off
+* **Recorded basis (registry, verbatim):** V3: ha.power_off, ha.power_on (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_power (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestControlEndpoints (mocked).
+* **Named assertion scope read:** `A27` — `tests/sim/test_sim_hub.py::test_power`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C15` — `tests/test_rest_api.py TestControlEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (10 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-010/2026-10-19-V3-1baac3de-remote.power_switch_off-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.power_switch_off`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device system.power == 0; device otherwise unchanged (allowed: system.power); device received http 'set poweronoff' with {'power': 0} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** power off/on change the simulator's system power and the forced status read returns `off` then `on`; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestControlEndpoints` asserts 7 method(s) / 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-007 — Mute / unmute the audio of an output
+
+* **Registry claim:** README "Advanced Output Control: Audio mute per output"
+* **Interfaces:** device: set output audio mute; rest: POST /api/output/{output}/mute; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced; ws: audio_mute; flic: POST /api/output/{n}/mute; ha: switch.output_N_mute
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_e2e.py::test_output_setting_via_rest (POST /api/output/2/mute -> simulator audio_mute asserted) and tests/sim/test_sim_real_commands.py (payload `{"mute": [2, 1]}` on the simulator log). Recorded V2 before WP-A4 part 2, lowered: On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A8` — `tests/sim/test_sim_e2e.py::test_output_setting_via_rest`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `outputs.audio_mute`, target `sim`, image digest **not recorded in this record**, covers 17 path(s); source delta `src/rest_api/outputs.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[1].audio_mute == 1; device otherwise unchanged (allowed: outputs[1].audio_mute); device received http 'set output audio mute' with {'mute': [2, 1]} exactly 1x; WebSocket event 'audio_mute' with {'output': 2, 'muted': True}; hub GET /api/status/outputs -> data.outputs[1].muted == True (HTTP 200); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the REST call returns 200 and the simulator's output 1 `audio_mute` becomes 1; the exact command strings and payloads the hub sends are asserted against the simulator log.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; the fresh proof reaches only **V2** and only against the simulator; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-008 — Enable / disable an output's video stream
+
+* **Registry claim:** README "Advanced Output Control" (stream)
+* **Interfaces:** device: tx stream; rest: POST /api/output/{output}/enable; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced; ha: switch.output_N_stream
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A26` — `tests/sim/test_sim_hub.py::test_output_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (5 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 5 stale record(s) include `docs/validation/evidence/F-MTX-008/2026-10-04-V2-7dbc4dc7-settings.enable_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.enable_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-009 — Set an output's HDCP mode
+
+* **Registry claim:** README "Advanced Output Control" (hdcp)
+* **Interfaces:** device: tx hdcp; rest: POST /api/output/{output}/hdcp; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A26` — `tests/sim/test_sim_hub.py::test_output_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (11 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 11 stale record(s) include `docs/validation/evidence/F-MTX-009/2026-10-04-V2-7dbc4dc7-settings.hdcp_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.hdcp_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-010 — Set an output's HDR mode
+
+* **Registry claim:** README "Advanced Output Control" (hdr)
+* **Interfaces:** device: set hdr conversion; rest: POST /api/output/{output}/hdr; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A26` — `tests/sim/test_sim_hub.py::test_output_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (9 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 9 stale record(s) include `docs/validation/evidence/F-MTX-010/2026-10-04-V2-7dbc4dc7-settings.hdr_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.hdr_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-011 — Set an output's scaler mode (incl. audio-only)
+
+* **Registry claim:** README "Advanced Output Control" (scaler)
+* **Interfaces:** device: set video scaler; rest: POST /api/output/{output}/scaler; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A26` — `tests/sim/test_sim_hub.py::test_output_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (11 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 11 stale record(s) include `docs/validation/evidence/F-MTX-011/2026-10-04-V2-7dbc4dc7-settings.scaler_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.scaler_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-15, HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) BE-15, HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-012 — Enable / disable ARC on an output
+
+* **Registry claim:** README "Advanced Output Control" (arc)
+* **Interfaces:** device: set arc; rest: POST /api/output/{output}/arc; ui: modal/output-settings/default; kiosk: kiosk/routing-modal/advanced
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_output_settings and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator, payload on the simulator log -> V1); tests/test_rest_api.py TestAdvancedOutputControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A26` — `tests/sim/test_sim_hub.py::test_output_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (5 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 5 stale record(s) include `docs/validation/evidence/F-MTX-012/2026-10-04-V2-7dbc4dc7-settings.arc_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.arc_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** enable, HDCP, HDR, scaler, ARC and audio-mute are all accepted by the simulator and report success; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-013 — Set an input's EDID
+
+* **Registry claim:** README "EDID Management: Per-input EDID configuration"
+* **Interfaces:** device: set edid; rest: POST /api/input/{input}/edid, GET /api/edid/modes, GET /api/status/edid; ui: modal/input-settings/default
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_edid and tests/sim/test_sim_real_commands.py (driver-level: real OreiMatrix against the simulator -> V1); tests/test_rest_api.py TestEdidControl (mocked). EDID ids 1-47 are the device web interface's list (36 = 8K FRL 12G HDR 7.1CH, as V1.10.01 reports). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A24` — `tests/sim/test_sim_hub.py::test_edid`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C17` — `tests/test_rest_api.py TestEdidControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (10 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 10 stale record(s) include `docs/validation/evidence/F-MTX-013/2026-10-04-V2-7dbc4dc7-settings.edid_input_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.edid_input_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `set_input_edid(4, 12)` and `copy_edid_from_output(5, 1)` change the simulator's input EDID values to 12 and 40, and the EDID read reports mode 12; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestEdidControl` asserts 8 method(s) / 30 assertion(s): `test_get_edid_modes`, `test_get_edid_status`, `test_set_input_edid`, `test_set_input_edid_invalid_input` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-014 — Copy EDID from a connected display
+
+* **Registry claim:** README "Copy EDID from connected displays"
+* **Interfaces:** device: set edid (39+N); rest: POST /api/input/{input}/edid
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_edid (copy_edid_from_output sends set edid 39+N) (driver-level -> V1). Neither `copy edid` nor `set input edid 14+N` is answered by V1.10.01 (BE-25). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A24` — `tests/sim/test_sim_hub.py::test_edid`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (11 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 11 stale record(s) include `docs/validation/evidence/F-MTX-014/2026-10-04-V2-7dbc4dc7-settings.edid_copy_invalid_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `settings.edid_copy_invalid_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `set_input_edid(4, 12)` and `copy_edid_from_output(5, 1)` change the simulator's input EDID values to 12 and 40, and the EDID read reports mode 12.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-25, HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) BE-25, HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-015 — External audio: matrix mode
+
+* **Registry claim:** README "External Audio Routing: Bind to input/output or matrix mode"
+* **Interfaces:** device: set ext-audio mode, set ext-audio index, get ext-audio status; rest: POST /api/ext-audio/mode, GET /api/ext-audio/modes, GET /api/status/ext-audio
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1); tests/test_rest_api.py TestExtAudioControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A25` — `tests/sim/test_sim_hub.py::test_ext_audio`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C19` — `tests/test_rest_api.py TestExtAudioControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (9 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 9 stale record(s) include `docs/validation/evidence/F-MTX-015/2026-10-04-V2-7dbc4dc7-audio.mode_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `audio.mode_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** mode/enable/source set the simulator's external-audio state and the status read returns mode 2, `allout[3] == 1` and `allsource[3] == 6`; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestExtAudioControl` asserts 8 method(s) / 29 assertion(s): `test_get_ext_audio_status`, `test_get_ext_audio_modes`, `test_set_ext_audio_mode`, `test_set_ext_audio_mode_invalid` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-016 — External audio: enable per output
+
+* **Registry claim:** README "Independent audio matrix control"
+* **Interfaces:** device: set ext-audio out; rest: POST /api/ext-audio/{output}/enable
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1); tests/test_rest_api.py TestExtAudioControl (mocked). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A25` — `tests/sim/test_sim_hub.py::test_ext_audio`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C19` — `tests/test_rest_api.py TestExtAudioControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (20 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 20 stale record(s) include `docs/validation/evidence/F-MTX-016/2026-10-04-V2-7dbc4dc7-audio.enable_1_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `audio.enable_1_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** mode/enable/source set the simulator's external-audio state and the status read returns mode 2, `allout[3] == 1` and `allsource[3] == 6`; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestExtAudioControl` asserts 8 method(s) / 29 assertion(s): `test_get_ext_audio_status`, `test_get_ext_audio_modes`, `test_set_ext_audio_mode`, `test_set_ext_audio_mode_invalid` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-017 — External audio: source per output
+
+* **Registry claim:** README "Per-output audio source selection"
+* **Interfaces:** device: ext-audio switch; rest: POST /api/ext-audio/{output}/source
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_ext_audio and tests/sim/test_sim_real_commands.py (driver-level -> V1); tests/test_rest_api.py TestExtAudioControl (mocked). The device web interface offers it only in matrix mode (2). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A25` — `tests/sim/test_sim_hub.py::test_ext_audio`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C19` — `tests/test_rest_api.py TestExtAudioControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (71 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 71 stale record(s) include `docs/validation/evidence/F-MTX-017/2026-10-04-V2-7dbc4dc7-audio.source_1_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `audio.source_1_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** mode/enable/source set the simulator's external-audio state and the status read returns mode 2, `allout[3] == 1` and `allsource[3] == 6`; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestExtAudioControl` asserts 8 method(s) / 29 assertion(s): `test_get_ext_audio_status`, `test_get_ext_audio_modes`, `test_set_ext_audio_mode`, `test_set_ext_audio_mode_invalid` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-018 — Front-panel beep on / off
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/system/beep; built-in shortcuts beep_on/off
+* **Interfaces:** device: set beep; rest: POST /api/system/beep; ui: drawer/hardware/default
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).
+* **Named assertion scope read:** `A30` — `tests/sim/test_sim_hub.py::test_system_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C25` — `tests/test_rest_api.py TestSystemSettingsEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-MTX-018/2026-10-04-V2-7dbc4dc7-matrix.beep_off-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.beep_off`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** beep, panel lock and LCD timeout change the simulator's system state; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestSystemSettingsEndpoints` asserts 4 method(s) / 12 assertion(s): `test_set_beep_enabled`, `test_set_beep_disabled`, `test_set_panel_lock_locked`, `test_set_panel_lock_unlocked`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-019 — Front-panel lock
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/system/panel_lock
+* **Interfaces:** device: set panel lock; rest: POST /api/system/panel_lock; ui: drawer/hardware/default
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_system_settings (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestSystemSettingsEndpoints (mocked).
+* **Named assertion scope read:** `A30` — `tests/sim/test_sim_hub.py::test_system_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C25` — `tests/test_rest_api.py TestSystemSettingsEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-MTX-019/2026-10-04-V2-7dbc4dc7-matrix.panel_lock_off-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.panel_lock_off`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** beep, panel lock and LCD timeout change the simulator's system state; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestSystemSettingsEndpoints` asserts 4 method(s) / 12 assertion(s): `test_set_beep_enabled`, `test_set_beep_disabled`, `test_set_panel_lock_locked`, `test_set_panel_lock_unlocked`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-020 — Front-panel LCD timeout
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/system/lcd
+* **Interfaces:** device: set lcd on time; rest: POST /api/system/lcd, GET /api/system/lcd/modes; ui: drawer/hardware/default
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_system_settings and tests/sim/test_sim_real_commands.py (driver-level -> V1); tests/test_rest_api.py TestLcdTimeoutControl (mocked). V1.10.01 rejected the old {"time": N} payload for every code (captured, result 0); the hub now sends {"lcd on time": N} and reads the code back as `get system status.mode` (captured: 3 = "lcd on 30 seconds"). On MCU V1.10.01 the command the hub sent before WP-A4 part 2 got no answer and changed nothing (HIL-09); the hub now sends the device web interface's command, which is web-UI-derived until a hardware write run proves it (tools/hil/README.md). Capped at V1 by HIL-09.
+* **Named assertion scope read:** `A30` — `tests/sim/test_sim_hub.py::test_system_settings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M4` — `tests/sim/test_sim_real_commands.py`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C22` — `tests/test_rest_api.py TestLcdTimeoutControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, capped at V1 by **HIL-09**, freshness `stale` (8 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 8 stale record(s) include `docs/validation/evidence/F-MTX-020/2026-10-04-V2-7dbc4dc7-matrix.lcd_invalid_mode-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.lcd_invalid_mode`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** beep, panel lock and LCD timeout change the simulator's system state; the exact command strings and payloads the hub sends are asserted against the simulator log; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestLcdTimeoutControl` asserts 4 method(s) / 15 assertion(s): `test_get_lcd_timeout_modes`, `test_set_lcd_timeout`, `test_set_lcd_timeout_invalid_mode`, `test_set_lcd_timeout_missing_mode`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); it is **capped at V1** by the open HIL-09 row, and source presence cannot decide the device's answer; there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-07, HIL-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); **first** lift the V1 cap by discharging HIL-09 on its own recorded acceptance condition, because no evidence can raise a capped row above V1; discharge the open finding(s) API-07, HIL-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-021 — Reboot the matrix
+
+* **Registry claim:** docs/FLIC_SETUP.md POST /api/system/reboot; HA reboot button
+* **Interfaces:** device: reboot; telnet: reboot; rest: POST /api/system/reboot; ui: dialog/confirm/reboot; ha: button.reboot_matrix; flic: POST /api/system/reboot
+* **Recorded basis (registry, verbatim):** Enabled simulator reboot via the real REST app and both shortcut aliases; HTTP-only and Telnet lifecycle tests, refusal and missing-acknowledgement fallback. Packaged-image records prove one simulator reboot and automatic recovery. Confirmation-dialog UI, HA/Flic triggers and physical reboot acknowledgement/timing require separate proof.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (8 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 8 stale record(s) include `docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `reboot.direct`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 21 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-022 — Rename inputs (names stored on the matrix)
+
+* **Registry claim:** web UI input settings modal; POST /api/input/{n}/name
+* **Interfaces:** device: set input name, get video status; rest: POST /api/input/{input}/name; ui: modal/input-settings/default; uc: media_player source_list; ha: select options
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1). Direct REST simulator scenarios now prove device names and hub readback, the 32-character limit, invalid-request no-write behavior and device refusal. Cross-client rename propagation still requires separate proof.
+* **Named assertion scope read:** `A29` — `tests/sim/test_sim_hub.py::test_set_names`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-MTX-022/2026-10-04-V2-7dbc4dc7-matrix.input_blank_name-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.input_blank_name`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the input and output names are written to the simulator and the status read returns the same names.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-023 — Rename outputs (names stored on the matrix)
+
+* **Registry claim:** web UI output settings modal; POST /api/output/{n}/name
+* **Interfaces:** device: set output name; rest: POST /api/output/{output}/name; ui: modal/output-settings/default; uc: media_player.output_N name
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_set_names (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1). Direct REST simulator scenarios now prove device names and hub readback, the 32-character limit, invalid-request no-write behavior and device refusal. Cross-client rename propagation still requires separate proof.
+* **Named assertion scope read:** `A29` — `tests/sim/test_sim_hub.py::test_set_names`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-MTX-023/2026-10-04-V2-7dbc4dc7-matrix.output_blank_name-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `matrix.output_blank_name`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the input and output names are written to the simulator and the status read returns the same names.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-024 — Read the current routing and names
+
+* **Registry claim:** docs/API_REFERENCE.md GET /api/status; every client's status view
+* **Interfaces:** device: get video status; rest: GET /api/status; ws: status, routing_change, input_name_change, output_name_change, power_change; ui: matrix/grid/default; kiosk: kiosk/routing/default; uc: sensor.output_N_source; ha: select.output_N_source current_option
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator (REST status equals simulator state). V2 against real device data: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (REST -> real hub -> simulator in golden mode serving the byte-exact MCU V1.10.01 read capture, 9-entry allsource).
+* **Named assertion scope read:** `A9` — `tests/sim/test_sim_e2e.py::test_status_reflects_simulator`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A5` — `tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V2`, effective `V2`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-MTX-024/2026-10-04-V2-7dbc4dc7-status.routing_all_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.routing_all_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the status payload equals the simulator state (connected, input names, output names, routing, preset names); the REST status response reports `connected: true`, the captured eight-slot routing, the captured input/output names, `power: on` and eight output descriptors.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-025 — Show which inputs have an active signal
+
+* **Registry claim:** README HA "Binary sensors for input active video signals"
+* **Interfaces:** device: get input status (inactive); rest: GET /api/status/inputs, GET /api/inputs; ui: inputs/list/default, matrix/grid/no-signal; kiosk: kiosk/routing/default; uc: sensor.input_N_signal; ha: binary_sensor.input_N_signal
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked).
+* **Named assertion scope read:** `A22` — `tests/sim/test_sim_hub.py::test_capabilities`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C24` — `tests/test_rest_api.py TestStatusEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (16 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 16 stale record(s) include `docs/validation/evidence/F-MTX-025/2026-10-04-V2-7dbc4dc7-status.signal_1_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.signal_1_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the capabilities document reports input 1 `signal_detected: true` and output 0 `connected: true` with `arc_enabled: true`; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestStatusEndpoints` asserts 7 method(s) / 31 assertion(s): `test_inputs_endpoint`, `test_outputs_endpoint`, `test_full_status_endpoint`, `test_output_status_endpoint` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-026 — Show which cables are plugged in (Telnet link status)
+
+* **Registry claim:** README Technical Details "Telnet (port 23) - for CEC commands and cable detection"
+* **Interfaces:** telnet: status, r link in {n}, r link out {n}; rest: GET /api/status/cables; ui: matrix/grid/cables-unplugged, outputs/list/cables-unplugged; uc: sensor.input_N_cable, sensor.output_N_cable
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1). Against real device data (still driver-level, V1): tests/test_telnet_real_captures.py (real TelnetClient against a replay of the captured V1.10.01 segments and timing: banner with IAC, echo, status dump, r link) and tests/sim/test_golden_hub.py::test_telnet_banner_cables_and_presets_from_real_device_bytes. GET /api/status/cables is not exercised by any test.
+* **Named assertion scope read:** `A31` — `tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A6` — `tests/sim/test_golden_hub.py::test_telnet_banner_cables_and_presets_from_real_device_bytes`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M11` — `tests/test_telnet_real_captures.py`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-MTX-026/2026-10-04-V2-7dbc4dc7-status.cables_all-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.cables_all`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the cable read equals the simulator's cable state, per-port cable reads agree with it, and the full status returns the routing and the preset info; the handshake yields `telnet_connected`, firmware `1.10.01`, and the captured input/output cable sets, with per-port cable reads consistent with them; the captured V1.10.01 banner, echo, status dump and `r link` segments are replayed through the real TelnetClient.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) HIL-03 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) HIL-03 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-027 — Show which outputs have a display connected
+
+* **Registry claim:** README HA "Binary sensors for ... output display connection status"
+* **Interfaces:** device: get output status (allconnect); rest: GET /api/status/outputs, GET /api/outputs; ui: outputs/list/default; uc: sensor.output_N_connected; ha: binary_sensor.output_N_connected
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_capabilities (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestStatusEndpoints (mocked). V2 against real device data, not yet recorded as evidence: tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers (GET /api/status/outputs -> real hub -> simulator in golden mode serving the V1.10.01 get output status capture: `name`, 9-entry arrays).
+* **Named assertion scope read:** `A22` — `tests/sim/test_sim_hub.py::test_capabilities`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A5` — `tests/sim/test_golden_hub.py::test_rest_status_from_real_device_answers`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C24` — `tests/test_rest_api.py TestStatusEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (16 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 16 stale record(s) include `docs/validation/evidence/F-MTX-027/2026-10-04-V2-7dbc4dc7-status.display_1_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.display_1_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the capabilities document reports input 1 `signal_detected: true` and output 0 `connected: true` with `arc_enabled: true`; the REST status response reports `connected: true`, the captured eight-slot routing, the captured input/output names, `power: on` and eight output descriptors; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestStatusEndpoints` asserts 7 method(s) / 31 assertion(s): `test_inputs_endpoint`, `test_outputs_endpoint`, `test_full_status_endpoint`, `test_output_status_endpoint` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-028 — Show device info (model, firmware, network)
+
+* **Registry claim:** web UI About/General; GET /api/status/device, /api/system/info
+* **Interfaces:** device: get status, get network, get system status; telnet: r fw version, r type; rest: GET /api/status/device, GET /api/status/system, GET /api/system/info; ui: dialog/about/default
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_system_settings and ::test_telnet_connects_and_reads_firmware (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1). Against real device data (driver-level, V1): tests/sim/test_golden_hub.py::test_login_and_status_reads_parse_the_device_bytes (get status, get network, get system status as captured on V1.10.01) and tests/test_telnet_real_captures.py (banner, r fw version, r type).
+* **Named assertion scope read:** `A30` — `tests/sim/test_sim_hub.py::test_system_settings`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A33` — `tests/sim/test_sim_hub.py::test_telnet_connects_and_reads_firmware`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A4` — `tests/sim/test_golden_hub.py::test_login_and_status_reads_parse_the_device_bytes`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M11` — `tests/test_telnet_real_captures.py`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (5 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 5 stale record(s) include `docs/validation/evidence/F-MTX-028/2026-10-04-V2-7dbc4dc7-status.device_dhcp_0-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.device_dhcp_0`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** beep, panel lock and LCD timeout change the simulator's system state; the Telnet connect succeeds, `telnet_connected` is true and the firmware version reads back `1.10.01`; the login is served verbatim from the capture and the parsed status yields routing `[7]*8`, the captured input/output names and `power: on`, with firmware/web/model read back as `V1.10.01` / `V2.00.03` / `BK-808`; the captured V1.10.01 banner, echo, status dump and `r link` segments are replayed through the real TelnetClient.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-029 — Cycle an output to the next / previous input
+
+* **Registry claim:** docs/FLIC_SETUP.md Flic Twist; README Flic
+* **Interfaces:** rest: POST /api/input/next?output=N, POST /api/input/previous?output=N; flic: Twist rotate
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestInputCycling (mocked). Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior.
+* **Named assertion scope read:** `A34` — `tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C21` — `tests/test_rest_api.py TestInputCycling`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (138 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 138 stale record(s) include `docs/validation/evidence/F-MTX-029/2026-10-04-V2-7dbc4dc7-status.cycle_next_1_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `status.cycle_next_1_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the endpoint returns 200 and reports previous/current input and output; the status read and the simulator state both show the clamped or wrapped value; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestInputCycling` asserts 3 method(s) / 7 assertion(s): `test_input_next`, `test_input_previous`, `test_output_source`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-030 — Read a preset's stored routing
+
+* **Registry claim:** GET /api/presets (routing per preset); presets drawer routing editor
+* **Interfaces:** device: preset get; telnet: r preset {n}; rest: GET /api/presets; ui: drawer/presets/expanded
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status (get_preset_info) (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1). Against real device data (driver-level, V1): the r preset answers captured on V1.10.01 (8 lines, one TCP segment each, or an empty slot) through the real TelnetClient in tests/test_telnet_real_captures.py; HTTP preset get is not implemented by that firmware (HIL-01), so there is no HTTP path: tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read. BE-36 fixed on fix-backend-wp-v2-bugs: GET /api/presets reads every slot with Telnet r preset N (routing_source matrix; the hub copy, marked routing_source saved, only when a slot cannot be read). preset_read.device_slot_1..8 pass on the packaged image (V2). Slot contents on the real BK-808 still need hardware proof (V4). Shared-runtime forced-status expiration is exercised by tests/sim/test_sim_rest_reads.py::test_shared_runtime_preset_catalog_after_explicit_ws_refresh and tests/test_runtime_preset_cache_r1e.py: ordinary reads retain the normal TTL, while an explicit client status refresh expires slots without prefetching them or writing to the matrix. Integrated source and image evidence must follow the R1E correction; existing feature levels are retained.
+* **Named assertion scope read:** `A31` — `tests/sim/test_sim_hub.py::test_telnet_cable_and_full_status`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A3` — `tests/sim/test_golden_hub.py::test_get_preset_info_never_uses_the_http_preset_read`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A40` — `tests/sim/test_sim_rest_reads.py::test_shared_runtime_preset_catalog_after_explicit_ws_refresh`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M11` — `tests/test_telnet_real_captures.py`.
+* **Named module/class scope read:** `M10` — `tests/test_runtime_preset_cache_r1e.py`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (35 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`f4f417bfed08` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 35 stale record(s) include `docs/validation/evidence/F-MTX-030/2026-10-02-V2-f4f417bf-preset_read.device_slot_1-api.json` @ `f4f417bfed08` (client `api`, level `V2`, scenario `preset_read.device_slot_1`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the cable read equals the simulator's cable state, per-port cable reads agree with it, and the full status returns the routing and the preset info; `get_preset_info(1)` returns `None` and the simulator log contains no `preset get` / `get routing status` command, i.e. the hub does **not** use an HTTP preset read on this firmware; the catalog returns the warm slots, each populated slot reports `routing_source: matrix` with the captured routing, an unreadable slot is `{}`, and exactly the eight `r preset N` reads are issued; the captured V1.10.01 banner, echo, status dump and `r link` segments are replayed through the real TelnetClient; ordinary preset reads keep the normal TTL and an explicit client status refresh expires slots without prefetching or writing.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-MTX-031 — Notice changes made outside the hub (front panel, cable plugged, source on/off)
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md HIL-B physical-change detection; driver poller routing_change/cable_change
+* **Interfaces:** telnet: push: hdmi input|output N: connect|disconnect; ws: routing_change, cable_change, signal_change, connection_change; uc: sensor updates; ha: coordinator refresh
+* **Recorded basis (registry, verbatim):** V3: scenarios live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere: the simulator changes behind the hub's back and a /ui and a /kiosk page that stay open show it, with their status reads stripped so only the WebSocket can explain it (browser client). Hardware: HIL-B.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (11 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.display_unplugged-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.display_unplugged`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 23 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+1 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.front_panel_route`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.input_signal-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.input_signal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); (+1 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — device outputs[0].connected == 0; WebSocket event 'cable_change' with {'type': 'output', 'port': 1, 'connected': False}; WebSocket event 'connection_change' with {'output': 1, 'connected': False}; client shows ui.output.1 == 'disconnected' (was 'signal'); every WebSocket message follows docs/api/websocket.schema.json; device outputs[1].source == 6; WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name': 'PS5'}; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.2 CEC control (11 features)
+
+##### F-CEC-001 — Power a source on / off over CEC
+
+* **Registry claim:** README "CEC control for all 8 inputs (navigation, playback, power)"
+* **Interfaces:** device: cec command (object 0); telnet: s cec in {n} {word}; rest: POST /api/cec/input/{input}/{command}; ui: cec-remote/input-2; kiosk: kiosk/cec-remote/output-1; uc: remote.input_N_cec send_cmd; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.
+* **Named assertion scope read:** `A23` — `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C4` — `tests/test_driver.py TestCecCommandResolution`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (17 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 17 stale record(s) include `docs/validation/evidence/F-CEC-001/2026-10-04-V2-7dbc4dc7-cec.input_power_on-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec.input_power_on`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more); `tests/test_driver.py TestCecCommandResolution` asserts 6 method(s) / 8 assertion(s): `test_get_input_cec_method_no_matrix`, `test_get_input_cec_method_invalid_command`, `test_get_output_cec_method_no_matrix`, `test_get_output_cec_method_invalid_command` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-002 — Navigate a source's menus over CEC (up/down/left/right/select/menu/back)
+
+* **Registry claim:** README "CEC control ... navigation"
+* **Interfaces:** device: cec command (object 0); telnet: s cec in {n} {word}; rest: POST /api/cec/input/{input}/{command}; ui: cec-remote/input-2; kiosk: kiosk/cec-remote/output-1; uc: remote.input_N_cec send_cmd; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.
+* **Named assertion scope read:** `A23` — `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C4` — `tests/test_driver.py TestCecCommandResolution`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (56 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 56 stale record(s) include `docs/validation/evidence/F-CEC-002/2026-10-04-V2-7dbc4dc7-cec_controls.input_1_back-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec_controls.input_1_back`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more); `tests/test_driver.py TestCecCommandResolution` asserts 6 method(s) / 8 assertion(s): `test_get_input_cec_method_no_matrix`, `test_get_input_cec_method_invalid_command`, `test_get_output_cec_method_no_matrix`, `test_get_output_cec_method_invalid_command` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-003 — Control playback on a source over CEC
+
+* **Registry claim:** README "CEC control ... playback"
+* **Interfaces:** device: cec command (object 0); telnet: s cec in {n} {word}; rest: POST /api/cec/input/{input}/{command}; ui: cec-remote/input-2; kiosk: kiosk/cec-remote/output-1; uc: remote.input_N_cec send_cmd; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.
+* **Named assertion scope read:** `A23` — `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C4` — `tests/test_driver.py TestCecCommandResolution`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (56 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 56 stale record(s) include `docs/validation/evidence/F-CEC-003/2026-10-04-V2-7dbc4dc7-cec_controls.input_1_fast_forward-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec_controls.input_1_fast_forward`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more); `tests/test_driver.py TestCecCommandResolution` asserts 6 method(s) / 8 assertion(s): `test_get_input_cec_method_no_matrix`, `test_get_input_cec_method_invalid_command`, `test_get_output_cec_method_no_matrix`, `test_get_output_cec_method_invalid_command` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-004 — Source volume / mute over CEC
+
+* **Registry claim:** docs/CEC_CONTROL_ARCHITECTURE.md input volume commands
+* **Interfaces:** device: cec command (object 0); telnet: s cec in {n} {word}; rest: POST /api/cec/input/{input}/{command}; ui: cec-remote/input-2; kiosk: kiosk/cec-remote/output-1; uc: remote.input_N_cec send_cmd; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked); tests/test_driver.py TestCecCommandResolution.
+* **Named assertion scope read:** `A23` — `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C4` — `tests/test_driver.py TestCecCommandResolution`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (24 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 24 stale record(s) include `docs/validation/evidence/F-CEC-004/2026-10-04-V2-7dbc4dc7-cec_controls.input_1_mute-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec_controls.input_1_mute`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more); `tests/test_driver.py TestCecCommandResolution` asserts 6 method(s) / 8 assertion(s): `test_get_input_cec_method_no_matrix`, `test_get_input_cec_method_invalid_command`, `test_get_output_cec_method_no_matrix`, `test_get_output_cec_method_invalid_command` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-005 — Turn a display (TV) on / off over CEC
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Profiles power automation
+* **Interfaces:** device: cec command (object 1); telnet: s cec hdmi out {n} {word}; rest: POST /api/cec/output/{output}/{command}; ws: cec_command; ui: cec-remote/output-1, cec-tray/expanded; kiosk: kiosk/cec-remote/display-target; uc: remote.output_N_cec, media_player.output_N on/off/volume; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** V3: ha.service_cec_display (ha client: a real Home Assistant container drives it; simulator state read back). tests/sim/test_sim_hub.py::test_telnet_cec (Telnet path, POWER_ON to output 1) (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1); tests/test_rest_api.py TestCecCommandEndpoints (mocked).
+* **Named assertion scope read:** `A32` — `tests/sim/test_sim_hub.py::test_telnet_cec`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (22 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec.output_power_on`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_power_on-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.output_cec_power_on`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 0} exactly 1x; simulator raised no protocol warnings; WebSocket event 'cec_command' with {'type': 'output', 'port': 1, 'command': 'power_on'}; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the send produces the telnet command `s cec hdmi out 1 on`; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more).
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) BE-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) BE-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-006 — Display / soundbar volume and mute over CEC
+
+* **Registry claim:** docs/FLIC_SETUP.md Flic Twist volume control
+* **Interfaces:** device: cec command (object 1); telnet: s cec hdmi out {n} {word}; rest: POST /api/cec/output/{output}/{command}; ws: cec_command; ui: cec-remote/output-1, cec-tray/expanded; kiosk: kiosk/cec-remote/display-target; uc: remote.output_N_cec, media_player.output_N on/off/volume; ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestCecCommandEndpoints (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (25 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 25 stale record(s) include `docs/validation/evidence/F-CEC-006/2026-10-04-V2-7dbc4dc7-cec.output_volume_up-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec.output_volume_up`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) BE-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-007 — Enable CEC on the target port automatically before a command
+
+* **Registry claim:** src/orei_matrix.py ensure_cec_enabled; docs/OREI_API_COMMANDS.md CEC enable note
+* **Interfaces:** device: get cec status, set cec index
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port (driver-level: real OreiMatrix against the simulator, no user interface in the path -> V1).
+* **Named assertion scope read:** `A23` — `tests/sim/test_sim_hub.py::test_cec_http_auto_enables_port`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (417 stale record(s)).
+* **Ancestry:** stale `62adf645a020`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 417 stale record(s) include `docs/validation/evidence/F-API-015/2026-10-04-V2-7dbc4dc7-cec_controls.output_1_active-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec_controls.output_1_active`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** sending CEC auto-enables the input's CEC port (`cec_enabled` 0 to 1), the simulator receives the mapped command index and the call reports no warnings.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-008 — Enable / disable CEC per port
+
+* **Registry claim:** docs/API_REFERENCE.md POST /api/cec/{input|output}/{port}/enable
+* **Interfaces:** device: set cec index; rest: POST /api/cec/input/{port}/enable, POST /api/cec/output/{port}/enable
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: real REST/simulator tests cover both input/output enable and disable, warm caches, external changes, concurrent edits and failed/incomplete reads (BE-35). The cec_controls packaged-image scenarios now provide linked V2 proof for both flag values on all 16 ports, default enable, boundaries and refusal; all other flags are preserved.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V2`, no cap, freshness `fresh` (40 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_0-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_controls.input_1_enable_0`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_controls.py`); `docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_1_enable_1-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_controls.input_1_enable_1`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_controls.py`); `docs/validation/evidence/ev02-original-api/F-CEC-008/2026-10-19-V2-1baac3de-cec_controls.input_2_enable_0-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_controls.input_2_enable_0`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_controls.py`); (+37 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'port_type': 'input', 'port': 1, 'cec_enabled': False}}; device received http 'get cec status'; device received http 'set cec index' with {'inputindex': [0, 1, 0, 1, 1, 0, 1, 0], 'outputindex': [1, 0, 1, 0, 0, 1, 0, 1]} exactly 1x; device never received 'cec command'; device inputs[0].cec_enabled == 0; hub GET /api/status/cec -> data.cec_config.inputs[0].cec_enabled == False (HTTP 200); hub GET /api/status/cec -> data.raw.inputindex == [0, 1, 0, 1, 1, 0, 1, 0] (HTTP 200); ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-009 — Read which ports have CEC enabled
+
+* **Registry claim:** GET /api/status/cec
+* **Interfaces:** device: get cec status; rest: GET /api/status/cec
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline retained. The cec_controls packaged-image scenarios exercise GET /api/status/cec against independent all-off/all-on/mixed matrix flags and a failed matrix read, including raw and formatted arrays. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py verify real-SIM input/output enable decisions after explicit protocol, facade and WS synchronization, plus registered status readback after power commands; ordinary cache behavior is preserved. Fresh complete source and image campaigns at clean 4adbc13 pass and are archived in docs/validation/runs/runtime; hardware V4 remains unobserved.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-CEC-009/2026-10-04-V2-7dbc4dc7-cec_controls.status_mixed-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `cec_controls.status_mixed`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-010 — Send CEC over Telnet (OREI_USE_TELNET_CEC)
+
+* **Registry claim:** README Technical Details "CEC via Telnet or HTTP fallback"
+* **Interfaces:** telnet: s cec in {n} {word}, s cec hdmi out {n} {word}; env: OREI_USE_TELNET_CEC
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: driver-level Telnet tests. The cec_telnet packaged-image scenarios provide V2 proof for all 19 source/six display commands on every port, with flag readback and no HTTP CEC frame. BE-37 fixed (fix-backend-wp-v2-bugs): after an interrupted volume reply the hub reports failure and sends no HTTP CEC frame (cec_telnet.*_interrupted_volume pass); BE-38: only power on/off are sent again over HTTP after such a reply (cec_telnet.*_interrupted_power_on/off pass). Simulator acknowledgements and physical effects still require hardware proof.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `stale` (208 stale record(s)).
+* **Ancestry:** stale `62adf645a020`…`a538a8ef4c52` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 208 stale record(s) include `docs/validation/evidence/F-CEC-010/2026-10-02-V2-a538a8ef-cec_telnet.input_interrupted_volume-api.json` @ `a538a8ef4c52` (client `api`, level `V2`, scenario `cec_telnet.input_interrupted_volume`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-CEC-011 — List CEC commands and per-port capabilities (incl. audio-only outputs)
+
+* **Registry claim:** docs/API_REFERENCE.md GET /api/cec/commands, /api/cec/capabilities
+* **Interfaces:** rest: GET /api/cec/commands, GET /api/cec/commands/{type}, GET /api/cec/capabilities, GET /api/cec/input/{input}/capabilities, GET /api/cec/output/{output}/capabilities
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked REST endpoints and driver-level capability reads. The cec_caps packaged-image scenarios provide V2 proof for catalogue membership, input signal/CEC combinations, all output scaler codes and both flag values, grouped records/summaries, invalid ports/types and failed CEC reads. Device scaler 4 reads as audio-only; BE-15 hardware/write proof remains open.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V2`, no cap, freshness `fresh` (88 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_0-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_caps.all_pattern_0`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_capabilities.py`); `docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_1-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_caps.all_pattern_1`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_capabilities.py`); `docs/validation/evidence/ev02-original-api/F-CEC-011/2026-10-19-V2-1baac3de-cec_caps.all_pattern_2-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec_caps.all_pattern_2`, target `sim`, image digest **not recorded in this record**, covers 20 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `src/device_codes.py`, `tests/validation/scenarios/cec_capabilities.py`); (+85 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'capabilities': {'inputs': [{'input_num': 1, 'name': 'Capability Source 1', 'signal_detected': True, 'cec_enabled': False, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 2, 'name': 'Capability Source 2', 'signal_detected': False, 'cec_enabled': True, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 3, 'name': 'Capability Source 3', 'signal_detected': True, 'cec_enabled': False, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 4, 'name': 'Capability Source 4', 'signal_detected': False, 'cec_enabled': True, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 5, 'name': 'Capability Source 5', 'signal_detected': True, 'cec_enabled': False, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 6, 'name': 'Capability Source 6', 'signal_detected': False, 'cec_enabled': True, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 7, 'name': 'Capability Source 7', 'signal_detected': True, 'cec_enabled': False, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}, {'input_num': 8, 'name': 'Capability Source 8', 'signal_detected': False, 'cec_enabled': True, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'MENU', 'BACK', 'PLAY', 'PAUSE', 'STOP', 'PREVIOUS', 'NEXT', 'REWIND', 'FAST_FORWARD', 'VOLUME_UP', 'VOLUME_DOWN', 'MUTE']}], 'outputs': [{'output_num': 1, 'name': 'Capability Display 1', 'connected': True, 'stream_enabled': False, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': True, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 2, 'name': 'Capability Display 2', 'connected': False, 'stream_enabled': True, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': False, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 3, 'name': 'Capability Display 3', 'connected': True, 'stream_enabled': False, 'is_audio_only': True, 'arc_enabled': True, 'cec_enabled': False, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 4, 'name': 'Capability Display 4', 'connected': False, 'stream_enabled': True, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': True, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 5, 'name': 'Capability Display 5', 'connected': True, 'stream_enabled': False, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': False, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 6, 'name': 'Capability Display 6', 'connected': False, 'stream_enabled': True, 'is_audio_only': True, 'arc_enabled': True, 'cec_enabled': False, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 7, 'name': 'Capability Display 7', 'connected': True, 'stream_enabled': False, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': True, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}, {'output_num': 8, 'name': 'Capability Display 8', 'connected': False, 'stream_enabled': True, 'is_audio_only': True, 'arc_enabled': False, 'cec_enabled': False, 'scaler_mode': 4, 'supported_cec_commands': ['POWER_ON', 'POWER_OFF', 'MUTE', 'VOLUME_DOWN', 'VOLUME_UP', 'ACTIVE']}]}, 'summary': {'audio_only_outputs': [1, 2, 3, 4, 5, 6, 7, 8], 'arc_enabled_outputs': [3, 6], 'connected_outputs': [1, 3, 5, 7], 'signal_detected_inputs': [1, 3, 5, 7]}}}; no write command reached the device; device never received 'cec command'; device never received 'set cec index'; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); the fresh proof reaches only **V2** and only against the simulator; the open finding(s) BE-15 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); discharge the open finding(s) BE-15 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.3 REST/WebSocket contract (42 features)
+
+##### F-API-001 — GET /api/health, /api/openapi.json, /api/docs (liveness, matrix connection, runtime metrics, integration lifecycle, OpenAPI 3.1 & Swagger UI)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table; src/hub/openapi.py; src/hub/runtime/composition.py
+* **Interfaces:** rest: GET /api/health, GET /api/openapi.json, GET /api/docs
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime; tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping; tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads; tests/test_health.py; tests/test_openapi_and_config_docs.py. R1 adds data.integrations; real loader/flag startup proof awaits peer integration. OpenAPI describes shared cycle query parameters and the existing SceneV2ResponseEnvelope field omissions, creation201 and execution207; tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi compares real registered responses with their schemas. Core envelope remains strict; no public wire normalization.
+* **Named assertion scope read:** `A7` — `tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A35` — `tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A36` — `tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A54` — `tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M7` — `tests/test_health.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the health document reports `status: healthy`, `matrix.connected: true`, the matrix host, a non-null `last_successful_poll` and `telnet_connected: false`; the `integrations` map is empty before any integration and then carries each integration's `running` state, and reading health performs no device write; the document is served as JSON, declares `openapi: 3.1.0`, validates against the project's own validator with no errors and lists `/api/openapi.json` among its paths; the execute path declares a 207 response, the live response status matches the declared status, the envelope `$ref` is `SceneV2ResponseEnvelope`, and `data`/`error` presence follows the 404 rule; the health document's field presence is asserted in isolation.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Feature-specific distinction:** The registry basis names three distinct assertions, not one: the health/runtime read (`tests/sim/test_sim_e2e.py::test_health_reports_matrix_and_runtime`), the integration-lifecycle mapping (`tests/sim/test_sim_rest_reads.py::test_health_includes_integration_lifecycle_mapping`) and the real OpenAPI response assertions (`tests/sim/test_sim_rest_reads.py::test_openapi_spec_and_swagger_docs_reads` plus `tests/test_openapi_and_config_docs.py::test_live_scene_v2_omitted_fields_and_created_status_match_openapi`). The recorded basis explicitly keeps `data.integrations`, the shared cycle query parameters and the SceneV2 field omissions as stated; a real loader/flag startup proof is still awaited.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-002 — API info and root (GET /, /api, /api/info)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /, GET /api, GET /api/info
+* **Recorded basis (registry, verbatim):** V2: clean source-simulator API campaign at 0dd2c25ea866fd56fbe6046e03f0172499b70080 passes contracts.api_info, contracts.api_root and contracts.api_root_alias. Assertions cover canonical application/driver identity, documented API version/catalog and root aliases, unchanged simulator state and no mutating commands. Existing direct/simulator manifest-fallback tests remain covered. Three original records retain source SHA, timestamps, API-only client and null image digest byte-for-byte. Independent exact-candidate review/integration disposition is recorded in docs/production/software-waves/SW-API-READ-01/REVIEW.md and coordinator records; preparation alone is not final acceptance. No other client, image, hardware, soak or field qualification. All three API cases refreshed at clean 2ae46e6c after the browser-adapter change; two original directory-covered records are stale and retained with original source attribution. Fresh combined-source API proof at clean 310d8b65 refreshes all three root/info cases; original evidence remains unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `0dd2c25ea866`…`310d8b65a9fc` (ancestor(s) of `a07cf94`); stale `0dd2c25ea866`…`2ae46e6c8bb9` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json` @ `0dd2c25ea866` (client `api`, level `V2`, scenario `contracts.api_info`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `driver.json`, `src/hub/__init__.py`); `docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json` @ `2ae46e6c8bb9` (client `api`, level `V2`, scenario `contracts.api_info`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `driver.json`, `src/hub/__init__.py`); `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/api-root/F-API-002/2026-10-26-V2-310d8b65-contracts.api_info-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `contracts.api_info`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `driver.json`, `src/hub/__init__.py`); (+2 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'version': '1.0.0rc1', 'driver_id': 'hdmi_matrix', 'driver_name': 'HDMI Matrix'}}; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-003 — GET /api/status
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/status
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_e2e.py::test_status_reflects_simulator; tests/test_contract_fixtures.py.
+* **Named assertion scope read:** `A9` — `tests/sim/test_sim_e2e.py::test_status_reflects_simulator`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the status payload equals the simulator state (connected, input names, output names, routing, preset names).
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-004 — Detailed status (GET /api/status/full|inputs|outputs|cables|edid|ext-audio|system|device|cec)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/status/full, GET /api/status/inputs, GET /api/status/outputs, GET /api/status/cables, GET /api/status/edid, GET /api/status/ext-audio, GET /api/status/system, GET /api/status/device, GET /api/status/cec
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: tests/test_rest_api.py TestStatusEndpoints (mocked). New simulator read tests cover cable and CEC status, including unavailable/disconnected cases.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C24` — `tests/test_rest_api.py TestStatusEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-API-004/2026-10-04-V2-7dbc4dc7-contracts.cables-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `contracts.cables`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestStatusEndpoints` asserts 7 method(s) / 31 assertion(s): `test_inputs_endpoint`, `test_outputs_endpoint`, `test_full_status_endpoint`, `test_output_status_endpoint` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-005 — POST /api/switch (one output or all)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/switch
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state, ::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence.
+* **Named assertion scope read:** `A11` — `tests/sim/test_sim_e2e.py::test_switch_changes_simulator_state`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A10` — `tests/sim/test_sim_e2e.py::test_switch_all_and_preset`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-MTX-001/2026-10-04-V2-d6baf3ca-routing.switch_one-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `routing.switch_one`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 17 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST call returns 200, output 0's source becomes 6, and GET /api/status reports the same routing; route-all sets all eight simulator outputs to the input, and recalling preset 3 sets all eight outputs to the stored routing.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-006 — POST /api/output/{output}/source and input cycling
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/output/{output}/source, POST /api/input/next, POST /api/input/previous
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestControlEndpoints, TestInputCycling (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Input next/previous accept optional cycle=true|false (default true); false clamps under the same shared lock. tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation and test_invalid_cycle_option_is_refused_before_any_write verify registered operation readback and invalid-input no-write behavior.
+* **Named assertion scope read:** `A34` — `tests/sim/test_sim_rest_reads.py::test_cycle_clamp_and_wrap_read_back_exact_operation`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C15` — `tests/test_rest_api.py TestControlEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the endpoint returns 200 and reports previous/current input and output; the status read and the simulator state both show the clamped or wrapped value; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestControlEndpoints` asserts 7 method(s) / 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-007 — POST /api/preset/{preset} (recall)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/preset/{preset}
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_e2e.py::test_switch_all_and_preset. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C/R4D preserve opaque correlated preset exception responses without replacing the matrix owner; tests/sim/test_sim_rest_reads.py::test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write verifies the registered route, private log correlation and unchanged simulator routing. Combined runtime regressions: 1002 independent passes, two skips; final image/client campaigns pending.
+* **Named assertion scope read:** `A10` — `tests/sim/test_sim_e2e.py::test_switch_all_and_preset`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A38` — `tests/sim/test_sim_rest_reads.py::test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `presets.recall`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 18 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** route-all sets all eight simulator outputs to the input, and recalling preset 3 sets all eight outputs to the stored routing; the response is HTTP 500 with exactly the `success`/`data`/`error` envelope, `data` is null, the private value is absent from the body, and no device write occurs.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-008 — POST /api/preset/{preset}/save
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/preset/{preset}/save
+* **Recorded basis (registry, verbatim):** Scenario presets.save_custom_mapping (V2, custom mapping body); tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C15` — `tests/test_rest_api.py TestControlEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (49 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 49 stale record(s) include `docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `preset_read.saved_partial_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestControlEndpoints` asserts 7 method(s) / 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-009 — POST /api/power/on|off
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/power/on, POST /api/power/off
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestControlEndpoints (mocked). R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C15` — `tests/test_rest_api.py TestControlEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-MTX-006/2026-10-04-V2-7dbc4dc7-power.standby-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `power.standby`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestControlEndpoints` asserts 7 method(s) / 12 assertion(s): `test_recall_preset`, `test_recall_preset_invalid`, `test_switch_routing`, `test_switch_missing_input` (+3 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-010 — Output setting routes (mute, enable, hdcp, hdr, scaler, arc)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/output/{output}/mute, POST /api/output/{output}/enable, POST /api/output/{output}/hdcp, POST /api/output/{output}/hdr, POST /api/output/{output}/scaler, POST /api/output/{output}/arc
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestAdvancedOutputControl (mocked); mute also V2 in tests/sim/test_sim_e2e.py::test_output_setting_via_rest.
+* **Named assertion scope read:** `A8` — `tests/sim/test_sim_e2e.py::test_output_setting_via_rest`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C13` — `tests/test_rest_api.py TestAdvancedOutputControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST call returns 200 and the simulator's output 1 `audio_mute` becomes 1; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestAdvancedOutputControl` asserts 10 method(s) / 12 assertion(s): `test_output_enable`, `test_output_hdcp`, `test_output_hdcp_invalid_mode`, `test_output_hdr` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-011 — EDID routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/input/{input}/edid, GET /api/edid/modes
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestEdidControl (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C17` — `tests/test_rest_api.py TestEdidControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestEdidControl` asserts 8 method(s) / 30 assertion(s): `test_get_edid_modes`, `test_get_edid_status`, `test_set_input_edid`, `test_set_input_edid_invalid_input` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-012 — External audio routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/ext-audio/mode, POST /api/ext-audio/{output}/enable, POST /api/ext-audio/{output}/source, GET /api/ext-audio/modes
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestExtAudioControl (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C19` — `tests/test_rest_api.py TestExtAudioControl`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestExtAudioControl` asserts 8 method(s) / 29 assertion(s): `test_get_ext_audio_status`, `test_get_ext_audio_modes`, `test_set_ext_audio_mode`, `test_set_ext_audio_mode_invalid` (+4 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-013 — System setting routes (beep, panel lock, LCD, reboot)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/system/beep, POST /api/system/panel_lock, POST /api/system/lcd, GET /api/system/lcd/modes, POST /api/system/reboot
+* **Recorded basis (registry, verbatim):** Existing mocked system-settings tests plus enabled simulator reboot contracts through the registered app. Reboot refusal returns 500 with exactly one HTTP attempt. System-mode scenarios separately cover beep, panel lock and LCD writes; this batch records the reboot portion.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (8 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 8 stale record(s) include `docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `reboot.direct`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 21 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-014 — System info and storage routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/system/info, GET /api/system/storage
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: tests/test_persistence.py TestStorageEndpoint (handler-level). New simulator reads verify runtime info and the actual fixture storage directory. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named test-class scope read:** `C12` — `tests/test_persistence.py TestStorageEndpoint`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.storage-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.storage`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/system.py`, `src/persistence.py`); `docs/validation/evidence/ev02-original-api/F-API-014/2026-10-19-V2-1baac3de-contracts.system_info-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.system_info`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/system.py`, `src/persistence.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'data_dir_exists': True, 'config_dir_exists': True}, 'error': None}; no write command reached the device; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'success': True, 'data': {'rest_api_version': '2.10.0'}, 'error': None}.
+* **What the basis' own assertions establish:** `tests/test_persistence.py TestStorageEndpoint` asserts 4 method(s) / 20 assertion(s): `test_storage_endpoint_returns_sanitized_layout`, `test_storage_endpoint_discloses_no_paths_or_file_names`, `test_storage_source_follows_resolution_order`, `test_info_endpoint_includes_sanitized_storage`.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-015 — CEC command routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/cec/input/{input}/{command}, POST /api/cec/output/{output}/{command}
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestCecCommandEndpoints (mocked). V2 from the cec_telnet scenarios; BE-37 fixed: an ambiguous Telnet acknowledgement answers 500 without an HTTP resend; BE-38: power on/off are resent once over HTTP and answer 200. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C14` — `tests/test_rest_api.py TestCecCommandEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V2`, no cap, freshness `fresh` (440 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `62adf645a020`…`a538a8ef4c52` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec.output_power_on`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 0} exactly 1x; simulator raised no protocol warnings; WebSocket event 'cec_command' with {'type': 'output', 'port': 1, 'command': 'power_on'}; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestCecCommandEndpoints` asserts 12 method(s) / 40 assertion(s): `test_cec_commands_list`, `test_cec_capabilities`, `test_cec_input_capabilities`, `test_cec_output_capabilities` (+8 more).
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-016 — CEC catalogue, capability and enable routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/cec/commands, GET /api/cec/commands/{type}, GET /api/cec/capabilities, GET /api/cec/input/{input}/capabilities, GET /api/cec/output/{output}/capabilities, POST /api/cec/input/{port}/enable, POST /api/cec/output/{port}/enable
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads/writes and fresh packaged-image records. Single-port CEC writes preserve current arrays; tests/sim/test_sim_cec_enable_snapshot.py covers external changes, concurrent edits and failed/incomplete reads (BE-35). Grouped capability routes still have scope beyond the selected scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (133 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `72cc71dc4556`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_input_catalog-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.cec_input_catalog`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_invalid_type-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.cec_invalid_type`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/ev02-original-api/F-API-016/2026-10-19-V2-1baac3de-contracts.cec_output_catalog-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.cec_output_catalog`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`); (+129 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'device_type': 'input'}, 'error': None}; hub GET /api/cec/commands/input -> data.by_category.navigation[0].command == 'UP' (HTTP 200); no write command reached the device; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 400 and body contains {'success': False, 'data': None, 'error': "Type must be 'input' or 'output'"}; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-017 — Device settings routes (icons, display names, preset names, favourite/dashboard presets)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/device-settings, POST /api/device-settings, GET /api/device-settings/input/{input}, POST /api/device-settings/input/{input}, GET /api/device-settings/output/{output}, POST /api/device-settings/output/{output}, POST /api/device-settings/preset/{preset}/name, GET /api/device-settings/favorite-presets, PUT /api/device-settings/favorite-presets, POST /api/device-settings/favorite-presets/{preset}/toggle, GET /api/device-settings/dashboard-presets, PUT /api/device-settings/dashboard-presets, POST /api/device-settings/dashboard-presets/{preset}/toggle
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R2 private storage projection: test_device_settings_private_extensions_survive_edits_without_public_exposure verifies real registered reads, edit/reload persistence, schema preservation and no private extension exposure. Recorded level retained pending the fresh integrated campaign. Historical shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (9 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 9 stale record(s) include `docs/validation/evidence/F-API-017/2026-10-04-V2-7dbc4dc7-contracts.device_settings-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `contracts.device_settings`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-018 — Name routes (POST /api/input|output/{n}/name)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: POST /api/input/{input}/name, POST /api/output/{output}/name
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Clean source-simulator API campaign at bb4d3fdc972e7f556f29c6ed468accd4ff3b88b5 passes input/output rename and input invalid-port/blank-name cases with independent device/hub readback and mutation/command checks. Scenario code was independently reviewed at 0a7d71b2; final combined acceptance is recorded separately in the EV-02 execution record. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (1 stale record(s)).
+* **Ancestry:** fresh `bb4d3fdc972e` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name-api.json` @ `bb4d3fdc972e` (client `api`, level `V2`, scenario `writes.input_name`, target `sim`, image digest **not recorded in this record**, covers 21 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `src/persistence.py`, `src/_file_io.py`, `tests/validation/scenarios/writes.py`); `docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_blank-api.json` @ `bb4d3fdc972e` (client `api`, level `V2`, scenario `writes.input_name_blank`, target `sim`, image digest **not recorded in this record**, covers 21 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `src/persistence.py`, `src/_file_io.py`, `tests/validation/scenarios/writes.py`); `docs/validation/evidence/ev02-input-name/F-API-018/2026-10-20-V2-bb4d3fdc-writes.input_name_invalid_port-api.json` @ `bb4d3fdc972e` (client `api`, level `V2`, scenario `writes.input_name_invalid_port`, target `sim`, image digest **not recorded in this record**, covers 21 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `src/persistence.py`, `src/_file_io.py`, `tests/validation/scenarios/writes.py`); (+1 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'error': None, 'data': {'input': 8, 'name': 'Media PC', 'message': "Input 8 renamed to 'Media PC'"}}; device inputs[7].name == 'Media PC'; hub GET /api/status -> data.input_names.8 == 'Media PC' (HTTP 200); device received http 'set input name' with {'index': 8, 'name': 'Media PC', 'language': 0} exactly 1x; device received http 'set input name' exactly 1x; device otherwise unchanged (allowed: inputs[7].name); simulator raised no protocol warnings; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator; the open finding(s) BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; discharge the open finding(s) BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-019 — Profile routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/profiles, GET /api/profiles/favorites, POST /api/profile, GET /api/profile/{profile_id}, PUT /api/profile/{profile_id}, DELETE /api/profile/{profile_id}, POST /api/profile/{profile_id}/recall, POST /api/profiles/reorder, GET|POST|PUT /api/profile/{profile_id}/cec, GET|POST|PUT /api/profile/{profile_id}/macros, POST|PUT /api/profile/{profile_id}/favorite, POST|PUT /api/profile/{profile_id}/dashboard, GET /api/profile/{profile_id}/execution-log
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. API-22 fixed: profile_crud.*_scaler_arc round trips and *_invalid refusals pass. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4D generic profile HTTP500 responses expose opaque references, with full diagnostics confined to private logs. tests/sim/test_sim_rest_reads.py::test_profile_read_exception_is_opaque_and_preserves_saved_data covers registered list/detail failures and byte-preserved stores; tests/test_runtime_error_projections_r4d.py covers all 13 changed handlers. Combined runtime regressions: 1002 independent passes, two skips; final image/client campaigns pending.
+* **Named assertion scope read:** `A37` — `tests/sim/test_sim_rest_reads.py::test_profile_read_exception_is_opaque_and_preserves_saved_data`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (108 stale record(s)).
+* **Ancestry:** stale `0b9cbe878608`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 108 stale record(s) include `docs/validation/evidence/F-API-019/2026-10-04-V2-7dbc4dc7-writes.profile_cec-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `writes.profile_cec`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the private detail is logged server-side with an exception, the private value never appears in the JSON response, the stored files are byte-identical before and after, and no device write occurs.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-020 — Scene v1 alias routes (/api/scene*, /api/scenes)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/scenes, POST /api/scene, GET /api/scene/{scene_id}, DELETE /api/scene/{scene_id}, POST /api/scene/{scene_id}/recall, POST /api/scene/save-current, GET|POST|PUT /api/scene/{scene_id}/cec, POST /api/scene/{scene_id}/cec/auto-resolve
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline and historical packaged-image scenarios cover scene aliases and save-current. R4 shared execution/catalog notification seams have 432 independent focused passes with one HA dependency skip. R1D fixes capture-specific fresh output/video reads under one runtime transaction; tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py verify nonzero-TTL current-state capture, registered profile readback and refusal without persistence on failed reads. Ninety-five independent capture/readiness/source-UC checks passed. Existing levels are retained pending fresh integrated image/client evidence; API-12 remains open.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V2`, no cap, freshness `fresh` (71 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`ed4cb0fb7876` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profile_state.alias_recall-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profile_state.alias_recall`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/rest_api/scenes_v2.py`, `src/scene_manager.py` (+9 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'scene': 'State Profile'}}; device outputs[0].source == 5; device received http 'video switch' with {'source': [1, 5]} exactly 1x; device never received 'cec command'; device otherwise unchanged (allowed: outputs[0].source, routing); simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator; the open finding(s) API-12 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; discharge the open finding(s) API-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-021 — Scene v2 routes (/api/v2/scenes*)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/v2/scenes, POST /api/v2/scenes, GET /api/v2/scenes/{scene_id}, PUT /api/v2/scenes/{scene_id}, DELETE /api/v2/scenes/{scene_id}, POST /api/v2/scenes/{scene_id}/execute, POST /api/v2/scenes/{scene_id}/validate, POST /api/v2/scenes/{scene_id}/steps, DELETE /api/v2/scenes/{scene_id}/steps/{index}, PUT|DELETE /api/v2/scenes/{scene_id}/override, GET /api/v2/scenes/{scene_id}/history
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_scenes_v2.py exercises every /api/v2/scenes route on the real hub + simulator and asserts the device effect of execute (V2). R2: tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload covers registered list/detail reads and edit/reload with nested private storage extensions, keeping public fields and PIN hashes separated. Existing evidence levels are retained pending the fresh integrated runtime campaign. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named assertion scope read:** `A39` — `tests/sim/test_sim_rest_reads.py::test_scene_override_private_extensions_survive_public_edit_and_reload`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `stale` (44 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 44 stale record(s) include `docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `domain_manage.scene_a_list`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the public edit keeps the scene's private credential/override extensions intact across save and reload, and the public payload carries only the public override.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) TST-03 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) TST-03 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-022 — Response envelope and input validation (4xx before anything reaches the matrix)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: all routes: {success, data, error}
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestErrorHandling (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C18` — `tests/test_rest_api.py TestErrorHandling`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (1 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 1 stale record(s) include `docs/validation/evidence/F-API-022/2026-10-04-V2-7dbc4dc7-failures.bad_input-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `failures.bad_input`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestErrorHandling` asserts 4 method(s) / 6 assertion(s): `test_invalid_json_returns_400`, `test_invalid_output_number`, `test_matrix_not_connected`, `test_cors_headers_present`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-21 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-21 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-023 — Macro routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/cec/macros, GET /api/cec/macros/favorites, POST /api/cec/macro, GET /api/cec/macro/{macro_id}, PUT /api/cec/macro/{macro_id}, DELETE /api/cec/macro/{macro_id}, POST /api/cec/macro/{macro_id}/execute, POST /api/cec/macro/{macro_id}/test, POST /api/cec/macro/{macro_id}/favorite, POST /api/cec/macro/{macro_id}/dashboard
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked macro API tests. The domain_manage packaged-image scenarios add V2 proof for macro management, validation boundaries/refusals, favorite/dashboard flags, collection ordering and non-executing dry-run. API-28 fixed: edits apply the create limits (domain_manage.macro_update_description_long passes). Macro execution and physical CEC effects are outside this management batch. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C macro transport exceptions use correlated opaque public details while preserving partial207 behavior, command counts and private traceback diagnostics; tests/test_runtime_action_error_privacy_r4c.py covers real registered execution and shared action surfaces. Final image/client campaigns pending.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (72 stale record(s)).
+* **Ancestry:** stale `1aafbbf4ec1d`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 72 stale record(s) include `docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json` @ `1aafbbf4ec1d` (client `api`, level `V2`, scenario `domain_manage.macro_update_description_long`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-024 — Shortcut routes (/api/system-shortcuts* and the /api/shortcuts* aliases)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/system-shortcuts, GET /api/system-shortcuts/{key}, POST /api/system-shortcuts, PUT /api/system-shortcuts/{key}, DELETE /api/system-shortcuts/{key}, POST /api/system-shortcuts/{key}/execute, PUT /api/system-shortcuts/reorder, POST /api/system-shortcuts/{key}/favorite|dashboard, GET /api/system-shortcuts/favorites|dashboard, /api/shortcuts* (10 aliases)
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. R4 shared execution/catalog notification seams are covered by tests/test_runtime_action_parity_r4.py, test_runtime_action_wire_r4.py, test_runtime_action_cancel_r4.py and test_runtime_http_scene_parity_r4a.py; 432 independent focused tests passed with one HA dependency skip. Existing feature levels are retained pending fresh integrated image/client evidence. R4C shortcut exception details use correlated opaque references while preserving refusals and action effects; tests/test_runtime_action_error_privacy_r4c.py covers registered routes and shared action surfaces. Final image/client campaigns pending.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (11 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 11 stale record(s) include `docs/validation/evidence/F-API-024/2026-10-04-V2-7dbc4dc7-contracts.shortcut_alias-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `contracts.shortcut_alias`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 11 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-025 — Dashboard layout routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/dashboard/layout, PUT /api/dashboard/layout, POST /api/dashboard/layout, POST /api/dashboard/cards, DELETE /api/dashboard/cards
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C16` — `tests/test_rest_api.py TestDashboardLayoutAPI`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_card_refused-api.json` @ `b3aced1ba250` (client `api`, level `V2`, scenario `dashboard.widget_card_refused`, target `sim`, image digest `sha256:9aa791cca6936282ae5dfd21f1d137c9afc371ddd3abedbe867c7a63c60ca8ab`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestDashboardLayoutAPI` asserts 10 method(s) / 20 assertion(s): `test_get_layout_starts_empty`, `test_widget_cards_are_refused`, `test_put_layout_replaces_layout`, `test_put_layout_skips_invalid_cards` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-026 — Themes and UI preference routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/themes, PUT /api/themes, POST /api/themes/reset, GET /api/ui/preferences, PUT /api/ui/preferences
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (5 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.themes-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.themes`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/themes.py`, `src/persistence.py`, `tests/e2e/fixtures/data/themes.json`); `docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-contracts.ui_preferences-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.ui_preferences`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/ui.py`, `src/persistence.py`, `tests/e2e/fixtures/data/ui_preferences.json`); `docs/validation/evidence/ev02-original-api/F-API-026/2026-10-19-V2-1baac3de-writes.themes-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `writes.themes`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/themes.py`, `src/_file_io.py`); (+2 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'activePresetIndex': 0, 'cardOpacity': 0.8, 'hoverPreference': 'primary'}, 'error': None}; hub GET /api/themes -> data.presets[0].name == 'Tron Classic' (HTTP 200); no write command reached the device; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'success': True, 'data': {'pinnedTabs': ['matrix', 'dashboard', 'inputs', 'outputs', 'profiles'], 'tabOrder': ['matrix', 'dashboard', 'inputs', 'outputs', 'profiles']}, 'error': None}; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-027 — Settings routes (matrix host, test connection)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-API-027/2026-10-04-V2-7dbc4dc7-contracts.settings-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `contracts.settings`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) TST-03 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) TST-03 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-028 — Flic integration routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /api/integrations/flic/buttons, POST /api/integrations/flic/register
+* **Recorded basis (registry, verbatim):** Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. R5B reads verify canonical buttons exclude private metadata, edits preserve private extensions, and FLIC_ENABLED=false removes both routes while core health/status remain available. Fresh-process flag and cleanup checks are in tests/test_runtime_integration_safety_r5b.py. Recorded level retained pending the fresh image/client campaign. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-contracts.flic_buttons-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `contracts.flic_buttons`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/integrations.py`, `src/persistence.py`, `tests/e2e/fixtures/data/flic_buttons.json`); `docs/validation/evidence/ev02-original-api/F-API-028/2026-10-19-V2-1baac3de-writes.flic_register-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `writes.flic_register`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/integrations.py`, `src/persistence.py`, `src/_file_io.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'buttons': [{'bdaddr': '80:e4:da:70:00:01', 'name': 'Couch Button', 'serial': 'BG12-A00001'}, {'bdaddr': '80:e4:da:70:00:02', 'name': 'Kitchen Button', 'serial': 'BG12-A00002'}]}, 'error': None}; no write command reached the device; device otherwise unchanged; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'success': True, 'error': None, 'data': {'count': 2}}; hub GET /api/integrations/flic/buttons -> data.buttons[0].name == 'Renamed' (HTTP 200).
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator; the open finding(s) TST-03 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; discharge the open finding(s) TST-03 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-029 — Web UI, kiosk and static asset routes
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /ui, GET /ui/, GET /kiosk, GET /kiosk/, GET /manifest.json, GET /css/{path}, GET /js/{path}, GET /assets/{path}
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts loads /ui and /kiosk in Chromium with no page errors; tests/test_rest_api.py TestWebUI.
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C28` — `tests/test_rest_api.py TestWebUI`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestWebUI` asserts 7 method(s) / 13 assertion(s): `test_web_ui_endpoint`, `test_web_ui_with_trailing_slash`, `test_static_css`, `test_static_js` (+3 more).
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-030 — Rate limiting (60 requests / 10 s per client)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: all /api routes
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestRateLimiting; tests/test_concurrency.py TestRateLimitUnderConcurrency.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C23` — `tests/test_rest_api.py TestRateLimiting`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C2` — `tests/test_concurrency.py TestRateLimitUnderConcurrency`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestRateLimiting` asserts 2 method(s) / 2 assertion(s): `test_rate_limit_allows_normal_traffic`, `test_health_endpoint_not_rate_limited`; `tests/test_concurrency.py TestRateLimitUnderConcurrency` asserts 2 method(s) / 2 assertion(s): `test_rate_limit_under_concurrent_requests`, `test_rate_limit_same_ip_many_requests`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-031 — CORS headers
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: all routes (OPTIONS preflight)
+* **Recorded basis (registry, verbatim):** V2: thirteen clean source-simulator CORS cases at 7b07e1cb, independently source-reviewed by DeepSeek Pro, and thirteen fresh combined-source cases at 310d8b65 prove configured/default/wildcard origins, preflight header equality and absence, denied mutation, unchanged device state and no write commands. Original JSON bytes, API-only attribution and null image digests are preserved. This evidence does not qualify browser, deployed-image, hardware, soak or field targets.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh`.
+* **Ancestry:** fresh `310d8b65a9fc`…`7b07e1cb7e7e` (ancestor(s) of `a07cf94`).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_allowed-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `sw_api_read_04.configured_allowed`, target `sim`, image digest **not recorded in this record**, covers 25 path(s); source delta `src/rest_api/security.py`, `src/rest_api/core.py`, `tools/validate/clients/api.py`, `tools/validate/model.py`, `tools/validate/runner.py`, `tools/validate/stack.py` (+3 more)); `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_allowed_preflight-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `sw_api_read_04.configured_allowed_preflight`, target `sim`, image digest **not recorded in this record**, covers 25 path(s); source delta `src/rest_api/security.py`, `src/rest_api/core.py`, `tools/validate/clients/api.py`, `tools/validate/model.py`, `tools/validate/runner.py`, `tools/validate/stack.py` (+3 more)); `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/cors/F-API-031/2026-10-26-V2-310d8b65-sw_api_read_04.configured_denied-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `sw_api_read_04.configured_denied`, target `sim`, image digest **not recorded in this record**, covers 25 path(s); source delta `src/rest_api/security.py`, `src/rest_api/core.py`, `tools/validate/clients/api.py`, `tools/validate/model.py`, `tools/validate/runner.py`, `tools/validate/stack.py` (+3 more)); (+23 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and headers equal (names: Access-Control-Allow-Methods, Access-Control-Allow-Headers, Access-Control-Max-Age, Vary, Access-Control-Allow-Origin) and headers absent: Access-Control-Allow-Credentials; device otherwise unchanged; no write command reached the device; simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and headers equal (names: Access-Control-Allow-Methods, Access-Control-Allow-Headers, Access-Control-Max-Age, Vary) and headers absent: Access-Control-Allow-Credentials, Access-Control-Allow-Origin.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-032 — WebSocket /ws: welcome, status snapshot, get_status, matrix link, errors
+
+* **Registry claim:** docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** rest: GET /ws; ws: connected, status, matrix_connection, error
+* **Recorded basis (registry, verbatim):** V2: scenario live.matrix_offline (a browser run; the runner's /ws observer gets matrix_connection down and back, /api/status answers 503 with the link state); tests/sim/test_sim_ws_contract.py (real hub app + simulator: welcome with protocol and link, snapshot, get_status, link loss and recovery, schema-checked); every message a scenario's /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).
+* **Named module/class scope read:** `M6` — `tests/sim/test_sim_ws_contract.py`.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (10 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-REL-009/2026-10-19-V3-1baac3de-live.matrix_offline-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.matrix_offline`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+2 more)).
+* **What the evidence establishes:** the committed record's own checks — WebSocket event 'matrix_connection' with {'connected': False}; hub GET /api/status -> success == False; hub GET /api/status -> data.connected == False; client shows ui.header == 'disconnected' (was 'connected'); client shows kiosk.status == 'Disconnected' (was 'Connected'); WebSocket event 'matrix_connection' with {'connected': True, 'state': 'connected'}; hub GET /api/health -> data.matrix.connected == True (HTTP 200); ….
+* **What the basis' own assertions establish:** the welcome, the status snapshot, the `get_status` answer, route-all and preset-recall announcements, the link loss/recovery, the failed-status-read answer and the stalled-client case are asserted against the real hub app and the simulator, and every message is checked against `docs/api/websocket.schema.json`.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Feature-specific distinction:** The fresh V3 record for this row is `live.matrix_offline` (`docs/validation/evidence/runtime-r8b/F-API-032/2026-10-19-V3-1baac3de-live.matrix_offline-browser.json`): it covers the matrix-link loss, the REST refusal and the recovery, and the UI/kiosk connection-state checks. It does **not** by itself cover every welcome/`get_status` requirement named in the feature title; those are the separate `tests/sim/test_sim_ws_contract.py` assertions named above.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-033 — WS event routing_change (one per changed output, whoever routed) / switch_failed
+
+* **Registry claim:** docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** ws: routing_change, switch_failed
+* **Recorded basis (registry, verbatim):** V2: scenarios routing.switch_one (routing_change after /api/switch) and failures.unreachable_switch (switch_failed); tests/sim/test_sim_ws_contract.py (exactly one routing_change per change, grid route, a refused route announces switch_failed); every message a scenario's /ws observer receives is checked against docs/api/websocket.schema.json (tools/validate/runner.py ws_contract_check).
+* **Named module/class scope read:** `M6` — `tests/sim/test_sim_ws_contract.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `310d8b65a9fc` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/offline/F-REL-009/2026-10-26-V2-310d8b65-failures.unreachable_switch-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `failures.unreachable_switch`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/control.py`, `src/rest_api/core.py`, `src/rest_api/core.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP >= 500 and body contains {'success': False}; device outputs[0].source == 2; device otherwise unchanged; WebSocket event 'switch_failed' with {'input': 3}; hub GET /api/health -> data.matrix.connected == False (HTTP 200); hub GET /api/status -> success == False; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the welcome, the status snapshot, the `get_status` answer, route-all and preset-recall announcements, the link loss/recovery, the failed-status-read answer and the stalled-client case are asserted against the real hub app and the simulator, and every message is checked against `docs/api/websocket.schema.json`.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); the fresh proof reaches only **V2** and only against the simulator; the open finding(s) VAL-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); discharge the open finding(s) VAL-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-034 — Route to all: routing_change per output that changed / switch_all_failed
+
+* **Registry claim:** docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** ws: routing_change, switch_all_failed
+* **Recorded basis (registry, verbatim):** V2: scenario routing.route_all (routing_change for output 8); tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed. switch_all_failed: V1 (sent by the handler on a refused write; no scenario yet).
+* **Named assertion scope read:** `A48` — `tests/sim/test_sim_ws_contract.py::test_route_all_announces_every_output_that_changed`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-MTX-002/2026-10-04-V2-d6baf3ca-routing.route_all-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `routing.route_all`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 19 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** route-all emits one `routing_change` per changed output and every one names the same input.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) VAL-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) VAL-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-035 — WS event preset_recall / preset_recall_failed
+
+* **Registry claim:** src/rest_api/control.py broadcasts
+* **Interfaces:** ws: preset_recall, preset_recall_failed
+* **Recorded basis (registry, verbatim):** V2: scenario presets.recall (preset_recall after the matrix accepted it; the routing follows as routing_change); tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows. tests/e2e/flows.spec.ts UI-04 test: the web UI no longer refreshes (and toasts) on every page for this event.
+* **Named assertion scope read:** `A47` — `tests/sim/test_sim_ws_contract.py::test_preset_recall_is_announced_after_success_and_its_routing_follows`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-MTX-003/2026-10-04-V2-d6baf3ca-presets.recall-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `presets.recall`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 18 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** after a successful recall the WebSocket announces the preset (no `optimistic` marker) and the routing that follows matches; a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-036 — WS event audio_mute
+
+* **Registry claim:** src/rest_api/events.py (from the matrix's allaudiomute, any path); docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** ws: audio_mute
+* **Recorded basis (registry, verbatim):** V2: scenario outputs.audio_mute (audio_mute after the matrix reports it) and outputs.audio_mute_rejected (a refused mute is not announced); tests/sim/test_sim_ws_contract.py. Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named module/class scope read:** `M6` — `tests/sim/test_sim_ws_contract.py`.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-MTX-007/2026-10-19-V2-1baac3de-outputs.audio_mute-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `outputs.audio_mute`, target `sim`, image digest **not recorded in this record**, covers 17 path(s); source delta `src/rest_api/outputs.py`); `docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `outputs.audio_mute_rejected`, target `sim`, image digest **not recorded in this record**, covers 17 path(s); source delta `src/rest_api/outputs.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[1].audio_mute == 1; device otherwise unchanged (allowed: outputs[1].audio_mute); device received http 'set output audio mute' with {'mute': [2, 1]} exactly 1x; WebSocket event 'audio_mute' with {'output': 2, 'muted': True}; hub GET /api/status/outputs -> data.outputs[1].muted == True (HTTP 200); every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** the welcome, the status snapshot, the `get_status` answer, route-all and preset-recall announcements, the link loss/recovery, the failed-status-read answer and the stalled-client case are asserted against the real hub app and the simulator, and every message is checked against `docs/api/websocket.schema.json`.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-037 — WS events device_settings / device_settings_full
+
+* **Registry claim:** src/rest_api/device_settings.py broadcasts
+* **Interfaces:** ws: device_settings, device_settings_full
+* **Recorded basis (registry, verbatim):** V2: scenario presets.rename (device_settings on /ws, schema-checked).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V2-1baac3de-presets.rename-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `presets.rename`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; hub GET /api/presets -> data.presets[3].name == 'Validation Night' (HTTP 200); WebSocket event 'device_settings' with {'type': 'preset', 'number': 4, 'name': 'Validation Night'}; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-038 — WS event cec_command
+
+* **Registry claim:** src/rest_api/cec.py broadcast
+* **Interfaces:** ws: cec_command
+* **Recorded basis (registry, verbatim):** V2: scenario cec.output_power_on (cec_command, now sent after the matrix accepted it, no `optimistic` flag). The web UI does not show it (docs/api/WEBSOCKET.md). Accepted original source-simulator API V2 proof is preserved byte-exact at 1baac3dec660f41345869c126cfca94d6731c5a0, independently audited in docs/production/ev02/API_PRESERVATION_REVIEW.md (700a7d7e). Original SHA, timestamps and null image digest are retained; this is not a new run or image/client promotion. Existing findings and hardware/cross-client gates remain unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (1 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-CEC-005/2026-10-19-V2-1baac3de-cec.output_power_on-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `cec.output_power_on`, target `sim`, image digest **not recorded in this record**, covers 18 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 0} exactly 1x; simulator raised no protocol warnings; WebSocket event 'cec_command' with {'type': 'output', 'port': 1, 'command': 'power_on'}; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-039 — WS status snapshot (after connect, after a first reading, get_status)
+
+* **Registry claim:** src/rest_api/events.py status_snapshot; docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** ws: status
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_ws_contract.py::test_welcome_carries_the_protocol_and_the_matrix_link_then_a_snapshot (snapshot = simulator routing, real output names: BE-31) and ::test_get_status_answers_a_status_snapshot; every scenario's observer receives the snapshot and the runner checks it against the schema. The old background refresh no longer broadcasts. tests/sim/test_sim_status_broadcast.py (WP-E1) pins the refresh side: repeated warm-cache reads send no further status and nothing names an output "Output N".
+* **Named assertion scope read:** `A51` — `tests/sim/test_sim_ws_contract.py::test_welcome_carries_the_protocol_and_the_matrix_link_then_a_snapshot`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A45` — `tests/sim/test_sim_ws_contract.py::test_get_status_answers_a_status_snapshot`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M5` — `tests/sim/test_sim_status_broadcast.py`.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the welcome carries `protocol: 1` and the matrix link state, the snapshot's routing equals the simulator routing, the output details carry the real names, `connected` is true, and every message satisfies `docs/api/websocket.schema.json`; a `get_status` request is answered with a status snapshot whose `input_names` carry the real names, and the answer satisfies the WebSocket schema; repeated warm-cache reads send no further status and no output is named `Output N`.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Feature-specific distinction:** The registry basis names two assertions in `tests/sim/test_sim_ws_contract.py`: `test_welcome_carries_the_protocol_and_the_matrix_link_then_a_snapshot` at line 281 (welcome protocol 1, matrix link state, snapshot routing equal to the simulator routing, real output names) and `test_get_status_answers_a_status_snapshot` at line 295 (a `get_status` request answers a status snapshot whose `input_names` carry the real names). Both are read at this base.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-040 — WS live matrix events from the hub's own poller (routing, power, signal, display, cable, mute, names)
+
+* **Registry claim:** README "WebSocket for real-time status updates"; docs/api/WEBSOCKET.md; docs/api/websocket.schema.json
+* **Interfaces:** ws: routing_change, power_change, signal_change, connection_change, cable_change, audio_mute, input_name_change, output_name_change; telnet: push: hdmi input|output N: connect|disconnect
+* **Recorded basis (registry, verbatim):** V2: scenarios live.front_panel_route, live.input_signal, live.display_unplugged (from the Telnet push, within 4 s), live.rename_elsewhere (browser runs: the runner's /ws observer gets each event, the value is read back over REST), power.standby (api: power_change); tests/sim/test_sim_ws_contract.py and tests/test_hub_events.py. Emitted in every mode by src/rest_api/events.py (no longer by the driver's poller).
+* **Named module/class scope read:** `M6` — `tests/sim/test_sim_ws_contract.py`.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (9 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.display_unplugged-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.display_unplugged`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 23 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+1 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.front_panel_route`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.input_signal-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.input_signal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); (+1 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — device outputs[0].connected == 0; WebSocket event 'cable_change' with {'type': 'output', 'port': 1, 'connected': False}; WebSocket event 'connection_change' with {'output': 1, 'connected': False}; client shows ui.output.1 == 'disconnected' (was 'signal'); every WebSocket message follows docs/api/websocket.schema.json; device outputs[1].source == 6; WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name': 'PS5'}; ….
+* **What the basis' own assertions establish:** the welcome, the status snapshot, the `get_status` answer, route-all and preset-recall announcements, the link loss/recovery, the failed-status-read answer and the stalled-client case are asserted against the real hub app and the simulator, and every message is checked against `docs/api/websocket.schema.json`.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator; the open finding(s) BE-24 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V3`; discharge the open finding(s) BE-24 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-041 — WS event scene_execution_error
+
+* **Registry claim:** src/scene_execution.py broadcast
+* **Interfaces:** ws: scene_execution_error
+* **Recorded basis (registry, verbatim):** V2: scenario scenes.partial_failure receives scene_execution_error on /ws (schema-checked). The web UI does not show it yet (WP-E1, VAL-11).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `fresh` (3 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.partial_failure-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.partial_failure`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 207 and body contains {'success': False, 'data': {'steps_completed': 1, 'total_steps': 2}}; client shows toast.warning == '"Good Night" ran partly: 1 of 2 steps succeeded'; device outputs[0].audio_mute == 1; WebSocket event 'scene_execution_error' with {'scene_id': 'scene_goodnight01', 'steps_completed': 1}; hub GET /api/v2/scenes/scene_goodnight01/history -> data.execution_history[-1].status == 'error' (HTTP 200); device otherwise unchanged (allowed: outputs[*].audio_mute); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-API-042 — WS heartbeat (ping / pong)
+
+* **Registry claim:** docs/API_REFERENCE.md; src/rest_api/app.py route table
+* **Interfaces:** rest: GET /ws; ws: ping, pong
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_ws_contract.py::test_ping_is_answered_in_both_the_contract_and_the_old_client_form and ::test_the_server_keeps_idle_clients_alive_with_protocol_pings (real hub app: protocol ping frames, {command: ping} and the old {type: ping} answered with pong). V1: tests/test_rest_api.py TestWebSocket.
+* **Named assertion scope read:** `A46` — `tests/sim/test_sim_ws_contract.py::test_ping_is_answered_in_both_the_contract_and_the_old_client_form`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A50` — `tests/sim/test_sim_ws_contract.py::test_the_server_keeps_idle_clients_alive_with_protocol_pings`; the function's assertion statements were read at this base.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C27` — `tests/test_rest_api.py TestWebSocket`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V2`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the ping is answered in the contract form and in the legacy client form, and no error event is emitted; the server sends protocol-level PING frames and the client answers them, keeping an idle connection alive; the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestWebSocket` asserts 4 method(s) / 7 assertion(s): `test_websocket_connection`, `test_websocket_ping_pong`, `test_websocket_get_status`, `test_websocket_unknown_command`.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V2` is reached by the recorded baseline at `V2`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.4 Domain features (36 features)
+
+##### F-DOM-001 — Create, edit and delete profiles
+
+* **Registry claim:** README "Profiles: Save named routing configurations"
+* **Interfaces:** rest: POST /api/profile, PUT /api/profile/{profile_id}, DELETE /api/profile/{profile_id}; ui: editor/profile/new, editor/profile/edit, profiles/manager/populated; kiosk: kiosk/profile-wizard/step-1; files: profiles.json
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: tests/test_config.py TestProfileManager and mocked REST tests. The profile_crud packaged-image scenarios add V2 proof for create/replace/edit/delete, output and macro/CEC readback, assignment clearing, missing profiles and create boundaries. API-22 fixed: create/edit scaler/ARC round trips pass and invalid values are refused; recall applies them (API-29 fixed). API-30 fixed: edits apply the create output checks (profile_crud.edit_reject_* pass). Restart persistence, browser behavior and exhaustive invalid edit shapes are outside this batch.
+* **Named test-class scope read:** `C3` — `tests/test_config.py TestProfileManager`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (50 stale record(s)).
+* **Ancestry:** stale `0b9cbe878608`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 50 stale record(s) include `docs/validation/evidence/F-DOM-001/2026-10-02-V2-0b9cbe87-profile_crud.post_scaler_arc-api.json` @ `0b9cbe878608` (client `api`, level `V2`, scenario `profile_crud.post_scaler_arc`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_config.py TestProfileManager` asserts 14 method(s) / 46 assertion(s): `test_init_empty`, `test_create_profile_minimal`, `test_create_profile_full`, `test_get_profile` (+10 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-002 — Recall a profile: its routing is applied
+
+* **Registry claim:** README "Recall profiles with single command"
+* **Interfaces:** rest: POST /api/profile/{profile_id}/recall; ui: profiles/list/populated, dashboard/cards/all-types; kiosk: kiosk/profiles/default; flic: POST /api/profile/{id}/recall
+* **Recorded basis (registry, verbatim):** WP-C4 V3 on the shipped image: browser profile activation applies routing, including disabled outputs; API refusal cases verify truthful failures. Shared recall/scene state writer (DI-11). V4 awaits the owner.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (17 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profile_state.alias_recall-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profile_state.alias_recall`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/rest_api/scenes_v2.py`, `src/scene_manager.py` (+9 more)); `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_disabled_output-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_disabled_output`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `web/index.html`, `web/js/app.js` (+9 more)); `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_rejected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`); (+3 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'scene': 'State Profile'}}; device outputs[0].source == 5; device received http 'video switch' with {'source': [1, 5]} exactly 1x; device never received 'cec command'; device otherwise unchanged (allowed: outputs[0].source, routing); simulator raised no protocol warnings; every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) API-19 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) API-19 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-003 — Recall a profile: its output settings (mute, HDR, HDCP, enable) are applied
+
+* **Registry claim:** README "Include HDR/HDCP/audio settings"
+* **Interfaces:** rest: POST /api/profile/{profile_id}/recall; files: profiles.json outputs.{n}.audio_mute|hdr_mode|hdcp_mode
+* **Recorded basis (registry, verbatim):** WP-C4 V3: profiles.recall_output_settings and profiles.recall_disabled_output activate profiles through Chromium and read mute, HDR, HDCP and stream state back from the simulator on the shipped image. V4 awaits the owner; API-29 fixed (fix-backend-followups): recall applies saved scaler (set video scaler) and ARC (set arc); profiles.recall_scaler_arc passes on the api client and in the browser, and profiles.recall_leaves_unset_scaler_arc proves unset settings are not written.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (19 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `22afc1a7e866`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V2-1baac3de-profiles.recall_disabled_output-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_disabled_output`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `web/index.html`, `web/js/app.js` (+9 more)); `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V3-1baac3de-profiles.recall_disabled_output-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_disabled_output`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `web/index.html`, `web/js/app.js` (+9 more)); `docs/validation/evidence/runtime-r8b/F-DOM-003/2026-10-19-V2-1baac3de-profiles.recall_leaves_unset_scaler_arc-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_leaves_unset_scaler_arc`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`); (+4 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 7; device outputs[1].source == 7; device outputs[1].stream == 0; device received http 'tx stream' with {'out': [2, 0]} exactly 1x; device never received 'cec command'; every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-004 — Recall a profile: its power-on macro runs
+
+* **Registry claim:** README "CEC macros, and power automation"
+* **Interfaces:** rest: POST /api/profile/{profile_id}/recall; files: profiles.json power_on_macro
+* **Recorded basis (registry, verbatim):** WP-C4 V3: profiles.recall_power_macro activates the profile through Chromium on the shipped image and verifies its power-on CEC frames in the simulator. This recall feature covers power_on_macro; a stored power_off_macro is not run by recall. Physical TV/source observation remains V4.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (7 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `22afc1a7e866`…`97d0d2af94a2` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-004/2026-10-19-V2-1baac3de-profiles.recall_power_macro-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_power_macro`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 21 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/cec_macros.py`); `docs/validation/evidence/runtime-r8b/F-DOM-004/2026-10-19-V3-1baac3de-profiles.recall_power_macro-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_power_macro`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 21 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/cec_macros.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device received http 'cec command' with {'object': 1, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 0} exactly 1x; device received http 'cec command' with {'object': 0, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 1} exactly 1x; response body contains {'data': {'power_on_macro': {'success': True}}}; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-005 — Protect a profile with a passcode (per-item PIN)
+
+* **Registry claim:** docs/PHASE_8_SPEC.md passcodes; DI-6
+* **Interfaces:** rest: POST /api/profile/{profile_id}/recall (passcode); ui: dialog/passcode-prompt, editor/profile/passcode
+* **Recorded basis (registry, verbatim):** Scenarios profiles.recall_needs_passcode, recall_with_passcode and recall_wrong_passcode pass with the api and browser clients, and kiosk.profile_with_passcode / profile_wrong_passcode on the kiosk PIN pad (V3 evidence; WP-E1 UI-01, UI-48). Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (18 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_needs_passcode-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_needs_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)); `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_with_passcode-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_with_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)); `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V2-1baac3de-profiles.recall_wrong_passcode-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `profiles.recall_wrong_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)); (+5 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}; client shows dialogs == ['"Kids Gaming" is passcode protected. Enter passcode:']; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'success': True}; device outputs[0].source == 6; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-006 — Favourite, pin, reorder profiles and show them on the dashboard
+
+* **Registry claim:** web UI Profiles tab; kiosk profile slots
+* **Interfaces:** rest: POST|PUT /api/profile/{profile_id}/favorite, POST|PUT /api/profile/{profile_id}/dashboard, POST /api/profiles/reorder; ui: profiles/manager/populated
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked favorite/dashboard tests. The profile_crud packaged-image scenarios add V2 proof for favorite/dashboard toggle/set in both directions, favorite ordering/exclusion, pin editing, reorder/partial errors and empty/missing requests. API-20 layout reconciliation and pin-capacity policy remain unproven.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (20 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 20 stale record(s) include `docs/validation/evidence/F-DOM-006/2026-10-04-V2-7dbc4dc7-profile_crud.dashboard_missing_field-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `profile_crud.dashboard_missing_field`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-007 — Per-profile CEC targets (nav/playback/volume/power) and auto-resolve
+
+* **Registry claim:** docs/CEC_CONTROL_ARCHITECTURE.md scene CEC config
+* **Interfaces:** rest: GET|POST|PUT /api/profile/{profile_id}/cec, POST /api/scene/{scene_id}/cec/auto-resolve; ui: dialog/scene-cec
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked CEC tests and tests/sim/test_sim_profiles.py. The profile_state packaged-image scenarios add V2 proof for canonical/legacy CEC reads/writes, manual/default/wrapped configurations, invalid structural writes preserving prior data, every port and resolver audio/ARC/default/disconnected/disabled selection. Status caching is disabled. API-25 target-string semantics, browser behavior and physical CEC effects are outside this batch.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (83 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 83 stale record(s) include `docs/validation/evidence/F-DOM-007/2026-10-04-V2-7dbc4dc7-profile_state.cec_profile_get_default-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `profile_state.cec_profile_get_default`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 24 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-008 — Profile execution log
+
+* **Registry claim:** GET /api/profile/{id}/execution-log
+* **Interfaces:** rest: GET /api/profile/{profile_id}/execution-log
+* **Recorded basis (registry, verbatim):** Recorded V0 baseline. The profile_state packaged-image scenarios add V2 proof for empty/missing history, real scene profile steps producing success/error entries, separate reads, count/list agreement, UTC timestamps and append order. Seven-day expiry and restart persistence are not exercised.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V0`, effective `V0`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-DOM-008/2026-10-04-V2-7dbc4dc7-profile_state.history_empty-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `profile_state.history_empty`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 24 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-009 — Save the current routing as a new profile
+
+* **Registry claim:** POST /api/scene/save-current; web UI save-profile modal
+* **Interfaces:** rest: POST /api/scene/save-current; ui: modal/save-profile/legacy
+* **Recorded basis (registry, verbatim):** Historical profile_state image scenarios cover routing pairs, mute/HDR/HDCP capture and default name/icon with independent storage readback using TTL=0. R1D runtime/source checks now verify fresh serialized output/video reads with TTL=3600, disabled streams and out-of-band state changes; failed reads return 502 without creating a profile or changing stored bytes. Tests/validation/test_runtime_readiness_r1d.py and tests/sim/test_sim_rest_reads.py cover actual composition and registered readback. Recorded level retained; fresh final-image, browser and restart campaign evidence remains pending.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (14 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70`…`ed4cb0fb7876` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 14 stale record(s) include `docs/validation/evidence/F-DOM-009/2026-10-02-V2-ed4cb0fb-profile_state.capture_output_read_failure-api.json` @ `ed4cb0fb7876` (client `api`, level `V2`, scenario `profile_state.capture_output_read_failure`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 24 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-010 — Create, edit and delete scenes (sequences of steps)
+
+* **Registry claim:** docs/PHASE_8_SPEC.md Scenes v2; DI-2
+* **Interfaces:** rest: POST /api/v2/scenes, PUT /api/v2/scenes/{scene_id}, DELETE /api/v2/scenes/{scene_id}, POST /api/v2/scenes/{scene_id}/steps, DELETE /api/v2/scenes/{scene_id}/steps/{index}; ui: editor/scene/new, editor/scene/edit; files: scenes.json
+* **Recorded basis (registry, verbatim):** Scenarios scenes.edit_with_profile_step and scenes.invalid_edit_rejected (V2); tests/sim/test_sim_scenes_v2.py (every /api/v2/scenes route on the real hub + simulator); tests/test_scene_manager.py. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (46 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 46 stale record(s) include `docs/validation/evidence/F-DOM-010/2026-10-04-V2-7dbc4dc7-domain_manage.scene_a_list-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `domain_manage.scene_a_list`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-011 — Run a scene: profile steps
+
+* **Registry claim:** docs/PHASE_8_SPEC.md scene execution
+* **Interfaces:** rest: POST /api/v2/scenes/{scene_id}/execute; ws: scene_execution_error; ui: drawer/settings/scenes
+* **Recorded basis (registry, verbatim):** WP-C4 V3: browser execution on the shipped image verifies full profile state, disabled output routing/stream, no implicit profile macros, truthful partial failures and history. Explicit scene steps own sequencing (DI-11).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (29 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.disabled_output_state-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.disabled_output_state`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.partial_failure-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.partial_failure`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.profile_step_scaler_arc-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.profile_step_scaler_arc`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); (+7 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[1].source == 7; device outputs[1].stream == 0; device received http 'tx stream' with {'out': [2, 0]} exactly 1x; device never received 'cec command'; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 207 and body contains {'success': False, 'data': {'steps_completed': 1, 'total_steps': 2}}; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-012 — Run a scene: macro steps
+
+* **Registry claim:** docs/PHASE_8_SPEC.md scene step types
+* **Interfaces:** rest: POST /api/v2/scenes/{scene_id}/execute
+* **Recorded basis (registry, verbatim):** WP-C4 V3: browser-run scene macro steps send exactly the explicit CEC frames; a single refused target does not prevent later commands when the saved continue_on_error policy is true. Device command logs prove the effects.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (18 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_profile_macro_preset-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.run_profile_macro_preset`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_profile_macro_preset-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.run_profile_macro_preset`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); `docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V2-1baac3de-scenes.macro_continues_after_refusal-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.macro_continues_after_refusal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); (+3 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 3, 'total_steps': 3}}; device outputs[0].hdr == 0; device outputs[0].hdcp == 3; device received http 'video switch' with {'source': [1, 2]} exactly 1x; device received http 'video switch' with {'source': [2, 2]} exactly 1x; device outputs[1].audio_mute == 0; device received http 'set output audio mute' with {'mute': [2, 1]} exactly 0x; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-013 — Run a scene: wait and shortcut steps
+
+* **Registry claim:** docs/PHASE_8_SPEC.md scene step types
+* **Interfaces:** rest: POST /api/v2/scenes/{scene_id}/execute
+* **Recorded basis (registry, verbatim):** WP-C4 V3 (DI-12): the browser adds two 0.5-second waits, removes one, saves and reads back exactly one wait; scene execution places the wait between actual shortcut commands, whose simulator timestamps are at least 0.5 seconds apart. Unit/API/UI regressions reject invalid durations.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (12 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V2-1baac3de-scenes.wait_between_actions-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.wait_between_actions`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V2-1baac3de-scenes.wait_edit-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.wait_edit`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)); `docs/validation/evidence/runtime-r8b/F-DOM-013/2026-10-19-V3-1baac3de-scenes.wait_between_actions-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.wait_between_actions`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); (+1 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 6; device system.beep == 0; device 'video switch' follows 'set beep' by at least 0.5s; every WebSocket message follows docs/api/websocket.schema.json; hub GET /api/v2/scenes/scene_goodnight01 -> data.scene.steps == [{'type': 'wait', 'id': '', 'params': {'seconds': 0.5}}] (HTTP 200); no write command reached the device.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-014 — Scene overrides (per-run changes to a profile step)
+
+* **Registry claim:** docs/PHASE_8_SPEC.md overrides
+* **Interfaces:** rest: PUT|DELETE /api/v2/scenes/{scene_id}/override
+* **Recorded basis (registry, verbatim):** WP-C4 V3: browser-run scenes apply routing while leaving an overridden input, audio mute or enabled setting unchanged on the simulator. Disabled outputs still receive all unskipped state writes.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (17 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_profile_macro_preset-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.run_profile_macro_preset`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_profile_macro_preset-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.run_profile_macro_preset`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); `docs/validation/evidence/runtime-r8b/F-DOM-014/2026-10-19-V2-1baac3de-scenes.enabled_override-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.enabled_override`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); (+3 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 3, 'total_steps': 3}}; device outputs[0].hdr == 0; device outputs[0].hdcp == 3; device received http 'video switch' with {'source': [1, 2]} exactly 1x; device received http 'video switch' with {'source': [2, 2]} exactly 1x; device outputs[1].audio_mute == 0; device received http 'set output audio mute' with {'mute': [2, 1]} exactly 0x; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-015 — Protect a scene with a passcode
+
+* **Registry claim:** docs/PHASE_8_SPEC.md; DI-6
+* **Interfaces:** rest: POST /api/v2/scenes/{scene_id}/execute (passcode); ui: editor/scene/passcode
+* **Recorded basis (registry, verbatim):** Scenarios scenes.run_protected (api, and browser through the passcode prompt since WP-E1: V3 evidence) and scenes.run_needs_passcode (V2); tests/sim/test_sim_scenes_v2.py passcode tests; tests/test_scene_execution.py TestSceneExecutorPassword. Recorded level capped at V1 by the open high findings SEC-05 and SEC-06.
+* **Named test-class scope read:** `C31` — `tests/test_scene_execution.py TestSceneExecutorPassword`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (7 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.run_protected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.run_protected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_protected-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.run_protected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}; device outputs[0].source == 6; device received http 'video switch' with {'source': [1, 6]} exactly 2x; device otherwise unchanged (allowed: outputs[0].source, routing); client shows toast.success == 'Scene executed'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** `tests/test_scene_execution.py TestSceneExecutorPassword` asserts 3 method(s) / 5 assertion(s): `test_protected_scene_requires_passcode`, `test_protected_scene_wrong_passcode`, `test_protected_scene_correct_passcode`.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-016 — Validate a scene and detect conflicting steps
+
+* **Registry claim:** POST /api/v2/scenes/{id}/validate
+* **Interfaces:** rest: POST /api/v2/scenes/{scene_id}/validate; ui: editor/scene/conflicts, editor/scene/validation-error
+* **Recorded basis (registry, verbatim):** WP-C4 V3: the saved scene editor displays three actual differing profile settings, including default mute values; browser observations verify each displayed value and the API reports has_conflicts=true. Identical, absent and overridden values are covered by unit regressions.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (8 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V2-1baac3de-scenes.conflicts_scaler_arc-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.conflicts_scaler_arc`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+2 more)); `docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V2-1baac3de-scenes.conflicts_visible-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.conflicts_visible`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)); `docs/validation/evidence/runtime-r8b/F-DOM-016/2026-10-19-V3-1baac3de-scenes.conflicts_visible-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.conflicts_visible`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'conflicts': [{'output': 1, 'setting': 'scaler', 'profiles': [{'id': 'validation_scene_sa', 'name': 'Scene SA', 'value': 5}, {'id': 'validation_scene_sb', 'name': 'Scene SB', 'value': 4}]}, {'output': 1, 'setting': 'arc', 'profiles': [{'id': 'validation_scene_sa', 'name': 'Scene SA', 'value': True}, {'id': 'validation_scene_sb', 'name': 'Scene SB', 'value': False}]}]}}; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'data': {'has_conflicts': True}}; client shows scene.conflict_count == 3; client shows scene.values == ['= 2', '= 5', '= 2', '= 5', '= true', '= false'].
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-017 — Scene execution history
+
+* **Registry claim:** GET /api/v2/scenes/{id}/history
+* **Interfaces:** rest: GET /api/v2/scenes/{scene_id}/history
+* **Recorded basis (registry, verbatim):** V3: scenario scenes.partial_failure, run from the web UI (browser client) and the api client, reads the history back through the hub; tests/sim/test_sim_scenes_v2.py history checks.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (6 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V2-1baac3de-scenes.partial_failure-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.partial_failure`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.partial_failure-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.partial_failure`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 207 and body contains {'success': False, 'data': {'steps_completed': 1, 'total_steps': 2}}; client shows toast.warning == '"Good Night" ran partly: 1 of 2 steps succeeded'; device outputs[0].audio_mute == 1; WebSocket event 'scene_execution_error' with {'scene_id': 'scene_goodnight01', 'steps_completed': 1}; hub GET /api/v2/scenes/scene_goodnight01/history -> data.execution_history[-1].status == 'error' (HTTP 200); device otherwise unchanged (allowed: outputs[*].audio_mute); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-018 — Legacy 'scenes' (v1) as aliases of profiles
+
+* **Registry claim:** README "Backward compatible with legacy Scenes terminology"
+* **Interfaces:** rest: GET /api/scenes, POST /api/scene/{scene_id}/recall
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked legacy tests. The domain_manage packaged-image scenarios add V2 proof for list aliases with canonical readback and recall routing Output 1 to Input 5. API-12/API-23 remain linked; compatibility across restart is outside this batch.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V2`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-DOM-018/2026-10-04-V2-7dbc4dc7-domain_manage.legacy_list-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `domain_manage.legacy_list`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 25 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V2`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V2`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-019 — Create, edit, delete and validate CEC macros
+
+* **Registry claim:** README "CEC Macro System: custom multi-step sequences"
+* **Interfaces:** rest: POST /api/cec/macro, PUT /api/cec/macro/{macro_id}, DELETE /api/cec/macro/{macro_id}; ui: editor/cec-macro/edit, editor/cec-macro/validation-error; files: cec_macros.json
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked macro tests. The domain_manage packaged-image scenarios add V2 proof for create/read/replace/edit/delete, invalid writes preserving prior data, command/target restrictions and boundary limits. API-28 fixed: edits over 2000 characters are refused and the previous description kept. Browser rendering, restart persistence and storage failure handling are outside this batch.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (63 stale record(s)).
+* **Ancestry:** stale `1aafbbf4ec1d`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 63 stale record(s) include `docs/validation/evidence/F-DOM-019/2026-10-02-V2-1aafbbf4-domain_manage.macro_update_description_long-api.json` @ `1aafbbf4ec1d` (client `api`, level `V2`, scenario `domain_manage.macro_update_description_long`, target `sim`, image digest `sha256:1b7b72c01322972198e2660896ca6a4270cce740d4c32d701a16eaa12b580dc0`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-020 — Run a CEC macro (steps, targets, delays)
+
+* **Registry claim:** README "CEC Macro System"
+* **Interfaces:** rest: POST /api/cec/macro/{macro_id}/execute; ui: editor/cec-macro/list, dashboard/cards/all-types; flic: POST /api/cec/macro/{id}/execute
+* **Recorded basis (registry, verbatim):** WP-C4 V3: browser-run macros send CEC commands on the shipped image. Single-refusal scenarios prove saved continue_on_error continues to later accepted commands, while the default policy stops. The REST default-timeout contract is pinned separately by the simulator endpoint regression.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (23 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V2-1baac3de-scenes.macro_continues_after_refusal-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `scenes.macro_continues_after_refusal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-012/2026-10-19-V3-1baac3de-scenes.macro_continues_after_refusal-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.macro_continues_after_refusal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)); `docs/validation/evidence/runtime-r8b/F-DOM-020/2026-10-19-V2-1baac3de-macros.run_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `macros.run_rejected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 28 path(s); source delta `src/cec_macros.py`, `src/rest_api/macros.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+6 more)); (+5 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 500; device received http 'cec command' exactly 5x; device received http 'cec command' with {'object': 1, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 1} exactly 1x; hub GET /api/v2/scenes/scene_goodnight01/history -> data.execution_history[-1].status == 'error' (HTTP 200); every WebSocket message follows docs/api/websocket.schema.json; response HTTP 500 and body contains {'success': False}; device received http 'cec command' exactly 1x; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-021 — Test / dry-run a macro
+
+* **Registry claim:** README "Test/dry-run capabilities via API"
+* **Interfaces:** rest: POST /api/cec/macro/{macro_id}/test
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked dry-run tests. The domain_manage packaged-image scenarios add V2 proof for a 25-step sequence covering every source/display command, no issues, 1500 ms duration, unchanged complete saved steps and no CEC commands or device changes. Missing macros return 404. Browser behavior is outside this batch.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-DOM-021/2026-10-04-V2-7dbc4dc7-domain_manage.macro_dry_run-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `domain_manage.macro_dry_run`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-022 — Favourite macros and show them on the dashboard
+
+* **Registry claim:** web UI dashboard macro cards
+* **Interfaces:** rest: POST /api/cec/macro/{macro_id}/favorite, POST /api/cec/macro/{macro_id}/dashboard, GET /api/cec/macros/favorites
+* **Recorded basis (registry, verbatim):** Recorded V1 baseline: mocked toggle tests. The domain_manage packaged-image scenarios add V2 proof for favorite/dashboard toggles in both directions, missing IDs and sorted favorite collection with independent reads. API-20 layout/source-of-truth semantics and browser rendering remain outside this proof.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (7 stale record(s)).
+* **Ancestry:** stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 7 stale record(s) include `docs/validation/evidence/F-DOM-022/2026-10-04-V2-7dbc4dc7-domain_manage.macro_dashboard_false-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `domain_manage.macro_dashboard_false`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-023 — Built-in shortcuts: route all to an output, one-to-one routing
+
+* **Registry claim:** src/system_shortcuts.py built-ins
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** Scenarios shortcuts.route_* (V2); tests/sim/test_sim_shortcuts.py shortcut tests; tests/test_system_shortcuts.py (spec'd double).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (7 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-023/2026-10-19-V2-1baac3de-shortcuts.route_one_to_one-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.route_one_to_one`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-023/2026-10-19-V3-1baac3de-shortcuts.route_one_to_one-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `shortcuts.route_one_to_one`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device routing == [1, 2, 3, 4, 5, 6, 7, 8]; device received http 'video switch' exactly 8x; device otherwise unchanged (allowed: outputs[*].source, routing); client shows toast.success == 'Shortcut executed'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-024 — Built-in shortcut: power everything off
+
+* **Registry claim:** src/system_shortcuts.py power_off_all
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** Scenario shortcuts.power_off_all (V2: one `set poweronoff`, API-06); tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command.
+* **Named assertion scope read:** `A43` — `tests/sim/test_sim_shortcuts.py::test_power_off_all_shortcut_sends_one_command`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (5 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-024/2026-10-19-V2-1baac3de-shortcuts.power_off_all-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.power_off_all`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-024/2026-10-19-V3-1baac3de-shortcuts.power_off_all-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `shortcuts.power_off_all`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device system.power == 0; device received http 'set poweronoff' with {'power': 0} exactly 1x; client shows toast.success == 'Shortcut executed'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the shortcut returns 200, the simulator's system power becomes 0, and exactly one `set poweronoff` write reaches the simulator.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-025 — Built-in shortcuts: mute / unmute all outputs
+
+* **Registry claim:** src/system_shortcuts.py mute_all_audio
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** Scenarios shortcuts.mute_all, shortcuts.unmute_all, shortcuts.mute_rejected (V2); tests/sim/test_sim_shortcuts.py.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (15 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.mute_all-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.mute_all`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.mute_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.mute_rejected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-025/2026-10-19-V2-1baac3de-shortcuts.unmute_all-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.unmute_all`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); (+3 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device outputs[0].audio_mute == 1; device outputs[1].audio_mute == 1; device outputs[2].audio_mute == 1; device outputs[3].audio_mute == 1; device outputs[4].audio_mute == 1; device outputs[5].audio_mute == 1; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-026 — Built-in shortcuts: recall preset 1-8
+
+* **Registry claim:** src/system_shortcuts.py preset_recall_N
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** Scenario shortcuts.preset_recall (V2); tests/sim/test_sim_shortcuts.py::test_other_shortcuts.
+* **Named assertion scope read:** `A42` — `tests/sim/test_sim_shortcuts.py::test_other_shortcuts`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V2`, no cap, freshness `stale` (7 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 7 stale record(s) include `docs/validation/evidence/F-DOM-026/2026-10-01-V3-9362fd00-shortcuts.preset_recall-browser.json` @ `9362fd009efe` (client `browser`, level `V3`, scenario `shortcuts.preset_recall`, target `sim`, image digest `sha256:7edf885a563d70679ea073035846e87f013a41eeb9c66b028b11e8983c86f364`, covers 20 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** each shortcut returns 200 and the per-shortcut `check` helper asserts the corresponding simulator state.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-027 — Built-in shortcuts: beep, panel lock, reboot
+
+* **Registry claim:** src/system_shortcuts.py system actions
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** System-mode and refusal scenarios plus disabled_reboot and reboot.enabled_shortcut API/browser records. Enabled simulator reboot emits one Telnet command and restores the connection; hardware reboot behaviour remains pending.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (38 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_off-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.beep_off`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_on-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.beep_on`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-027/2026-10-19-V2-1baac3de-shortcuts.beep_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.beep_rejected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); (+11 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device system.beep == 0; device received http 'set beep' with {'beep': 0} exactly 1x; device otherwise unchanged (allowed: system.beep); client shows toast.success == 'Shortcut executed'; every WebSocket message follows docs/api/websocket.schema.json; device system.beep == 1; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-028 — Built-in shortcuts: LCD timeout
+
+* **Registry claim:** src/system_shortcuts.py lcd_timeout_*
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/execute; ui: drawer/shortcuts/default; kiosk: kiosk/shortcuts/default
+* **Recorded basis (registry, verbatim):** Scenario shortcuts.lcd_15s (V2: device LCD code 2 = 15 s; label 'LCD: 15s', key lcd_timeout_10s kept); tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code. The device command itself is web-UI-derived until a hardware write run proves it (HIL-09).
+* **Named assertion scope read:** `A41` — `tests/sim/test_sim_shortcuts.py::test_lcd_shortcuts_set_the_device_code`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V2`, effective `V3`, no cap, freshness `fresh` (27 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_15s-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.lcd_15s`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_30s-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.lcd_30s`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); `docs/validation/evidence/runtime-r8b/F-DOM-028/2026-10-19-V2-1baac3de-shortcuts.lcd_60s-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `shortcuts.lcd_60s`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/system_shortcuts.py`, `src/rest_api/system_shortcuts.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)); (+9 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device system.lcd_timeout == 2; device received http 'set lcd on time' with {'lcd on time': 2} exactly 1x; hub GET /api/system-shortcuts/lcd_timeout_10s -> data.label == 'LCD: 15s' (HTTP 200); device otherwise unchanged (allowed: system.lcd_timeout); client shows toast.success == 'Shortcut executed'; every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** the shortcut returns 200 and sets the simulator's `lcd_timeout` to the device code.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator; the open finding(s) API-07 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; discharge the open finding(s) API-07 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-029 — Create, rename, reorder and delete user shortcuts
+
+* **Registry claim:** web UI Shortcuts drawer; DI-3
+* **Interfaces:** rest: POST /api/system-shortcuts, PUT /api/system-shortcuts/{key}, PUT /api/system-shortcuts/reorder, DELETE /api/system-shortcuts/{key}; ui: drawer/shortcuts/rename; kiosk: kiosk/slot-mapper/shortcut
+* **Recorded basis (registry, verbatim):** tests/test_system_shortcuts.py TestSystemShortcutManager; tests/test_rest_api.py TestSystemShortcutsAPI (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C32` — `tests/test_system_shortcuts.py TestSystemShortcutManager`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C26` — `tests/test_rest_api.py TestSystemShortcutsAPI`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_system_shortcuts.py TestSystemShortcutManager` asserts 8 method(s) / 11 assertion(s): `test_list_shortcuts_returns_builtins`, `test_list_shortcuts_sorted_by_order`, `test_list_shortcuts_keys_unique`, `test_get_shortcut_existing` (+4 more); `tests/test_rest_api.py TestSystemShortcutsAPI` asserts 18 method(s) / 40 assertion(s): `test_list_shortcuts_returns_5_defaults`, `test_list_shortcuts_enabled_only`, `test_list_favorites`, `test_list_dashboard_empty_by_default` (+14 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-030 — Favourite shortcuts and show them on the dashboard
+
+* **Registry claim:** web UI dashboard shortcut cards
+* **Interfaces:** rest: POST /api/system-shortcuts/{key}/favorite, POST /api/system-shortcuts/{key}/dashboard
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestSystemShortcutsAPI (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C26` — `tests/test_rest_api.py TestSystemShortcutsAPI`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestSystemShortcutsAPI` asserts 18 method(s) / 40 assertion(s): `test_list_shortcuts_returns_5_defaults`, `test_list_shortcuts_enabled_only`, `test_list_favorites`, `test_list_dashboard_empty_by_default` (+14 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-031 — Dashboard layout (add, remove, reorder cards)
+
+* **Registry claim:** docs/PHASE_8_SPEC.md dashboard layout; DI-5
+* **Interfaces:** rest: GET|PUT /api/dashboard/layout, POST|DELETE /api/dashboard/cards; ui: dashboard/cards/all-types, dashboard/card-picker/profiles; files: dashboard_layout.json
+* **Recorded basis (registry, verbatim):** tests/test_dashboard_layout.py; tests/test_rest_api.py TestDashboardLayoutAPI (mocked).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C16` — `tests/test_rest_api.py TestDashboardLayoutAPI`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-DOM-031/2026-10-10-V2-b3aced1b-dashboard.widget_card_refused-api.json` @ `b3aced1ba250` (client `api`, level `V2`, scenario `dashboard.widget_card_refused`, target `sim`, image digest `sha256:9aa791cca6936282ae5dfd21f1d137c9afc371ddd3abedbe867c7a63c60ca8ab`, covers 12 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestDashboardLayoutAPI` asserts 10 method(s) / 20 assertion(s): `test_get_layout_starts_empty`, `test_widget_cards_are_refused`, `test_put_layout_replaces_layout`, `test_put_layout_skips_invalid_cards` (+6 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-20, UI-08 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-20, UI-08 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-032 — Input/output icons, colours and display names (device settings)
+
+* **Registry claim:** web UI input/output settings modals
+* **Interfaces:** rest: GET|POST /api/device-settings/input/{input}, GET|POST /api/device-settings/output/{output}, POST /api/device-settings; ws: device_settings, device_settings_full; ui: modal/input-settings/icon-suggestion, modal/icon-picker/default; files: device_settings.json
+* **Recorded basis (registry, verbatim):** No test exercises the input/output device-settings routes or their storage.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V0` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-033 — Favourite presets and choose which presets the dashboard shows
+
+* **Registry claim:** web UI presets drawer; kiosk presets
+* **Interfaces:** rest: PUT /api/device-settings/favorite-presets, POST /api/device-settings/favorite-presets/{preset}/toggle, PUT /api/device-settings/dashboard-presets, POST /api/device-settings/dashboard-presets/{preset}/toggle
+* **Recorded basis (registry, verbatim):** tests/test_device_settings_presets.py.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-034 — Save a custom routing mapping into a preset
+
+* **Registry claim:** web UI presets drawer 'Save Mapping'; DI-4
+* **Interfaces:** rest: POST /api/preset/{preset}/save {routing}; ui: drawer/presets/expanded
+* **Recorded basis (registry, verbatim):** Scenario presets.save_custom_mapping (V2); tests/sim/test_sim_preset_save.py custom preset save tests (fresh routing, lock, refusal without a readable routing).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (25 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 25 stale record(s) include `docs/validation/evidence/F-DOM-034/2026-10-04-V2-7dbc4dc7-preset_read.saved_partial_1-api.json` @ `7dbc4dc70c70` (client `api`, level `V2`, scenario `preset_read.saved_partial_1`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-035 — Theme presets and custom themes
+
+* **Registry claim:** web UI theme drawer; docs/ui/LOOK_AND_FEEL.md
+* **Interfaces:** rest: GET|PUT /api/themes, POST /api/themes/reset; ui: drawer/theme/default, drawer/theme/customize
+* **Recorded basis (registry, verbatim):** tests/test_rest_themes_ui.py TestThemesHandlers.
+* **Named test-class scope read:** `C29` — `tests/test_rest_themes_ui.py TestThemesHandlers`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_rest_themes_ui.py TestThemesHandlers` asserts 5 method(s) / 19 assertion(s): `test_get_themes_returns_valid_structure`, `test_get_themes_default_presets_have_valid_structure`, `test_put_themes_accepts_valid_data`, `test_put_themes_rejects_wrong_preset_count` (+1 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-DOM-036 — UI preferences stored on the hub
+
+* **Registry claim:** GET/PUT /api/ui/preferences
+* **Interfaces:** rest: GET|PUT /api/ui/preferences; ui: drawer/interface/default; files: ui_preferences.json
+* **Recorded basis (registry, verbatim):** tests/test_rest_themes_ui.py TestUiPreferencesHandlers.
+* **Named test-class scope read:** `C30` — `tests/test_rest_themes_ui.py TestUiPreferencesHandlers`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_rest_themes_ui.py TestUiPreferencesHandlers` asserts 3 method(s) / 10 assertion(s): `test_get_ui_preferences_returns_defaults`, `test_ui_preferences_includes_matrix_tab`, `test_set_ui_preferences_updates_tabs`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.5 Web UI (36 features)
+
+##### F-UI-001 — Open the web UI; the header shows the matrix connection
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: app/header/disconnected, app/header/reconnecting
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts '/ui loads without page errors, connects the WebSocket' (header class connected, 64 grid cells); tests/e2e/flows.spec.ts UI-03/UI-29 test: a dropped, retrying WebSocket shows its own reconnecting header state, distinct from connected and disconnected (WP-E1).
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards; a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-002 — Route by clicking a cell in the matrix grid
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: matrix/grid/default, matrix/grid/route-pending
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts 'routing an input to an output in the matrix grid changes the simulator'.
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-MTX-001/2026-10-04-V3-d6baf3ca-routing.switch_one-browser.json` @ `d6baf3ca2574` (client `browser`, level `V3`, scenario `routing.switch_one`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 17 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-003 — Route from the matrix card view (routing sheet)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: matrix/cards/default, matrix/cards/routing-sheet
+* **Recorded basis (registry, verbatim):** visual catalog matrix/cards/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-004 — Route one input to every output from the Route To All drawer
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/routing/default, drawer/routing/routing-in-progress
+* **Recorded basis (registry, verbatim):** visual catalog drawer/routing/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-MTX-002/2026-10-04-V3-d6baf3ca-routing.route_all-browser.json` @ `d6baf3ca2574` (client `browser`, level `V3`, scenario `routing.route_all`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 19 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-005 — Recall a preset from the Presets drawer
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/presets/default, drawer/presets/expanded, drawer/presets/active
+* **Recorded basis (registry, verbatim):** visual catalog drawer/presets/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-MTX-003/2026-10-04-V3-d6baf3ca-presets.recall-browser.json` @ `d6baf3ca2574` (client `browser`, level `V3`, scenario `presets.recall`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 18 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-006 — Rename a preset in the Presets drawer
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/presets/rename
+* **Recorded basis (registry, verbatim):** visual catalog drawer/presets/rename (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-005/2026-10-19-V3-1baac3de-presets.rename-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `presets.rename`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 26 path(s); source delta `src/rest_api/device_settings.py`, `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+4 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; hub GET /api/presets -> data.presets[3].name == 'Validation Night' (HTTP 200); WebSocket event 'device_settings' with {'type': 'preset', 'number': 4, 'name': 'Validation Night'}; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-007 — Overwrite a preset / save a custom mapping from the Presets drawer
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/presets/expanded
+* **Recorded basis (registry, verbatim):** visual catalog drawer/presets/expanded (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-008 — Run profiles, scenes, presets, shortcuts and macros from dashboard cards
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dashboard/default, dashboard/cards/all-types
+* **Recorded basis (registry, verbatim):** V3: scenario scenes.run_protected with the browser client runs the locked scene from its dashboard card through the passcode prompt; tests/e2e/flows.spec.ts runs protected scene and profile cards and checks every card type renders on load (UI-01, UI-27 fixed in WP-E1). Visual diffs pending owner approval.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (3 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.run_protected-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.run_protected`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+14 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'steps_completed': 2, 'total_steps': 2}}; device outputs[0].source == 6; device received http 'video switch' with {'source': [1, 6]} exactly 2x; device otherwise unchanged (allowed: outputs[0].source, routing); client shows toast.success == 'Scene executed'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-009 — Customise the dashboard (card picker, pin, reorder)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dashboard/card-picker/profiles, dashboard/cards/empty, dashboard/first-visit, dashboard/widgets/cec-remote
+* **Recorded basis (registry, verbatim):** visual catalog dashboard/card-picker/* (screenshot baseline only; no effect asserted). UI-57: tests/e2e/flows.spec.ts asserts a first visit pins Routing and CEC Remote once each and that widgets are never dashboard cards (no scenario evidence yet).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-08, API-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-08, API-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-010 — Inputs tab: signal/cable status and input settings (name, icon, EDID)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: inputs/list/default, modal/input-settings/default, modal/icon-picker/default
+* **Recorded basis (registry, verbatim):** visual catalog inputs/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-011 — Outputs tab: display status and output settings (HDCP, HDR, scaler, ARC, mute)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: outputs/list/default, modal/output-settings/default
+* **Recorded basis (registry, verbatim):** visual catalog outputs/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-012 — Profiles tab and profile manager
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: profiles/list/populated, profiles/manager/populated
+* **Recorded basis (registry, verbatim):** V3: scenario profiles.recall_routing with the browser client (Profiles tab, Activate) and tests/e2e/flows.spec.ts 'the Profiles tab lists the hub profiles and recalls one' (UI-27 fixed in WP-E1). Visual diffs pending owner approval.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (3 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-002/2026-10-19-V3-1baac3de-profiles.recall_routing-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_routing`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 31 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `web/index.html`, `web/js/app.js` (+9 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True}; device outputs[0].source == 5; device outputs[1].source == 5; device outputs[2].source == 5; device otherwise unchanged (allowed: outputs[0].*, outputs[1].*, outputs[2].*, routing); device received http 'video switch' with {'source': [3, 5]} exactly 1x; client shows toast.success == '"Game Day" activated'; ….
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-013 — Create and edit a profile in the profile editor
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: editor/profile/new, editor/profile/edit
+* **Recorded basis (registry, verbatim):** visual catalog editor/profile/* (screenshot baseline only). tests/e2e/flows.spec.ts checks the editor's CEC button (edit only) opens the profile's CEC dialog (UI-45 owner decision 2026-09-27); saving a profile from the editor is not asserted.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-014 — Run a passcode-protected profile (passcode prompt)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dialog/passcode-prompt
+* **Recorded basis (registry, verbatim):** V3: scenarios profiles.recall_with_passcode, recall_wrong_passcode and recall_needs_passcode with the browser client (prompt answered, wrong passcode reported, prompt cancelled: nothing sent) and tests/e2e/flows.spec.ts UI-01 tests (Settings drawer, dashboard cards). The prompt is still a native window.prompt() (UI-36, Phase 5).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (6 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_needs_passcode-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_needs_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)); `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_with_passcode-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_with_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)); `docs/validation/evidence/runtime-r8b/F-DOM-005/2026-10-19-V3-1baac3de-profiles.recall_wrong_passcode-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `profiles.recall_wrong_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/index.html` (+10 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 403 and body contains {'success': False, 'data': {'error': 'passcode_required'}}; client shows dialogs == ['"Kids Gaming" is passcode protected. Enter passcode:']; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200 and body contains {'success': True}; device outputs[0].source == 6; ….
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UI-36 remain open on their own recorded conditions.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; discharge the open finding(s) UI-36 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-015 — Build a scene in the scene editor
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: editor/scene/new, editor/scene/edit, editor/scene/conflicts
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/flows.spec.ts 'the scene editor saves a new scene' (Settings drawer, New scene, Save -> POST /api/v2/scenes 201 with the typed name; UI-26 fixed in WP-E1). Steps are still added through prompt() (UI-19).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-19 remain open on their own recorded conditions.
+* **Feature-specific distinction:** The recorded V3 rests on the scene-editor save flow in `tests/e2e/flows.spec.ts` ('the scene editor saves a new scene': Settings drawer, New scene, Save -> POST /api/v2/scenes 201 with the typed name). The registry itself retains prompt-based step editing under UI-19, so the V3 baseline is **not** complete editor acceptance.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-19 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-016 — Build a CEC macro in the macro editor
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: editor/cec-macro/list, editor/cec-macro/edit
+* **Recorded basis (registry, verbatim):** visual catalog editor/cec-macro/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-017 — CEC remote on output/input tiles and the CEC tray
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: cec-remote/output-1, cec-remote/input-2, cec-tray/expanded, cec-tray/fab
+* **Recorded basis (registry, verbatim):** visual catalog cec-remote/*, cec-tray/* (screenshot baseline only). tests/e2e/flows.spec.ts checks the tray FAB throws nothing, the target selector closes and leaves no listener behind, a display's remote offers only the display CEC keys, and after a profile recall the tray sends navigation to that profile's CEC target (UI-17, UI-28, UI-37, UI-45 in WP-E1).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-018 — Theme presets, customisation and card opacity
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/theme/default, drawer/theme/customize, drawer/theme/low-opacity
+* **Recorded basis (registry, verbatim):** visual catalog drawer/theme/* (screenshot baseline only). tests/e2e/flows.spec.ts checks each preset has its own edit button and editing preset 1 opens preset 1 (UI-31 fixed in WP-E1); the theme effect itself is not asserted.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-019 — General settings: matrix host and connection test
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/general/default, drawer/general/connection-error
+* **Recorded basis (registry, verbatim):** visual catalog drawer/general/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-05 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-05 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-020 — Hardware settings: beep, panel lock, LCD, reboot
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/hardware/default
+* **Recorded basis (registry, verbatim):** visual catalog drawer/hardware/default (screenshot baseline only). tests/e2e/flows.spec.ts checks the drawer shows the matrix's LCD timeout, beep and external audio mode (UI-30 fixed in WP-E1); changing them is not asserted and still goes through the hidden legacy modal (UI-05).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-05 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-05 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-021 — Interface settings
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/interface/default
+* **Recorded basis (registry, verbatim):** visual catalog drawer/interface/default (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-05 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-05 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-022 — Shortcuts drawer: run, rename, reorder
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/shortcuts/default, drawer/shortcuts/rename
+* **Recorded basis (registry, verbatim):** visual catalog drawer/shortcuts/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-023 — Integrations drawer (Flic request builder, HA YAML, Remote 3 info)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: drawer/integrations/flic, drawer/integrations/home-assistant, drawer/integrations/unfolded-circle
+* **Recorded basis (registry, verbatim):** visual catalog drawer/integrations/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-024 — Live updates when another client or the matrix changes something
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: app/ws-status-refresh/output-names
+* **Recorded basis (registry, verbatim):** V3: scenarios routing.grid_notifies_other_clients (a grid route reaches another /ws client, VAL-05) and live.front_panel_route, live.input_signal, live.display_unplugged, live.rename_elsewhere (an open /ui page shows routing, signal, display and name changes made elsewhere; its status reads are stripped, so only the WebSocket can explain them).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (12 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards); stale `d6668000167b` (**not** an ancestor of `a07cf94`; that record's commit is unknown to this history, so its freshness is `unknown` and the project's ledger files it under `stale`).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.display_unplugged-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.display_unplugged`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 23 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+1 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.front_panel_route`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.input_signal-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.input_signal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); (+1 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — device outputs[0].connected == 0; WebSocket event 'cable_change' with {'type': 'output', 'port': 1, 'connected': False}; WebSocket event 'connection_change' with {'output': 1, 'connected': False}; client shows ui.output.1 == 'disconnected' (was 'signal'); every WebSocket message follows docs/api/websocket.schema.json; device outputs[1].source == 6; WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name': 'PS5'}; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-025 — Reconnect and resync after the WebSocket drops
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: app/header/reconnecting
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts 'the web UI reconnects after losing the hub WebSocket and resyncs from the snapshot' (WP-C2) and tests/e2e/flows.spec.ts UI-03/UI-29 test (the retry shows the reconnecting header state, WP-E1).
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards; a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-026 — Show an error state when the matrix is unreachable
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: app/matrix-unreachable, matrix/grid/status-pending
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/flows.spec.ts UI-29 tests: the grid shows 'Loading matrix' until a real routing arrives and 'Matrix not reachable' when the status read fails, never a made-up routing (WP-E1); the header turns red when the hub reports the matrix unreachable (WP-C2, live.matrix_offline). Visual diffs pending owner approval.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-027 — Toasts and confirmation dialogs
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: toast/success, toast/stacked, dialog/confirm/default
+* **Recorded basis (registry, verbatim):** V3: scenario scenes.partial_failure with the browser client checks the warning toast a partial run shows (VAL-11 fixed in WP-E1); tests/e2e/flows.spec.ts checks success, partial and error toasts for profiles and scenes. Other toasts and the confirmation dialogs: visual catalog only.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (3 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`b3aced1ba250` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-DOM-011/2026-10-19-V3-1baac3de-scenes.partial_failure-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `scenes.partial_failure`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 36 path(s); source delta `src/rest_api/scenes_v2.py`, `src/scene_manager.py`, `src/scene_execution.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py` (+13 more)).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 207 and body contains {'success': False, 'data': {'steps_completed': 1, 'total_steps': 2}}; client shows toast.warning == '"Good Night" ran partly: 1 of 2 steps succeeded'; device outputs[0].audio_mute == 1; WebSocket event 'scene_execution_error' with {'scene_id': 'scene_goodnight01', 'steps_completed': 1}; hub GET /api/v2/scenes/scene_goodnight01/history -> data.execution_history[-1].status == 'error' (HTTP 200); device otherwise unchanged (allowed: outputs[*].audio_mute); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-028 — Keyboard shortcuts
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dialog/keyboard-shortcuts
+* **Recorded basis (registry, verbatim):** visual catalog dialog/keyboard-shortcuts (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-06 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-06 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-029 — Accessibility (keyboard, focus, ARIA, contrast, zoom)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: deck/default
+* **Recorded basis (registry, verbatim):** tests/e2e/smoke.spec.ts runs axe on /ui report-only (violations recorded, not asserted).
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-07, UI-35 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-07, UI-35 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-030 — Debug panel
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: debug/fab, debug/panel/state
+* **Recorded basis (registry, verbatim):** visual catalog debug/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-031 — About dialog
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dialog/about/default
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/flows.spec.ts UI-30 About test: the WebSocket and matrix rows show the app's link state (state.wsConnected, state.matrixLink); they always showed WebSocket 'Disconnected' (WP-E1). The dialog still has no UI trigger.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-032 — Animated Tron background (opt-in)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: deck/default
+* **Recorded basis (registry, verbatim):** visual catalog paused Tron frame (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-033 — Tablet and phone layouts
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: matrix/grid/default
+* **Recorded basis (registry, verbatim):** visual catalog tablet and phone viewports (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-33 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-33 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-034 — Personalise tabs in the Control Deck (pin, reorder)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: deck/personalize-tabs
+* **Recorded basis (registry, verbatim):** visual catalog deck/personalize-tabs (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-035 — Copy an API endpoint for automation (API button / modal)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: profiles/api-endpoint-modal
+* **Recorded basis (registry, verbatim):** visual catalog profiles/api-endpoint-modal (screenshot baseline only). tests/e2e/flows.spec.ts checks the first click opens the modal (UI-28 fixed in WP-E1); the URLs still hard-code port 8080 (UI-18).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-18 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-18 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UI-036 — First-run setup wizard (matrix connection)
+
+* **Registry claim:** web/ (index.html); docs/ui/LOOK_AND_FEEL.md (approved baseline)
+* **Interfaces:** ui: dialog/setup-wizard/connection, dialog/setup-wizard/testing
+* **Recorded basis (registry, verbatim):** visual catalog dialog/setup-wizard/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-09 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-09 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.6 Kiosk (14 features)
+
+##### F-KIO-001 — Open the kiosk; it shows the matrix connection
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/default, kiosk/disconnected
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/smoke.spec.ts '/kiosk loads without page errors, connects the WebSocket' (status dot connected, 8 output tiles).
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-002 — Route a source to one display with the routing wizard
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing-modal/step-1, kiosk/routing-modal/step-2, kiosk/routing-modal/advanced
+* **Recorded basis (registry, verbatim):** V3: scenario kiosk.route_one_muted (browser: kiosk routing wizard, one output, 'Mute output audio' on; only the mute is sent, routing and mute read back from the simulator, nothing else changed) and tests/e2e/flows.spec.ts UI-23/UI-46 and UI-25 tests (UI-23, UI-25 fixed in WP-E1; UI-46 owner decision 2026-09-27). Visual diffs pending owner approval.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-KIO-002/2026-10-04-V3-7dbc4dc7-kiosk.route_one_muted-browser.json` @ `7dbc4dc70c70` (client `browser`, level `V3`, scenario `kiosk.route_one_muted`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-003 — Route a source to every display from the kiosk
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/all-to-one
+* **Recorded basis (registry, verbatim):** V3: scenario kiosk.route_all_apply (browser: all outputs to input 5 with untouched options; only the routing changes, the soundbar keeps its audio-only scaler, no output setting command reaches the device, UI-46 owner decision 2026-09-27) and tests/e2e/smoke.spec.ts kiosk route-all (UI-23 fixed in WP-E1).
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-KIO-003/2026-10-04-V3-7dbc4dc7-kiosk.route_all_apply-browser.json` @ `7dbc4dc70c70` (client `browser`, level `V3`, scenario `kiosk.route_all_apply`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-004 — Input and output status tiles
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/default
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/flows.spec.ts 'kiosk status tiles come from the real status routes' (no 404s; input 2 shows a signal and input 1 none, from the simulator) (UI-24 fixed in WP-E1). Visual diffs pending owner approval.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-005 — Recall a preset from the kiosk
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/presets/default
+* **Recorded basis (registry, verbatim):** visual catalog kiosk/presets/default (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-006 — Configure which presets the kiosk shows (edit mode)
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/presets/edit-mode, kiosk/preset-config
+* **Recorded basis (registry, verbatim):** visual catalog kiosk/presets/edit-mode (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-08 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-08 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-007 — Run shortcuts from the kiosk and map them to slots
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/shortcuts/default, kiosk/slot-mapper/shortcut
+* **Recorded basis (registry, verbatim):** visual catalog kiosk/shortcuts/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-008 — Run profiles from the kiosk; create one with the profile wizard
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/profiles/default, kiosk/profile-wizard/step-1
+* **Recorded basis (registry, verbatim):** Scenarios kiosk.profile_with_passcode and kiosk.profile_wrong_passcode (browser, V3: a protected profile run from its kiosk slot through the PIN pad, UI-48 owner decision 2026-09-27; device read back) and tests/e2e/flows.spec.ts UI-25 / UI-48 tests. Recorded V1 because creating a profile with the kiosk wizard is not asserted (the wizard opening is, UI-25).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (6 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`97d0d2af94a2` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-KIO-008/2026-10-19-V3-1baac3de-kiosk.profile_with_passcode-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `kiosk.profile_with_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/kiosk.html`); `docs/validation/evidence/runtime-r8b/F-KIO-008/2026-10-19-V3-1baac3de-kiosk.profile_wrong_passcode-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `kiosk.profile_wrong_passcode`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/password.py`, `web/kiosk.html`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 6; device received http 'video switch' with {'source': [1, 6]} exactly 1x; device otherwise unchanged (allowed: outputs[0].*, routing); client shows toast.success == 'Profile activated'; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 403; ….
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-009 — CEC remote in the kiosk
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/cec-remote/output-1, kiosk/cec-remote/display-target
+* **Recorded basis (registry, verbatim):** visual catalog kiosk/cec-remote/* (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-010 — Kiosk live updates
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/default
+* **Recorded basis (registry, verbatim):** V3: scenarios live.front_panel_route and live.input_signal: an open /kiosk page shows routing and signal changes made on the matrix (shared /js/websocket.js client). tests/e2e/flows.spec.ts UI-24 test: the kiosk makes no status reads after start and still shows a matrix-side change (WP-E1 removed its 5 s status poll).
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.front_panel_route`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)); `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.input_signal-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.input_signal`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)).
+* **What the evidence establishes:** the committed record's own checks — device outputs[1].source == 6; WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name': 'PS5'}; hub GET /api/status -> data.routing.2 == 6 (HTTP 200); client shows ui.route.2 == 6 (was 2); client shows kiosk.route.2 == 6 (was 2); every WebSocket message follows docs/api/websocket.schema.json; device inputs[2].signal == 1; ….
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-011 — Kiosk disconnected state
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/disconnected
+* **Recorded basis (registry, verbatim):** V3: scenario live.matrix_offline: an open /kiosk page shows Disconnected while the matrix is off the network and Connected again after it returns. The first-load visual is the catalog entry kiosk/disconnected.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-REL-009/2026-10-19-V3-1baac3de-live.matrix_offline-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.matrix_offline`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+2 more)).
+* **What the evidence establishes:** the committed record's own checks — WebSocket event 'matrix_connection' with {'connected': False}; hub GET /api/status -> success == False; hub GET /api/status -> data.connected == False; client shows ui.header == 'disconnected' (was 'connected'); client shows kiosk.status == 'Disconnected' (was 'Connected'); WebSocket event 'matrix_connection' with {'connected': True, 'state': 'connected'}; hub GET /api/health -> data.matrix.connected == True (HTTP 200); ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-012 — Kiosk layout and pins persist
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/edit-mode
+* **Recorded basis (registry, verbatim):** visual catalog kiosk/*/edit-mode (screenshot baseline only; no effect asserted); pins live in browser localStorage only.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-08 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-08 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-013 — Kiosk follows the selected theme
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/default
+* **Recorded basis (registry, verbatim):** visual catalog themed kiosk captures (screenshot baseline only; no effect asserted).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-34 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-34 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-KIO-014 — Kiosk touch accessibility (targets, ARIA, contrast)
+
+* **Registry claim:** web/kiosk.html; docs/REMEDIATION_PLAN.md D7
+* **Interfaces:** kiosk: kiosk/routing/tile-pressed
+* **Recorded basis (registry, verbatim):** tests/e2e/smoke.spec.ts runs axe on /kiosk report-only.
+* **Named module/class scope read:** `M2` — `tests/e2e/smoke.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser drives the UI and the simulator state is asserted afterwards.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UI-07, UI-35 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UI-07, UI-35 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.7 Remote 3 integration (17 features)
+
+##### F-UC-001 — Discover the integration and register the driver (mDNS, driver URL)
+
+* **Registry claim:** README "Fast reconnection via static driver URL"; docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md
+* **Interfaces:** uc: mDNS _uc-integration._tcp, driver.json; env: UC_ENABLED, UC_INTEGRATION_INTERFACE
+* **Recorded basis (registry, verbatim):** tests/uc (scripted Remote 3 -> real driver.py -> simulator) disables mDNS. test_handshake.py pins the metadata (driver_metadata = driver.json, no driver_url: UC-03 fixed in WP-D2) and that UC_DRIVER_URL is the URL advertised; tests/deploy reaches the integration at that URL from the image; driver.json text, validation and min_core_api fixed in WP-B3 (UC-16, tests/test_driver.py::TestDriverMetadata). mDNS discovery by a real Remote: not tested.
+* **Named assertion scope read:** `A52` — `tests/test_driver.py::TestDriverMetadata`; the function's assertion statements were read at this base.
+* **Named package scope read:** `M15` — `tests/deploy/`.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the driver identity (`hdmi_matrix`, port 9095), `min_core_api: 0.20.0`, a release date between 2026-09-25 and today, and the host field's validation are asserted; the packaged container is started and the integration is reached at the advertised URL; the Docker healthcheck and the compose/runtime wiring are asserted; a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UC-11 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UC-11 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-002 — Set up the integration on the Remote
+
+* **Registry claim:** docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md setup flow
+* **Interfaces:** uc: setup_driver, driver_setup_change
+* **Recorded basis (registry, verbatim):** V1 (capped: UC-02 open, token auth is Phase 3). tests/uc (scripted Remote 3 -> real driver.py -> simulator), all passing since WP-B3 (UC-05 fixed): test_setup.py::test_setup_reports_success (STOP/OK), ::test_setup_connects_creates_entities_and_saves_the_configuration (login page, 74 entities, address + entered login saved, control), ::test_a_new_address_asks_for_its_login_before_anything_is_sent, ::test_a_wrong_password_is_an_authorization_error, ::test_setup_errors_name_the_problem (CONNECTION_REFUSED / NOT_FOUND), ::test_the_setup_login_is_never_logged, ::test_setup_starts_live_updates_without_a_remote_connect. UC-02 short term: ::test_a_new_host_never_receives_the_stored_credentials. Setup on a real Remote (V4) pending.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-003 — Reconfigure the integration (new matrix address)
+
+* **Registry claim:** docs/UNFOLDED_CIRCLE_INTEGRATION_GUIDE.md reconfigure
+* **Interfaces:** uc: setup_driver (reconfigure)
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2/WP-B3: test_setup.py::test_reconfigure_with_a_bad_address_keeps_the_working_setup, ::test_reconfigure_keeps_the_subscribed_entities_working (same address: no login page), ::test_reconfigure_to_another_matrix_disposes_the_old_connection (login page, old matrix disposed: BE-10), ::test_the_login_entered_for_a_matrix_is_used_after_a_restart, ::test_abort_on_the_login_page_discards_the_new_address (UC-05 fixed in WP-B3). UC-02 (open, H) is linked to F-UC-002, not here. V4 on a real Remote pending. Shared HubRuntime matrix reconfiguration restoration is additionally covered by the R1G/R1H/R1I source regressions described in F-REL-017; this does not replace actual Remote setup/physical-client acceptance. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-004 — Preset buttons on the Remote
+
+* **Registry claim:** README "8 preset buttons with dynamic names from matrix"
+* **Interfaces:** uc: button.preset_1..8 press
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_preset_button_recalls_the_preset (simulator routing and 'preset set' asserted); since WP-B3 (UC-14) the buttons carry the web app's preset names: test_state_sync.py::test_preset_names_match_the_web_app, ::test_preset_changes_in_the_web_app_reach_the_remote_live. Scenarios remote.preset_button, remote.preset_names_from_web_app. V4: a name change reaching an entity already added on a real Remote is UC-28.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_button-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.preset_button`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`); `docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_names_from_web_app-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.preset_names_from_web_app`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/device_settings.py`, `src/rest_api/core.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device routing == [6, 6, 6, 6, 6, 6, 6, 6]; device otherwise unchanged (allowed: outputs[*].source, routing); device received http 'preset set' with {'index': 3} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json; client shows button.preset_3@name == 'Game Night' (was 'PS5'); client shows remote.orei_matrix@page:orei_matrix_main == ['Apple TV Everywhere', 'Shield Night', 'Game Night', 'Retro', 'Preset 5', 'Preset 6', 'Preset 7', 'Preset 8']; ….
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-28 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-28 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-005 — Matrix remote entity with a preset page
+
+* **Registry claim:** README "Matrix remote entity with preset selection UI"
+* **Interfaces:** uc: remote.orei_matrix send_cmd PRESET_N, remote.orei_matrix on/off
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_matrix_remote_preset_command_recalls_the_preset and ::test_matrix_remote_rejects_bad_commands_and_stays_connected; since WP-B3 (UC-14) its pages show the web app's preset names and a Favourites page (test_state_sync.py::test_preset_names_match_the_web_app). Scenarios remote.matrix_preset_command, remote.preset_names_from_web_app.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-004/2026-10-19-V3-1baac3de-remote.preset_names_from_web_app-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.preset_names_from_web_app`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/device_settings.py`, `src/rest_api/core.py`); `docs/validation/evidence/runtime-r8b/F-UC-005/2026-10-19-V3-1baac3de-remote.matrix_preset_command-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.matrix_preset_command`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; client shows button.preset_3@name == 'Game Night' (was 'PS5'); client shows remote.orei_matrix@page:orei_matrix_main == ['Apple TV Everywhere', 'Shield Night', 'Game Night', 'Retro', 'Preset 5', 'Preset 6', 'Preset 7', 'Preset 8']; client shows remote.orei_matrix@page:orei_matrix_favourites == ['Apple TV Everywhere', 'Shield Night']; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-006 — Per-input CEC remotes (source power, navigation, playback)
+
+* **Registry claim:** README "Per-input CEC remote entities"; "CEC control for all 8 inputs"
+* **Interfaces:** uc: remote.input_N_cec send_cmd, remote.input_N_cec on/off, send_cmd_sequence
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): send_cmd sends the exact CEC frame for all 19 commands (test_commands.py::test_input_cec_remote_send_cmd_sends_exact_frames); since WP-B2 on/off/toggle/send_cmd_sequence answer 200 with the exact frames and the connection stays open (::test_cec_remote_power_and_sequence_commands, ::test_cec_remote_toggle_follows_the_tracked_power_state; UC-01), repeat applies per command (::test_send_cmd_sequence_repeat_and_the_button_mapping_form; UC-22). Scenarios remote.input_cec_command, remote.input_cec_off, remote.input_cec_sequence.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (6 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_command-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.input_cec_command`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_off-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.input_cec_off`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-006/2026-10-19-V3-1baac3de-remote.input_cec_sequence-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.input_cec_sequence`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'cec command' with {'object': 0, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 11} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json; device received http 'cec command' with {'object': 0, 'port': [0, 0, 0, 0, 1, 0, 0, 0], 'index': 2} exactly 1x; device otherwise unchanged; device received http 'cec command' with {'object': 0, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 3} exactly 1x; device received http 'cec command' with {'object': 0, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 5} exactly 1x.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-12 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-12 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-007 — Per-output CEC remotes (TV power, volume)
+
+* **Registry claim:** src/driver.py remote.output_N_cec
+* **Interfaces:** uc: remote.output_N_cec send_cmd, remote.output_N_cec on/off
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): the remote offers exactly the display CEC table (POWER_ON, POWER_OFF, MUTE, VOLUME_DOWN, VOLUME_UP, ACTIVE; BE-14) and send_cmd sends its exact frame (test_commands.py::test_output_cec_remote_send_cmd_sends_exact_frames, ::test_output_cec_remote_advertises_only_the_display_table); source-only keys answer 400 with no frame (::test_source_only_keys_on_the_output_cec_remote_are_rejected); since WP-B2 on/off/toggle/send_cmd_sequence work and never close the connection (::test_cec_remote_power_and_sequence_commands; UC-01) and repeat sends every step (::test_send_cmd_repeat_sends_the_command_repeatedly; UC-22); since WP-B3 the CEC remotes advertise toggle (::test_cec_remotes_advertise_the_power_toggle; UC-24). Scenarios remote.output_cec_power_on, remote.output_cec_on, remote.output_cec_toggle, remote.output_cec_volume_repeat, remote.cec_bad_sequence.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (10 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.cec_bad_sequence-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.cec_bad_sequence`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_on-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.output_cec_on`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-007/2026-10-19-V3-1baac3de-remote.output_cec_power_on-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.output_cec_power_on`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); (+2 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 400; device never received 'cec command'; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 0} exactly 1x.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) BE-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) BE-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-008 — Choose an output's source from the Remote (media player source list)
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §3 media_player.output_N
+* **Interfaces:** uc: media_player.output_N select_source
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_select_source_routes_the_output (simulator routing, the exact 'video switch' and the entity_change asserted); renames are strict xfails (UC-08). Scenarios remote.select_source, remote.unknown_source.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (6 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-008/2026-10-19-V3-1baac3de-remote.select_source-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.select_source`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`); `docs/validation/evidence/runtime-r8b/F-UC-008/2026-10-19-V3-1baac3de-remote.unknown_source-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.unknown_source`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`); `docs/validation/evidence/runtime-r8b/F-UC-016/2026-10-19-V3-1baac3de-remote.input_rename_live-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.input_rename_live`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 21 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/core.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 6; device otherwise unchanged (allowed: outputs[0].source, routing[0]); device received http 'video switch' with {'source': [1, 6]} exactly 1x; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 400; no write command reached the device; ….
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-10 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-10 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-009 — TV power / volume / mute from the output media player
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §3
+* **Interfaces:** uc: media_player.output_N on/off/toggle/volume/mute
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_media_player_power_volume_and_mute_send_output_cec (exact CEC frames of the display table asserted: on 0, off 1, mute 2, volume down 3, volume up 4; BE-14); since WP-B2 the first toggle powers the display on and toggle then follows the tracked power (::test_media_player_first_toggle_does_not_turn_the_tv_off; UC-10 toggle part). Scenarios remote.media_player_volume, remote.media_player_toggle.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-009/2026-10-19-V3-1baac3de-remote.media_player_toggle-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.media_player_toggle`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`); `docs/validation/evidence/runtime-r8b/F-UC-009/2026-10-19-V3-1baac3de-remote.media_player_volume-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.media_player_volume`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 22 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/cec.py`, `src/cec_commands.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [0, 0, 0, 1, 0, 0, 0, 0], 'index': 0} exactly 1x; device received http 'cec command' with {'object': 1, 'index': 1} exactly 0x; every WebSocket message follows docs/api/websocket.schema.json; device received http 'cec command' with {'object': 1, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 4} exactly 1x; device otherwise unchanged.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-10, BE-24 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-10, BE-24 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-010 — Matrix power switch on the Remote
+
+* **Registry claim:** src/driver.py switch.matrix_power
+* **Interfaces:** uc: switch.matrix_power on/off/toggle
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_commands.py::test_power_switch_turns_the_matrix_off_and_on; since WP-B3 (UC-09) the switch follows the device (::test_power_switch_follows_a_front_panel_power_change, ::test_power_switch_follows_the_web_app_at_once) and answers 503 while the matrix is unreachable (::test_power_switch_reports_unavailable_while_the_matrix_is_unreachable). Scenarios remote.power_switch_off, remote.power_switch_follows_front_panel.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (4 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-010/2026-10-19-V3-1baac3de-remote.power_switch_follows_front_panel-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.power_switch_follows_front_panel`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`); `docs/validation/evidence/runtime-r8b/F-UC-010/2026-10-19-V3-1baac3de-remote.power_switch_off-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.power_switch_off`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 20 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`).
+* **What the evidence establishes:** the committed record's own checks — device system.power == 0; client shows switch.matrix_power == 'OFF' (was 'ON'); no write command reached the device; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200; device otherwise unchanged (allowed: system.power); device received http 'set poweronoff' with {'power': 0} exactly 1x.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-011 — Input signal and cable sensors
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §3 sensor.input_N_*
+* **Interfaces:** uc: sensor.input_N_signal, sensor.input_N_cable
+* **Recorded basis (registry, verbatim):** V1 (capped: BE-03 still open in the register). tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device and ::test_signal_and_cable_changes_reach_the_remote pass; since WP-B2 (UC-04) sensors start UNKNOWN and keep their last known value during an outage (::test_starting_with_the_matrix_offline_reports_no_made_up_state, ::test_no_values_are_made_up_during_an_outage).
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UC-13 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UC-13 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-012 — Output connected, cable and source sensors
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §3 sensor.output_N_*
+* **Interfaces:** uc: sensor.output_N_connected, sensor.output_N_cable, sensor.output_N_source
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator): test_state_sync.py::test_subscribed_entity_states_reflect_the_device, ::test_front_panel_routing_change_reaches_the_remote and ::test_a_partial_subscription_still_gets_updates pass; since WP-B2 (UC-04) no 'Input 0'/'Disconnected' placeholders: ::test_no_values_are_made_up_during_an_outage, ::test_starting_with_the_matrix_offline_reports_no_made_up_state.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UC-13 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UC-13 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-013 — Entities go unavailable while the matrix is unreachable
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §9 item 7
+* **Interfaces:** uc: entity state UNAVAILABLE, device state
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-04, BE-06): test_state_sync.py::test_matrix_outage_changes_the_device_state (ERROR), ::test_entities_are_unavailable_during_an_outage (every stateful entity UNAVAILABLE), ::test_recovery_reports_connected_and_restores_the_last_known_state, ::test_live_updates_resume_after_a_transient_failure; test_commands.py::test_commands_answer_503_while_the_matrix_is_unreachable. One unanswered status read is not an outage (HIL-12, ::test_one_unanswered_status_read_keeps_the_remote_live).
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-014 — Remote standby and wake
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §9 item 9
+* **Interfaces:** uc: enter_standby, exit_standby
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-06, UC-17, BE-09): test_lifecycle.py::test_remote_standby_keeps_the_matrix_connected, ::test_no_pushes_while_the_remote_is_in_standby, ::test_wake_resyncs_with_exactly_one_poller, ::test_repeated_connects_and_wakes_keep_one_poller; the web app keeps live updates without an awake Remote (::test_front_panel_change_reaches_web_clients_* tests).
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-015 — Only changed attributes are sent to the Remote
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md UC-07
+* **Interfaces:** uc: entity_change events
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B2 (UC-07): test_state_sync.py::test_unchanged_attributes_are_not_resent (no entity_change for three polls of an unchanged device); tests/test_driver.py::TestEntityStateSync.
+* **Named assertion scope read:** `A53` — `tests/test_driver.py::TestEntityStateSync`; the function's assertion statements were read at this base.
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** only changed attributes are pushed to the Remote, an outage keeps the last known values, and the standby state is published; a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-016 — Renamed inputs/outputs show up on the Remote
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §9 item 5
+* **Interfaces:** uc: media_player source_list, entity names
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) since WP-B3 (UC-08): a web-app rename reaches the subscribed media players live and select by the new name works without a reconnect (test_state_sync.py::test_input_rename_updates_the_source_list, ::test_output_rename_updates_the_offered_entities; at the next connect too: ::test_select_source_by_new_name_after_rename). Scenario remote.input_rename_live. Entity names of entities already added on a Remote: UC-28 (V4).
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-UC-016/2026-10-19-V3-1baac3de-remote.input_rename_live-uc.json` @ `1baac3dec660` (client `uc`, level `V3`, scenario `remote.input_rename_live`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 21 path(s); source delta `src/hub/integrations/unfolded_circle`, `driver.json`, `requirements-uc.txt`, `src/rest_api/__init__.py`, `src/rest_api/core.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device inputs[2].name == 'Xbox'; client shows media_player.output_1@source_list == ['PS3', 'AppleTV', 'Xbox', 'Switch', 'Shield', 'PS5', 'Analogue', 'Input 8'] (was ['PS3', 'AppleTV', 'Computer', 'Switch', 'Shield', 'PS5', 'Analogue', 'Input 8']); client shows remote.input_3_cec@name == 'Xbox CEC'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) UC-28, BE-16 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) UC-28, BE-16 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-UC-017 — Restore the configuration at startup (also with the matrix offline)
+
+* **Registry claim:** src/driver.py restore_from_config
+* **Interfaces:** uc: driver restart; files: config.json (UC_CONFIG_HOME)
+* **Recorded basis (registry, verbatim):** V3: tests/uc (scripted Remote 3 -> real driver.py -> simulator) test_entities.py::test_restore_after_restart (same entity ids; a re-subscribing Remote routes without a new setup, simulator asserted); since WP-B2 (UC-19) the integration port opens without waiting for a hanging matrix and the restored entities are offered at once (test_lifecycle.py::test_integration_port_opens_promptly_when_the_matrix_hangs), and a driver started with the matrix offline reports no made-up state (test_state_sync.py::test_starting_with_the_matrix_offline_reports_no_made_up_state). Without a saved setup, MATRIX_HOST serves the hub before any Remote setup and is never saved (test_setup.py::test_matrix_host_serves_the_hub_before_any_remote_setup). tests/test_driver.py TestConfigPersistence, TestStartupHelpers (unit).
+* **Named package scope read:** `M16` — `tests/uc/`.
+* **Named test-class scope read:** `C5` — `tests/test_driver.py TestConfigPersistence`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a scripted Remote drives the real `driver.py` against the simulator; the handshake, setup, entities, commands, state sync and lifecycle are asserted in-process; `tests/test_driver.py TestConfigPersistence` asserts 5 method(s) / 11 assertion(s): `test_save_config_creates_file`, `test_save_and_load_config_roundtrip`, `test_load_config_no_file`, `test_load_config_corrupted_file` (+1 more).
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.8 Home Assistant component (18 features)
+
+##### F-HA-001 — Add the hub in Home Assistant (config flow)
+
+* **Registry claim:** README "UI-based config flow (setup via IP address & port)"
+* **Interfaces:** ha: config flow user step
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-001/2026-10-04-V3-7dbc4dc7-ha.config_flow-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.config_flow`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-002 — Choose each output's source (select entities)
+
+* **Registry claim:** README "Output source routing select entities"
+* **Interfaces:** ha: select.output_N_source
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.select_source; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_select.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-HA-002/2026-10-04-V3-7dbc4dc7-ha.front_panel_route-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.front_panel_route`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-003 — Matrix power switch
+
+* **Registry claim:** README "Switch controls for matrix power"
+* **Interfaces:** ha: switch.matrix_power
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.power_off, ha.power_on; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-HA-003/2026-10-04-V3-7dbc4dc7-ha.power_off-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.power_off`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-004 — Output audio mute switches
+
+* **Registry claim:** README "Switch controls for ... audio mute"
+* **Interfaces:** ha: switch.output_N_mute
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.mute_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-004/2026-10-04-V3-7dbc4dc7-ha.mute_switch-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.mute_switch`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-005 — Output stream enable switches
+
+* **Registry claim:** README "Switch controls for ... output stream enable/disable"
+* **Interfaces:** ha: switch.output_N_stream
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.stream_switch; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_switch.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-005/2026-10-04-V3-7dbc4dc7-ha.stream_switch-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.stream_switch`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-006 — Preset buttons
+
+* **Registry claim:** README "Button controls to recall presets 1-8"
+* **Interfaces:** ha: button.preset_N
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.preset_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-006/2026-10-04-V3-7dbc4dc7-ha.preset_button-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.preset_button`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-007 — Reboot button
+
+* **Registry claim:** README "... and reboot the device"
+* **Interfaces:** ha: button.reboot_matrix
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reboot_button; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_button.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-007/2026-10-04-V3-7dbc4dc7-ha.reboot_button-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.reboot_button`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-008 — Input signal binary sensors
+
+* **Registry claim:** README "Binary sensors for input active video signals"
+* **Interfaces:** ha: binary_sensor.input_N_signal
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.input_signal; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-008/2026-10-04-V3-7dbc4dc7-ha.input_signal-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.input_signal`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-009 — Output connected binary sensors
+
+* **Registry claim:** README "... and output display connection status"
+* **Interfaces:** ha: binary_sensor.output_N_connected
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.display_unplugged; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_binary_sensor.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-009/2026-10-04-V3-7dbc4dc7-ha.display_unplugged-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.display_unplugged`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-010 — Service hdmi_matrix.recall_preset
+
+* **Registry claim:** README "Custom native service integrations (recall_preset ...)"
+* **Interfaces:** ha: service hdmi_matrix.recall_preset
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_recall_preset; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-010/2026-10-04-V3-7dbc4dc7-ha.service_recall_preset-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.service_recall_preset`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-011 — Service hdmi_matrix.switch_input
+
+* **Registry claim:** README "... switch_input ..."
+* **Interfaces:** ha: service hdmi_matrix.switch_input
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.service_switch_input; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-011/2026-10-04-V3-7dbc4dc7-ha.service_switch_input-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.service_switch_input`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-012 — Service hdmi_matrix.send_cec_command
+
+* **Registry claim:** README "... send_cec_command"
+* **Interfaces:** ha: service hdmi_matrix.send_cec_command
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_cec_display, ha.service_cec_source, ha.service_cec_invalid; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (9 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 9 stale record(s) include `docs/validation/evidence/F-HA-012/2026-10-04-V3-7dbc4dc7-ha.service_cec_display-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.service_cec_display`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 16 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-013 — Poll the hub; entities go unavailable when it is unreachable
+
+* **Registry claim:** custom_components/hdmi_matrix/coordinator.py
+* **Interfaces:** ha: DataUpdateCoordinator
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.input_signal, ha.display_unplugged, ha.matrix_unreachable; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (15 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 15 stale record(s) include `docs/validation/evidence/F-HA-002/2026-10-04-V3-7dbc4dc7-ha.front_panel_route-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.front_panel_route`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-014 — Install through HACS (custom repository)
+
+* **Registry claim:** README "Home Assistant Custom HACS Component"
+* **Interfaces:** ha: hacs.json, manifest.json, translations/en.json
+* **Recorded basis (registry, verbatim):** hassfest passes (blocking CI job, also run locally); the HACS action passes every check, brands included (HA-14: local brand icons); tests/ha/test_init.py::test_manifest_and_hacs and test_translations_match_strings. Not yet installed through HACS itself.
+* **Named assertion scope read:** `A2` — `tests/ha/test_init.py::test_manifest_and_hacs`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `manifest.json` declares `integration_type: hub` and `iot_class: local_polling` with no zeroconf dependency, and `hacs.json` names the integration and the minimum Home Assistant `2025.1.0`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-015 — Device and entity naming in Home Assistant
+
+* **Registry claim:** custom_components/hdmi_matrix device_info
+* **Interfaces:** ha: device registry entry
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_init.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-001/2026-10-04-V3-7dbc4dc7-ha.config_flow-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.config_flow`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-016 — Change the hub address of a configured matrix (reconfigure flow)
+
+* **Registry claim:** custom_components/hdmi_matrix/config_flow.py async_step_reconfigure; docs/HOME_ASSISTANT.md
+* **Interfaces:** ha: config flow reconfigure step
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.reconfigure; effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-016/2026-10-04-V3-7dbc4dc7-ha.reconfigure-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.reconfigure`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-017 — Polling interval option (options flow)
+
+* **Registry claim:** custom_components/hdmi_matrix/config_flow.py HdmiMatrixOptionsFlow; docs/HOME_ASSISTANT.md
+* **Interfaces:** ha: options flow scan_interval
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenario ha.config_flow (sets 5 s; every later scenario relies on it); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_config_flow.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (3 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 3 stale record(s) include `docs/validation/evidence/F-HA-001/2026-10-04-V3-7dbc4dc7-ha.config_flow-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.config_flow`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 15 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-HA-018 — Services target one matrix (config entry or device)
+
+* **Registry claim:** custom_components/hdmi_matrix/services.py; docs/HOME_ASSISTANT.md
+* **Interfaces:** ha: service field config_entry_id, service field device_id
+* **Recorded basis (registry, verbatim):** V3: real Home Assistant container (tools/validate/clients/ha.py; HA 2026.9.3, also run on the minimum 2025.1.4), scenarios ha.service_recall_preset (entry), ha.service_switch_input (device); effect read back from the simulator and shown by Home Assistant. V1: tests/ha/test_services.py (pytest-homeassistant-custom-component, contract fixtures).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (6 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 6 stale record(s) include `docs/validation/evidence/F-HA-010/2026-10-04-V3-7dbc4dc7-ha.service_recall_preset-ha.json` @ `7dbc4dc70c70` (client `ha`, level `V3`, scenario `ha.service_recall_preset`, target `sim`, image digest `sha256:0078ebd82f7576c4304650e3f29ee3aaee18d92638594b0b66f2506fa94ad05a`, covers 14 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.9 Flic (10 features)
+
+##### F-FLIC-001 — Button click recalls a preset
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST http://hub:8080/api/preset/{n} (no body)
+* **Recorded basis (registry, verbatim):** R6 generator/replay tests cover dedicated-client requests. R1F tests/test_runtime_cec_enable_r1f.py and tests/sim/test_sim_rest_reads.py reproduce and correct stale CEC enable decisions after explicit synchronization using a real simulator. Coordinator exact-commit checks: 27 passed; registered input/output cases failed before the fix and both passed afterward. The failed integrated 55d4fe0 image campaign and focused dirty-source worker proofs remain preserved. Fresh complete source and shipped-image campaigns at clean 4adbc13 both pass all 23 Flic outcomes, including source_power with unchanged strict enable-write/frame/readback oracles; actual image IDs and summaries are archived in docs/validation/runs/runtime. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub and CEC effects remain unobserved.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-FLIC-001/2026-10-19-V3-4adbc136-flic.preset-flic.json` @ `4adbc136a4c1` (client `flic`, level `V3`, scenario `flic.preset`, target `sim`, image digest `sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e`, covers 32 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-002 — Button hold powers the matrix off / on
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST /api/power/off, POST /api/power/on
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `stale` (4 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 4 stale record(s) include `docs/validation/evidence/F-FLIC-002/2026-10-19-V3-4adbc136-flic.power_off-flic.json` @ `4adbc136a4c1` (client `flic`, level `V3`, scenario `flic.power_off`, target `sim`, image digest `sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e`, covers 25 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-003 — Button powers a source on over CEC
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST /api/cec/input/{n}/power_on
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (1 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-003/2026-10-19-V3-1baac3de-flic.source_power-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.source_power`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'set cec index' with {'inputindex': [1, 1, 0, 0, 1, 1, 0, 0]} exactly 1x; device received http 'cec command' with {'object': 0, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 1} exactly 1x; simulator raised no protocol warnings; device inputs[0].cec_enabled == 1; device otherwise unchanged (allowed: inputs[0].cec_enabled); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-004 — Flic Twist cycles an output through its inputs
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST /api/input/next?output=N, POST /api/input/previous?output=N
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (3 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.cycle_next-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.cycle_next`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_next-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.sdk_twist_next`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_previous-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.sdk_twist_previous`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 3; device received http 'video switch' with {'source': [1, 3]} exactly 1x; device otherwise unchanged (allowed: outputs[0].source, routing[0]); every WebSocket message follows docs/api/websocket.schema.json; device outputs[0].source == 1; device received http 'video switch' with {'source': [1, 1]} exactly 1x.
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-005 — Flic Twist controls TV volume and mute over CEC
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST /api/cec/output/{n}/volume_up, POST /api/cec/output/{n}/volume_down, POST /api/cec/output/{n}/mute
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-005/2026-10-19-V3-1baac3de-flic.cec_output_navigation_refused-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.cec_output_navigation_refused`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-005/2026-10-19-V3-1baac3de-flic.display_volume-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.display_volume`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 400; no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 200; device received http 'cec command' with {'object': 1, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 4} exactly 1x; simulator raised no protocol warnings.
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator; the open finding(s) BE-14 remain open on their own recorded conditions.
+* **Feature-specific distinction:** Two different records carry this row. `flic.cec_output_navigation_refused` (`.../F-FLIC-005/2026-10-19-V3-1baac3de-flic.cec_output_navigation_refused-flic.json`) is a **negative** record: it asserts HTTP 400, that no write command reached the device and that the device was otherwise unchanged. The **positive** volume proof is the separate record `flic.display_volume` (`.../F-FLIC-005/2026-10-19-V3-1baac3de-flic.display_volume-flic.json`), which asserts HTTP 200 and exactly one `cec command` with the expected object/port/index. The record's own environment names Node stubs for the generated SDK callback replay; the physical Flic Hub, the SDK version and the physical button set are **unknown** in that record and were not observed.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; discharge the open finding(s) BE-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-006 — Button recalls a profile or runs a macro
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** flic: POST /api/profile/{id}/recall, POST /api/cec/macro/{id}/execute
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved. Macro execution is a documented manual protocol variant, not a generated drawer action.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (5 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.manual_macro-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.manual_macro`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/cec_macros.py`, `src/rest_api/macros.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+9 more)); `docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.manual_macro_refused-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.manual_macro_refused`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 35 path(s); source delta `src/cec_macros.py`, `src/rest_api/macros.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js` (+9 more)); `docs/validation/evidence/runtime-r8b/F-FLIC-006/2026-10-19-V3-1baac3de-flic.profile-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.profile`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 38 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `web/index.html`, `web/js/app.js` (+12 more)); (+2 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200 and body contains {'success': True, 'data': {'steps_executed': 3}}; device received http 'cec command' with {'object': 1, 'port': [0, 1, 0, 0, 0, 0, 0, 0], 'index': 4} exactly 3x; device received http 'cec command' exactly 3x; device otherwise unchanged; client shows toast.success == 'Macro executed'; every WebSocket message follows docs/api/websocket.schema.json; response HTTP 500 and body contains {'success': False}; ….
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-007 — Register Flic buttons with the hub (button registry)
+
+* **Registry claim:** docs/FLIC_SETUP.md; README Flic Smart Button Integration
+* **Interfaces:** rest: POST /api/integrations/flic/register, GET /api/integrations/flic/buttons; files: flic_buttons.json
+* **Recorded basis (registry, verbatim):** R5B registry safety and configured route ownership: tests/test_runtime_integration_safety_r5b.py and tests/sim/test_sim_rest_reads.py verify canonical six-octet addresses, metadata privacy, private extension retention and disabled-route absence with core reads available. R6 client/generator tests use explicit Node SDK stubs. Recorded level retained pending fresh normal-entry/image campaign; physical Flic Hub, SDK version and buttons remain unobserved.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V0`, effective `V3`, no cap, freshness `fresh` (1 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-007/2026-10-19-V3-1baac3de-flic.register-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.register`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 9 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`, `src/rest_api/integrations.py`, `src/hub/integrations/flic`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; hub GET /api/integrations/flic/buttons -> data.buttons[0].name == 'Validation' (HTTP 200); no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-008 — Button switches every output to input N (POST /api/switch with JSON input)
+
+* **Registry claim:** docs/FLIC_SETUP.md endpoint table
+* **Interfaces:** flic: POST /api/switch with JSON input
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V0`, effective `V0`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-FLIC-008/2026-10-19-V3-4adbc136-flic.all_outputs-flic.json` @ `4adbc136a4c1` (client `flic`, level `V3`, scenario `flic.all_outputs`, target `sim`, image digest `sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e`, covers 33 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-009 — Flic Hub SDK JavaScript module templates
+
+* **Registry claim:** README "Pre-built Flic Hub SDK Javascript templates"; docs/FLIC_SETUP.md#flic-hub-sdk-integration
+* **Interfaces:** docs: docs/FLIC_SETUP.md Flic Hub SDK section
+* **Recorded basis (registry, verbatim):** R6 implementation: tests/validation/test_flic_replay_r6.py, tests/validation/test_flic_templates_r6.py and tests/validation/test_flic_replay_live_r6.py exercise the dedicated client and actual generator with Node stubs; 74 coordinator tests passed in its isolated pre-R1 worktree, one disabled-route test awaits integrated startup. Recorded level retained until fresh normal-entry/image campaign. Physical Flic Hub, SDK version/buttons and physical CEC effects remain unobserved.
+* **Named module/class scope read:** `M13` — `tests/validation/test_flic_replay_r6.py`.
+* **Named module/class scope read:** `M14` — `tests/validation/test_flic_templates_r6.py`.
+* **Named module/class scope read:** `M12` — `tests/validation/test_flic_replay_live_r6.py`.
+* **Level / cap / freshness:** target `V3`, recorded `V0`, effective `V3`, no cap, freshness `fresh` (15 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_next-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.sdk_twist_next`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.sdk_twist_previous-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.sdk_twist_previous`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-009/2026-10-19-V3-1baac3de-flic.sdk_filter_mismatch-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.sdk_filter_mismatch`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device outputs[0].source == 3; device received http 'video switch' with {'source': [1, 3]} exactly 1x; device otherwise unchanged (allowed: outputs[0].source, routing[0]); every WebSocket message follows docs/api/websocket.schema.json; device outputs[0].source == 1; device received http 'video switch' with {'source': [1, 1]} exactly 1x; ….
+* **What the basis' own assertions establish:** the dedicated Flic client is driven against Node stubs; the generated Flic templates are asserted against Node stubs; the generated SDK callback replay is exercised against Node stubs.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-FLIC-010 — Generate Flic request URLs in the web UI
+
+* **Registry claim:** web UI integrations drawer
+* **Interfaces:** ui: drawer/integrations/flic-generated-request, drawer/integrations/flic-cec
+* **Recorded basis (registry, verbatim):** R6 generator/replay tests cover dedicated-client requests; Node DOM stubs prove generated output separately from browser rendering. R1F tests/test_runtime_cec_enable_r1f.py correct real-SIM CEC enable decisions after explicit synchronization without changing generator or scenario expectations. Fresh complete source and shipped-image campaigns at clean 4adbc13 pass all 23 Flic outcomes; docs/validation/runs/runtime retains actual summaries and image metadata. Earlier failed image and dirty-source focused proofs remain distinct. Recorded V1 baseline retained; fresh records supply their actual V3 level. Physical Flic Hub, SDK/buttons and CEC effects remain unobserved.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V3`, no cap, freshness `fresh` (26 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`4adbc136a4c1` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-FLIC-003/2026-10-19-V3-1baac3de-flic.source_power-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.source_power`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/cec.py`, `src/cec_commands.py`, `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-004/2026-10-19-V3-1baac3de-flic.cycle_next-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.cycle_next`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); `docs/validation/evidence/runtime-r8b/F-FLIC-005/2026-10-19-V3-1baac3de-flic.cec_output_navigation_refused-flic.json` @ `1baac3dec660` (client `flic`, level `V3`, scenario `flic.cec_output_navigation_refused`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 7 path(s); source delta `tools/validate/clients/flic.py`, `tools/validate/clients/flic_driver.mjs`, `web/js/components/integrations-drawer.js`); (+3 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 200; device received http 'set cec index' with {'inputindex': [1, 1, 0, 0, 1, 1, 0, 0]} exactly 1x; device received http 'cec command' with {'object': 0, 'port': [1, 0, 0, 0, 0, 0, 0, 0], 'index': 1} exactly 1x; simulator raised no protocol warnings; device inputs[0].cec_enabled == 1; device otherwise unchanged (allowed: inputs[0].cec_enabled); every WebSocket message follows docs/api/websocket.schema.json; ….
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.10 Deployment, configuration, persistence (20 features)
+
+##### F-OPS-001 — Run the hub from the Docker image
+
+* **Registry claim:** README "Docker Deployment: Containerized"; docs/DOCKER.md (one image, D11)
+* **Interfaces:** files: Dockerfile; rest: GET /api/health, GET /api/status, POST /api/switch, /ui, /kiosk
+* **Recorded basis (registry, verbatim):** V3 (WP-D2): tests/deploy/test_docker_image.py starts the shipped image with the integrations off and with the Remote 3 integration on, against the BK-808 simulator in a container: /api/health, /ui, /kiosk and static assets served, /api/status equals the simulator routing and a switch changes it, UID 1000 with read-only app code, clean SIGTERM stop. CI docker-build job. Deployment evidence deploy.image_core, deploy.image_uc.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-002 — Run the hub without the Remote integration (UC_ENABLED=false, the default)
+
+* **Registry claim:** README "Core" setup; docs/DOCKER.md (the api-only target is an alias of the one image)
+* **Interfaces:** files: Dockerfile; env: UC_ENABLED
+* **Recorded basis (registry, verbatim):** V3 (WP-D2, DEP-03 fixed): tests/deploy/test_docker_image.py[core]: the image with UC_ENABLED unset serves the core against the simulator, port 9095 is closed and the PYTHONPROFILEIMPORTTIME trace has no ucapi module; tests/test_run_entry.py proves the same for `python -X importtime run.py`. Deployment evidence deploy.image_core.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (1 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 1 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-003 — docker compose quick start
+
+* **Registry claim:** README Quick Start `docker compose up -d`; docs/DOCKER.md compose files
+* **Interfaces:** files: docker-compose.yml, docker-compose.uc-host.yml, docker-compose.uc-bridge.yml
+* **Recorded basis (registry, verbatim):** V3 (WP-D2, DEP-01 fixed): tests/deploy/test_compose.py: `docker compose up -d` with docker-compose.yml alone starts the hub (health, /ui, 9095 closed); with docker-compose.uc-bridge.yml the scripted Remote reaches the integration at the advertised UC_DRIVER_URL; with docker-compose.uc-host.yml (Linux/CI only) the API and 9095 listen on the host; both UC files refuse to start without HUB_HOST_IP. Deployment evidence deploy.compose: the 2026-10-01 Docker Desktop rerun uses a Linux runner with host networking enabled; all four Compose checks pass, including host networking. Real Remote mDNS discovery remains F-OPS-004 / HIL-E.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (1 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 1 stale record(s) include `docs/validation/evidence/F-OPS-003/2026-10-03-V3-b30436af-deploy.compose-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.compose`, target `sim`, image digest **not recorded in this record**, covers 13 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-004 — Remote 3 discovery works from Docker
+
+* **Registry claim:** docs/DOCKER.md Remote 3 integration and networking
+* **Interfaces:** files: docker-compose.uc-host.yml, docker-compose.uc-bridge.yml; env: UC_ENABLED, UC_INTEGRATION_INTERFACE, UC_DISABLE_MDNS_PUBLISH, UC_DRIVER_URL
+* **Recorded basis (registry, verbatim):** WP-D2 (DEP-02 fixed): host-networking and bridge compose files; tests/deploy/test_compose.py starts both and the scripted Remote connects (bridge: at UC_DRIVER_URL; host networking on Linux: on the host port, mDNS publishing on). Not proven: that a real Remote discovers the mDNS announcement or accepts the driver-URL registration (HIL-E). UC-11: no mDNS unregister on shutdown.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) UC-11 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) UC-11 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-005 — Container health check and auto-restart
+
+* **Registry claim:** README "Health checks and auto-restart"
+* **Interfaces:** files: Dockerfile HEALTHCHECK; rest: GET /api/health
+* **Recorded basis (registry, verbatim):** V3 (WP-D2): the image HEALTHCHECK (`python run.py healthcheck`, follows API_PORT) reports healthy in both modes (tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy, run with a 2 s interval). Not tested: a restart triggered by an unhealthy state (restart policy).
+* **Named assertion scope read:** `A1` — `tests/deploy/test_docker_image.py::test_image_healthcheck_reports_healthy`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the packaged container reports Docker health `healthy` within 60 s.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-006 — Point the hub at the matrix (MATRIX_HOST / MATRIX_PORT)
+
+* **Registry claim:** README Environment Variables; docs/DOCKER.md
+* **Interfaces:** env: MATRIX_HOST, MATRIX_PORT, OREI_HOST, OREI_PORT
+* **Recorded basis (registry, verbatim):** V3 (WP-D2): the image started with MATRIX_HOST/MATRIX_PORT pointing at the simulator container reports its routing and switches it (tests/deploy/test_docker_image.py[core]); tests/test_run_entry.py: OREI_HOST/OREI_PORT are warned aliases, the canonical name wins, bad ports stop the hub. With UC_ENABLED=true the address comes from the Remote setup (DEP-07, still open).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (1 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 1 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) DEP-07, BE-26 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) DEP-07, BE-26 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-007 — Choose the API port (API_PORT)
+
+* **Registry claim:** README Environment Variables; docs/DOCKER.md
+* **Interfaces:** env: API_PORT, REST_API_PORT, OREI_API_PORT
+* **Recorded basis (registry, verbatim):** WP-D2: tests/test_run_entry.py::test_core_only_start_serves_ui_and_never_imports_ucapi starts run.py with the deprecated REST_API_PORT and reaches /api/health, /ui, /kiosk on it (one deprecation warning); alias unit tests; tests/deploy/test_compose.py host networking serves the API on API_PORT (Linux/CI).
+* **Named assertion scope read:** `A56` — `tests/test_run_entry.py::test_core_only_start_serves_ui_and_never_imports_ucapi`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the start imports `rest_api` and never `ucapi`, prints `ucapi imported: False`, prints the deprecation notice exactly once and names the `REST_API_PORT -> use API_PORT` rename.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) DEP-07 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) DEP-07 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-008 — Matrix credentials (OREI_USER / OREI_PASSWORD)
+
+* **Registry claim:** README Technical Details authentication
+* **Interfaces:** env: OREI_USER, OREI_PASSWORD
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py login tests use the default credentials only.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-009 — Verify the matrix TLS certificate (OREI_VERIFY_SSL)
+
+* **Registry claim:** README Environment Variables
+* **Interfaces:** env: OREI_VERIFY_SSL
+* **Recorded basis (registry, verbatim):** No test.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-010 — Log level (LOG_LEVEL)
+
+* **Registry claim:** README Environment Variables
+* **Interfaces:** env: LOG_LEVEL
+* **Recorded basis (registry, verbatim):** tests/test_run_entry.py: an unknown LOG_LEVEL falls back to INFO with a warning. No test of the levels.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-011 — Enable/disable integrations (UC_ENABLED)
+
+* **Registry claim:** README Deployment table; D4, D11
+* **Interfaces:** env: UC_ENABLED, WEBUI_ENABLED, USE_MODULAR, REST_API_ENABLED
+* **Recorded basis (registry, verbatim):** V3 (WP-D2): the image with UC_ENABLED unset opens no port 9095 and never imports ucapi; with UC_ENABLED=true the scripted Remote connects and ucapi is in the import trace (tests/deploy/test_docker_image.py). WEBUI_ENABLED, USE_MODULAR and REST_API_ENABLED=false are ignored with a warning (the web UI and REST API are the core; tests/test_run_entry.py). The integration loader itself is Phase 4 (BE-20).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) DEP-07, BE-20 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) DEP-07, BE-20 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-012 — Background polling (POLLING_ENABLED / POLLING_INTERVAL)
+
+* **Registry claim:** src/driver.py poller
+* **Interfaces:** env: POLLING_ENABLED, POLLING_INTERVAL
+* **Recorded basis (registry, verbatim):** No test of the poller (TST-03).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) TST-03 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) TST-03 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-013 — Telnet options (OREI_TELNET_PORT, OREI_USE_TELNET_CEC)
+
+* **Registry claim:** README Technical Details
+* **Interfaces:** env: OREI_TELNET_PORT, OREI_USE_TELNET_CEC
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_hub.py Telnet tests set OREI_TELNET_PORT. BE-32 (WP-C2): the Telnet port is per matrix (OreiMatrix(telnet_port=...), POST /api/settings/matrix-host telnet_port, config_state.json telnet_port), the variable is only the default (tests/test_orei_matrix.py::test_telnet_port_is_per_matrix, tests/test_run_entry.py::test_saved_telnet_port).
+* **Named assertion scope read:** `A55` — `tests/test_orei_matrix.py::test_telnet_port_is_per_matrix`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A57` — `tests/test_run_entry.py::test_saved_telnet_port`; the function's assertion statements were read at this base.
+* **Named test-class scope read:** `C1` — `tests/sim/test_sim_hub.py Telnet`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a configured Telnet port 23 is kept, the default is 2323, and a matrix constructed without configuration uses 23; the saved port is read from and written to the saved configuration (`None` to 2323 back to `None`); `tests/sim/test_sim_hub.py Telnet` is **not present** in this file at this base.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-014 — Cache and retry tuning (OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_*RETR*)
+
+* **Registry claim:** src/orei_matrix.py
+* **Interfaces:** env: OREI_STATUS_CACHE_TTL, OREI_CEC_CACHE_TTL, OREI_MAX_RETRIES, OREI_RETRY_DELAY, OREI_MAX_RETRY_DELAY
+* **Recorded basis (registry, verbatim):** tests/test_orei_matrix.py TestRetryLogic, TestStatusCaching.
+* **Named test-class scope read:** `C8` — `tests/test_orei_matrix.py TestRetryLogic`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_orei_matrix.py TestRetryLogic` asserts 3 method(s) / 4 assertion(s): `test_calculate_retry_delay_initial`, `test_calculate_retry_delay_exponential`, `test_calculate_retry_delay_max_cap`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-015 — Hub data persists across restarts (DATA_DIR)
+
+* **Registry claim:** README "Persistent configuration across restarts"; docs/DOCKER.md Persistent storage
+* **Interfaces:** env: DATA_DIR, MATRIX_DATA_DIR, UC_CONFIG_HOME; files: profiles.json, themes.json, cec_macros.json, scenes.json
+* **Recorded basis (registry, verbatim):** V3 (WP-D2): a theme (data dir) and a profile (config dir) saved through the API are read back after `docker restart`, in both modes, from the /data volume (tests/deploy/test_docker_image.py:: test_data_persists_across_restart); an unwritable data dir stops the hub with a chown hint (tests/test_run_entry.py). tests/test_persistence.py TestPersistenceRoundTrip (in-process).
+* **Named test-class scope read:** `C11` — `tests/test_persistence.py TestPersistenceRoundTrip`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `stale` (2 stale record(s)).
+* **Ancestry:** stale `b30436afd26e` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 2 stale record(s) include `docs/validation/evidence/F-OPS-001/2026-10-03-V3-b30436af-deploy.image_core-api.json` @ `b30436afd26e` (client `api`, level `V3`, scenario `deploy.image_core`, target `sim`, image digest `sha256:069076733456776b1b9b4be9c490b35f64293ea289dae6cc23ebf80da4abd14a`, covers 10 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_persistence.py TestPersistenceRoundTrip` asserts 2 method(s) / 4 assertion(s): `test_themes_persist_across_init`, `test_ui_preferences_persist_across_init`.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) DEP-07 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) DEP-07 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-016 — Writes are atomic and safe under concurrency
+
+* **Registry claim:** src/_file_io.py
+* **Interfaces:** files: all hub JSON files
+* **Recorded basis (registry, verbatim):** tests/test_atomic_writes.py (fails on Windows: TST-08).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-017 — Migrate legacy data files (scenes -> profiles)
+
+* **Registry claim:** src/persistence.py migrate_legacy_file
+* **Interfaces:** files: scenes.json (v1), profiles.json
+* **Recorded basis (registry, verbatim):** tests/test_persistence.py TestLegacyMigration; tests/test_error_paths.py TestProfileMigrationErrors. R2D def66d26 adds tests/test_runtime_legacy_scene_restart_r2d.py for validated migration provenance and legacy/v2 coexistence, including actual HTTP create/fresh-start/list/execute across same/split config layouts and both UC modes. Unchanged source and normal-image regressions in tests/test_runtime_review_r8.py pass in R8B/R8C at their recorded source/image revisions; see docs/validation/RUNTIME_REVIEW_DEADLINE_RESOLUTION.md. Complete candidate evidence is attributed below; baseline levels are unchanged. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named test-class scope read:** `C10` — `tests/test_persistence.py TestLegacyMigration`; the class's methods and assertions were read at this base.
+* **Named test-class scope read:** `C7` — `tests/test_error_paths.py TestProfileMigrationErrors`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_persistence.py TestLegacyMigration` asserts 3 method(s) / 7 assertion(s): `test_migrates_existing_legacy_file`, `test_no_op_when_target_exists`, `test_no_op_when_legacy_absent`; `tests/test_error_paths.py TestProfileMigrationErrors` asserts 2 method(s) / 2 assertion(s): `test_missing_profiles_file_uses_defaults`, `test_corrupted_profiles_file_returns_empty`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) API-12, PER-04 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) API-12, PER-04 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-018 — Only one hub instance runs (process lock)
+
+* **Registry claim:** src/driver.py acquire_lock
+* **Interfaces:** files: driver.lock
+* **Recorded basis (registry, verbatim):** tests/test_driver.py TestLockFileManagement.
+* **Named test-class scope read:** `C6` — `tests/test_driver.py TestLockFileManagement`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_driver.py TestLockFileManagement` asserts 6 method(s) / 12 assertion(s): `test_acquire_lock_creates_file`, `test_release_lock_removes_file`, `test_acquire_lock_when_already_held`, `test_acquire_lock_with_stale_lock` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-019 — One consistent version everywhere
+
+* **Registry claim:** driver.json, /api/info, HA manifest
+* **Interfaces:** rest: GET /api/info; files: driver.json, pyproject.toml, manifest.json
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestHealthEndpoints (version field present).
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C20` — `tests/test_rest_api.py TestHealthEndpoints`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestHealthEndpoints` asserts 6 method(s) / 23 assertion(s): `test_health_endpoint`, `test_api_root_documentation`, `test_info_endpoint`, `test_info_reads_driver_json_next_to_the_package` (+2 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-OPS-020 — Multi-arch images (amd64 + arm64)
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md Phase 6
+* **Interfaces:** files: ci.yml publish
+* **Recorded basis (registry, verbatim):** Published on main/tags; never started on arm64.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.11 Security controls (15 features)
+
+##### F-SEC-001 — Optional admin / control PIN gate
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md D2, Phase 3
+* **Interfaces:** rest: all mutating routes, GET /api/auth/status, POST /api/auth/unlock, POST /api/auth/login, POST /api/auth/lock, POST /api/auth/pin, GET /api/auth/devices, DELETE /api/auth/devices/{device_id}, GET /api/auth/api-keys, POST /api/auth/api-keys, DELETE /api/auth/api-keys/{key_id}; ws: /ws
+* **Recorded basis (registry, verbatim):** tests/test_security_access_and_guards.py and tests/test_security_v3_auth_scenarios.py exercise open, admin-PIN, and admin+control-PIN configurations, session cookies, remembered-device tokens, and API keys against the real hub and simulator; tests/e2e/kiosk-security.spec.ts exercises Kiosk CONTROL_PIN unlock.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-002 — Cross-site request protection (CORS, Origin, Content-Type, Host allow-list)
+
+* **Registry claim:** README "Rate limiting and CORS support"
+* **Interfaces:** rest: all routes; env: CORS_ALLOWED_ORIGINS
+* **Recorded basis (registry, verbatim):** tests/test_security_access_and_guards.py and tests/test_security_v3_auth_scenarios.py verify Host allow-list / DNS-rebinding rejection, Origin/Referer enforcement, Content-Type: application/json requirement, and WebSocket Origin checks.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-003 — Matrix host changes cannot leak the matrix password (SSRF guard)
+
+* **Registry claim:** src/rest_api/settings.py
+* **Interfaces:** rest: POST /api/settings/matrix-host
+* **Recorded basis (registry, verbatim):** tests/test_security_ssrf_tls.py and tests/test_security_v3_auth_scenarios.py verify matrix-host password re-entry requirement and SSRF rejection for loopback, link-local, IPv4-mapped IPv6, and cloud metadata addresses.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-004 — Profile/scene passcodes are stored as PBKDF2 hashes
+
+* **Registry claim:** src/password.py; docs/PHASE_8_SPEC.md
+* **Interfaces:** env: MATRIX_PASSWORD_ITERATIONS; files: profiles.json passcode_hash
+* **Recorded basis (registry, verbatim):** tests/test_password.py, tests/test_profiles_scenes_pins.py, and tests/test_security_v3_hardening_scenarios.py verify PBKDF2-HMAC-SHA256 storage, independent per-item salts, and legacy plaintext migration.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-005 — Passcode hashes are never sent to clients
+
+* **Registry claim:** DI-6; docs/REMEDIATION_PLAN.md SEC-04
+* **Interfaces:** rest: GET /api/profile/{profile_id}, GET /api/v2/scenes
+* **Recorded basis (registry, verbatim):** tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify passcode_hash is never serialized in profile or scene detail/list responses.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-006 — Changing or removing a PIN needs the current PIN
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md SEC-05
+* **Interfaces:** rest: PUT /api/profile/{profile_id}, PUT /api/v2/scenes/{scene_id}
+* **Recorded basis (registry, verbatim):** tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify changing/removing a PIN or deleting a protected profile/scene requires current_passcode.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-007 — Wrong-PIN attempts are limited and do not stall the hub
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md SEC-06
+* **Interfaces:** rest: POST /api/profile/{profile_id}/recall, POST /api/v2/scenes/{scene_id}/execute
+* **Recorded basis (registry, verbatim):** tests/test_profiles_scenes_pins.py and tests/test_security_v3_hardening_scenarios.py verify per-item exponential lockout (429 + Retry-After) and thread-executor PBKDF2 keeping /api/health loop_lag_ms < 100. V3 source proof at 2ae46e6c: six API and eight real Chromium cases demonstrate wrong-PIN refusal, visible per-item lockout/Retry-After and allowed controls; existing during-held PBKDF2 tests complement UI proof. Null image digests; no deployed-image or physical qualification. Fresh combined-source proof at clean 310d8b65 refreshes the same six API and eight real Chromium outcomes, with original source/image attribution preserved and no level increase.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (12 stale record(s)).
+* **Ancestry:** fresh `2ae46e6c8bb9`…`310d8b65a9fc` (ancestor(s) of `a07cf94`); stale `2ae46e6c8bb9` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json` @ `2ae46e6c8bb9` (client `api`, level `V2`, scenario `security_hardening.profile_wrong_pin`, target `sim`, image digest **not recorded in this record**, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/rest_api/scenes_v2.py`, `src/scene_manager.py` (+10 more)); `docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json` @ `2ae46e6c8bb9` (client `api`, level `V2`, scenario `security_hardening.scene_wrong_pin`, target `sim`, image digest **not recorded in this record**, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/rest_api/scenes_v2.py`, `src/scene_manager.py` (+10 more)); `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/auth/F-SEC-007/2026-10-26-V2-310d8b65-security_hardening.profile_wrong_pin-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `security_hardening.profile_wrong_pin`, target `sim`, image digest **not recorded in this record**, covers 32 path(s); source delta `src/rest_api/profiles.py`, `src/profile_execution.py`, `src/config.py`, `src/cec_macros.py`, `src/rest_api/scenes_v2.py`, `src/scene_manager.py` (+10 more)); (+13 further fresh record(s) of the same family).
+* **What the evidence establishes:** the committed record's own checks — response HTTP 403 and body contains {'success': False, 'data': {'error': 'invalid_passcode'}}; hub GET /api/health -> data.status == 'healthy' (HTTP 200); no write command reached the device; device otherwise unchanged; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-008 — Rate limiting per client
+
+* **Registry claim:** README "Rate limiting"
+* **Interfaces:** rest: all /api routes
+* **Recorded basis (registry, verbatim):** tests/test_rest_api.py TestRateLimiting and tests/test_security_v3_hardening_scenarios.py verify separate read/write rate-limit buckets and /api/health exemption.
+* **Named module/class scope read:** `M9` — `tests/test_rest_api.py`.
+* **Named test-class scope read:** `C23` — `tests/test_rest_api.py TestRateLimiting`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the REST surface is exercised with a mocked matrix, so request/response shape is asserted but no device effect is; `tests/test_rest_api.py TestRateLimiting` asserts 2 method(s) / 2 assertion(s): `test_rate_limit_allows_normal_traffic`, `test_health_endpoint_not_rate_limited`.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-009 — Proxy headers trusted only from configured proxies
+
+* **Registry claim:** src/rest_api/utils.py
+* **Interfaces:** env: TRUST_PROXY_HEADERS, TRUSTED_PROXY_IPS
+* **Recorded basis (registry, verbatim):** tests/test_security_v3_hardening_scenarios.py verifies TRUST_PROXY_HEADERS and TRUSTED_PROXY_IPS rightmost-untrusted X-Forwarded-For extraction.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-010 — Static files cannot escape the web root
+
+* **Registry claim:** src/rest_api/static.py
+* **Interfaces:** rest: GET /css/{path}, GET /js/{path}, GET /assets/{path}
+* **Recorded basis (registry, verbatim):** tests/test_security_hardening.py and tests/test_security_v3_hardening_scenarios.py verify resolve() + is_relative_to containment against slash, backslash, and URL-encoded traversal.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-011 — Error responses do not leak internals
+
+* **Registry claim:** src/rest_api/utils.py safe_error_message
+* **Interfaces:** rest: all routes
+* **Recorded basis (registry, verbatim):** tests/test_security_hardening.py and tests/test_security_v3_hardening_scenarios.py verify generic error messages with correlation IDs (error_id / X-Error-Id) and path-free /api/system/storage.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-012 — User-provided names are escaped in the UI (no XSS)
+
+* **Registry claim:** web/js/utils/helpers.js escapeHtml
+* **Interfaces:** ui: all views rendering names; kiosk: all views
+* **Recorded basis (registry, verbatim):** V3: tests/e2e/flows.spec.ts SEC-07 / SEC-08 tests: escapeHtml escapes quotes, and hostile profile, scene, shortcut, macro, preset, input and output names and icons render as text in the main UI and the kiosk (no injected handler runs; before WP-E1 it ran 50 and 108 times). Patch level: the structural fix (safe template helper, lint rule) is Phase 5.
+* **Named module/class scope read:** `M1` — `tests/e2e/flows.spec.ts`.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** a real browser performs the flow and the simulator state or the REST response is asserted afterwards.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-013 — TLS certificate verification / pinning for the matrix
+
+* **Registry claim:** README OREI_VERIFY_SSL
+* **Interfaces:** env: OREI_VERIFY_SSL
+* **Recorded basis (registry, verbatim):** tests/test_security_ssrf_tls.py and tests/test_security_v3_hardening_scenarios.py verify OREI_VERIFY_SSL, MATRIX_CA_CERT, and MATRIX_TLS_FINGERPRINT SHA-256 pinning against real HTTPS handshakes.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-014 — No credentials in logs
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md SEC-10
+* **Interfaces:** env: LOG_LEVEL
+* **Recorded basis (registry, verbatim):** tests/test_security_ssrf_tls.py and tests/test_security_v3_hardening_scenarios.py verify _PasswordLogFilter redacts password, passcode, key, and auth_token across structured, JSON, and key=value log messages.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V3`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V3`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence; the open finding(s) VAL-15 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V1` -> `V3`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); discharge the open finding(s) VAL-15 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-SEC-015 — Remote 3 integration port requires authentication
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md UC-02
+* **Interfaces:** uc: ws://hub:9095
+* **Recorded basis (registry, verbatim):** V3: tests/uc/test_setup.py and tests/test_security_v3_hardening_scenarios.py::test_uc_auth_token_guards_setup_and_reconfigure exercise a real driver process with UC_AUTH_TOKEN and UcRemoteSim.
+* **Named assertion scope read:** `A58` — `tests/test_security_v3_hardening_scenarios.py::test_uc_auth_token_guards_setup_and_reconfigure`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V3`, recorded `V3`, effective `V3`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the token never reaches the log file, the setup metadata marks the password present and exposes an `auth_token` field, no `login` command reaches the simulator, and the setup call succeeds.
+* **What it does **not** establish:** there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** the target `V3` is reached by the recorded baseline at `V3`; commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the recorded baseline alone carries the level; this map renews no acceptance and closes no row; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+#### 5A.3.12 Reliability (18 features)
+
+##### F-REL-001 — Reconnect automatically after a matrix outage
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md Phase 1 goal
+* **Interfaces:** device: login, get video status
+* **Recorded basis (registry, verbatim):** Enabled reboot automatically restores HTTP and Telnet through the matrix reconnect supervisor; tests/sim/test_sim_enabled_reboot.py and packaged-image reboot records. The live.matrix_offline browser record also proves recovery after a 30-second simulator outage. Hardware and broader outage/soak cases remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. For supported Orei clients, cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Supported-client independent review and complete software campaigns are accepted below; no hardware/field level is granted. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `stale` (8 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 8 stale record(s) include `docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `reboot.direct`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 21 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-002 — Report the connection state truthfully on errors and timeouts
+
+* **Registry claim:** GET /api/health matrix.connected
+* **Interfaces:** rest: GET /api/health
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_dropped_connection_clears_connected and ::test_timeout_clears_connected are strict xfails (BE-04).
+* **Named assertion scope read:** `A12` — `tests/sim/test_sim_faults.py::test_dropped_connection_clears_connected`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A20` — `tests/sim/test_sim_faults.py::test_timeout_clears_connected`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** after the drop the video-status read returns `None` and `matrix.connected` becomes `False`; the timeout clears the connected state so the hub does not keep reporting a live matrix.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-003 — Detect a wrong matrix password
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-05
+* **Interfaces:** device: login
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_wrong_password_is_not_connected is a strict xfail (BE-05).
+* **Named assertion scope read:** `A21` — `tests/sim/test_sim_faults.py::test_wrong_password_is_not_connected`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `connect()` returns `False` and the matrix stays disconnected.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-004 — Log in again when the matrix session expires
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-04
+* **Interfaces:** device: login
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_session_expiry_triggers_relogin is a strict xfail (BE-04).
+* **Named assertion scope read:** `A17` — `tests/sim/test_sim_faults.py::test_session_expiry_triggers_relogin`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** after expiry and re-login the status routing equals the simulator routing.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-005 — Recover after the matrix reboots or is power-cycled
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md §9 item 8
+* **Interfaces:** device: reboot; telnet: reboot
+* **Recorded basis (registry, verbatim):** Enabled reboot through REST and both shortcut aliases recovers automatically without manual connect, preserves device settings and permits a subsequent REST routing write (tests/sim/test_sim_enabled_reboot.py). Packaged-image records include actual simulator reboot logs and ordered link events. Physical power-cycle/reboot remains pending.
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `stale` (8 stale record(s)).
+* **Ancestry:** stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** **no fresh record**; the 8 stale record(s) include `docs/validation/evidence/F-MTX-021/2026-10-04-V2-d6baf3ca-reboot.direct-api.json` @ `d6baf3ca2574` (client `api`, level `V2`, scenario `reboot.direct`, target `sim`, image digest `sha256:2103d7114eae70bb2b25dfae6ca843a3bedf716a4474dd1551276cc31200c528`, covers 21 path(s)). These records are **not current proof**; their attribution is historical and is reproduced, not re-established, here.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-006 — Detect a dropped Telnet connection and reconnect
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-28/29
+* **Interfaces:** telnet: connection
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_telnet_drop_mid_command_is_detected is a strict xfail (BE-29).
+* **Named assertion scope read:** `A19` — `tests/sim/test_sim_faults.py::test_telnet_drop_mid_command_is_detected`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the drop is detected (`telnet_connected: false`), output cable state is still reported and unknown input cable values stay `None`, with probe lag under 0.2 s.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-007 — Shut down and disconnect cleanly
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-01
+* **Interfaces:** telnet: disconnect
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_telnet_disconnect_completes is a strict xfail (BE-01).
+* **Named assertion scope read:** `A18` — `tests/sim/test_sim_faults.py::test_telnet_disconnect_completes`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the disconnect completes, the listener finishes and `telnet_connected` becomes `False`.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-008 — A command the matrix rejects is reported as failed
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-12
+* **Interfaces:** rest: POST /api/output/{output}/*, POST /api/switch
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_rejected_output_setting_reports_failure and ::test_rejected_switch_all_reports_failure are strict xfails (BE-12).
+* **Named assertion scope read:** `A15` — `tests/sim/test_sim_faults.py::test_rejected_output_setting_reports_failure`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A16` — `tests/sim/test_sim_faults.py::test_rejected_switch_all_reports_failure`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V2`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `7dbc4dc70c70` (ancestors of `a07cf94`; the `covers` paths changed afterwards); stale `d6668000167b` (**not** an ancestor of `a07cf94`; that record's commit is unknown to this history, so its freshness is `unknown` and the project's ledger files it under `stale`).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/ev02-original-api/F-REL-008/2026-10-19-V2-1baac3de-outputs.audio_mute_rejected-api.json` @ `1baac3dec660` (client `api`, level `V2`, scenario `outputs.audio_mute_rejected`, target `sim`, image digest **not recorded in this record**, covers 17 path(s); source delta `src/rest_api/outputs.py`).
+* **What the evidence establishes:** the committed record's own checks — response HTTP >= 400 and body contains {'success': False}; device outputs[1].audio_mute == 0; device otherwise unchanged; hub GET /api/status/outputs -> data.outputs[1].muted == False (HTTP 200); no WebSocket event 'audio_mute'; every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** the setter returns `False` instead of raising when the simulator refuses the write; `switch_input_to_all(4)` returns `False` instead of raising when the simulator refuses writes.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); the fresh proof reaches only **V2** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-009 — Matrix unreachable: commands fail visibly and no state is made up
+
+* **Registry claim:** VALIDATION_PLAN §1.5
+* **Interfaces:** rest: POST /api/switch, GET /api/status, GET /api/health
+* **Recorded basis (registry, verbatim):** V3: scenario live.matrix_offline (browser: the /ui header and the kiosk status go disconnected and come back; /api/status answers 503 with the link, never made-up names). V2: failures.unreachable_switch; tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails (VAL-04: the link up but the status read failing).
+* **Named assertion scope read:** `A49` — `tests/sim/test_sim_ws_contract.py::test_status_is_not_made_up_when_the_status_read_fails`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (7 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660`…`310d8b65a9fc` (ancestor(s) of `a07cf94`); stale `1baac3dec660`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards); stale `d6668000167b` (**not** an ancestor of `a07cf94`; that record's commit is unknown to this history, so its freshness is `unknown` and the project's ledger files it under `stale`).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-REL-009/2026-10-19-V3-1baac3de-live.matrix_offline-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.matrix_offline`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 24 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+2 more)); `docs/validation/evidence/software-waves/W03-CLOSEOUT-20261028/combined/offline/F-REL-009/2026-10-26-V2-310d8b65-failures.unreachable_switch-api.json` @ `310d8b65a9fc` (client `api`, level `V2`, scenario `failures.unreachable_switch`, target `sim`, image digest **not recorded in this record**, covers 19 path(s); source delta `src/rest_api/control.py`, `src/rest_api/core.py`, `src/rest_api/core.py`).
+* **What the evidence establishes:** the committed record's own checks — WebSocket event 'matrix_connection' with {'connected': False}; hub GET /api/status -> success == False; hub GET /api/status -> data.connected == False; client shows ui.header == 'disconnected' (was 'connected'); client shows kiosk.status == 'Disconnected' (was 'Connected'); WebSocket event 'matrix_connection' with {'connected': True, 'state': 'connected'}; hub GET /api/health -> data.matrix.connected == True (HTTP 200); ….
+* **What the basis' own assertions establish:** the API returns HTTP 503 with `success: false` and `connected: true`, and no `input_names` are fabricated.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator; the open finding(s) VAL-14 remain open on their own recorded conditions.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); discharge the open finding(s) VAL-14 on their own recorded conditions; the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-010 — Status stays fresh (caches expire, one refresh at a time)
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-03/API-11
+* **Interfaces:** rest: GET /api/status, GET /api/status/*
+* **Recorded basis (registry, verbatim):** tests/test_orei_matrix.py TestStatusCaching.
+* **Named test-class scope read:** `C9` — `tests/test_orei_matrix.py TestStatusCaching`; the class's methods and assertions were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** `tests/test_orei_matrix.py TestStatusCaching` asserts 5 method(s) / 18 assertion(s): `test_status_cache_hit`, `test_status_cache_busting`, `test_output_status_cache_hit`, `test_input_status_cache_hit` (+1 more).
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-011 — API calls are not blocked while the hub reconnects
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-17
+* **Interfaces:** rest: all matrix routes
+* **Recorded basis (registry, verbatim):** No test.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-012 — Background polling keeps state live without a Remote connected
+
+* **Registry claim:** docs/audits/UC_INTEGRATION_AUDIT.md UC-17
+* **Interfaces:** ws: routing_change, signal_change
+* **Recorded basis (registry, verbatim):** V3: scenario live.front_panel_route in the core-only hub (no Remote integration at all): the hub's own poller (src/rest_api/events.py) announces the change and the open /ui and /kiosk pages show it. UC mode: tests/uc/test_lifecycle.py front-panel tests (web clients get routing_change with and without a Remote).
+* **Named assertion scope read:** the registry basis names **no test file** for this row; the observable assertion available for it is the committed evidence record's own recorded `checks` (reproduced in the attribution and evidence lines below). **No test assertion could be read** for this row, and none is claimed.
+* **Level / cap / freshness:** target `V4`, recorded `V3`, effective `V3`, no cap, freshness `fresh` (2 stale record(s)).
+* **Ancestry:** fresh `1baac3dec660` (ancestor(s) of `a07cf94`); stale `4adbc136a4c1`…`d6baf3ca2574` (ancestors of `a07cf94`; the `covers` paths changed afterwards).
+* **Attribution (source · client · image · covers):** `docs/validation/evidence/runtime-r8b/F-MTX-031/2026-10-19-V3-1baac3de-live.front_panel_route-browser.json` @ `1baac3dec660` (client `browser`, level `V3`, scenario `live.front_panel_route`, target `sim`, image digest `sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e`, covers 25 path(s); source delta `src/rest_api/core.py`, `web/index.html`, `web/js/app.js`, `web/js/api.js`, `web/js/state.js`, `web/js/websocket.js` (+3 more)).
+* **What the evidence establishes:** the committed record's own checks — device outputs[1].source == 6; WebSocket event 'routing_change' with {'output': 2, 'input': 6, 'input_name': 'PS5'}; hub GET /api/status -> data.routing.2 == 6 (HTTP 200); client shows ui.route.2 == 6 (was 2); client shows kiosk.route.2 == 6 (was 2); every WebSocket message follows docs/api/websocket.schema.json.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V3` < `V4`); the fresh proof reaches only **V3** and only against the simulator.
+* **Residual acceptance:** close the level gap (`V3` -> `V4`); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-013 — The event loop never stalls (loop-lag metric)
+
+* **Registry claim:** GET /api/health runtime.loop_lag_ms
+* **Interfaces:** rest: GET /api/health
+* **Recorded basis (registry, verbatim):** tests/test_health.py test_monitor_measures_lag.
+* **Named module/class scope read:** `M7` — `tests/test_health.py`.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the health document's field presence is asserted in isolation.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-014 — A slow WebSocket client cannot stall commands
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md API-09
+* **Interfaces:** ws: all broadcasts
+* **Recorded basis (registry, verbatim):** V2: tests/sim/test_sim_ws_contract.py::test_a_stalled_client_cannot_hold_up_a_command (real hub app + simulator: a client whose socket never takes a message; /api/switch still answers at once and the matrix is routed). V1: tests/test_hub_events.py (per-client queue, 5 s send timeout, 256-message limit).
+* **Named assertion scope read:** `A44` — `tests/sim/test_sim_ws_contract.py::test_a_stalled_client_cannot_hold_up_a_command`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V2`, effective `V2`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the command still returns 200 in under 2 s and the routing change lands on the simulator.
+* **What it does **not** establish:** the row is **below its target** (`V2` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V2` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-015 — Tolerate slow and malformed matrix responses
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md §5.1 fault injection
+* **Interfaces:** device: all comheads
+* **Recorded basis (registry, verbatim):** tests/sim/test_sim_faults.py::test_latency_within_client_timeout, ::test_malformed_json_is_reported (driver-level); tests/test_error_paths.py.
+* **Named assertion scope read:** `A13` — `tests/sim/test_sim_faults.py::test_latency_within_client_timeout`; the function's assertion statements were read at this base.
+* **Named assertion scope read:** `A14` — `tests/sim/test_sim_faults.py::test_malformed_json_is_reported`; the function's assertion statements were read at this base.
+* **Level / cap / freshness:** target `V4`, recorded `V1`, effective `V1`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** the refreshed status carries a non-empty routing within the client timeout; the read returns `None` and the last error records `Unparseable`, and the next read recovers.
+* **What it does **not** establish:** the row is **below its target** (`V1` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V1` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-016 — Standby does not start reconnect storms or duplicate pollers
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-09, UC-06
+* **Interfaces:** uc: enter_standby
+* **Recorded basis (registry, verbatim):** No test.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-017 — No leaked sessions, sockets or tasks after reconfiguration
+
+* **Registry claim:** docs/REMEDIATION_PLAN.md BE-10/11
+* **Interfaces:** uc: setup_driver
+* **Recorded basis (registry, verbatim):** Source/runtime cleanup coverage; physical and long-duration leak acceptance remain pending. R1G c2e02f00, R1H c36edb91 and R1I 0ea3b7ad are covered by tests/test_runtime_rollback_reconnect_r1g.py, test_runtime_rollback_deadline_r1h.py, test_runtime_rollback_restoration_r1i.py and unchanged review regressions test_runtime_review_r8.py/test_runtime_review_r8b.py/test_runtime_review_r8c.py. Exact R1I source verification passes 59 focused cases; the worker also passes 155 scoped runtime/UC/transport regressions. For supported Orei clients, cleanup retains one public retirement owner, restores logical state on interruption, fences uncertified disposal errors, and hands successful late closure to the existing reconnect supervisor under lifecycle and generation guards. Cleanup5 plus a separately bounded settling5 phase is not a global transaction deadline. Supported-client independent review and complete software campaigns are accepted below; no hardware/field level is granted. The complete clean 1baac3de campaign passes 4041 core tests with four platform skips and 177/177 routes, 1506 source client outcomes, 19 actual HA outcomes on each pinned version, and 193 normal-image client outcomes. All four normal-image startup/immediate/deadline regressions pass on sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e, with 257 actual shipped inputs matching each architecture. R8D accepts the supported Orei boundary; see docs/validation/RUNTIME_REVIEW_RESTORATION.md and the attributed runs/runtime-r8b manifest. The conditional pre-body alternate-disconnect probe remains explicitly failing outside that supported guarantee. Records contribute their actual software evidence levels; recorded baselines and hardware/field targets are unchanged.
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V4`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V4`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V4`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
+##### F-REL-018 — 72-hour soak with flat memory, tasks and sockets
+
+* **Registry claim:** VALIDATION_PLAN §2 V5; HIL-D
+* **Interfaces:** rest: GET /api/health
+* **Recorded basis (registry, verbatim):** Not run yet (Phase 8).
+* **Named assertion scope read:** **unknown** — the registry basis names no test file for this row and no committed evidence record exists, so there is no assertion of any kind to read.
+* **Level / cap / freshness:** target `V5`, recorded `V0`, effective `V0`, no cap, freshness `—`.
+* **Ancestry:** no committed evidence record cites any commit.
+* **Attribution (source · client · image · covers):** **unknown** — no committed evidence record exists for this row, so there is no source, client, image or `covers` set to attribute. The recorded basis is a historical prose statement, not a committed record.
+* **What the evidence establishes:** nothing at this base — the row has no fresh passing record, so no level above the recorded baseline is established by committed evidence.
+* **What the basis' own assertions establish:** nothing that can be read — the basis names no assertion in this tree.
+* **What it does **not** establish:** the row is **below its target** (`V0` < `V5`); there is **no fresh passing committed record**, so nothing about current behaviour is established by evidence.
+* **Residual acceptance:** close the level gap (`V0` -> `V5`); commit a fresh passing evidence record at the target level with its own source/client/image/covers attribution, produced at a commit that is an ancestor of the integration head (the row currently has no fresh passing record at all); the registry row itself is **unchanged** — this map raises no level, admits no evidence and closes no finding.
+
 ## 6. All 65 mapped units — author/reviewer/judge rematch
 
 ### 6.1 What is actually qualified right now
@@ -886,7 +4961,7 @@ The adopted packet's per-unit reservations are **historical labels**. The reposi
 | --- | --- | --- |
 | Anthropic `claude-opus-5-5` | `SCOPED_PASS` (one replacement attempt) | **Only** "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards". `generic_core_qualification: NOT_GRANTED`; `automatic_reservation_unlock: false`; `fresh_task_match_required: true`. Evaluated source `caaa4faa`, review base `938ae303`, evaluator report `1d49014b`, independent judge `gpt-6-astra/high` report `dda63d66`. The two earlier attempts remain **FAIL** with `qualified_domains: []`. |
 | OpenAI `gpt-6.1-sol` / `gpt-6-astra` | No separate competence record in the current gate JSON | Historical reviews remain valid **within their recorded scope**. Sol and Astra are the **same underlying family** (OpenAI GPT): a Sol review of Astra's work, or an Astra review of Sol's work, is **not** a different-family review. |
-| MiniMax `MiniMax-M3` | No competence-assessment record; assigned as the inventory/prose author | The adopted packet requires that the **coordinator, from a non-MiniMax family**, independently checks every MiniMax-specific attempt/contribution fact, and that a MiniMax fidelity review **cannot certify MiniMax's own eligibility**. |
+| MiniMax `MiniMax-M3` | **No relevant PASS** for the proposed source role; assigned as the inventory/prose author | *"No competence-assessment record"* was the original wording and it was too broad: MiniMax records **do** exist, and they are negative or out of scope. The accurate statement is that there is **no relevant PASS** for the source-review role these 65 units would need. The two MiniMax-routed attempts that exist are both **terminal FAILs**, and neither is a source-review qualification: the privacy chain's MiniMax review is recorded `FAIL/NOT_QUALIFIED; one first candidate / one judge exhausted; no automatic retry / extra judge` (axes: provenance PASS, dataflow_invariants FAIL, counterexamples PASS, behaviour_and_tools FAIL, calibration FAIL, review_quality FAIL), and the terminal Opus 5.5 privacy assessment is recorded `FAIL; mandatory six-axis competence not earned`. Both failures, their lost original bytes and the exhausted attempt budget are preserved unchanged in §4.4; none is renewed, waived, re-run or retaken by this report. The adopted packet requires that the **coordinator, from a non-MiniMax family**, independently checks every MiniMax-specific attempt/contribution fact, and that a MiniMax fidelity review **cannot certify MiniMax's own eligibility**. |
 | Gemini / Antigravity | **Unverified** — no confirmed native routing, helper behaviour, qualification or supported capacity |
 | DeepSeek | **Unavailable** — owner reports exhausted credit; no dispatch, no fallback |
 
@@ -896,8 +4971,8 @@ The adopted packet's per-unit reservations are **historical labels**. The reposi
 
 | # | Unit | Pkg | Phase | A→R | Rematch | Why |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | SW-AUDIT-01 | SW-AUDIT | P0 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. Canonical registry/ledger/summary edits stay with the coordinator. |
-| 02 | SW-FINDINGS-01 | SW-FINDINGS | P0 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. Canonical registry/ledger/summary edits stay with the coordinator. |
+| 01 | SW-AUDIT-01 | SW-AUDIT | P0 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. **"Inventory-ready" means bounded inventory task fit subject to the normal gates** (a current pool observation, an available reviewer slot, the coordinator's own review of the exact commit) — it is **not** a readiness grant, a qualification, or a claim that any dependency is satisfied. Canonical registry/ledger/summary edits stay with the coordinator. |
+| 02 | SW-FINDINGS-01 | SW-FINDINGS | P0 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. **"Inventory-ready" means bounded inventory task fit subject to the normal gates** — it is **not** a readiness grant. SW-FINDINGS-01's own accepted output (the triage and its accepted execution delta, §2.3/§4.1) is also the **accepted findings intake** that SW-REPO-01 consumes, so the two units are related by a dependency rather than being four interchangeable parallel rows; that intake is accepted **as triage only, with limits**, and this report renews none of it. Canonical registry/ledger/summary edits stay with the coordinator. |
 | 03 | SW-HARNESS-01 | SW-HARNESS | P0 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 04 | SW-API-READ-01 | SW-API-READ | P1 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 05 | SW-API-READ-02 | SW-API-READ | P1 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
@@ -956,15 +5031,15 @@ The adopted packet's per-unit reservations are **historical labels**. The reposi
 | 58 | SW-HA-PREP-03 | SW-HA-PREP | P3 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 59 | SW-DOM-HIL-PREP-01 | SW-DOM-HIL-PREP | P3 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 60 | SW-SOAK-PREP-01 | SW-SOAK-PREP | P3 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
-| 61 | SW-REPO-01 | SW-REPO | P4 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. Canonical registry/ledger/summary edits stay with the coordinator. |
-| 62 | SW-DOCS-01 | SW-DOCS | P4 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. Canonical registry/ledger/summary edits stay with the coordinator. |
+| 61 | SW-REPO-01 | SW-REPO | P4 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. **SW-REPO requires accepted findings intake**: the intake is the SW-FINDINGS-01 triage and its accepted execution delta, accepted **as triage only, with limits** (§2.3, §4.1), and this report renews none of it and asserts no additional acceptance for SW-REPO-01 itself. **"Inventory-ready" therefore means bounded inventory task fit subject to the normal gates**, not completion or dispatch readiness. Canonical registry/ledger/summary edits stay with the coordinator. |
+| 62 | SW-DOCS-01 | SW-DOCS | P4 | M3 → Sol | **inventory-ready** | prose/metadata only, no source, no tests, no tooling, no feature/competence gate; M3→Sol is a genuine cross-family pair for a prose deliverable, and the packet itself names SW-AUDIT-01 / SW-FINDINGS-01 / SW-REPO-01 / SW-DOCS-01 as the `independent_inventory_routes`. **SW-DOCS retains numerous accepted/integrated/published package and unit dependencies** in the adopted packet, and its **full completion and dispatch readiness was not established here**; the adopted packet preserves those dependencies while allowing early bounded work, and this report preserves them too and resolves none of them. **"Inventory-ready" therefore means bounded inventory task fit subject to the normal gates**, not completion or dispatch readiness. Canonical registry/ledger/summary edits stay with the coordinator. |
 | 63 | SW-VERSION-01 | SW-VERSION | P4 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 64 | SW-BUILD-01 | SW-BUILD | P4 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 | 65 | SW-SOFTWARE-GATE-01 | SW-SOFTWARE-GATE | P5 | Sol → M3 after exact relevant domain PASS; no automatic broad source entitlement | **qualification** + provenance + capacity | the reserved reviewer is "M3 after exact relevant domain PASS; no automatic broad source entitlement". MiniMax has **no** recorded domain PASS for this scope, so the reviewer reservation is unmet; the Opus 5.5 scoped PASS does not cover these domains either. The unit additionally depends on `QUAL-ANTHROPIC-CORE-01` in its frozen dependency list and on FC-PROVENANCE for the author's actual attempt/contribution/role record, and on a fresh pool observation at dispatch. |
 
 ### 6.3 What the rematch does and does not say
 
-* **4 units are inventory-ready now**: `SW-AUDIT-01`, `SW-FINDINGS-01`, `SW-REPO-01`, `SW-DOCS-01`. All four are `domain: inventory`, `owner_gate: false`, no feature IDs and no source. They are the only units whose deliverable is prose/registry metadata rather than implementation, which is precisely why they need no new competence assessment.
+* **4 units are bounded-inventory task fit now**: `SW-AUDIT-01`, `SW-FINDINGS-01`, `SW-REPO-01`, `SW-DOCS-01`. All four are `domain: inventory`, `owner_gate: false`, no feature IDs and no source. They are the only units whose deliverable is prose/registry metadata rather than implementation, which is precisely why they need no new competence assessment. **"Inventory-ready" means bounded inventory task fit subject to the normal gates** — a current pool observation, an available reviewer slot and the coordinator's own review of the exact commit. It is **not** a readiness grant, **not** a qualification, and **not** a claim that the unit's own dependencies are satisfied: **SW-REPO-01 requires accepted findings intake** (the SW-FINDINGS-01 triage and its accepted execution delta, accepted **as triage only, with limits**), and **SW-DOCS-01 retains numerous accepted/integrated/published package and unit dependencies**, whose **full completion and dispatch readiness was not established here**. The adopted packet preserves those dependencies while allowing early bounded work; this report preserves them and resolves none of them.
 * **11 units are blocked on an unused first assessment** (`Q-UI-A`, `Q-UI-M3`) plus qualification and capacity.
 * **50 units are blocked on qualification, provenance and capacity.** Their reviewer reservation names M3 *after an exact relevant domain PASS* that does not exist in any record at this base.
 * **No unit of the 65 carries `owner_gate: true`.** The seven human-owner gates are separate entries in `docs/planning/software-waves/EXECUTION_PINS.json` and are **not** among the 65 mapped units. Owner conditions do attach to *findings* though — API-07 (catalogue visual diff), SEC-14 (GitHub-Support cache purge), UC-11/UC-12/UC-13 (the DI-9 direction), UC-28 and HIL-14 (physical), and the privacy budget request — and those remain open.
@@ -983,7 +5058,8 @@ These are **proposed** edits for the coordinator to apply after qualified differ
 | 3 | `docs/planning/software-waves/EXECUTION_READINESS.md` → the 85-entry reservations table (from the earlier execution-pinning plan) | Rows such as `SW-RUNTIME-PREP-01 \| P3 \| astra / claude` and the reviewer column `claude` throughout | The **adopted** functional-completion packet `933166c3…` re-staffs the 65 units to `Sol` as author and `M3 (after an exact relevant domain PASS)` as reviewer, with `Opus after Q-UI-A` for the 11 UI/kiosk units. The readiness table therefore shows a **different reservation set** from the governing packet. | Add a dated note above the table stating that the table records the *execution-pinning* plan's reservations and that the adopted `functional-completion-20261104` packet supersedes the staffing column; keep the older table intact as history. |
 | 4 | `docs/agent-process/REPO_CONFIG.json` → `readiness.current_values` | `below_target: 203`, `stale: 57`, `source: "Last accepted wave02 ledger; wave03 qualification/evidence not yet applied."` | The value is **accurate for its stated snapshot** but is being read in circulation as the current count, alongside 210 and 228. `stale: 57` is a different population again (a stale-evidence count at the wave02 ledger, not the 96 stale-only features at this base). | Keep the values and the `source` note (they are honest history), and add an explicit `superseded_by` / `current_measurement` pointer naming the current base and its rule so 203/57 cannot be quoted without their date and definition. |
 | 5 | `docs/validation/LEDGER.md` (generated) | *"Commit `28fce729`"* and the summary block | The committed ledger is **current in its totals** (210 / 96 / 70 fresh-passing / 0 fresh-failing / 12 capped reproduce exactly at this base) but its header commit is older than HEAD. | Do **not** hand-edit the generated ledger. If a refreshed ledger is wanted, the coordinator regenerates it serially with the canonical command; this package did not and must not. |
-| 6 | `docs/REMEDIATION_PLAN.md` §4 register text (many rows) | e.g. SEC-14 *"LICENSE is a stub"*; SEC-15 *"CI actions tag-pinned"*, *"base image not digest-pinned"*; DEP-05 *"no `pull_request` trigger"*, *"ruff only on `src/`"*, *"no hassfest/HACS validation"*, *"no gitleaks"*, and its cited workflow path; UI-16 *"no reduced-motion check"*; BE-26 *"~62 `range(1, 9)` / `[0]*8`"*; TST-03 *"No tests: …"*; TST-04 *"No JS tests of any kind"*; API-07's location anchors; several UI line anchors | Each clause is contradicted by the current source, as recorded in §4.2/§4.3. These are **register-text** inaccuracies, not new defects and not closures. | Text-only reconciliation of the affected cells, keeping every original assertion visible and dated. Per the pending-YAML header, a closed row is renamed into the register and its `features.yaml` / scenario `finding=` links updated. This package proposes that; it does not apply it. |
+| 6 | `docs/REMEDIATION_PLAN.md` §4 register text (many rows) | e.g. SEC-14 *"LICENSE is a stub"*; SEC-15 *"CI actions tag-pinned"*, *"base image not digest-pinned"*; DEP-05 *"no `pull_request` trigger"*, *"ruff only on `src/`"*, *"no hassfest/HACS validation"*, *"no gitleaks"*, and its cited workflow path; UI-16 *"no reduced-motion check"*; BE-26 *"~62 `range(1, 9)` / `[0]*8`"*; TST-03 *"No tests: …"*; TST-04 *"No JS tests of any kind"*; API-07's location anchors; several UI line anchors | Each clause is contradicted by the current source, as recorded in §4.2/§4.3. These are **register-text** inaccuracies, not new defects and not closures. **The correction must stay per row and per clause:** TST-03's literal *"no tests"* claim may be reconciled as **stale in its literal form only** — the occurrence counts recorded in §4.2 (151 / 91 / 40 / 7) are **identity counts, not assertion adequacy**, and the reconciled text must say that the *adequacy* of those assertions is **not established**, exactly as the registry basis itself says. The same rule applies to every other row in this proposal: a count, a file list or a link is never the acceptance. | Text-only reconciliation of the affected cells, keeping every original assertion visible and dated. Per the pending-YAML header, a closed row is renamed into the register and its `features.yaml` / scenario `finding=` links updated. This package proposes that; it does not apply it. |
+| 8 | `docs/REMEDIATION_PLAN.md` §4 register rows for **API-16, API-18, API-21, UI-05 and UI-08** | The five rows carry the register's original assertions (API-16 *"sys.path.insert on every request (9 handlers)"*; UI-05 *"New settings drawers drive a hidden legacy `#settings-modal` via synthetic `change` events"*) and the accepted triage's class **`S` — source-inspection candidate, behaviour not reproduced**. | These five rows must **stay open** as source-inspection leads. Their surviving source is re-read at this base and recorded per row in §4.2: the nine `sys.path.insert` call sites (API-16); `src/config.py:258`'s legacy `SceneManager` and its reader (API-18); `src/rest_api/scenes_v2.py:212`'s own async response helper beside the shared sync one at `src/rest_api/utils.py:336` (API-21); the synthetic `change` forwarding at `web/js/components/hardware-drawer.js:145-168` (UI-05); the two `localStorage` stores at `web/js/utils/dashboard-manager.js:1113-1140` and `web/kiosk.html:2856-2883` (UI-08). **None of them may be routed to register-text reconciliation:** the register text is not stale, the behaviour was not reproduced, and source presence proves neither active runtime use nor closure. | **No register-text edit** for these five rows. The correct follow-up is the **bounded reproduction** the `S` class already calls for, after which the row's own recorded close condition applies. No implementation is proposed or made here, and none of the five duplicates an existing corrective package. | No source change — a register-row disposition correction, made by the coordinator after qualified different-family review of this report. |
 | 7 | `docs/REMEDIATION_PLAN.md` §4 HIL-09 row | Description cell begins *"✅ Fixed and proven on hardware 2026-09-25 …"* while the phase cell says *"open until the capture tool's write run proves them on hardware"* | The two cells contradict each other, and the first is **not** a hardware proof. The row is the sole cap for 12 features. | Text reconciliation so the row stops asserting a hardware proof it does not have, **keeping the row open and keeping all twelve caps** until the capture-tool write run with read-back exists. |
 
 ## 8. New source-backed residual findings (not duplicate implementation)
@@ -993,9 +5069,9 @@ These are **source-backed residuals** that no existing parser-open row states in
 | # | Residual | Source evidence at `a07cf94` | Smallest follow-up scope | Exact acceptance | Independent review needed |
 | --- | --- | --- | --- | --- | --- |
 | R-01 | The **228** peer numerator is not reproducible from the registry it claims to summarise, while its adjacent counts are. | `docs/validation/features.yaml` is byte-identical between `9b783d72` and `a07cf94`; an independent parse yields 227 rows with `current != target` and 227 with `current < target`, 0 above target; the peer's 268/50/33 counts reproduce exactly. | A read-only arithmetic re-derivation by the MiniMax fidelity reviewer, plus a coordinator note recording the verified numerator. | The published numerator for `current != target`, its denominator (268), its date and its definition, with the verified 227/268 stated. | Not a new implementation — a factual cross-family check by the M3 fidelity reviewer and the coordinator. |
-| R-02 | The retained **privacy C2 commit object is absent** from the local object database while both refs still point at it. | `refs/heads/ryan-haver/wp-sec-data-02-c2` and `refs/remotes/origin/ryan-haver/wp-sec-data-02-c2` → `615d3c8403b237dd117c803269c7b9b58895f9217`; `git cat-file -t` → *Not a valid object name*; the repository is not a partial clone. | A coordinator-side object restore from the existing remote ref, then a content verification of C2. **No worker may fetch, prune or rewrite history.** | The C2 commit object resolves and its tree matches the recorded C1→C3 chain, with the fetch receipt recorded. | No — object restoration and verification is coordinator work, not a new deliverable. |
-| R-03 | The register's **line anchors** for at least six findings no longer point at the content they name. | `system_shortcuts.py:22-34` / `orei_matrix.py:1972` (API-07); `web/js/app.js:74-78` and `dashboard-manager.js:71,1102,1126` (UI-08); `hardware-drawer.js:145-178` and `web/index.html:352-598` (UI-05); `cec-tray.js:1468-1580` (UI-12); `api-copy.js:13` (UI-18); `overlay-manager.js:35-46` (UI-15); `scene-editor.js:263-278` (UI-19); `config.py:221,486` (API-12); `utils.py:388-395` (API-18); `driver.py:60` (DEP-07). | Text-only re-anchoring of the register's location cells to current lines, with the original anchors retained as dated history. | Every re-anchored cell names a file and line that exist at the stated base and carry the named content. | Text-only change to a register cell — not a new implementation deliverable. |
-| R-04 | The register's **TST-03/TST-04 'no tests' claims** are stale in their literal form but are being used as if they were coverage gaps. | `tests/` contains 151 occurrences of `api/v2/scenes`, 91 of `/api/integrations`, 40 of `/api/settings`, 7 of `_task_supervisor`; `tests/e2e/` carries six Playwright `.spec.ts` files; there are **0** JavaScript unit-test files outside `tests/e2e`. | A bounded per-surface assertion inventory under `SW-AUDIT-01` (already an inventory unit) to decide, per named surface, whether the assertion is adequate — **not** new test authorship. | For each named surface: the test file, the test name, the asserted behaviour and the client/level it actually proves, or an explicit *missing assertion* decision. | Prose inventory; the independent reviewer checks the inventory's claims against the test source. |
+| R-02 | **RETRACTED — the original residual was a transcription error, not an availability blocker.** The original entry claimed the retained **privacy C2 commit object was absent** from the local object database while both refs still pointed at it. That claim is withdrawn. | Corrected and independently re-measured: `git rev-parse 615d3c84` → `615d3c8403b237dd117c8032697c9b58895f9217`; `git cat-file -t` on that SHA → `commit`; both `refs/heads/ryan-haver/wp-sec-data-02-c2` and `refs/remotes/origin/ryan-haver/wp-sec-data-02-c2` point at that same valid SHA; the mistyped string `…269c7b9…` exits 128 with *Not a valid object name*. The only surviving fact is the integration one: C2 is **not** an ancestor of `a07cf94` (exit 1, no object error) and **is** an ancestor of C3 `2d02004d…` (exit 0). | **None.** No object restore, fetch, prune or history repair is required or proposed; the original failed command and its captured bytes stay as the historical record of the error and are **not** rewritten. | The withdrawn claim stays visible and labelled as withdrawn, and the corrected C2 identity and ancestry are recorded in the correction receipt. | No — a withdrawn residual, not a deliverable. |
+| R-03 | The register's **line anchors** for several findings no longer point at the content they name — **but not for UI-05, whose anchor does.** | **UI-05 is withdrawn from this residual:** `web/js/components/hardware-drawer.js:145-178` **does** carry the named mechanism (the drawer forwarding plus the synthetic `new Event("change")` dispatch at :145-168), and this report's earlier claim that the range carried only unrelated comments was wrong. The remaining anchor cases are `system_shortcuts.py:22-34` / `orei_matrix.py:1972` (API-07); `web/js/app.js:74-78` and `dashboard-manager.js:71,1102,1126` (UI-08 — the live `localStorage` store is at `dashboard-manager.js:1113-1140` and the kiosk pin store at `web/kiosk.html:2856-2883`); `cec-tray.js:1468-1580` (UI-12); `api-copy.js:13` (UI-18); `overlay-manager.js:35-46` (UI-15); `scene-editor.js:263-278` (UI-19); `config.py:221,486` (API-12); `utils.py:388-395` (API-18); `driver.py:60` (DEP-07). | Text-only re-anchoring of the register's location cells to current lines, with the original anchors retained as dated history — **excluding UI-05, whose anchor already names the right content and must be left alone**. | Every re-anchored cell names a file and line that exist at the stated base and carry the named content, and a cell whose content survived is not moved. | Text-only change to a register cell — not a new implementation deliverable. |
+| R-04 | The register's **TST-03/TST-04 'no tests' claims** are stale in their literal form but are being used as if they were coverage gaps. | `tests/` contains 151 occurrences of `api/v2/scenes`, 91 of `/api/integrations`, 40 of `/api/settings`, 7 of `_task_supervisor`; `tests/e2e/` carries six Playwright `.spec.ts` files; there are **0** JavaScript unit-test files outside `tests/e2e`. **Those counts are identity counts only**: they establish that the strings occur in the test tree, not that any assertion is adequate, and they must never be restated as coverage. | A bounded per-surface assertion inventory under `SW-AUDIT-01` (already an inventory unit) to decide, per named surface, whether the assertion is adequate — **not** new test authorship. | For each named surface: the test file, the test name, the asserted behaviour and the client/level it actually proves, or an explicit *missing assertion* decision. **A file occurrence is not an acceptance.** | Prose inventory; the independent reviewer checks the inventory's claims against the test source. |
 | R-05 | The **accepted UNWIRED WS component** is integrated and reviewed but not wired, so CR-01's bounded admission/cleanup behaviour is not in the product path. | `e54228c0` added `src/rest_api/ws_request_work.py` (519 lines) and `tests/test_ws_request_work.py` (1502 lines); the module is imported by **no** file under `src/`, `run.py` or `run_server.py`. | The **existing** WS wiring package — `FC-WS-WIRE` in the adopted packet — which is a separate source package with its own author/reviewer/lease requirements. This report only records that the component is unwired. | The adopted `FC-WS-WIRE` acceptance at the exact wiring commit, including bounded outstanding work, a defined overload response, connection/application-owned cleanup, preservation of the status schema and fresh-read semantics, and proof that another client's service survives a burst. | Yes — qualified different-family exact-commit source review (the packet's `FC-WS-WIRE` row). |
 
 **Deliberately not reported as new findings.** CR-01 (unbounded per-frame WebSocket task creation), CR-02 (HA setup does not establish that a supplied key can control a locked hub), CR-03 (keyboard shortcuts), CR-04 (credential redaction), CR-06 (API-C2 invalidates the F-SEC-007 V3 proof), CR-07 (CI proof names a synthetic PR merge), CR-10 (declared minimum versions exceed the demonstrated matrix) and CR-11…CR-14 are **already recorded** in `docs/audits/COMPREHENSIVE_PROJECT_REVIEW_20261104.md` with their own dispositions; repeating them here would duplicate an existing record rather than add truth. Where this report touches them it does so only to carry their recorded status forward (R-05, M-1, CI attribution).
@@ -1008,18 +5084,19 @@ These are **source-backed residuals** that no existing parser-open row states in
 | O-2 | Approve the visual diff of the affected catalogue entries for the LCD shortcut rename (API-07's own recorded close condition). | The register row's exact close condition: *"close once the owner approves the visual diff of the affected catalog entries"*. The repository's owner visual-approval rule applies to changed rendering. | The WP-C1 rename to "LCD: 15s" is recorded as owner-approved with the legacy key retained, but the row's own close condition is recorded separately and is **not** discharged by this inventory. |
 | O-3 | Owner action: GitHub-Support cache purge of the public history for SEC-14. | SEC-14's recorded owner condition (vendor-blob history purge); the public-history purge verification was **inherited**, not re-run here, and this package has no exhaustive public-history or secret-scan authority. | The tracked tree no longer carries the vendor payloads and LICENSE is the full MPL 2.0, but the *public-history* element is an owner/support action. |
 
-**No other owner question is required by this package.** Kiosk zoom is a technical design choice within existing scope; only a *changed* rendering needs a visual decision. Software viewport probes may run; actual-device confirmation is a separate gate. The compatibility floor, the physical HIL windows, the continuous 72-hour soak, the field week, the final version/artifact matching and release authority all stay open and untouched by this inventory.
+**No other owner question is required by this package, and no closed decision is reopened.** O-1 is **carried forward unchanged** from its already-recorded request rather than re-asked; O-2 restates API-07's own recorded close condition; O-3 restates SEC-14's own recorded owner action. This report issues **no new** owner question and **no** new approval request. The **closed original Tron owner decisions stay closed** and are not reopened here. Kiosk zoom is a technical design choice within existing scope; only a *changed* rendering needs a visual decision. Software viewport probes may run; actual-device confirmation is a separate gate. The compatibility floor, the physical HIL windows, the continuous 72-hour soak, the field week, the final version/artifact matching and release authority all stay open and untouched by this inventory.
 
 ## 10. Acceptance, non-acceptance and what remains
 
 ### 10.1 What this package does
 
 * Publishes the recomputed parser-open set (**61**, with its **59 + 2** composition and severity distribution) and a per-ID original assertion, surviving condition, current source/client/image/proof reference, assertion strength and recommendation for **every** one of them.
-* Publishes the full **268**-feature contract table with recorded, target, effective, owner-capped level, freshness, proof binding and package binding.
+* Publishes the full **268**-feature contract table with recorded, target, effective, owner-capped level, freshness, proof binding and package binding, **and** — in §5A — the semantic source/assertion/acceptance map for **all 268** rows: the registry claim and interfaces, the recorded basis, the named assertion scope actually read, what that assertion does and does not establish, the evidence's own source/client/image/covers attribution (or an explicit unknown), the level/cap/ancestry/freshness state, and the exact residual acceptance.
 * Publishes the full **65**-unit author/reviewer/judge rematch against the actually recorded qualification state.
-* Reconciles **228 / 210 / 203 / 227** with explicit definitions, numerators, denominators, dates, the ordered level ladder, the twelve caps and the two over-achievements.
+* Reconciles **228 / 210 / 203 / 227** with explicit definitions, numerators, denominators, dates, the ordered level ladder, the effective-inequality sensitivity control (212), the twelve caps and the two over-achievements.
 * Names the stale current-summary prose and proposes precise coordinator updates without applying any of them.
-* Reports five source-backed residuals with the smallest follow-up scope and exact acceptance, without implementing anything.
+* Reports **four live source-backed residuals** with the smallest follow-up scope and exact acceptance, without implementing anything, and **retracts** the fifth (R-02) with its reason stated in place.
+* **Read limits of this package.** No product test, scenario, browser session, container, device, simulator campaign or HIL session was executed for any row; no historical feature assertion, client campaign, image layer or UI behaviour was semantically re-read end-to-end; no runtime defect was reproduced. The 52 named test functions, the named test modules, classes and packages that the registry bases cite were read, and that is the bound of the source reading.
 
 ### 10.2 What this package does not do
 
@@ -1031,6 +5108,9 @@ These are **source-backed residuals** that no existing parser-open row states in
 * It removes **none** of HIL-09's twelve caps, and it does not call UC-18 or the LICENSE-stub prose a current reproduced defect.
 * It grants **no** owner, hardware, visual, soak, field, version, artifact or release approval.
 * It does not publish, push, merge, tag, release or clean up anything.
+* It **does not** claim a completed semantic re-read of every historical feature assertion, client campaign, image layer or UI behaviour; §5A states exactly which named assertion scopes were read and which rows remain **unknown**.
+* It **does not** claim that any committed evidence record was produced against physical hardware: every record it cites records `target: sim`.
+* It **does not** convert a file occurrence, a scenario link, a hash count or a source presence into an assertion or an acceptance.
 
 ### 10.3 What remains open
 
@@ -1040,7 +5120,7 @@ These are **source-backed residuals** that no existing parser-open row states in
 | Coordinator application of the proposed canonical edits | **Not done** — §7 proposals only. |
 | RV-API034 source admission and the M-1 F-SEC-007 freshness diagnosis | Open (separate scope). |
 | RV-WS040 retained-source review | Open (separate scope). |
-| Privacy chain C1–C4 qualified review, privacy admission and register reconciliation | Open; the chain is unintegrated and C2's object is locally missing. |
+| Privacy chain C1–C4 qualified review, privacy admission and register reconciliation | Open; the chain is unintegrated — C1, C2 and C3 all exist as objects in this checkout, C2 is an ancestor of C3, and **none** of them is an ancestor of this base. No object restore is needed or proposed. |
 | WS component wiring (`FC-WS-WIRE`) | Open; the component is integrated and unwired. |
 | Owner privacy-budget request | Pending owner answer; carried forward unchanged. |
 | Physical HIL-B/C/E, continuous 72-hour soak, field week, final version/artifact matching, release | Open. |
@@ -1128,7 +5208,11 @@ The full streams, the JUnit file, the in-run import capture and both owned-root 
 
 ### 12.3 In-run module and import origins
 
-Measured **inside** the pytest process after `pytest.main` returned (the same snapshot is taken at interpreter exit):
+Measured **inside** the pytest process after `pytest.main` returned. The **original** receipt
+(`docs_result.json`, 87313 bytes, SHA-256 `08f970c723edbeccc026fc7c3770d3b4a97ae35c56322a789d8177bfde8e5ed0`) is
+**preserved unchanged**; the corrected reading below is a **derived supplement computed from that same original
+snapshot**. **No rerun was performed to replace the old evidence identity**, and the original run's conclusion is
+corrected here rather than by re-running the unchanged documentation check.
 
 | Module | Origin |
 | --- | --- |
@@ -1137,11 +5221,46 @@ Measured **inside** the pytest process after `pytest.main` returned (the same sn
 | `hub.openapi` | `C:\Users\ryanh\orca\workspaces\unfoldedcircle-orei-hdmi-matrix-integration\wp-fc26-fc-truth\src\hub\openapi.py` |
 | `pytest` | `C:\scripts\unfoldedcircle-orei-hdmi-matrix-integration\.venv\Lib\site-packages\pytest\__init__.py` |
 
-| Observation | Value |
-| --- | --- |
-| Product imports under `src.rest_api` / `tools.validate` observed | **0** |
+#### 12.3.1 The corrected import reading
 
-So this run exercised the **documentation modules of this checkout** (`tests.conftest`, `hub` and `hub.openapi` resolved inside this worktree) together with `pytest` from the root virtual environment. It did **not** import `src/rest_api/*` or `tools/validate/*`. It is therefore a documentation-module prose check of *this* checkout — **not** a product-behaviour result, **not** a feature-level result, **not** a model-qualification result and **not** a canonical route check (the route-inventory plugin was deliberately disabled, so no route-coverage number is claimed).
+The original receipt's `observed_product_imports` field is **empty**, and this report originally repeated that as
+*"Product imports under `src.rest_api` / `tools.validate` observed: **0**" and concluded that the run *"did **not**
+import `src/rest_api/*`"*. **That conclusion was wrong, and it is withdrawn.**
+
+| Observation in the original snapshot | Actual value |
+| --- | --- |
+| `imports_at_finish` entries named `rest_api` or `rest_api.*` | **25** |
+| Where those 25 entries resolve | the author's own checkout — `…\wp-fc26-fc-truth\src\rest_api\…` (`rest_api`, `rest_api.app`, `rest_api.audio`, `rest_api.cec`, `rest_api.control`, `rest_api.core`, `rest_api.dashboard_layout`, `rest_api.device_settings`, `rest_api.events`, `rest_api.macros`, `rest_api.outputs`, `rest_api.profiles`, `rest_api.runtime`, `rest_api.scenes`, `rest_api.scenes_v2`, `rest_api.security`, `rest_api.settings`, `rest_api.static`, `rest_api.system`, `rest_api.system_shortcuts`, `rest_api.themes`, `rest_api.ui`, `rest_api.utils`, `rest_api.validation`, `rest_api.websocket`) |
+| `imports_at_finish` entries named `tools.validate` or `tools.validate.*` | **0** |
+| `observed_product_imports` (the filtered subset) | **{}** — empty |
+| `imports_atexit` | **{}** — empty |
+
+**Why the filter produced a false zero.** The retained entry script (`build/remediation-functional-20261104/fc-truth/docs_entry.py`,
+lines 162–165) builds `observed_product_imports` with
+`name.startswith(("src.", "src/", "tools.validate", "tools/validate"))`. The project's canonical import name for the
+REST package is **`rest_api`**, not `src.rest_api` — `src` is on `sys.path`, so the package is imported under its own
+top-level name. The `src.`-prefixed filter therefore **never matched** the 25 real `rest_api` entries. The filtered
+zero is an artefact of the filter, **not** evidence of absence. The `tools.validate` half of the filter was correct:
+no `tools.validate` module was imported by this run.
+
+**The exit-time snapshot limit.** `imports_atexit` is **empty**. The receipt's own atexit handler therefore
+contributed **no** import data, and an empty `imports_atexit` is **not** proof that a second, completed exit-time
+snapshot was taken. The only complete in-process snapshot is `imports_at_finish`.
+
+**What the corrected reading does and does not support.** This run exercised the **documentation modules of this
+checkout** (`tests.conftest`, `hub` and `hub.openapi` resolved inside this worktree) together with `pytest` from the
+root virtual environment, and it **did** import the canonical `rest_api` package from this checkout — 25 modules of
+it. It is therefore still a **documentation-module prose check of *this* checkout**: **not** a product-behaviour
+result, **not** a feature-level result, **not** a model-qualification result and **not** a canonical route check (the
+route-inventory plugin was deliberately disabled, so no route-coverage number is claimed). Importing `rest_api` does
+not establish that any REST route, assertion or product behaviour was exercised, and nothing here promotes a level
+or admits evidence. The direct exit/JUnit pass recorded in §12.2 is unaffected: the run's exit code, pass count and
+JUnit counters stand exactly as originally measured.
+
+> **A separate, correction-attributed check exists.** The covered factual correction ran the same five documentation
+> modules **once** on the **changed** report. That run is recorded in `NEW CORRECTION.md` §4 and in the correction's own
+> completion receipt. It is a **separate event**: it does not replace, re-date or re-identify the original run's
+> evidence, and it is not used anywhere in this report as a substitute for the original snapshot.
 
 ### 12.4 Post-append scope, encoding and whitespace checks
 
@@ -1153,13 +5272,25 @@ After appending this section and §13, the following were checked on the **final
 * No ledger generation, no `tools.validate check`, no canonical gate, no evidence import, no source hook, no campaign, no browser, no container, no device.
 * No global or repository configuration change of any kind; no second scratchpad; no shared system `TEMP` inventory was taken.
 
-### 12.6 Post-run prose correction (declared, not covered by the run)
+### 12.6 Post-run prose corrections (declared, not covered by the run)
 
-After the single run, **one** path citation was corrected: §9 O-1 now names `docs/production/remediation-20261104/recovery-execution/PRIVACY_REASSESSMENT_BUDGET_REQUEST.json`, which is where that file actually lives at this base; the earlier string omitted the `recovery-execution/` segment. This is a **citation-string correction only** — it changes no question, no owner condition, no disposition and no count. The corrected bytes were checked for scope, UTF-8 validity and whitespace only, exactly like the appended sections. **The run did not cover them, and this report makes no claim that it did.**
+After the single run, the following corrections were applied to this report's prose. Each is a **reading or wording
+correction**; none of them re-ran the unchanged documentation check, none of them replaces the original run's evidence
+identity, and each one is labelled as a post-run correction. The corrected bytes were checked for scope, UTF-8
+validity and whitespace only, exactly like the appended sections. **The run did not cover them, and this report makes
+no claim that it did.**
+
+1. **§9 O-1 path citation.** §9 O-1 now names `docs/production/remediation-20261104/recovery-execution/PRIVACY_REASSESSMENT_BUDGET_REQUEST.json`, which is where that file actually lives at this base; the earlier string omitted the `recovery-execution/` segment. A **citation-string correction only** — it changes no question, no owner condition, no disposition and no count.
+2. **§12.3 import conclusion (R4 of the independent review).** The original "the run did not import `src/rest_api/*`" conclusion is **withdrawn**. The original snapshot itself contains **25** `rest_api`/`rest_api.*` entries resolving to this checkout; the receipt's filtered field was empty only because its filter used `src.`/`tools.validate` prefixes while the canonical import name is `rest_api`. The corrected reading is derived from the **same original snapshot**; `imports_atexit` is empty and is not proof of a completed second snapshot. The run's exit code, pass count and JUnit counters are unchanged.
+3. **§12.5 wording.** The bullet "no second run, no retry, no softened assertion…" is unchanged in substance; the only addition is the explicit statement that no rerun was used to replace the original evidence identity.
 
 ## 13. Storage receipt
 
-This package's disposable output is confined to two owned roots. No other location on the host was written by this task, and no other agent's output, cache, workspace, evidence archive, baseline or protected resource was read, moved or removed.
+**Scope of the claim below.** The original wording of this receipt said that *"No other location on the host was written by this task, and no other agent's output, cache, workspace, evidence archive, baseline or protected resource was read, moved or removed."* **That claim exceeded what this package actually observed and is withdrawn and replaced by the scoped statement below.** What is true is narrower:
+
+* **Writes.** Every byte this package wrote lies inside the **two owned roots** listed in the table. The package inventoried those two roots before and after its run (ordinary **and** hidden files, with per-file SHA-256); it did **not** run a host-wide write audit, so no host-wide claim is made.
+* **Reads.** This package read other agents' **historical evidence records** as documentation — the accepted SW-FINDINGS-01 triage and its execution delta, the comprehensive project review, the software-wave execution records, the adoption packet and the current gate records — and read the reviewer's and the coordinator's retained evidence **read-only**. It did **not** write to, move or remove any of them. It did **not** read another agent's private prompt, credential, raw account dump or private runtime data, and it made no exhaustive public-history or secret-scan pass.
+* **Removals.** This package removed **nothing**: no file, directory, worktree, branch, ref, cache or archive was deleted, truncated or rewritten. The two terminal privacy FAILs, the lost original bytes, the historical failed runs and the coordinator's retained bundle and native export are untouched.
 
 | Root | Role | Files | Approx. bytes | Disposition |
 | --- | --- | ---: | ---: | --- |
@@ -1168,7 +5299,7 @@ This package's disposable output is confined to two owned roots. No other locati
 
 | Item | Value |
 | --- | --- |
-| Bytes created by this task (owned roots, measured) | 3737360 (pre-run {inv_pre['grand_total_bytes']} → post-run {inv_post['grand_total_bytes']}) |
+| Bytes created by this task (owned roots, measured) | **3737360** (pre-run 3473181 bytes / 36 files → post-run 3737360 bytes / 145 files) |
 | Bytes retained and why | the owned roots above, as the review trail and the raw run proof |
 | Quarantined | none — this package performed no deletion and has no deletion authority |
 | Actually removed | **nothing**. No file, directory, worktree, branch, ref, cache or archive was deleted, truncated or rewritten by this task. |
@@ -1176,5 +5307,18 @@ This package's disposable output is confined to two owned roots. No other locati
 | Expiry / review date | the owned roots are retained until the coordinator settles this task and reviews this report; the disposable pytest basetemp may be removed at that point |
 | Diagnostic budget | far below the 100 MiB default per-task diagnostic budget |
 
-The size and SHA-256 of this report, its commit and its parent are recorded in this task's separate completion receipt rather than here, so that this file does not contain a self-referential hash.
+### 13.1 Two configuration facts the original completion receipt recorded incorrectly
+
+The original completion receipt for this package (`author-completion-original.json`, preserved unchanged in the coordinator's registered payload) carried two fields that are **false or non-probative** as written. They are corrected here; the original bytes are **not** rewritten.
+
+| Original field | Original value | Corrected observation at this base |
+| --- | --- | --- |
+| `scoped_config.scoped_model_config_present_in_this_worktree` | `false` | **False as a statement about the file: the file exists.** `opencode.json` is present in this worktree, **1628 bytes**, SHA-256 **`62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096`**. The receipt's field name conflated "no *scoped model* config" with "no model config file", and the reviewer's finding is that the latter is false. The file is **read only**; nothing in it was changed, and no model, provider or credential setting was edited by this task. |
+| `scoped_config.git_config_path` / `git_config_sha256` | `…\wp-fc26-fc-truth\.git\config` / the SHA-256 of the **empty string** | **Non-probative.** In this worktree `.git` is a **pointer file** (`gitdir: C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.git/worktrees/wp-fc26-fc-truth`), not a directory, so `…\wp-fc26-fc-truth\.git\config` **does not exist**; hashing a non-existent path yields the empty-string SHA-256, which proves **nothing** about the actual common or global configuration. The real configuration lives in the **common** directory `C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.git`, whose `core.hooksPath` is `C:\scripts\unfoldedcircle-orei-hdmi-matrix-integration\.githooks`. No global or repository configuration was changed by this task, and this report makes **no** claim about the content of any configuration file beyond that one observed value. |
+
+The size, SHA-256, commit and parent of this report are recorded in this task's separate completion receipt rather than here, so that this file does not contain a self-referential hash.
+
+### 13.2 The correction pass's own disposable output
+
+The covered correction that produced this revision ran under its own registered agent-storage payload. **All** of its scratch scripts, intermediate digests, the generated §5A fragment and its own documentation-run artefacts live inside that payload; **none** of them was written into the two roots above, into `C:/t/`, or into any other path. Its own byte accounting, its retention decision and its review date are recorded in its separate completion receipt. The two owned roots listed above remain the original package's review trail and are **unchanged by the correction** — the correction read them (the original `docs_result.json`, `owned_inventory_pre-run.json` and `owned_inventory_post-run.json`) and did not write to them.
 
