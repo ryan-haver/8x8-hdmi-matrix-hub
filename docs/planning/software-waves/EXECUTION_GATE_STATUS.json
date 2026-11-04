@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T14:02:31.749729+00:00",
+  "observed_utc": "2026-11-04T16:44:40.264259+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3382,5 +3382,20 @@
     },
     "report_commit": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb"
   },
-  "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt"
+  "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
+  "functional_completion_planning": {
+    "status": "R1PREPARED, no newTask/Dispatchyet",
+    "phase": "functional-completion-20261104",
+    "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+    "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_PREFLIGHT.json",
+    "implementation_authority": false,
+    "privacy_budget_expansion": "NOT_APPROVED / ownerdecisionrequested"
+  },
+  "latest_verified_CI": {
+    "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+    "run": 41843691782,
+    "result": "14success/1publishskipped",
+    "record": "docs/production/remediation-20261104/recovery-execution/CI_9B783D72_RESULT.json",
+    "feature_or_hardware_acceptance": false
+  }
 }

@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "phase": "functional-completion-20261104",
+  "round": 1,
+  "created_utc": "2026-11-04T16:44:40.264259+00:00",
+  "status": "PROSPECTIVE planning, NOT adopted or implementation dispatch",
+  "owner_authority": "Owner now asks to continue remediating all findings and identify required input. This authorizes independent remaining-software planning/remediation within actual gates; it does NOT explicitly approve exhausted-assessment budget expansion, hardware actions, visual baselines, mainmerge or release.",
+  "immutable_product_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+  "source_intake": "e54228c0 exact unwired WScomponent/test source78295ecd, qualified runtime review ed697083 and wording review9817554e. Local4155core/73debug/92mypy/177strict routes and docs489 pass; protectedprivate inputs unchanged, generatedrouteJSONmtimeexception recorded. Handler still UNWIRED/CR01open.",
+  "CI": {
+    "run": 41843691782,
+    "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/41843691782",
+    "head_sha": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Type check (mypy)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Home Assistant tests",
+        "conclusion": "success"
+      },
+      {
+        "name": "Remote 3 integration (scripted Remote)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Secret scan (gitleaks)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Lint (ruff)",
+        "conclusion": "success"
+      },
+      {
+        "name": "UI (smoke + visual)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Tests (pytest)",
+        "conclusion": "success"
+      },
+      {
+        "name": "HACS validation",
+        "conclusion": "success"
+      },
+      {
+        "name": "hassfest",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validation (Home Assistant container)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Docker image (build + deployment tests)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Repository hygiene (binary/size guard)",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validation (scenarios + ledger)",
+        "conclusion": "success"
+      },
+      {
+        "name": "UI review comment",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build and push to GHCR",
+        "conclusion": "skipped"
+      }
+    ],
+    "scope": "14success/1publishes-skipped; qualified local software pipeline only. PR checkout/artifact commit/tree/source/image/client binding not yet adjudicated for canonical feature evidence, not owner hardware/visual approval."
+  },
+  "scope": "Reassess ALL remaining CR01-14 and mapped30packages/65units from committed comprehensive plan, prioritizing independent bounded HAcredentials/keyboardshortcuts/accessibility/support fixes while privacy and WSreviewer gates are held. This preparation does not allocate broad new author/reviewer entitlement. Preserve existingfeatureownership/existingcompleted API034 boundedreview/evaluation and historicalfailedqualification.",
+  "issue_crosswalk": [
+    {
+      "id": "CR-01",
+      "title": "Bound WebSocket get_status work and connection-owned cleanup",
+      "priority": "P1",
+      "classification": "NEW confirmed source resource-control gap; Medium impact rating; production denial-of-service magnitude not measured",
+      "acceptance": [
+        "Qualified author implements bounded/coalesced per-connection status requests with a documented response policy and connection/application-owned cancellation.",
+        "Negative tests hold refresh pending, send a burst, close one socket, and shut down: admitted task count stays bounded and all owned tasks drain; another client still works.",
+        "Preserve ping/status schema and refresh semantics; exact-commit different-family review and applicable REST/WS registry/route coverage pipeline."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-02",
+      "title": "Validate Home Assistant API-key capability during setup/reconfigure",
+      "priority": "P1",
+      "classification": "NEW source/coverage gap with bounded actual transport reproduction; full real-HA flow reproduction pending",
+      "acceptance": [
+        "Add real-HA config-flow cases for wrong/missing/revoked and valid keys on a control-locked hub, including reconfigure/options and recovery.",
+        "Use nonmutating /api/auth/status capability information with its actual bare-JSON contract; public health/device reads alone cannot authenticate a key.",
+        "Invalid credentials give a meaningful correctable error; offline matrix and unlocked/no-key setup continue to work. No disruptive probe action."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-03",
+      "title": "Repair settings/scenes keyboard shortcuts",
+      "priority": "P2",
+      "classification": "RECONFIRMED bounded existing UI-06 behavior, not a new duplicate finding",
+      "acceptance": [
+        "Wire advertised shortcuts to the actual application controller and existing Profiles/Scenes view.",
+        "Browser negative/positive tests cover s,4,Matrix navigation, editing-field suppression and Escape/focus behavior.",
+        "Preserve approved UI/entity identifiers and existing shortcuts where required; visual owner approval only for newly changed rendering."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-04",
+      "title": "Finish validation credential redaction before admitting evidence",
+      "priority": "P0",
+      "classification": "RECONFIRMED existing VAL-15 Medium tooling defect, not an observed real credential disclosure",
+      "acceptance": [
+        "Review the full retained C1/C2/C3 chain against its actual base and preserve original author provenance; do not rewrite an already implemented fix.",
+        "Synthetic credential-marker controls cover nested headers/actions/procedure text, response capture, failure paths and actual artifact writes; public values/request behavior remain intact.",
+        "Qualified different-family source review plus evidence/privacy admission before canonical import; preserve historical raw/private bytes without publishing secrets."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-05",
+      "title": "Resolve three retained source chains through sequential integration",
+      "priority": "P0",
+      "classification": "Confirmed integration backlog, not six independent missing implementations",
+      "acceptance": [
+        "Finish required exact-report evaluation and domain-qualified independent reviews; retain all original failures and findings.",
+        "Integrate one accepted chain at a time with coordinator resolution of shared runner/model/evidence/client changes; no blind six-branch merge or duplicate author.",
+        "Combined tests and exact ref/diff/provenance receipts pass before published P1 checkpoint; bounded API review PASS alone is not full P1 acceptance."
+      ],
+      "depends_on": [
+        "CR-04"
+      ]
+    },
+    {
+      "id": "CR-06",
+      "title": "Refresh F-SEC-007 evidence after covered code is frozen",
+      "priority": "P0",
+      "classification": "Confirmed candidate-specific freshness/integration blocker M-1; not a proven product-security regression",
+      "acceptance": [
+        "After shared tool/source corrections are frozen, run separately scoped eight existing browser security scenarios and the required API controls on the exact accepted branch/candidate.",
+        "Keep separate original API/browser summaries and actual combined-input checks, explicit raw exit/status/artifact hashes, qualified security review and privacy admission.",
+        "No unchanged failed-gate retry, registry downgrade, nonancestor evidence borrowing or original-failure reconstruction."
+      ],
+      "depends_on": [
+        "CR-04",
+        "CR-05",
+        "CR-07"
+      ]
+    },
+    {
+      "id": "CR-07",
+      "title": "Bind accepted evidence to a real candidate ref rather than relabel PR-merge records",
+      "priority": "P0",
+      "classification": "Confirmed evidence-admission/provenance gap despite passing CI",
+      "acceptance": [
+        "Retain PR-merge CI as integration testing; create new canonical proof on an explicitly checked-out accepted RC/integration ref with valid ancestry and source/image/client binding.",
+        "Alternatively adopt a tested exact candidate only through the existing explicit integration/acceptance process; identical tree is not permission to edit record commit fields.",
+        "Independent assertion/privacy/freshness review before canonical admission. Keep original merge-commit artifacts and hashes unchanged; reconcile existing56 historical attribution units separately."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-08",
+      "title": "Reconcile finding closure and contradictory current-status prose",
+      "priority": "P1",
+      "classification": "Confirmed metadata/decision-quality gap;61parser-open records are not61verified current bugs",
+      "acceptance": [
+        "For each61open ID keep exact row assertions, surviving conditions, original accepted source/image/client proof and a resolved/partial/reproduce/hardware/owner disposition.",
+        "Do not close HIL-09 from source or remove its12caps without accepted physical proof; do not call UC-18/old LICENSE-stub text current reproduced defects.",
+        "Add one clearly dated authoritative current summary and label superseded narrative as historical; preserve old decisions/failures and immutable planning packet."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-09",
+      "title": "Complete UI/kiosk accessibility, mobile and persistence acceptance",
+      "priority": "P2",
+      "classification": "Confirmed source settings plus uncompleted feature evidence; broader historical UI complaints require reproduction",
+      "acceptance": [
+        "Reproduce residual UI issues on supported phone/tablet/kiosk sizes and check zoom, keyboard/focus, modal semantics, contrast, error/offline/recovery and data persistence.",
+        "Run actual browser action/request/device-state controls for each residual contract; screenshots alone are not behavior proof.",
+        "Keep baselines immutable; seek approval only for new changed visuals. Treat style/dead-code/module refactors as separately justified debt, not automatically MVP blockers."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-10",
+      "title": "Prove declared Home Assistant/HACS and Python support boundaries",
+      "priority": "P1",
+      "classification": "Confirmed support-matrix coverage gap; no unsupported-version failure demonstrated",
+      "acceptance": [
+        "Test exact HA2025.1.0 plus the supported/current selected version with install, setup, auth/reconfigure/unload/reload and HACS custom-repository upgrade; or explicitly revise the claimed floor through approved compatibility policy.",
+        "Prove supported Python3.11 behavior in an appropriate environment or reconcile the minimum-version claim; do not infer failure from absence of a job.",
+        "HACS default-catalog admission is distinct from custom-repository install and is not invented as a new MVP gate."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-11",
+      "title": "Complete real-client and physical protocol acceptance",
+      "priority": "Release gate",
+      "classification": "Known environment/physical gaps, not missing Flic/HA/UC implementation",
+      "acceptance": [
+        "Complete software SDK/replay/auth/error/recovery preparation first; qualify actual HA custom-repository install and real-client command/request/effect mapping.",
+        "Owner-present matrix/firmware/source/display/Remote/Flic/deployedHA checks, LANdiscovery, physical CEC effects, agreed outage/recovery and restored starting settings on one accepted digest.",
+        "Simulator, scriptedRemote, containerHA, command logs and source presence never substitute for physical acceptance; preserve unavailable devices as explicit gaps."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-12",
+      "title": "Finish release artifact, dependency-advisory, licensing and documentation closure",
+      "priority": "Release gate",
+      "classification": "Known release obligations plus unavailable advisory audit; current version synchronization is healthy",
+      "acceptance": [
+        "Reconcile exact remaining license/history/support statements and dependency advisories without new accounts/spend/token scopes or history rewrite; retain verified historical purge disposition.",
+        "Synchronize authorized final version/manifests/discovery metadata, build matching amd64/arm64 artifacts, inspect shipped-content/lock/license parity and bind their immutable digests before final acceptance.",
+        "Final required CI/source/client/browser/image tests,100%routes, schema/ledger/gate and independent output audit must match actual RC; owner separately authorizes main/tag/artifact release."
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "CR-13",
+      "title": "Complete uninterrupted72-hour soak and owner field week",
+      "priority": "Release gate",
+      "classification": "Known unexecuted physical/field evidence requirement",
+      "acceptance": [
+        "Qualify sampler, restart/continuity detection and durable raw CPU/memory/PID/task/loop-lag/availability capture before starting.",
+        "One accepted candidate digest, continuous72hours plus documented week of real use and owner sign-off; explain every restart/change/gap and do not combine discontinuous intervals.",
+        "Windows may overlap only when owner-approved and candidate identity/continuity are preserved. No collector is started by this plan."
+      ],
+      "depends_on": [
+        "CR-11",
+        "CR-12"
+      ]
+    },
+    {
+      "id": "CR-14",
+      "title": "Match real reviewer capacity and settle protected workspace recovery",
+      "priority": "P1 execution/P3 cleanup",
+      "classification": "Known operational constraints, not product defects",
+      "acceptance": [
+        "Rematch task-qualified allowed providers with supported exact model/family/helper routing, live quota>=30%or suitable verified fallback and reserved author/review/correction capacity.",
+        "Use accepted narrowly relevant competence or a real bounded independently judged useful domain evaluation; no automatic failed-qualification retries or relabelled authorship.",
+        "No new phase/material staffing/contract decision without required actual three-provider rounds; reuse accepted covered corrections without ceremonial repeats.",
+        "Recover uncertain oldresources through installed Orca guide, preserve originals/bundles/publishedrefs and remove only exact proven owned settled resources. No broad prune."
+      ],
+      "depends_on": []
+    }
+  ],
+  "evidence_baseline": "Counts89software/120hardware/1field belowtarget and198no-freshpass/96stale-only/12HILcaps are DATED review snapshots, not new bugcount or current earnedqualification. New CIgreen cannot automatically close any of them. Reconcile actual residual evidence without source-hash/ancestry relabeling or canonical generation before privacy/composition accepted.",
+  "inputs": [
+    {
+      "path": "docs/ORCHESTRATION_PROTOCOL.md",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "72761a5ba04e097791965c34b7df091272d7c5f6f3264857a72cfc6110652e1f"
+    },
+    {
+      "path": "docs/agent-process/PROTOCOL.md",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "4aeb2351edec0da278c0c330c4df0e852fed0335cff2e35a4e835895ab1ac052"
+    },
+    {
+      "path": "docs/agent-process/REPO_CONFIG.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "b131a23233185b4669ce81b1f81b3c380133b21831fcff9f8dd83caf86cac2fb"
+    },
+    {
+      "path": "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "af3ca3deb2b487b83c6f215b523c4bfaf2ac8eb323c1d63b1e64a07f2ca1831e"
+    },
+    {
+      "path": "docs/planning/comprehensive-review-20261104/REMEDIATION_PLAN.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "ffa81cc1fd137025dd1c82492efdd0d2294f3fe33c49c5891c1ef81eb45aa492"
+    },
+    {
+      "path": "docs/planning/software-waves/EXECUTION_PINS.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "e68f1ff2843676e24d8a9f6757edf78e90bc5bf167c0c53ae591b552a9615b1d"
+    },
+    {
+      "path": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_RESULT.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "c9a31283f4876f00ffefc81495dc304dfefa9ffc70d28a8746dd7b9527aa9813"
+    },
+    {
+      "path": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "ffd10d855e31f34269d4329de11909fe9c3c7c2d882069d587efe4fb3f9435b7"
+    },
+    {
+      "path": "docs/production/remediation-20261104/recovery-execution/D6_PROVENANCE_HOLD.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "c576596e882a042148db568976684aa97ed6cc654ae3771a3c99e41d4a517541"
+    },
+    {
+      "path": "docs/production/remediation-20261104/recovery-execution/PRIVACY_REASSESSMENT_BUDGET_REQUEST.json",
+      "commit": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+      "git_blob_sha256": "705b7d2c2cec1ed749f844496385b2c36c350b0893382ff7fafb9e6686e856d6"
+    }
+  ],
+  "mandatory_holds": {
+    "privacy": "Opusfirstprivacyqualification FAIL and M3firstprivacyqualification FAIL remain terminal. M3judge1b2b7c5f:2PASS4FAIL, noqualifieddomain/no verifiedfallback. ExactlyoneextraOpusassessment+oneAstrajudge proposal was sent to owner and is still UNAPPROVED. No retake/budgetexpansion/extra judge/modelaliasescape from planning votes, elapsedtime or latest broad remediation instruction.",
+    "WS_D6": "Frozen Anthropic lifecycle-review target independence at12ad507e remains unestablished due actualsourceattribution conflict indicators. No candidate/wiring lease under that frozen allocation. Any genuinelynewsource/domain/role/familystrategy must be justified prospectively with authentic provenance, failed-attempt boundaries and explicit gates; never narrow/relabel to evade failure.",
+    "independence": "Every implementation/tests/tooling needs qualified different-underlying-family exactcommit review. GPT variants onefamily; source/probe authorship and formal reportquality/competencejudgment separate. Nativeproof notGitidentity/modelalias; all scoped qualificationlimits remain.",
+    "owner": "No physical/HIL/72h/field/visual baseline/finalrelease authority; no newspend/credentials/accounts or sourcecopyright/history waivers. No messages to others beyond Orca workers."
+  },
+  "model_candidates": {
+    "OpenAI": "Astra/high qualified async/diagnostic reportjudgment; Sol6.1/high originalprivacy/coreauthor. Samefamily cannotreviewownsource. Exact task/domain reassessment required.",
+    "Anthropic": "Opus5.5/high allowed, scopedAPI-refusalauthor/reviewer earned; WSoriginalfirst-authorship NOT_GRANTED andprivacyreviewFAIL, correctedcomponentruntime accepted only. Planningroute verified, no broadHA/UI/privacy entitlement.",
+    "MiniMax": "M3/thinking acceptedplanning/inventory scope, privacyreviewFAIL; no automatic otherreview entitlement. Newgenuinelydifferentdomain/role proposal must meet actual first-attempt and source-conflict gates, no retake relabel.",
+    "Google": "GeminiCLIinstalledbutOAuthdisabled/unavailablequota; Antigravitylastreport20weeklyremainingandunresolvedunderlyingfamily/helperroute. Neither readyverifiedqualifiedfallback. No enable/login/spend.",
+    "DeepSeek": "Unavailable exhaustedcredit, never dispatch/buycredit."
+  },
+  "requested_R1": [
+    "Independently examine actual current source/tests/relevantcallers and currentplans; classify remaining realdefects versus evidence/preparation/owner gates. Full consequentialreads, notgrep/counter/hash claims.",
+    "Recommend concrete executable phase scope/strategy and task/model/worktree matches, exactsourcebaserules/dependencies/exclusivepaths/sharedcoorhunks, acceptance/evidence/isolation/failurecontrols and appropriate independentreviewer or explicit held gate.",
+    "Prioritize unrelated ready software packages instead of waiting on preferredroute/privacy. Identify suitable demonstratedqualification or genuine first newdomain/role qualification needs honestly; no automatic grants or retries.",
+    "Propose resolutions for CR02HA auth capability and CR03settings/scenes shortcuts, plus reproducedCR09/10 scope, and defensible WS_D6strategy respecting actualauthorship conflicts; no product changes now.",
+    "Recommend evidence/sourcecomposition order, exactPython3.11/HAfloor proof or legitimate compatibilitydecision, softwareRC and actual owner hardware/soak/finalrelease separation. No sourcecode workaround for absent ownerproof.",
+    "State each actual owner decision needed and concrete already-reviewable option; no credentials/hardware needed for boundedsoftwareplanning.",
+    "Full independentR1 report only. Do not read newphase peerR1 recommendations until all3originalspreserved; R2all-peerchallenge and R3all3explicit samefullfinalpacket/hashacceptance still future. No forced answer or majorityconsensus."
+  ],
+  "concurrency": "At mosttwo currentplanningworkers+coordinator+protectedexternal=4,no nesting. Stage thirdactualfamily after positivelyreleasedslot. Retain allhistorical/uncertainresources and originalbytes.",
+  "planning_stages": "R1independentall3, preserve/source/taskrefs; R2all-peerchallengeall3; one completeversionedhashed finalplan+staffing; R3eachactualsamehashacceptancewithoutunresolvedmaterialblocker. Owner-only budgets stayheld even ifplanaccepted. No implementationlaunch without all source/role/capacity/publication gates."
+}
