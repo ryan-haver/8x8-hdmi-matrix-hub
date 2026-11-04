@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T16:44:40.264259+00:00",
+  "observed_utc": "2026-11-04T16:47:33.319050+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3384,12 +3384,30 @@
   },
   "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "functional_completion_planning": {
-    "status": "R1PREPARED, no newTask/Dispatchyet",
+    "status": "OpenAI+Anthropic independent R1 ACTIVE, thirdMiniMaxreserved/no Taskyet; notadopted",
     "phase": "functional-completion-20261104",
     "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
-    "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_PREFLIGHT.json",
+    "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
     "implementation_authority": false,
-    "privacy_budget_expansion": "NOT_APPROVED / ownerdecisionrequested"
+    "privacy_budget_expansion": "NOT_APPROVED / ownerdecisionrequested",
+    "actors": {
+      "openai": {
+        "task_id": "task_deec8833e817",
+        "dispatch_id": "ctx_87e7f6a55dc2",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact_report_base": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation"
+      },
+      "anthropic": {
+        "task_id": "task_db6cadf2bd1b",
+        "dispatch_id": "ctx_0c24940765ab",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact_report_base": "5097650314502686a845a714e638643d66087971",
+        "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation"
+      }
+    }
   },
   "latest_verified_CI": {
     "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
