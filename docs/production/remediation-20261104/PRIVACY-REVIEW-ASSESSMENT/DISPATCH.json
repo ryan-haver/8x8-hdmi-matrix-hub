@@ -1,0 +1,112 @@
+{
+  "observed_utc": "2026-11-04T07:08:00.597969+00:00",
+  "status": "ONE first privacy-review-domain assessment ACTIVE, no competence/source acceptance",
+  "actor": {
+    "task_id": "task_8b5496cdc9b2",
+    "dispatch_id": "ctx_408fa818297a",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104",
+    "actual_branch": "qualification/privacy-review-20261104",
+    "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+    "report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/AUTHOR.md",
+    "packet_sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+    "launch": {
+      "requested": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native Opus5.5 at exact Task/Dispatch/cwd",
+      "session": "0c330b18-dc20-4251-96a1-82858470f91e",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high supported launch/local config, native per-turn effort not exposed",
+      "bytes": 687455,
+      "sha256": "8709219adbb7ae17caaa4cc150b4b16d7bbc13e23b77b8376803f69ebb0cb46f",
+      "unassigned_helpers_observed": [],
+      "scope": "entry attestation only, not competence or descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready"
+  },
+  "publication_before_wave": "f0053aac4cb85a729f8455872086a61ce92a1d2d",
+  "capacity": {
+    "observed_utc": "2026-11-04T07:06:40.352426+00:00",
+    "reserve": "two bounded tasks plus future independent WS component judgement/author correction/re-review; every future stage freshly gated",
+    "unknown": "absolute allowance/other-host demand not exposed",
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 24,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400069,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 7,
+        "windowMinutes": 300,
+        "resetsAt": 1793778600069,
+        "resetDescription": "Wed 12:50 AM"
+      },
+      "updatedAt": 1793775965936,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 3,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793775526452,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 138,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 138,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzA3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAxMDoyNzozOCIsImRpc3BhdGNoSWQiOiJjdHhfYmIwZThhZWY1NGQyIiwiZGF0YWJhc2VJZCI6NzM2fX0"
+      },
+      {
+        "limit": 100,
+        "total": 138,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 130
+    },
+    "current_resources": 2,
+    "historical_retained": 6
+  },
+  "WS_component": {
+    "taskId": "task_38756b76bd12",
+    "dispatchId": "ctx_14a660b697ab",
+    "dispatchStatus": "dispatched",
+    "workerState": "ready",
+    "terminalState": "retained"
+  },
+  "concurrency": "two currentresources+coordinator+protectedexternal=4; retained is not liveness proof, no nesting",
+  "judge": "ONE future fresh qualified Astra/high exact candidate report judgement; not launched, capacity/original/native/every-axis checks mandatory",
+  "attempts": "ONE new candidate+ONE fresh judge, no automatic rewrite/retry/new judge; old qualifications unchanged",
+  "source_review": "No privacy-domain qualification yet. Even after all-six PASS a separately qualified actual source review remains necessary; source integration/admission not autoaccepted.",
+  "settlement": "Prompt preserve original/native/workspace/temp/taskref receipts then release exact worker after delivery; keep all protected resources, no cleanup",
+  "publication": "Scoped records/checks/push/exactremoteverify then end turn for Orca wake; no completion polling"
+}

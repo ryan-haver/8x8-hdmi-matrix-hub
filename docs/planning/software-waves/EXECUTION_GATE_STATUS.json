@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T07:05:43.968061+00:00",
+  "observed_utc": "2026-11-04T07:08:00.597969+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2719,10 +2719,46 @@
     "api_report_evaluation": "accepted/released/preserved/published; no source integration"
   },
   "prospective_privacy_review_domain": {
-    "status": "candidate prepared, NOT_QUALIFIED",
+    "status": "ONE candidate ACTIVE; NOT_QUALIFIED, judge reserved",
     "packet": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/ASSESSMENT_PACKET.json",
     "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
     "no_source_acceptance": true,
-    "attempt_budget": "one first candidate plus one fresh judge"
+    "attempt_budget": "one first candidate plus one fresh judge",
+    "actor": {
+      "task_id": "task_8b5496cdc9b2",
+      "dispatch_id": "ctx_408fa818297a",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104",
+      "actual_branch": "qualification/privacy-review-20261104",
+      "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/AUTHOR.md",
+      "packet_sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Opus5.5 at exact Task/Dispatch/cwd",
+        "session": "0c330b18-dc20-4251-96a1-82858470f91e",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high supported launch/local config, native per-turn effort not exposed",
+        "bytes": 687455,
+        "sha256": "8709219adbb7ae17caaa4cc150b4b16d7bbc13e23b77b8376803f69ebb0cb46f",
+        "unassigned_helpers_observed": [],
+        "scope": "entry attestation only, not competence or descendant census"
+      },
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
   }
 }
