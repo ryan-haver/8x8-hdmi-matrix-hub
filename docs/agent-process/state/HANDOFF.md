@@ -1,5 +1,14 @@
 # Current coordinator handoff
 
+## Remediation authorized; current-status correction and wave1 prepared — 2026-11-04T06:44:59.365910+00:00
+
+Owner now authorizes enactment of the comprehensive corrective plan. CR-08 present-tense readiness metadata corrected: scoped Opus5.5 PASS/actual API review, completed qualification attempts and bounded inventory acceptance are distinguished from historical failures and old next-task instructions. Old approval-pending text retained in a historical JSON field; no finding closed or broad domain granted. Existing85pin packet unchanged.
+
+Prepare two genuine isolated tasks: Anthropic Opus5.5/high NEW-file WS work-controller implementation as useful bounded FIRST AUTHORSHIP assessment (base460a1905, not qualified at launch; no existing API lease/wiring/source acceptance), plus OpenAI Astra/high planned RV-API034 exact12ee report-quality evaluation. Future Astra component review reserved at exact delivered commit, not launched. Candidate must satisfy six prospective route/invariant/lifecycle/isolation/tests/calibration axes and independent component review before narrow authorship can be earned; not an automatic old qualification retry or existing OpenAI relabel. Source authorship/correction/privacy/security/combined gates remain.
+
+Same Run/runtime/gen5/all135fleet rows129released/6historicalretained/0new refreshed. OpenAI weekly reset now ACTUALLY verified with fresh supported usage100%remaining; Anthropic76%, future review/correction reserve bounded and re-gated, absolute allowance/otherhost demand unknown. Two newworkers+coordinator+protectedexternal=4, no helpers/nesting. Exact worktree/base/report/path and candidate acceptance in docs/production/remediation-20261104/WAVE1_PREFLIGHT.json and task specs. No Task/Dispatch/worktree yet. Publish/exactverify scoped records before provision/start; keep all protected resources and hardware/release gates.
+
+
 ## Comprehensive project review and corrective crosswalk complete — 2026-11-04T06:32:23.951101+00:00
 
 Owner requested comprehensive gaps/issues review and remediation plan. Coordinator examined current integration ac1dc745ebf552b4d762fc33bc25382052b0e9d6, runtime/REST/WS/security/persistence, HA/Flic/Remote/UI, six retained source trees, validation/CI/artifact provenance, release/HIL/field and orchestration state. New report docs/audits/COMPREHENSIVE_PROJECT_REVIEW_20261104.md; proposed plan docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md plus machine-readable14actions/30packages/65units/268features and exact baseline under docs/planning/comprehensive-review-20261104. This supplements the accepted program; no new phase consensus, source acceptance, worker/worktree launch, implementation or release authority. Material future plan changes still need actual required provider rounds; covered corrections keep ordinary qualified different-family review.

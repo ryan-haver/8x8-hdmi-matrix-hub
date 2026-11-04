@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T01:49:57.493094+00:00",
+  "observed_utc": "2026-11-04T06:44:59.365910+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -483,7 +483,7 @@
     "source_or_feature_qualification": false
   },
   "automatic_retakes": false,
-  "owner_decision_pending": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
+  "owner_decision_pending": "No qualification-retake approval pending. Owner now authorizes software remediation of comprehensive findings; separate actual hardware/visual/final-release gates remain.",
   "proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
   "product_source_changed_by_this_batch": false,
   "preservation_gaps": {
@@ -2671,5 +2671,19 @@
       "next_pin": "EV-API034-SECURITY-REFRESH",
       "automatic_dispatch": false
     }
+  },
+  "historical_owner_decision_pending": [
+    {
+      "superseded_utc": "2026-11-04T06:44:59.365910+00:00",
+      "prior_text": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
+      "resolution": "Manual attempt02 and Opus5.5 replacement already authorized/completed; dispositions and immutable historical records retained."
+    }
+  ],
+  "remediation_authority": {
+    "owner_request": "now enact the plan and remediate all findings",
+    "plan": "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
+    "state": "authorized; wave1 prepared, not launched",
+    "no_automatic_retakes": true,
+    "no_blanket_domain_grant": true
   }
 }
