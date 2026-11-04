@@ -17,6 +17,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
 from .model import Level
 
@@ -61,7 +62,13 @@ def write_record(root: Path, record: dict[str, Any]) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     # Callers may supply structured diagnostics without redacting them first.
     # Sanitize a copy at persistence as well as at individual capture boundaries.
-    path.write_text(dumps(redact(record)) + "\n", encoding="utf-8")
+    safe = redact(record)
+    observations = record.get("observations")
+    if isinstance(observations, dict):
+        for name in ("requests", "hub_reads"):
+            if name in observations:
+                safe["observations"][name] = redact(observations[name], exchanges=True)
+    path.write_text(dumps(safe) + "\n", encoding="utf-8")
     return path
 
 
@@ -112,22 +119,125 @@ def iter_records(roots: Iterable[Path]) -> list[LoadedRecord]:
     return records
 
 
-_SECRET_KEYS = re.compile(
-    r"pass(word|code)?|secret|token|api[_-]?key|^(key|pin|pin_hash|authorization|cookie|x-admin-pin)$",
-    re.IGNORECASE,
-)
-_SECRET_QUERY = re.compile(
-    r"([?&](?:key|api[_-]?key|token|passcode|password|pin)=)[^&\s\"'<>]+",
-    re.IGNORECASE,
-)
+_SECRET_KEYS = re.compile(r"pass(word|code)?|secret|token|api[_-]?key|(?:^|[_-])pin(?:$|[_-])", re.IGNORECASE)
+_CREDENTIAL_HEADERS = frozenset({
+    "authorization", "proxy-authorization", "cookie", "set-cookie", "x-admin-pin", "x-passcode",
+    "x-api-key", "api-key", "x-auth-token", "x-access-token", "orei_session", "orei_device_token",
+})
+_PUBLIC_SHORTCUTS = frozenset({
+    "route_all_to_output", "route_one_to_one", "power_off_all", "mute_all_audio", "unmute_all_audio",
+    "beep_on", "beep_off", "panel_lock_on", "panel_lock_off", "system_reboot",
+    "lcd_timeout_off", "lcd_timeout_10s", "lcd_timeout_30s", "lcd_timeout_60s", "lcd_timeout_always_on",
+    *(f"preset_recall_{n}" for n in range(1, 9)),
+})
 
 
-def redact(value: Any) -> Any:
-    """Drop secrets from anything that goes into a record."""
+def _secret_name(name: str, *, header: bool = False) -> bool:
+    name = name.lower()
+    # Header identity is exact, never a substring match on a public policy header.
+    if header or name.startswith("x-"):
+        return name in _CREDENTIAL_HEADERS
+    return name in {"key", "pin", "authorization", "proxy-authorization", "cookie", "set-cookie", "orei_session"} or bool(
+        _SECRET_KEYS.search(name)
+    )
+
+
+def _query_copy(text: str) -> str:
+    def mask(match: re.Match[str]) -> str:
+        return match[1] + ("***" if _secret_name(unquote(match[2])) else match[3])
+
+    return re.sub(r"([?&]([^?&=\s]+)=)([^&#\s\"'<>]*)", mask, text)
+
+
+def _public_field(name: str, value: Any, path: str, field: str) -> bool:
+    route = urlsplit(path).path
+    if name == "key" and field in {"key", "data.key"} and type(value) is str and value in _PUBLIC_SHORTCUTS:
+        return route in {"shortcut_run", f"/api/shortcuts/{value}", f"/api/system-shortcuts/{value}"}
+    if name == "password_protected" and type(value) is bool:
+        return bool(re.fullmatch(r"/api/profile(?:/[^/]+)?|/api/v2/scenes(?:/[^/]+)?", route)) and field in {
+            "password_protected", "data.password_protected", "scene.password_protected", "data.scene.password_protected",
+        }
+    return False
+
+
+def display_error(value: Any) -> str:
+    """Opaque error prose can echo credentials under arbitrary labels. Suppress it.
+
+    Preserve exception class, with HTTP method/status supplied separately by the
+    caller. This is deliberately not a claim to parse arbitrary prose safely.
+    """
+    if isinstance(value, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*: <error text suppressed>", value):
+        return value  # Preserve already-sanitized exception-class metadata.
+    prefix = f"{type(value).__name__}: " if isinstance(value, BaseException) else ""
+    return prefix + "<error text suppressed>"
+
+
+def display_body(value: Any, *, path: str = "", field_path: str = "") -> Any:
+    """Structured/serialized JSON diagnostics, or a safe opaque-body placeholder."""
+    if isinstance(value, (str, bytes, bytearray)):
+        try:
+            parsed = json.loads(value)
+        except (ValueError, UnicodeError):
+            return "<opaque body suppressed>"
+        if not isinstance(parsed, (dict, list)):
+            return "<opaque body suppressed>"
+        value = parsed
+    return redact(value, path=path, field_path=field_path)
+
+
+def redact(value: Any, *, path: str = "", field_path: str = "", headers: bool = False,
+           exchanges: bool = False) -> Any:
+    """Display copy for supported dict/list/tuple, header pairs and JSON strings.
+
+    Transport objects and comparisons must keep their originals. Public field
+    exceptions require both a trusted route/field and the precise public type.
+    Arbitrary Mapping/custom sequences and unknown prose are outside this parser.
+    """
+    if field_path and _secret_name(field_path.rsplit(".", 1)[-1], header=headers) and not _public_field(
+        field_path.rsplit(".", 1)[-1], value, path, field_path
+    ):
+        return "***"
     if isinstance(value, dict):
-        return {k: ("***" if _SECRET_KEYS.search(str(k)) else redact(v)) for k, v in value.items()}
-    if isinstance(value, list):
-        return [redact(v) for v in value]
+        # Only the caller's known exchange collection supplies trusted context.
+        # A body with method/path/status fields cannot grant itself exceptions.
+        exchange_path = value.get("path") if exchanges and "method" in value and "status" in value else None
+        out = {}
+        for k, v in value.items():
+            name = str(k)
+            child_field = f"{field_path}.{name}" if field_path else name
+            if exchange_path is not None and name in {"body", "response"}:
+                out[k] = display_body(v, path=str(exchange_path))
+            elif name in {"json", "body"} and path:
+                out[k] = display_body(v, path=path)
+            elif name in {"error", "blocked_reason", "aborted"} and v:
+                out[k] = display_error(v)
+            elif name == "data" and isinstance(v, (str, bytes, bytearray)):
+                out[k] = display_body(v, path=path)
+            elif _secret_name(name, header=headers) and not _public_field(name, v, path, child_field):
+                out[k] = "***"
+            elif name == "default" and _secret_name(str(value.get("name", ""))):
+                # HA's serialized form schema names a field next to its default.
+                out[k] = "***"
+            else:
+                out[k] = redact(v, path=path, field_path=child_field, headers=name.lower() in {
+                    "headers", "response_headers", "cookies",
+                })
+        return out
+    if isinstance(value, (list, tuple)):
+        if headers:
+            pairs = [
+                (item[0], "***" if _secret_name(str(item[0]), header=True) else redact(item[1]))
+                if isinstance(item, (list, tuple)) and len(item) == 2 else redact(item)
+                for item in value
+            ]
+        else:
+            pairs = [redact(v, path=path, field_path="", exchanges=exchanges) for v in value]
+        return tuple(pairs) if isinstance(value, tuple) else pairs
     if isinstance(value, str):
-        return _SECRET_QUERY.sub(r"\1***", value)
+        if value.lstrip().startswith(("{", "[")):
+            try:
+                return json.dumps(redact(json.loads(value), path=path), ensure_ascii=False)
+            except ValueError:
+                return "<malformed JSON suppressed>"
+        return _query_copy(value)
     return value

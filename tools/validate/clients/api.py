@@ -7,7 +7,7 @@ from typing import Any
 
 import aiohttp
 
-from ..evidence import redact
+from ..evidence import display_body, display_error, redact
 from ..model import Action
 from .base import ActionResult, Client, HubInfo, NotSupportedError
 
@@ -157,11 +157,12 @@ class ApiClient(Client):
             result.status, result.body = status, parsed
             result.ok = 200 <= status < 300
             # Mask structured fields before they become opaque procedure text.
-            result.steps.append(f"{method} {path}" + (f" {redact(body)}" if body is not None else "")
+            shown_body = display_body(body if body is not None else data, path=path)
+            result.steps.append(f"{method} {redact(path)}" + (f" {shown_body}" if body is not None or data is not None else "")
                                 + f" -> HTTP {status}")
         except (aiohttp.ClientError, TimeoutError) as exc:
-            result.error = f"{type(exc).__name__}: {exc}"
-            result.steps.append(f"{method} {path} -> {result.error}")
+            result.error = display_error(exc)
+            result.steps.append(f"{method} {redact(path)} -> {result.error}")
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result
 

@@ -25,8 +25,9 @@ import aiohttp
 
 from . import gitinfo
 from .clients import CLIENTS, ActionResult, ApiClient, Client, HubInfo, NotSupportedError, make_client
+from .clients.api import rest_call
 from .device import RESTORABLE_DOMAINS, HardwareDevice, SimDevice
-from .evidence import SCHEMA_VERSION, record_stem, redact, write_record
+from .evidence import SCHEMA_VERSION, display_body, display_error, record_stem, redact, write_record
 from .model import (
     RUNNER_INTENTS,
     Action,
@@ -84,6 +85,21 @@ VOLATILE_PATHS = ("inputs[*].signal", "inputs[*].cable", "outputs[*].connected")
 
 def _now() -> str:
     return dt.datetime.now(dt.UTC).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
+def _description(exp: Expectation, action: Action) -> str:
+    """Supply trusted display context without changing expectation/comparison inputs."""
+    if isinstance(exp, Response):
+        try:
+            _, path, _ = rest_call(action)
+        except (NotSupportedError, KeyError):
+            path = ""
+        return exp.describe(path=path)
+    if isinstance(exp, ClientState):
+        shown = redact(exp.equals, field_path=exp.key)
+        before = redact(exp.before, field_path=exp.key)
+        return f"client shows {exp.key} == {shown!r}" + (f" (was {before!r})" if exp.before is not None else "")
+    return exp.describe()
 
 
 def compare_preset_catalog(hub_presets: list[dict[str, Any]],
@@ -500,10 +516,10 @@ class Runner:
         except (NotImplementedError, RuntimeError) as exc:
             for sc in scenarios:
                 if client_name in sc.clients:
-                    self.outcomes.append(Outcome(sc.id, client_name, "skipped", gate="skipped", reason=str(exc)))
+                    self.outcomes.append(Outcome(sc.id, client_name, "skipped", gate="skipped", reason=display_error(exc)))
             if not any(client_name in sc.clients for sc in scenarios):
-                self.outcomes.append(Outcome("-", client_name, "skipped", gate="skipped", reason=str(exc)))
-            print(f"[validate] client '{client_name}' unavailable: {exc}", flush=True)
+                self.outcomes.append(Outcome("-", client_name, "skipped", gate="skipped", reason=display_error(exc)))
+            print(f"[validate] client '{client_name}' unavailable: {display_error(exc)}", flush=True)
             return
         try:
             for sc in scenarios:
@@ -609,7 +625,7 @@ class Runner:
                 procedure.append("snapshot the matrix state (readback)")
             await ws.start()
             if ws.error:
-                notes.append(f"WebSocket observer: {ws.error}")
+                notes.append(f"WebSocket observer: {display_error(ws.error)}")
             elif await ws.sync():
                 procedure.append("let the hub read the matrix (/ws get_status), so it is in sync before the action")
             else:
@@ -618,7 +634,8 @@ class Runner:
                 r = await helper.perform(step)
                 procedure.append(f"setup (api): {step.describe()} -> HTTP {r.status}")
                 if not r.ok:
-                    blocked = f"setup step {step.describe()} failed: HTTP {r.status} {r.error or ''}".strip()
+                    blocked = (f"setup step {step.describe()} failed: HTTP {r.status} "
+                               + (display_error(r.error) if r.error else "")).strip()
                     break
             if blocked is None:
                 await client.prepare(sc.action)
@@ -629,11 +646,13 @@ class Runner:
                     if (isinstance(exp, ClientState) and exp.before is not None and client.observes
                             and (exp.clients is None or client.name in exp.clients)):
                         pre = await self._client_state(client, exp.key, exp.before, exp.timeout)
-                        procedure.append(f"client showed {exp.key} = {pre['value']!r} before the action"
-                                         + ("" if pre["ok"] else f" (expected {exp.before!r})"))
+                        shown = redact(pre['value'], field_path=exp.key)
+                        expected = redact(exp.before, field_path=exp.key)
+                        procedure.append(f"client showed {exp.key} = {shown!r} before the action"
+                                         + ("" if pre["ok"] else f" (expected {expected!r})"))
                         if not pre["ok"]:
-                            checks.append({"description": f"client shows {exp.key} == {exp.before!r} before the action",
-                                           "result": "fail", "detail": f"{exp.key} = {pre['value']!r}",
+                            checks.append({"description": f"client shows {exp.key} == {expected!r} before the action",
+                                           "result": "fail", "detail": f"{exp.key} = {shown!r}",
                                            "finding": exp.finding, "linked_finding": exp.finding,
                                            "note": exp.note or None})
                 if sc.faults and isinstance(dev, SimDevice):
@@ -656,7 +675,7 @@ class Runner:
                                    reason=f"client cannot perform {sc.action.intent}")
                 procedure.extend(f"  {s}" for s in result.steps)
                 if result.error:
-                    notes.append(f"client error: {result.error}")
+                    notes.append(f"client error: {display_error(result.error)}")
                     if not self._is_expected_application_error(sc, client, result):
                         # An unchanged device is expected for a filtered SDK callback,
                         # but also happens when replay never ran (e.g. missing Node).
@@ -664,7 +683,7 @@ class Runner:
                         # status/body and need not set a replay/transport error.
                         checks.append({
                             "description": "client action completed without a replay or transport error",
-                            "result": "fail", "detail": redact(result.error),
+                            "result": "fail", "detail": display_error(result.error),
                             "finding": None, "linked_finding": None, "note": None,
                         })
                 # ---- expectations
@@ -680,20 +699,20 @@ class Runner:
                 if self.o.target == "hardware" and sc.observe:
                     operator = self._observe(sc)
         except Exception as exc:  # noqa: BLE001 - record infrastructure failures as blocked evidence
-            blocked = f"{type(exc).__name__}: {exc}"
+            blocked = display_error(exc)
         finally:
             await ws.stop()
             if isinstance(dev, SimDevice):
                 try:
                     await dev.clear_faults()
                 except Exception as exc:  # noqa: BLE001
-                    notes.append(f"could not clear faults: {exc}")
+                    notes.append(f"could not clear faults: {display_error(exc)}")
             for step in sc.cleanup:
                 try:
                     r = await helper.perform(step)
                     procedure.append(f"cleanup (api): {step.describe()} -> HTTP {r.status}")
                 except Exception as exc:  # noqa: BLE001
-                    notes.append(f"cleanup {step.describe()} failed: {exc}")
+                    notes.append(f"cleanup {step.describe()} failed: {display_error(exc)}")
             await helper.stop()
             if isinstance(dev, HardwareDevice) and snapshot is not None and sc.writes:
                 report = await dev.restore(snapshot, set(sc.writes))
@@ -749,9 +768,9 @@ class Runner:
             "environment": self._environment(client),
             "procedure": procedure,
             "observations": {
-                "requests": redact(result.requests),
+                "requests": redact(result.requests, exchanges=True),
                 "response_status": result.status,
-                "hub_reads": redact(hub_reads),
+                "hub_reads": redact(hub_reads, exchanges=True),
                 "state_before": state_before,
                 "state_after": state_after,
                 "state_diff": diff_states(state_before, state_after) if state_before and state_after else [],
@@ -832,7 +851,7 @@ class Runner:
         dev = self.device
         verdict, detail = "pass", ""
         if exp.clients is not None and client.name not in exp.clients:
-            return {"description": exp.describe(), "result": "n/a", "detail": f"not checked for client '{client.name}'",
+            return {"description": _description(exp, sc.action), "result": "n/a", "detail": f"not checked for client '{client.name}'",
                     "finding": None, "linked_finding": exp.finding, "note": exp.note or None}
         try:
             if isinstance(exp, Device):
@@ -917,8 +936,9 @@ class Runner:
                                          if wrong or present else "; observed header checks matched")
                 verdict = "pass" if ok else "fail"
                 # Comparisons above use the original body; only diagnostics are masked.
-                body = json.dumps(redact(result.body), default=str)[:300] if client.name == "api" else f"({client.name})"
-                detail = (f"HTTP {status}; body {body}" + (f"; error {result.error}" if result.error else "")
+                path = result.requests[-1].get("path", "") if result.requests else ""
+                body = json.dumps(display_body(result.body, path=path), default=str)[:300] if client.name == "api" else f"({client.name})"
+                detail = (f"HTTP {status}; body {body}" + (f"; error {display_error(result.error)}" if result.error else "")
                           + header_detail)
             elif isinstance(exp, Hub):
                 deadline = time.monotonic() + 4.0
@@ -942,7 +962,7 @@ class Runner:
                         break
                     await asyncio.sleep(0.5)
                 verdict = "pass" if ok else "fail"
-                shown = got if found else "<absent>"
+                shown = redact(got, path=exp.path, field_path=exp.field_path) if found else "<absent>"
                 detail = f"HTTP {status}; {exp.field_path or 'body'} = {json.dumps(shown, default=str)[:200]}"
             elif isinstance(exp, PresetRouting):
                 stored = (await dev.preset_slots()).get(exp.slot)
@@ -963,13 +983,14 @@ class Runner:
                           f"{sum(v is None for v in slots.values())} empty)") if verdict == "pass" else                     f"HTTP {status}; disagreements: {json.dumps(problems)[:600]}"
             elif isinstance(exp, ClientState):
                 if not client.observes:
-                    return {"description": exp.describe(), "result": "n/a",
+                    return {"description": _description(exp, sc.action), "result": "n/a",
                             "detail": f"client '{client.name}' has no view of {exp.key}", "finding": None,
                             "linked_finding": exp.finding, "note": exp.note or None}
                 t0 = time.monotonic()
                 state_seen = await self._client_state(client, exp.key, exp.equals, exp.timeout)
                 verdict = "pass" if state_seen["ok"] else "fail"
-                detail = f"{exp.key} = {state_seen['value']!r} after {time.monotonic() - t0:.1f} s"
+                shown = redact(state_seen['value'], field_path=exp.key)
+                detail = f"{exp.key} = {shown!r} after {time.monotonic() - t0:.1f} s"
             elif isinstance(exp, WsEvent):
                 deadline = time.monotonic() + exp.timeout
                 while True:
@@ -988,9 +1009,9 @@ class Runner:
             else:  # pragma: no cover - new expectation type without a checker
                 verdict, detail = "fail", f"no checker for {type(exp).__name__}"
         except Exception as exc:  # noqa: BLE001 - a check that crashes is a failed check
-            verdict, detail = "fail", f"check raised {type(exc).__name__}: {exc}"
+            verdict, detail = "fail", f"check raised {display_error(exc)}"
         return {
-            "description": exp.describe(),
+            "description": _description(exp, sc.action),
             "result": verdict,
             "detail": detail,
             "finding": exp.finding if verdict == "fail" else None,
@@ -1031,7 +1052,8 @@ class Runner:
             "operator": self.o.operator,
             "finished": _now(),
             "aborted": self.aborted,
-            "outcomes": [o.__dict__ for o in self.outcomes],
+            "outcomes": [{**o.__dict__, "reason": display_error(o.reason) if o.reason else ""}
+                         for o in self.outcomes],
         }
         self.o.out_dir.mkdir(parents=True, exist_ok=True)
-        (self.o.out_dir / "run-summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+        (self.o.out_dir / "run-summary.json").write_text(json.dumps(redact(summary), indent=2) + "\n", encoding="utf-8")

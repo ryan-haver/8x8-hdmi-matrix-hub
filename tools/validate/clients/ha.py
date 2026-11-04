@@ -53,6 +53,7 @@ from urllib.parse import urlsplit
 
 import aiohttp
 
+from ..evidence import display_body, display_error, redact
 from ..model import Action
 from ..stack import free_port
 from .base import ActionResult, Client, HubInfo, NotSupportedError
@@ -270,7 +271,7 @@ class HomeAssistantClient(Client):
                                "response": parsed, "via": "home assistant http api",
                                "elapsed_ms": round((time.perf_counter() - t0) * 1000, 1)})
             if resp.status >= 400:
-                raise RuntimeError(f"{method} {path}: HTTP {resp.status} {text[:300]}")
+                raise RuntimeError(f"{method} {redact(path)}: HTTP {resp.status} {display_error(parsed)}")
             return parsed
 
     async def _ws_connect(self) -> None:
@@ -487,17 +488,25 @@ class HomeAssistantClient(Client):
         if action.intent == "ha_config_flow":
             result.status = await self._config_flow(result.requests, action.params.get("options"))
             result.ok = result.status == 200
-            result.steps.extend(f"{r['method']} {r['path']} {r['body'] or ''} -> HTTP {r['status']} "
+            result.steps.extend(f"{r['method']} {redact(r['path'])} {display_body(r['body']) if r['body'] else ''} -> HTTP {r['status']} "
                                 f"{(r['response'] or {}).get('type', '') if isinstance(r['response'], dict) else ''}"
                                 for r in result.requests)
         elif action.intent == "ha_reconfigure":
             await self._ensure_entry()
             result.status = await self._reconfigure(result, action.params)
             result.ok = result.status == 200
+            result.steps = [f"{r['method']} {redact(r['path'])} {display_body(r['body'])} -> HTTP {r['status']}"
+                            for r in result.requests]
         else:
             await self._ensure_entry()
             domain, service, data = await self._service_call(action)
             await self._service(domain, service, data, result)
+            # _service keeps raw captures. Its legacy free-text step may echo
+            # service data/error prose, so build this display from that capture.
+            result.steps = [f"{r['method']} {redact(r['path'])} {display_body(r['body'])} -> HTTP {r['status']}"
+                            for r in result.requests]
+            if result.error:
+                result.error = display_error(result.error)
         result.body = {"home_assistant": self.version, "entry_id": self.entry_id}
         result.elapsed_ms = round((time.perf_counter() - t0) * 1000, 1)
         return result

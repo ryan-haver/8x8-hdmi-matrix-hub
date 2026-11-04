@@ -144,7 +144,8 @@ class Action:
         # variants. Import lazily because evidence also uses Level from this module.
         from .evidence import redact
 
-        args = ", ".join(f"{k}={v!r}" for k, v in redact(self.params).items())
+        path = str(self.params.get("path", "")) if self.intent == "request" else self.intent
+        args = ", ".join(f"{k}={v!r}" for k, v in redact(self.params, path=path).items())
         return f"{self.intent}({args})"
 
 
@@ -309,7 +310,7 @@ class Response(Expectation):
     headers: dict[str, str] = field(default_factory=dict)
     absent_headers: tuple[str, ...] = ()
 
-    def describe(self) -> str:
+    def describe(self, *, path: str = "") -> str:
         parts = []
         if self.status is not None:
             parts.append(f"HTTP {self.status}")
@@ -320,7 +321,7 @@ class Response(Expectation):
             # Import lazily: evidence also imports Level from this module.
             from .evidence import redact
 
-            parts.append(f"body contains {redact(self.json)}")
+            parts.append(f"body contains {redact(self.json, path=path)}")
         if self.headers:
             # Never persist caller-supplied credential values in descriptions.
             parts.append(f"headers equal (names: {', '.join(self.headers)})")
@@ -341,13 +342,18 @@ class Hub(Expectation):
     absent_or_false: bool = False
 
     def describe(self) -> str:
+        from .evidence import redact
+
+        path = redact(self.path)
         if self.absent_or_false:
-            return f"hub GET {self.path} does not report {self.field_path} as true"
+            return f"hub GET {path} does not report {self.field_path} as true"
         if self.not_equals is not None:
-            return f"hub GET {self.path} -> {self.field_path} != {self.not_equals!r}"
-        target = f" -> {self.field_path} == {self.equals!r}" if self.field_path else ""
+            shown = redact(self.not_equals, path=self.path, field_path=self.field_path)
+            return f"hub GET {path} -> {self.field_path} != {shown!r}"
+        shown = redact(self.equals, path=self.path, field_path=self.field_path)
+        target = f" -> {self.field_path} == {shown!r}" if self.field_path else ""
         st = f" (HTTP {self.status})" if self.status is not None else ""
-        return f"hub GET {self.path}{target}{st}"
+        return f"hub GET {path}{target}{st}"
 
 
 @dataclass(frozen=True)
