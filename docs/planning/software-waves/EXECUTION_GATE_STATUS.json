@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T08:10:14.335991+00:00",
+  "observed_utc": "2026-11-04T08:35:29.572457+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2718,7 +2718,7 @@
     "findings_closed": [],
     "api_report_evaluation": "accepted/released/preserved/published; no source integration",
     "WS_component_environment": "Node cause repaired, authorized normal hook67 PASS; failed66/prior originals preserved",
-    "WS_component": "candidate15c069bd normal hook PASS; independent Astra exact-component review ACTIVE, no verdict/wiring/authorship acceptance",
+    "WS_component": "independent exactreview1cc44220 completed: correctnessFAIL, acceptance/first-authorshipHOLD; no new competence, correction or wiring authorized automatically",
     "privacy": "independent judgement e8ce3966 FAIL, no privacy review qualification or source acceptance",
     "WS_component_reviewer": {
       "task_id": "task_b9f4d569ee06",
@@ -2754,6 +2754,17 @@
       },
       "dispatch_status": "dispatched",
       "worker_state": "ready"
+    },
+    "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
+    "recovery_planning": {
+      "status": "PREPARED prospective threefamily/threeround recovery; no consensus/sourceexecution",
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+      "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
+      "first_wave": [
+        "OpenAI",
+        "MiniMax"
+      ],
+      "third_family": "Anthropic reserved R1 after slot release"
     }
   },
   "prospective_privacy_review_domain": {

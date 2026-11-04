@@ -1,0 +1,155 @@
+{
+  "observed_utc": "2026-11-04T08:35:29.572457+00:00",
+  "status": "PREPARED planning R1 only, no new worktrees/Tasks/Dispatches or consensus",
+  "input_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+  "source_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+  "jobs": {
+    "openai": {
+      "key": "openai",
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "name": "wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "report": "docs/agent-process/phases/remediation-recovery-20261104/round1/openai.md",
+      "spec": "docs/agent-process/phases/remediation-recovery-20261104/tasks/openai-r1.md",
+      "title": "Remediation recovery independent R1 assessment: OpenAI",
+      "deps": [],
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc"
+    },
+    "minimax": {
+      "key": "minimax",
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": null,
+      "name": "wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "report": "docs/agent-process/phases/remediation-recovery-20261104/round1/minimax.md",
+      "spec": "docs/agent-process/phases/remediation-recovery-20261104/tasks/minimax-r1.md",
+      "title": "Remediation recovery independent R1 assessment: MiniMax",
+      "deps": [],
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc"
+    },
+    "anthropic": {
+      "key": "anthropic",
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "name": "wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "report": "docs/agent-process/phases/remediation-recovery-20261104/round1/anthropic.md",
+      "spec": "docs/agent-process/phases/remediation-recovery-20261104/tasks/anthropic-r1.md",
+      "title": "Remediation recovery independent R1 assessment: Anthropic",
+      "deps": [],
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc"
+    }
+  },
+  "initial_wave": [
+    "openai",
+    "minimax"
+  ],
+  "third_family": "anthropic R1 reserved, not launched; same frozen packet/no peer sharing",
+  "preflight": {
+    "observed_utc": "2026-11-04T08:32:18.583377+00:00",
+    "integration_head": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 140,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 140,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzIzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAwMzo0MTo1MiIsImRpc3BhdGNoSWQiOiJjdHhfZjEyY2IyMzIxYjc5IiwiZGF0YWJhc2VJZCI6Nzk2fX0"
+        },
+        {
+          "limit": 100,
+          "total": 140,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 134,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 8,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793780926591,
+        "error": null,
+        "age_seconds": 212
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400179,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600179,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793780926217,
+        "error": null,
+        "age_seconds": 212
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 33,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932854,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 15,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793780926263,
+        "error": null,
+        "age_seconds": 212
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "7ecd5dfff1bb3ff5a17eeafc55e1b87fe5cc584f0e41d613610de8120286de46",
+      "catalog_modified_utc": "2026-11-04T08:32:17.876682+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 2 planned R1 contributors + coordinator + protected external = 4 of 4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "quota": "fresh supported headroom observed OpenAI92/Anthropic75/MiniMax67percent weekly, dated only; recheck before each creation/start and natural checkpoints",
+  "placement": "local/Zelu/win32; remote saved hosts disconnected; 2current+coordinator+protectedexternal=4",
+  "no_execution": "No source edit, retake, source-role grant, revised outcome or release from planning."
+}
