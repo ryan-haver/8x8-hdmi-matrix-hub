@@ -1,5 +1,12 @@
 # Agent allocation and execution ledger
 
+## Privacy C4 pre-delivery self-audit correction authorized — 2026-11-04T11:17:15.059559+00:00
+
+Tasktask_25a4c3572682/ctx_5ca1ba3f03ac found supported favorites/dashboard list Hub key diagnostics would be masked by the initial C4 helper. Coordinator independently inspected actual callers and helper, and replied to msg_a73ea52381bf with bounded same-assignment correction authority. Existing exact base/outer seven-path lease unchanged; only evidence helper/additive C4tests/append-only C4report addendum for this fix. Preserve current unchanged hook/commit/source/report/native/temp originals; keep any first commit immutable and make a normal descendant, never reset/amend. Exactly ONE new normal source hook authorized after real changed-source regression proof and final freeze, with fresh isolated originals/strict route coverage; no unchanged retry or bypass. Decision: docs/production/remediation-20261104/recovery-execution/WAVE_A_C4_SELF_AUDIT_DECISION.json.
+
+This completes the initial undelivered author assignment against existing public-data preservation acceptance; no new phase/worker/model/lease, qualification retake, acceptance or automatic reserve use. Future qualified-review material-fix/re-review reserve remains conditional and unspent. All initial hook outcomes, old failures/assessments and original packet/criteria retained. Both current authors remain assigned; privacy independent qualification/source acceptance, D6/wiring, combined/owner gates remain held.
+
+
 ## Recovery source wave A active — 2026-11-04T10:50:25.796175+00:00
 
 Two genuine original-author PRODUCT corrections now launched with observed turn starts. WS-C01: Anthropic claude-opus-5-5/high Tasktask_92d47e338d62/ctx_15d1617958e2, NEW wp-remediation-ws-work-c01, branch remediation/ws-work-c01, exact15c069bdeb3a9ace37bf68033812ff72659bfbd1. Only component/additive tests/new CORRECTION-01.md. PRIV-C4: OpenAI gpt-6.1-sol/high Tasktask_25a4c3572682/ctx_5ca1ba3f03ac, NEW wp-sec-data-02-c4, branch remediation/privacy-c4, exact2d02004d3108953a302e1a49aab9a5f24e944136. Exact evidence/API/model/runner/HA diagnostic hunks/new C4tests/report; original C1-C3 tests/reports and raw wire/comparison semantics remain protected. Exact leases, launch/native model evidence, package/environment/config hashes and dated quota observations: docs/production/remediation-20261104/recovery-execution/WAVE_A_DISPATCHES.json. No delivery/review/integration or source acceptance yet.

@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T10:50:25.796175+00:00",
+  "observed_utc": "2026-11-04T11:17:15.059559+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3109,7 +3109,13 @@
           }
         },
         "privacy_acceptance": "HELD",
-        "WS_wiring": "HELD"
+        "WS_wiring": "HELD",
+        "privacy_self_audit": {
+          "status": "bounded pre-delivery same-assignment correction authorized; first hook preserved, exactly one changed-source hook",
+          "decision": "docs/production/remediation-20261104/recovery-execution/WAVE_A_C4_SELF_AUDIT_DECISION.json",
+          "future_review_fix_reserve": "unspent / conditional",
+          "acceptance": false
+        }
       }
     },
     "recovery_source_wave_A": {
