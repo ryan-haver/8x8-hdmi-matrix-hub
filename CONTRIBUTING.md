@@ -11,6 +11,13 @@ release gates. Architecture and validation lives in `docs/ARCHITECTURE.md`
 and `docs/validation/README.md`; client-facing guides in `docs/DOCKER.md`,
 `docs/HOME_ASSISTANT.md`, `docs/FLIC_SETUP.md` and `docs/UNFOLDED_CIRCLE.md`.
 
+Autonomous agents must also follow [AGENTS.md](AGENTS.md), the
+[standing Orca protocol](docs/ORCHESTRATION_PROTOCOL.md) and
+[allocation ledger](docs/production/AGENT_ALLOCATION.md). These govern staffing,
+quota preflight, ownership, cross-family implementation review, preservation
+and publication. They do not authorize a development phase or worker launch.
+The owner excludes Claude/Anthropic from all new roles, helpers and fallbacks.
+
 ## Development Setup
 
 ### 1. Clone the repository
@@ -187,9 +194,17 @@ Markers are declared in `pyproject.toml [tool.pytest.ini_options]`:
 
 ### 1. Branch off the integration branch
 
+Discover the actual integration branch from the current plan, Git/PR state and
+allocation ledger before branching. At instruction recording on 2026-10-19 it
+is `wp-runtime-completion`; `wp-g1-g2-release-and-docs` remains its PR base.
+For supervised Orca work, use the protocol's isolated `worker-start` placement
+after authorization and quota checks, rather than manually starting an agent.
+The following is the ordinary contributor branch pattern; substitute the
+verified integration branch before execution:
+
 ```bash
 git fetch origin
-git checkout -b ryan-haver/<your-track-name> origin/wp-g1-g2-release-and-docs
+git checkout -b ryan-haver/<your-track-name> origin/<verified-integration-branch>
 ```
 
 ### 2. Make your changes
@@ -256,6 +271,16 @@ test(rest): cover the new control-lock return code on POST /api/preset/2
 Push the branch and open a PR against `wp-g1-g2-release-and-docs`
 (or the integration branch your track fans out from). CI runs 13 gates
 (see `docs/PROJECT_ROADMAP.md`); all green is required before merge.
+
+Record the actual PR base rather than copying that historical branch name.
+Autonomous integration additionally requires independent review from a different
+underlying model family, complete applicable combined verification, preserved
+worker artifacts and verified remote/local head equality as specified in the
+[standing protocol](docs/ORCHESTRATION_PROTOCOL.md#verification-and-publication).
+For prose-only instruction maintenance, run applicable documentation/link and
+whitespace checks; an invocation-only empty `core.hooksPath` may avoid the broad
+runtime hook as documented there. Record the exception and do not claim fresh
+runtime qualification or change persistent hook settings.
 
 ## Testing with Docker
 

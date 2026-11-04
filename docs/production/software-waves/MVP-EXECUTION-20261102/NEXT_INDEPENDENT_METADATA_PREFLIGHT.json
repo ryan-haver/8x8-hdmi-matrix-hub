@@ -1,0 +1,115 @@
+{
+  "observed_utc": "2026-11-03T03:40:07.523938+00:00",
+  "status": "prepared; no new workers or findings worktree created yet",
+  "accepted_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, live supported discovery privately retained",
+  "capacity": {
+    "observed_utc": "2026-11-03T03:36:41.370945+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 41,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793676832662,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 38,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 16,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932902,
+        "resetDescription": null
+      },
+      "updatedAt": 1793676832688,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 105,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 105,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTg4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMjowNTo1NiIsImRpc3BhdGNoSWQiOiJjdHhfNWM1MGFlYWU5NWNhIiwiZGF0YWJhc2VJZCI6NTkwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 105,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 99,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "MiniMax": {
+      "exact_model": "minimax-coding-plan/MiniMax-M3",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "override": "OpenCode2 model/effort override unsupported; native model must be attested",
+      "helper_audit": "main/small/internal M3; provider/integration/subagent deny policies retained"
+    },
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_fetched_at": "2026-11-03T03:38:47.080699800Z",
+      "support": true
+    }
+  },
+  "tasks": {
+    "audit_correction03": {
+      "worktree": "existing settled wp-exec-sw-audit-01",
+      "base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "scope": "three specified report/provenance wording fixes only; no table/census/global audit changes",
+      "budget": "five-minute target, <=500new tracked explanatory words, no long appendix",
+      "author": "MiniMax-M3",
+      "reviewer": "OpenAI/Astra exact resulting commit",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "findings_delta": {
+      "unit": "SW-FINDINGS-01",
+      "dependencies": [],
+      "completion_dependency_unit_ids": [],
+      "worktree": "new wp-exec-sw-findings-01 at next exact published preflight integration head",
+      "scope": "remaining current parser-open findings DELTA to accepted59-row historical triage; preserve old reports/limits and actual DeepSeek authorship, new metadata not product proof",
+      "budget": "twelve-minute bounded intake; concise current-ID table/remaining unknowns, no repeated historical global audit",
+      "author": "MiniMax-M3",
+      "reviewer": "OpenAI/Astra exact resulting report commit",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "qualification_binding": {
+    "M3": "Accepted bounded inventory/provenance work incl EV corrected negative-gap disposition816/0ff, historical M3freshness; scoped to prose/static metadata, not source/security correctness or runtime findings",
+    "OpenAI": "Actual recent bounded factual reviews394/0ff plus prior4c2/d44/abd339; exact NativeAstra/high availability; prior reviewer mapping error preserved by explicit erratum",
+    "historical_findings": "DeepSeek8f23/b008 plus OpenAI COORDINATOR_RECONCILIATION.md accepted as triage only; no authorship relabel or DeepSeek dispatch"
+  },
+  "demand": "explicitly re-budget one additional targeted inventory author-fix/re-review beyond prior unsuccessful correction, plus one findings delta and different-family factual review with one material-fix/re-review reserve. No automatic qualification retries or unbounded loops.",
+  "alternatives": "Sol actual at-capacity event remains; Astra available qualified metadata route. Google route/headroom unknown, DeepSeek exhausted. M3 cannot self-review. No silent fallback.",
+  "creation_exception": "Model-pinned OpenCode2 requires agent-free Orca provisioning then audited local ignored route config before genuine worker-start. No raw git worktree, global settings or bare agent launch.",
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "protected": "root/private data, old failed originals/natives/ignoredfiles/evidence/baselines and protected workspaces/odd hook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner retake decision pending, source review/integration and owner gates held/open; these independent metadata units do not override it",
+  "material_plan_change": false
+}

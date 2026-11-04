@@ -1,0 +1,44 @@
+{
+  "status": "FAIL",
+  "observed_utc": "2026-11-03T02:02:41.705982+00:00",
+  "pin": "QUAL-ANTHROPIC-CORE-01",
+  "attempt": 1,
+  "candidate_model": "claude-opus-4-7/high",
+  "candidate_family": "Anthropic",
+  "evaluator_report_commit": "97c47be3670df297b2a7ac2696350615b88846c1",
+  "independent_judgement_commit": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+  "independent_judge_family": "OpenAI",
+  "actual_judgement_authorship": [
+    "gpt-6.1-sol/high original substantive analysis and FAIL draft",
+    "gpt-6-astra/high verified continuation and committed final judgement after proven Sol stop/release"
+  ],
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "candidate_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "per_axis_verdicts": {
+    "provenance": "pass",
+    "invariants": "pass",
+    "counterexamples": "pass",
+    "behavior_and_tools": "fail",
+    "calibration": "fail",
+    "review_quality": "fail"
+  },
+  "qualified_domains": [],
+  "reason": "Technical invariant and counterexample analysis passed; original evidence preservation, exact execution/process claims and causal calibration failed mandatory rubric axes. No qualification granted.",
+  "failed_qualification_retry_authorized": false,
+  "future_attempt_rule": "No automatic failed-qualification retry. A separately controlled new attempt requires explicit owner direction, keeps original FAIL and all failed bytes/history, and still needs full unchanged rubric plus independent different-family judgement.",
+  "source_acceptance_granted": false,
+  "review_admission": "RV-API034, RV-WS040, RV-PRIVACY-CHAIN and dependent source acceptance remain held until a task-qualified eligible different-family route is actually established",
+  "independent_work": "Continue dependency-ready bounded metadata/prose tasks on eligible M3/OpenAI routes; this failure is not a project-wide stop",
+  "evidence_preservation_limits": [
+    "Deleted original partial route report is not reconstructed or relabeled",
+    "Original evaluator pytest pipeline return codes and original process receipt/PID/descendant details remain unverified beyond documented indirect passing assertions",
+    "New judge doc checks are not repairs to evaluator original evidence"
+  ],
+  "original_eval_task": "task_e0fda51b39e2/ctx_cd0f4f2bae5c",
+  "judge_task": "task_3a3a04200302",
+  "interrupted_judge_dispatch": "ctx_f7db39e6c800",
+  "completed_judge_dispatch": "ctx_5db4e4b62a69",
+  "judge_worker_state": "released after accepted report-only delivery; final native captured",
+  "canonical_registry_ledger_and_owner_gates_unchanged": true
+}

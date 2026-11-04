@@ -1,0 +1,41 @@
+{
+  "observed_utc": "2026-11-03T18:20:58.693633+00:00",
+  "status": "Anthropic R2 contribution preserved/released/published, peer contents withheld",
+  "actor": {
+    "observed_utc": "2026-11-03T18:19:57.909253+00:00",
+    "head": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+    "base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+    "tree": "wp-qr-r1-anthropic",
+    "actual_branch": "planning/qr-20261103-r1-anthropic",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+    "bytes": 5047,
+    "sha256": "77cb03883ace830324cda67658f8e89c6996b8ac0bfa55c518b26f533eecc29b",
+    "task_id": "task_06770011f5e7",
+    "dispatch_id": "ctx_8cbcabfc43d2",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "bytes": 768680,
+      "sha256": "ff37d80d21f5e1cca267f110440fd479589ef225214b3d7733857a662e0731ad"
+    },
+    "R1_original_files_rehashed_unchanged": 4671,
+    "acceptance": "R2 contribution delivered; no consensus or qualification",
+    "peer_barrier": "substantive recommendation/conditions withheld until all three R2 preserved",
+    "process_history": "reported715 words versus600 aim retained; one489 doc invocation/direct0 and original streams/JUnit/receipt/temp preserved",
+    "cleanup": "retain exact tree read-only, no removal",
+    "preservation": {
+      "archive_sha256": "5a1049ab115aee1e50da2c919c5c41f4e8ed5731eca6cb2485f6a1ba6eec84ef",
+      "archive_bytes": 207192840,
+      "regular_files": 4676,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "0d78a4eccd6f55d93f12ea085579e3c4fe396fbe"
+  },
+  "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "peer_barrier": "No current R2 recommendations/materialconditions or peer based synthesis supplied to remaining contributors. All three complete R1 reports are common inputs. R3 begins only after all three R2 preserved.",
+  "qualification_or_source_acceptance": false
+}

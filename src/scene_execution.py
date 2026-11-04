@@ -138,6 +138,22 @@ async def _execute_profile(
 # =============================================================================
 
 
+class _PasscodeCheckedSceneManager:
+    """Executor view created only after the shared runner authorizes a scene."""
+
+    def __init__(self, manager, scene_id):
+        self._manager = manager
+        self._scene_id = scene_id
+
+    def verify_passcode(self, scene_id, passcode):
+        if scene_id == self._scene_id:
+            return True
+        return self._manager.verify_passcode(scene_id, passcode)
+
+    def __getattr__(self, name):
+        return getattr(self._manager, name)
+
+
 class SceneExecutor:
     """
     Executes Scenes with override handling, per-step results, error handling,
@@ -146,7 +162,7 @@ class SceneExecutor:
 
     def __init__(
         self,
-        scene_manager: SceneManager,
+        scene_manager: SceneManager | _PasscodeCheckedSceneManager,
         profile_manager: ProfileManager,
         system_action_manager: SystemActionManager,
         macro_manager: Any | None = None,

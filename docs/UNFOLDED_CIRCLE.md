@@ -4,10 +4,11 @@
 > Remote 3, and integrators wiring the hub into an existing UC setup.
 >
 > **Sources of truth**:
-> - `src/driver.py` — driver setup, login flow, entity handlers
-> - `src/hub/integrations/unfolded_circle/` — modular integration (`config.py`,
+> - `src/driver.py` — retained legacy reference; not launched by the shared runtime
+> - `src/hub/integrations/unfolded_circle/` — Remote adapter (`config.py`,
 >   `entities.py`, `state.py`, `handlers.py`, `mdns.py`, `migration.py`)
-> - `run.py` and `src/hub/env.py` — environment-variable resolution
+> - `hub.cli` and `hub.runtime/` — entry point, address resolution and shared runtime
+> - `src/hub/env.py` — framework environment inventory; runtime uses `hub.cli`
 > - `driver.json` — driver metadata (`port`, `setup_data_schema`, `min_core_api`)
 >
 > **Companion documents**:
@@ -39,10 +40,8 @@ and the pinned references in
 
 The hub has **one** image. The core (REST API, web UI at `/ui`, kiosk at
 `/kiosk`) always runs. The Remote 3 integration is **opt-in**: it is only
-imported when `UC_ENABLED=true`; otherwise `ucapi` is never imported and
-port 9095 stays closed (`run.py:run_uc_driver`,
-`src/driver.py:handle_setup_*`). `run.py` resolves the shipped startup settings;
-`src/hub/env.py` also describes the newer framework's configuration.
+imported when `UC_ENABLED=true`; otherwise `ucapi` is not imported and port
+9095 stays closed. Both modes use the same `hub.cli` runtime and matrix owner.
 
 | Variable | Default | Effect |
 | --- | --- | --- |
@@ -50,15 +49,15 @@ port 9095 stays closed (`run.py:run_uc_driver`,
 | `UC_INTEGRATION_HTTP_PORT` (alias `UC_PORT`) | `9095` (`driver.json` → `port`) | The WebSocket port the Remote 3 dials. |
 | `UC_INTEGRATION_INTERFACE` | all interfaces | Bind address; also the address mDNS announces (set to your LAN IP for mDNS to be useful). |
 | `UC_DISABLE_MDNS_PUBLISH` (alias `UC_DISABLE_MDNS`) | `false` | `true`: do not announce the integration by mDNS (bridge networking). |
-| `UC_DRIVER_URL` | not set | `ws://host:port` advertised to the Remote (bridge networking); must start with `ws://` or `wss://`. A bad value stops the hub with exit code 2 and a clear message (`run.py:load_settings`). |
-| `UC_CONFIG_HOME` | `DATA_DIR` | Integration state directory (`config_state.json`, `driver.lock`, profile / macro / scene files). |
-| `UC_AUTH_TOKEN` | unset | When set, the driver advertises `pwd: true` and requires a "Hub setup token" on every `DriverSetupRequest`. Falls back to `ADMIN_PIN` when unset. |
+| `UC_DRIVER_URL` | not set | `ws://host:port` advertised to the Remote (bridge networking); must start with `ws://` or `wss://`. |
+| `UC_CONFIG_HOME` | `DATA_DIR` | Remote configuration/state directory (`config_state.json`, `driver.lock`). Data catalogs can be separate. |
+| `UC_AUTH_TOKEN` | unset | When set, the adapter advertises `pwd: true` and requires a "Hub setup token" on every setup request. Falls back to `ADMIN_PIN` when unset. |
 | `API_PORT` | `8080` | REST API / web UI / kiosk port (only relevant for the host-networking compose override that needs to set it explicitly). |
-| `MATRIX_HOST` | the address a Remote setup saved, else `192.168.0.100` | Matrix IP / host name. With `UC_ENABLED=true` the Remote's setup wins once a setup is saved. |
-| `DATA_DIR` | image: `/data` | Persistent data directory (UC state and integration settings live here). |
+| `MATRIX_HOST` | UC off: `192.168.0.100`; UC on: saved setup or unconfigured | Matrix IP / host name. In UC mode saved setup wins; an environment host is an unsaved bootstrap. |
+| `DATA_DIR` | image: `/data` | Persistent directory and default UC config home; data stores resolve separately when paths differ. |
 | `STATUS_POLL_INTERVAL` | `5` | Seconds between the hub's own status reads. |
-| `FLIC_ENABLED` | `true` in the framework | Not applied by the current REST compatibility handlers; registration remains available. |
-| `HA_DISCOVERY_ENABLED` | `false` in the framework | Discovery module is not started by `run.py` yet; configure HA manually. |
+| `FLIC_ENABLED` | `true` | Enables Flic registration/list routes. Explicit false/0/no/off disables those routes and registry lifecycle. |
+| `HA_DISCOVERY_ENABLED` | `false` | Enables optional HA discovery; manual HACS installation remains available when disabled. |
 
 `POLLING_INTERVAL`, `POLLING_ENABLED` and the retired names (`USE_MODULAR`,
 `WEBUI_ENABLED`, `REST_API_ENABLED=false`) are documented in
@@ -98,32 +97,39 @@ itself — register it through the Remote's REST API
 
 ## 2. The Remote's setup flow (modular)
 
-The setup is handled by `src/driver.py:setup_handler`:
+The setup is handled by `src/hub/integrations/unfolded_circle/setup.py` and
+applied through the shared runtime:
 
 1. **First page — matrix address.** The Remote collects `host` + `port`.
-   - **Existing address** (already in `config_state.json`): the driver
-     reuses the saved login and skips the credential step. If the saved
-     login is rejected after a reconnect, the driver asks for it.
-   - **New address**: the driver probes it with a plain TCP connect
-     (nothing is sent — `src/driver.py:probe_address`). On
+   - **Existing address** (already in `config_state.json`): the shared runtime
+     can reuse the login for that address.
+   - **New address**: the adapter probes reachability before asking for
+     credentials; it does not send the previous matrix login to the new host. On
      `CONNECTION_REFUSED` / `NOT_FOUND` / `TIMEOUT` it returns the
      matching `IntegrationSetupError`; otherwise it asks for the matrix's
      login (its own web-interface login, factory default `Admin` / `admin`).
      The configured login is **never** sent to a new address.
 2. **Login page** — `user` + hidden `password`. Sent *only* to the
-   address from step 1. Compared with `hmac.compare_digest`; rejected
-   logins return `AUTHORIZATION_ERROR` and change nothing on the hub.
-3. **`SetupComplete`** — entities are installed, the saved configuration
-   (`config_state.json`) is updated with the host/port/login, the poller
-   starts, and the Remote sees the integration.
+   address from step 1. A failed login/connect returns its setup error and
+   rolls the shared runtime back to the previous address and session.
+3. **`SetupComplete`** — the shared runtime reconfigures every surface and
+   atomically persists `config_state.json` under `UC_CONFIG_HOME`. The address
+   and credentials become active immediately and win on later UC startups.
 
-A **reconfigure** with the same address needs no login page. A reconfigure
+A **Reconfigure** with the same address needs no login page. A reconfigure
 that changes the address triggers the credential step again.
+
+The adapter keeps the Remote setup server available when the matrix is
+unconfigured or disconnected. An unconfigured runtime has an empty catalog;
+after setup, a configured but offline matrix retains its 74 entity definitions
+as unavailable. The shipped `ucapi` 0.7 SDK does not advertise the optional
+select entities. Direct dispatcher cycle tests do not establish Remote UI
+cycling.
 
 ### Setup token (`UC_AUTH_TOKEN` / `ADMIN_PIN` fallback)
 
 When `UC_AUTH_TOKEN` is set (or `ADMIN_PIN` is set and `UC_AUTH_TOKEN` is
-not), the driver (`src/driver.py:handle_driver_setup`):
+not), the adapter:
 
 - advertises **`pwd: true`** in the mDNS TXT record (the Remote then asks
   for a password on the setup page instead of running an unauthenticated
@@ -135,16 +141,15 @@ not), the driver (`src/driver.py:handle_driver_setup`):
   `ucapi.SetupError(error_type=ucapi.IntegrationSetupError.AUTHORIZATION_ERROR)`
   and changes nothing on the hub.
 
-The driver accepts the token as `auth_token`, `token`, or `pin` and compares
+The adapter accepts the token as `auth_token`, `token`, or `pin` and compares
 it with `hmac.compare_digest`; the value is never logged. ucapi's sensitive
 key list (`auth_token`, `token`, `pin`, `current_password`) redacts it in
 the Remote's message log too.
 
-Without a token and with no admin PIN, the setup page keeps the **"Current
-matrix password (when changing address)"** field, and changing the matrix
-host or port requires re-entering that matrix's password. The stored
-password is never sent to a new address — `probe_address` checks reachability
-first.
+Without a token, changing an already configured address requires the
+**"Current matrix password (when changing address)"** field to authorize the
+setup request, then the new matrix's own credentials on the login page. The
+stored password is never sent to a new address.
 
 The token guards *setup*, not the transport. Anything that can reach TCP
 9095 can still subscribe to entities and control the matrix. Restrict the
@@ -166,10 +171,10 @@ Linux Docker host; on Docker Desktop enable it under
 If the Remote shows the integration with a wrong host name, also set
 `UC_MDNS_LOCAL_HOSTNAME` (read by the `ucapi` library).
 
-The hub log line on a healthy start:
+The bridge logs a line similar to this on startup:
 
 ```
-Integrations: Unfolded Circle Remote (port 9095, mDNS on, address 192.168.1.20)
+UCBridge started on port 9095 (74 available entities)
 ```
 
 ### Bridge networking (no mDNS, register by URL)
@@ -203,24 +208,18 @@ docs (`doc/integration-driver/driver-registration.md`).
 
 ## 4. The matrix address — who owns it
 
-With `UC_ENABLED=true` the Remote's setup is the **owner** of the matrix
-address (`config_state.json`):
+With `UC_ENABLED=true`, the saved `config_state.json` address is authoritative.
+An explicit `MATRIX_HOST` is an unsaved bootstrap only when no valid saved
+address exists. With neither, REST health/UI and the Remote setup service start
+without connecting to the core-only default. Successful setup atomically saves
+the candidate and immediately changes the shared runtime address. A failed or
+aborted setup restores the prior address/session. Same-address reconfiguration
+retains its working login; a different address requires its own login. REST
+matrix-host changes are transient and do not rewrite Remote setup state.
 
-- **Before the Remote has been set up**: `MATRIX_HOST` (env) gives the
-  hub its matrix; it is never saved. `run.py` logs
-  `MATRIX_HOST not set: using <host>:<port> from the saved Remote
-  integration setup` if a setup is saved.
-- **After the Remote has been set up**: the saved host/port/login is
-  authoritative. `MATRIX_HOST` is logged but unused unless the saved
-  address disappears (`run.py:saved_matrix_address`).
-- **Reconfigure with the same address**: no login page, the saved login
-  is reused.
-- **Reconfigure with a new address**: probe first, then a login page,
-  then `SetupComplete`. Nothing changes until the login succeeds.
-
-Moving the matrix-address ownership to the core (and away from the Remote
-setup) is on the roadmap — see
-`docs/audits/UC_INTEGRATION_AUDIT.md` §5.
+With UC disabled, address resolution prefers explicit `MATRIX_HOST`, then a
+valid saved address, then `192.168.0.100`. This core-only saved-address fallback
+does not load saved credentials.
 
 ---
 
@@ -279,12 +278,12 @@ rm data/config_state.json
 docker compose up -d
 ```
 
-`driver.lock` is a single-instance lock held by `src/driver.py` while the
-integration is running. If a previous container was killed without
+`driver.lock` is a single-instance lock held by the shared runtime while the
+Remote integration is running. If a previous container was killed without
 releasing it, remove `data/driver.lock` alongside `config_state.json`.
 
 If the hub refuses to start with `Configuration error: UC_DRIVER_URL=…`,
-fix the variable — `run.py:load_settings` raises `ConfigError` on a
+fix the variable — `hub.cli.load_settings` raises `ConfigError` on a
 non-WebSocket URL and the process exits with code 2.
 
 ---
@@ -309,17 +308,17 @@ non-WebSocket URL and the process exits with code 2.
   it.
 - No token is configured, but the matrix address was changed: re-enter
   the **current matrix password** in the field the setup page shows.
-- Hub log lines: `Setup: authorization token missing or invalid` or
-  `Setup: current matrix password required to change its address`.
+- Setup returns `AUTHORIZATION_ERROR` for a missing/invalid setup token or
+  missing/invalid current matrix password when one is required.
 - A port-9095 firewall rule blocking the Remote produces the same
   "setup does nothing" symptom from the Remote's side — check
   reachability before changing tokens.
 
 ### The matrix address changed but the hub still talks to the old one
 
-- Restart the hub: `config_state.json` is the source of truth once a setup
-  is saved. With `UC_ENABLED=false` the hub reads it from `DATA_DIR`;
-  with `UC_ENABLED=true` the driver reads it from `UC_CONFIG_HOME`.
+- Restart the hub: `config_state.json` under `UC_CONFIG_HOME` is the source
+  of truth in UC mode; core-only mode uses explicit host, then a valid saved
+  address, then the default.
 - Reset the Remote integration (§6) and re-run the setup on the Remote.
 
 ### `ucapi` not installed
@@ -330,11 +329,16 @@ non-WebSocket URL and the process exits with code 2.
 - The hub exits with
   `UC_ENABLED=true but the ucapi package is not installed
    (pip install -r requirements-uc.txt)`
-  (`run.py:run_uc_driver`).
+  (the shared runtime imports `ucapi` only when UC is enabled).
 
 ---
 
 ## 8. References
+
+The scripted Remote harness and SDK-stub tests are software evidence only.
+They do not prove a physical Remote's behavior. See the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md) for fresh
+coordinator campaign artifacts and pending hardware/field/soak gates.
 
 - **Unfolded Circle core API**: pinned at `vendor:core-api` (see
   [`docs/vendor/UNFOLDED_CIRCLE.md`](vendor/UNFOLDED_CIRCLE.md) for the pin).

@@ -1,0 +1,44 @@
+{
+  "observed_utc": "2026-11-03T03:05:35.884898+00:00",
+  "task_id": "task_eea6f443f108",
+  "dispatch_id": "ctx_70e7d15a49fc",
+  "head": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+  "parent": "ed78321e51156f229507e654f0cf3faae100b935",
+  "report": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/REVIEW.md",
+  "git_blob_bytes": 10496,
+  "git_blob_sha256": "b0720257b8e0104f7cab5ed5c3a72bd39e01c4cadc56bc35f9e8dc9149a233f6",
+  "verdict": "require_changes",
+  "findings": [
+    "R1 universal irrecoverability claims exceed bounded inspection",
+    "R2 new inspection metadata must be acknowledged separately from historical evidence",
+    "R3 focused log preserves count/assertion/BLOCKED outcome, native transcript reported actual Telnet reason"
+  ],
+  "scope": "only new REVIEW.md; clean submitted tree",
+  "terminal": "released",
+  "native_final": {
+    "session": "01a19f5a-2166-7a02-8b5a-9181fae48770",
+    "models": [
+      "gpt-6-astra"
+    ],
+    "effort": "high",
+    "bytes": 691293,
+    "sha256": "e6f0241a0489ac8262aa687572535b45962857f3f49c16bbc37e558ec251ada2"
+  },
+  "publication": "exact task ref remote/local head equality verified",
+  "cleanup": "explicit read-only retention; no removal",
+  "archives": [
+    {
+      "archive_sha256": "85c147864da0bbe7e72e221b05aa75c9df82f5865ad07e570844abfaad9a6af1",
+      "regular_files": 4571,
+      "regular_bytes": 299854144,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "archive_sha256": "1ef990a11592b59742d32b771b746d7ab1a13ac675e00216dd76644eb09e668d",
+      "regular_files": 103,
+      "regular_bytes": 164426,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "integration": "original author aef8cfd4 and require_changes review8d5f3d3f integrated sequentially as records only; no accepted disposition/original preservation/source or feature proof"
+}

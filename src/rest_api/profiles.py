@@ -13,6 +13,7 @@ from aiohttp import web
 
 from config import SCALER_FIELDS
 from device_codes import SCALER_MODES
+from hub.runtime.actions import catalog_changes, pin_response, run_rest_action
 from password import (
     PIN_CLEAR,
     PIN_SET,
@@ -23,9 +24,8 @@ from password import (
     reset_pin_lockout,
     verify_passcode_async,
 )
-from profile_execution import apply_profile_state
 
-from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager
+from .utils import _json_response, get_macro_manager, get_matrix_device, get_profile_manager, safe_error_message
 
 _LOG = logging.getLogger("rest_api.profiles")
 
@@ -228,8 +228,7 @@ async def handle_list_profiles(request: web.Request) -> web.Response:
         profiles = profile_manager.list_profiles()
         return _json_response(True, {"profiles": profiles})
     except Exception as e:
-        _LOG.exception(f"Error listing profiles: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "listing profiles"), status=500)
 
 
 async def handle_get_profile(request: web.Request) -> web.Response:
@@ -250,10 +249,10 @@ async def handle_get_profile(request: web.Request) -> web.Response:
 
         return _json_response(True, profile.to_dict())
     except Exception as e:
-        _LOG.exception(f"Error getting profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "getting profile"), status=500)
 
 
+@catalog_changes
 async def handle_create_profile(request: web.Request) -> web.Response:
     """Create or update a profile."""
     profile_manager = get_profile_manager()
@@ -324,10 +323,10 @@ async def handle_create_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error creating profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "creating profile"), status=500)
 
 
+@catalog_changes
 async def handle_update_profile(request: web.Request) -> web.Response:
     """Update an existing profile's properties."""
     profile_manager = get_profile_manager()
@@ -397,10 +396,10 @@ async def handle_update_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error updating profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "updating profile"), status=500)
 
 
+@catalog_changes
 async def handle_delete_profile(request: web.Request) -> web.Response:
     """Delete a profile."""
     profile_manager = get_profile_manager()
@@ -434,14 +433,12 @@ async def handle_delete_profile(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error deleting profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "deleting profile"), status=500)
 
 
 async def handle_recall_profile(request: web.Request) -> web.Response:
     """Recall a profile, applying all its settings to the matrix."""
     profile_manager = get_profile_manager()
-    macro_manager = get_macro_manager()
     matrix_device = get_matrix_device()
 
     if profile_manager is None:
@@ -462,69 +459,30 @@ async def handle_recall_profile(request: web.Request) -> web.Response:
         if profile is None:
             return _json_response(False, error=f"Profile '{profile_id}' not found", status=404)
 
-        # Password protection check: 429 while locked out after wrong
-        # passcodes, PBKDF2 off the event loop (SEC-06 / F-SEC-007)
+        passcode = None
         if profile.is_password_protected():
             try:
                 data = await _optional_json(request)
             except json.JSONDecodeError:
                 return _json_response(False, error="Invalid JSON", status=400)
-            denied = await _check_profile_pin(profile, data.get("passcode"))
-            if denied is not None:
-                return denied
-
-        # Execute power-on macro if configured
-        power_on_result = None
-        errors: list[str] = []
-        if profile.power_on_macro:
-            macro = macro_manager.get_macro(profile.power_on_macro) if macro_manager else None
-            if macro is None:
-                power_on_result = {"success": False, "error": f"Macro not found: {profile.power_on_macro}"}
-            else:
-                _LOG.info(f"Executing power-on macro '{macro.name}' for profile '{profile.name}'")
-                try:
-                    power_on_result = await macro_manager.execute_macro(profile.power_on_macro)  # type: ignore[union-attr]
-                except Exception as e:
-                    _LOG.warning(f"Power-on macro failed: {e}")
-                    power_on_result = {"success": False, "error": str(e)}
-            if not power_on_result.get("success"):
-                errors.append(
-                    f"Power-on macro '{profile.power_on_macro}': {power_on_result.get('error') or 'failed'}"
-                )
-
-        state_result = await apply_profile_state(profile, matrix_device)
-        applied = state_result.applied
-        failed_outputs = state_result.failed_outputs
-        errors.extend(state_result.errors)
-
-        _LOG.info(
-            f"Profile '{profile.name}' recalled: {len(applied)} outputs configured, {len(failed_outputs)} failed"
-        )
-
-        # 200 everything applied, 207 partly, 500 nothing (API-08).
-        if not errors:
-            status = 200
-        elif applied or (power_on_result or {}).get("success"):
-            status = 207
-        else:
-            status = 500
+            passcode = data.get("passcode")
+        result = await run_rest_action("profile", profile_id, passcode=passcode)
+        denied = pin_response(result)
+        if denied is not None:
+            return denied
+        if "profile" not in result.data:
+            return _json_response(False, error=result.error, status=result.status_code)
         return _json_response(
-            not errors,
-            {
-                "profile": profile.name,
-                "applied": applied,
-                "failed_outputs": failed_outputs,
-                "errors": errors if errors else None,
-                "power_on_macro": power_on_result,
-            },
-            error="; ".join(errors) if errors else None,
-            status=status,
+            result.success,
+            {**result.data, "errors": result.errors or None},
+            error=result.error,
+            status=result.status_code,
         )
     except Exception as e:
-        _LOG.exception(f"Error recalling profile: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "recalling profile"), status=500)
 
 
+@catalog_changes
 async def handle_profile_cec_config(request: web.Request) -> web.Response:
     """Get or update CEC configuration for a profile."""
     profile_manager = get_profile_manager()
@@ -574,10 +532,10 @@ async def handle_profile_cec_config(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error handling profile CEC config: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "handling profile CEC config"), status=500)
 
 
+@catalog_changes
 async def handle_profile_macros(request: web.Request) -> web.Response:
     """Get or update the macros assigned to a profile."""
     profile_manager = get_profile_manager()
@@ -658,10 +616,10 @@ async def handle_profile_macros(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error handling profile macros: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "handling profile macros"), status=500)
 
 
+@catalog_changes
 async def handle_reorder_profiles(request: web.Request) -> web.Response:
     """Bulk update pin order and pinned status for profiles."""
     profile_manager = get_profile_manager()
@@ -715,8 +673,7 @@ async def handle_reorder_profiles(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON", status=400)
     except Exception as e:
-        _LOG.exception(f"Error reordering profiles: {e}")
-        return _json_response(False, error=str(e), status=500)
+        return _json_response(False, error=safe_error_message(e, "reordering profiles"), status=500)
 
 
 # =============================================================================
@@ -738,10 +695,10 @@ async def handle_list_favorite_profiles(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error listing favorite profiles: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "listing favorite profiles"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
     """POST /api/profile/{id}/favorite — toggle the favorite flag."""
     manager = get_profile_manager()
@@ -762,10 +719,10 @@ async def handle_toggle_profile_favorite(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error toggling profile favorite: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling profile favorite"), status=500)
 
 
+@catalog_changes
 async def handle_set_profile_favorite(request: web.Request) -> web.Response:
     """PUT /api/profile/{id}/favorite — explicitly set favorite flag.
 
@@ -795,10 +752,10 @@ async def handle_set_profile_favorite(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
-        _LOG.error("Error setting profile favorite: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "setting profile favorite"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
     """POST /api/profile/{id}/dashboard — toggle dashboard-visible flag."""
     manager = get_profile_manager()
@@ -819,10 +776,10 @@ async def handle_toggle_profile_dashboard(request: web.Request) -> web.Response:
             },
         )
     except Exception as exc:
-        _LOG.error("Error toggling profile dashboard flag: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "toggling profile dashboard flag"), status=500)
 
 
+@catalog_changes
 async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
     """PUT /api/profile/{id}/dashboard — explicitly set dashboard-visible flag.
 
@@ -852,8 +809,7 @@ async def handle_set_profile_dashboard(request: web.Request) -> web.Response:
     except json.JSONDecodeError:
         return _json_response(False, error="Invalid JSON body", status=400)
     except Exception as exc:
-        _LOG.error("Error setting profile dashboard flag: %s", exc)
-        return _json_response(False, error=str(exc), status=500)
+        return _json_response(False, error=safe_error_message(exc, "setting profile dashboard flag"), status=500)
 
 
 async def handle_profile_execution_log(request: web.Request) -> web.Response:

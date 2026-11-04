@@ -145,7 +145,7 @@ class TestHashNeverSent:
         await make_profile(client, "kids", PIN)
         saved = json.loads((data_dir / "profiles.json").read_text(encoding="utf-8"))
         stored = saved["profiles"][0]["passcode_hash"]
-        assert stored.startswith("pbkdf2_sha256$") and PIN not in stored
+        assert password.is_passcode_hash(stored) and stored != PIN
         assert password.verify_passcode(PIN, stored)
 
     async def test_scene_routes_never_return_the_hash(self, client, data_dir):
@@ -162,7 +162,7 @@ class TestHashNeverSent:
         assert resp.status == 200
         assert_no_hash(await resp.text())
 
-        saved = json.loads((data_dir / "scenes.json").read_text(encoding="utf-8"))
+        saved = json.loads((data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
         assert saved["scenes"][0]["passcode_hash"].startswith("pbkdf2_sha256$")
 
     async def test_scene_reports_protection_inherited_from_a_profile(self, client):

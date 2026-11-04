@@ -1,0 +1,134 @@
+{
+  "observed_utc": "2026-11-03T05:45:52.469135+00:00",
+  "status": "prepared, no reviewer worktree or Task/Dispatch created",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, fresh supported discovery receipts retained privately",
+  "integration_branch": "wp-runtime-completion",
+  "remote": "origin/ryan-haver/8x8-hdmi-matrix-hub",
+  "author": {
+    "head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "tree": "wp-exec-sw-repo-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "bytes": 6892,
+    "sha256": "749ee4f2029c35a4e7be617854aa739320b4590f158f9c4579773586a47f4d82",
+    "working_identical": true,
+    "cr_bytes": 0,
+    "whole_report_whitespace_tokens": 821,
+    "task_id": "task_5486db7aed82",
+    "dispatch_id": "ctx_e47c86a8e4ee",
+    "terminal": "released",
+    "publication": "exact task ref remote/local verified",
+    "cleanup": "exact tree retained read-only, no removal",
+    "acceptance": "unaccepted author submission; exact-commit independent factual review required",
+    "native_final": {
+      "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "bytes": 591613,
+      "sha256": "707c8548af2a57fa76ec3e05dac6fb38b7d6cf9fe0ce755ae5563bbd23f17dc1"
+    },
+    "budget": "5min target exceeded; worker reports683bodywords plus required JSON, whole-report count separately recorded; no deadline or full-budget-conformance pass",
+    "preservation": {
+      "archive_sha256": "d47c5f5bcd3a366d8243ba8206c37fc08387b696ee4fa12e5116e36ae2c28b9c",
+      "archive_bytes": 206916510,
+      "regular_files": 4636,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "00217291ef008c4c4bbf9d78e34013a3fcb450b2"
+  },
+  "review": {
+    "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "spec": "REPO_EARLY_INTAKE_REVIEW_TASK.txt",
+    "worktree_name": "wp-exec-sw-repo-01-review",
+    "dependency": "task_5486db7aed82",
+    "title": "SW-REPO early three-row independent exact-commit factual review",
+    "new_report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+    "gate_path": [
+      "repo_early_intake",
+      "independent_review"
+    ],
+    "budget": "6min target; complete three-row report and named source references, no repeated history/secret/CI/global audit",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T05:44:17.752836+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 47,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793684440397,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 71,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 19,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932890,
+        "resetDescription": null
+      },
+      "updatedAt": 1793684440210,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 118,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 118,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MDo1MSIsImRpc3BhdGNoSWQiOiJjdHhfY2MzMzVjNTAyYjZjIiwiZGF0YWJhc2VJZCI6NjUzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 118,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 112,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "fetched_at": "2026-11-03T05:45:37.793457Z",
+    "supported": true
+  },
+  "qualification": "OpenAI actual Astra bounded factual review ac9/79b08 and prior433/81ac; different underlying family from M3 author, no core/source/security/legal domain inferred",
+  "selection": "same approved M3/OpenAI families; Astra available and competent for bounded prose, historical Sol capacity event retained, Google unknown and DeepSeek exhausted; no silent substitution",
+  "capacity_disposition": "OpenAI53%weekly remaining verified for this independent review. MiniMax29%session remaining below30%; no further M3 author/fix creation or dispatch until suitable verified headroom/fallback. Existing completed author review remains independent useful work; impending reset is not current headroom",
+  "correction_reserve": "Previously reserved one precise author fix/different-family re-review remains planned, but affected M3 author stage NOW HELD on quota. Any required correction must await fresh suitable verified capacity, never auto-dispatch or silently waive review; no account/spend change",
+  "scope": "bounded early SEC14/SEC15/DEP05 metadata only; entire SW-REPO completion dependencies and final candidate hygiene/security/license/history/secret-scan/required-check proof remain unsatisfied",
+  "process": "5min author target exceeded;683bodywords plus JSON vs821whole-report whitespace tokens, no deadline/full-word-budget conformity pass; independent factual accuracy reviewed separately",
+  "material_plan_change": false,
+  "concurrency": "one new reviewer+coordinator+protected external3<=4; no nesting",
+  "protected": "root/private runtime, historical failed originals/native transcripts/ignored artifacts/baselines/old retained trees/odd untrackedhook artifact preserved; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1formalFAIL/no domain; owner explicit manual-retake choice pending; no retry/source authority",
+  "source_security_license_qualification": false,
+  "package_completion": false
+}

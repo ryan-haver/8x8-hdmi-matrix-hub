@@ -1,0 +1,7 @@
+{
+  "schema_version": 0,
+  "shortcuts": [
+    {"id": "builtin.route_all_to_output", "label": "All to Out 1", "enabled": true, "order": 0},
+    {"id": "user.a1b2c3", "label": "My preset 1", "enabled": true, "order": 7}
+  ]
+}

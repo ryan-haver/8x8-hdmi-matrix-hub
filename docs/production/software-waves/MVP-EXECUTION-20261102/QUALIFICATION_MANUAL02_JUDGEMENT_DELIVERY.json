@@ -1,0 +1,122 @@
+{
+  "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+  "status": "judge complete/released/preserved/taskrefpublished; coordinatorformalFAIL/noqualifieddomain",
+  "judge": {
+    "observed_utc": "2026-11-03T17:34:10.902069+00:00",
+    "review_commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+    "review_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+    "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+    "bytes": 18514,
+    "sha256": "23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2",
+    "task_id": "task_c8b55f48fcff",
+    "dispatch_id": "ctx_6f1b83d8f673",
+    "worktree": "wp-exec-qual-anthropic-core-01-manual02-review",
+    "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+    "verdict": "FAIL mandatoryprovenance/calibration/review_quality; invariants/counterexamples/behavior_and_tools PASS, no qualified domain",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 1088133,
+      "sha256": "b7e23d43d24c1ce22f14275fee2454711629629c12973e7634f2f992b9ea8754"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "integration_commit": "a87df0927d857ae1bf40687b0e9180bb8ab7de3f",
+    "archives": [
+      {
+        "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+        "archive_bytes": 206071336,
+        "regular_files": 4608,
+        "regular_bytes": 295604926,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      {
+        "archive_sha256": "628223a8a01683b3f12eaafd09d8f31b11e357ffa863cdf3d31367b716e6c5f7",
+        "archive_bytes": 67537,
+        "regular_files": 106,
+        "regular_bytes": 167143,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    ]
+  },
+  "fleet": {
+    "total": 123,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 123,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMjoxNzozMCIsImRpc3BhdGNoSWQiOiJjdHhfYjAxNDkxYjk3OGU5IiwiZGF0YWJhc2VJZCI6NjY3fX0"
+      },
+      {
+        "limit": 100,
+        "total": 123,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 117,
+      "retained": 6
+    },
+    "new_active": 0,
+    "concurrency_reservation": "coordinator+protected external only; oldexternal not proven exited"
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740799715,
+        "resetDescription": "2:19 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966399715,
+        "resetDescription": "Fri 4:59 AM"
+      },
+      "updatedAt": 1793727197744,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 60,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793727198124,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 6,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932886,
+        "resetDescription": null
+      },
+      "updatedAt": 1793727197738,
+      "error": null
+    }
+  },
+  "coordinator_disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json",
+  "replacementproposal": "PROPOSED_REPLACEMENT_MODEL_QUALIFICATION.json, noexecutionauthorized"
+}

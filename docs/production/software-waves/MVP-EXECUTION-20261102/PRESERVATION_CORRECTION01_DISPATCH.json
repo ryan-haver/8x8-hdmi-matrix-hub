@@ -1,0 +1,74 @@
+{
+  "observed_utc": "2026-11-03T03:08:36.528186+00:00",
+  "status": "ordinary EV report correction launched; completion/review/acceptance not claimed",
+  "task_id": "task_e1d5c3589200",
+  "dispatch_id": "ctx_f56a5a99bfee",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "exact_base": "ed78321e51156f229507e654f0cf3faae100b935",
+  "actual_branch": "execution/wp-exec-ev-preservation-gaps",
+  "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+  "dependencies": [
+    "task_eea6f443f108"
+  ],
+  "launch": {
+    "requested": {
+      "agent": "opencode2",
+      "model": null,
+      "effort": null
+    },
+    "effective": {
+      "agent": "opencode2",
+      "model": null,
+      "effort": null
+    }
+  },
+  "turn_start": "unsupported",
+  "native_entry": {
+    "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+    "session": "ses_e609f4c5cffeALUy1NHYhE5Vup",
+    "models": [
+      "minimax-coding-plan/MiniMax-M3"
+    ],
+    "effort": "CLI override unsupported; project pinned routing, native thinking",
+    "bytes": 94144,
+    "sha256": "1d09557cd31547669ff1c44e39104300fb12c337492b101ac782a67c0d3ac991"
+  },
+  "fleet": {
+    "total": 103,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 103,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTg0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMTo0MDo1NiIsImRpc3BhdGNoSWQiOiJjdHhfYzQ4NjA4ZDk1OTZkIiwiZGF0YWJhc2VJZCI6NTgwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 103,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 95
+    },
+    "other_inventory_assignment": {
+      "taskId": "task_4c7cf7c289ff",
+      "dispatchId": "ctx_14d9b1569d7e",
+      "workerState": "ready",
+      "dispatchStatus": "dispatched",
+      "terminalState": "retained"
+    },
+    "accounting": "keep-open running workers are retained terminal resources, not separate historical active assignments"
+  },
+  "concurrency": "max2new+coordinator+protected old external reservation=4; no nesting",
+  "publication_before_wave": "f2430d01dd242796ebccc65f7f37191619a184d0 live remote/local exact equality",
+  "scope": "AUTHOR.md only, R1-R3 bounded prose corrections, immutable old private artifacts and NEW correction01/temp namespaces; no source/original-preservation pass",
+  "independent_review": "OpenAI/Astra at exact new correction commit after settled author delivery",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no retry authority inferred"
+}

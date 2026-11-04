@@ -1,0 +1,101 @@
+{
+  "observed_utc": "2026-11-03T02:59:30.202947+00:00",
+  "actors": {
+    "rereview": {
+      "tree": "wp-exec-sw-audit-01-rereview01",
+      "head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_01.md",
+      "bytes": 16031,
+      "sha256": "defab364642ad34bf1778fb78af0cb5590a65fac23545a4e6a8285d2906faaeb",
+      "task": "task_2e497661d2af",
+      "dispatch": "ctx_4ec26c6917ca",
+      "branch": "ryan-haver/wp-exec-sw-audit-01-rereview01",
+      "native_final": {
+        "session": "01a19f48-dbae-7561-9580-ed81f10d70ad",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "bytes": 909774,
+        "sha256": "a7482c3ebc037eb13bab78d836987264c586f0ca37e3e9db1f60a33d14249bce",
+        "scope": "full final native transcript, exact cwd and Task/Dispatch; no raw transcript published"
+      },
+      "remote_head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "terminal": "released; actual Orca receipts retained",
+      "cleanup": "explicit read-only retention; no destructive cleanup",
+      "archives": [
+        {
+          "head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+          "archive_sha256": "b0f8f0bd2e2d1ee6c05be8064dcec9712b91224b3c47cf695e6d9fa2f8785d52",
+          "regular_files": 4561,
+          "regular_bytes": 300771627,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "head": null,
+          "archive_sha256": "32dbc7e20041f20bffa318850c098715cc3272135b753b7874ee259486b55846",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "verdict": "require_changes",
+      "accepted_findings": [
+        "R2",
+        "R3"
+      ],
+      "remaining_findings": [
+        "R1",
+        "R4",
+        "R5",
+        "R6"
+      ],
+      "integration": "381dbcf0 author correction and following re-review cherry-pick are RECORDS ONLY, not accepted inventory/source"
+    },
+    "preservation": {
+      "tree": "wp-exec-ev-preservation-gaps",
+      "head": "ed78321e51156f229507e654f0cf3faae100b935",
+      "base": "f2dc1dbf683d8f96200d1517b0786e3441105b36",
+      "report": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md",
+      "bytes": 36331,
+      "sha256": "ca72b8fff2c1adc60a03b77d6932febc450171716a074c1b9c8b163b0bce76ab",
+      "task": "task_9456469c267b",
+      "dispatch": "ctx_f2864b9be31e",
+      "branch": "execution/wp-exec-ev-preservation-gaps",
+      "native_final": {
+        "session": "ses_e60b68c49ffeG8Vb3xTKg7JyqF",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 759642,
+        "sha256": "918d236054d9de4a117d9a5785e8716dab023941a984baea3d7a9adecc73c571",
+        "scope": "full final native transcript, exact cwd and Task/Dispatch; no raw transcript published"
+      },
+      "remote_head": "ed78321e51156f229507e654f0cf3faae100b935",
+      "terminal": "released; actual Orca receipts retained",
+      "cleanup": "explicit read-only retention; no destructive cleanup",
+      "archives": [
+        {
+          "head": "ed78321e51156f229507e654f0cf3faae100b935",
+          "archive_sha256": "6eef6b85a128c9bbe68596cb9b7c3b942f3cabd6d5186df73f3cb63f7f104745",
+          "regular_files": 4587,
+          "regular_bytes": 300239624,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "head": null,
+          "archive_sha256": "a0dfd0d7c99d80c3de13937c5eca3d1c5d1b1b991edf0a26dd9988d9b7758306",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "verdict": "independent exact-commit factual review pending",
+      "original_preservation_pass": false,
+      "source_or_feature_acceptance": false
+    }
+  },
+  "product_source_changed": false,
+  "cleanup": "Both settled terminals released; explicit read-only worktree retention, no removal",
+  "core_qualification": "attempt1FAIL/no qualified domain; no owner approval for retake"
+}

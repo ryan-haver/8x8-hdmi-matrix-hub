@@ -83,10 +83,6 @@ from .device_settings import (
     init_device_settings,
 )
 from .events import install_event_stream
-from .integrations import (
-    handle_get_flic_buttons,
-    handle_register_flic_buttons,
-)
 from .macros import (
     handle_create_macro,
     handle_delete_macro,
@@ -239,7 +235,7 @@ from .websocket import handle_websocket
 _LOG = logging.getLogger("rest_api.app")
 
 
-def create_rest_app(data_dir: Path | None = None) -> web.Application:
+def create_rest_app(data_dir: Path | None = None, *, runtime=None, integration_routes=None) -> web.Application:
     """Create and configure the REST API application.
 
     :param data_dir: Optional explicit persistent data directory. When omitted,
@@ -247,18 +243,28 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
         :func:`persistence.get_data_dir` (priority: ``MATRIX_DATA_DIR``,
         then ``UC_CONFIG_HOME``, then local ``<project_root>/data``).
     """
+    if runtime is not None:
+        from .utils import bind_runtime
+        bind_runtime(runtime)
+        if integration_routes is None:
+            integration_routes = runtime.loader.routes()
+        if data_dir is None:
+            data_dir = runtime.prepared.paths.data_dir
     if data_dir is None:
         data_dir = get_data_dir()
     data_dir = Path(data_dir).resolve()
 
     app = web.Application(middlewares=[rate_limit_middleware])
+    if runtime is not None:
+        app["hub_runtime"] = runtime
+        app["integration_health_provider"] = runtime.loader.health_summary
     app["security_manager"] = SecurityManager(data_dir)
 
     # Event-loop lag / uptime / task-count sampling for /api/health
     install_runtime_monitor(app)
 
     # The hub's live event stream (/ws) and its status poller (docs/api/WEBSOCKET.md)
-    install_event_stream(app)
+    install_event_stream(app, runtime=runtime)
 
     @web.middleware
     async def cors_middleware(request: web.Request, handler):
@@ -502,15 +508,26 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
     # Phase 8: Initialize Scene Manager and inject into scenes_v2
     from scene_manager import SceneManager as Phase8SceneManager
 
-    phase8_sm = Phase8SceneManager(data_dir)
+    phase8_sm = runtime.managers.scenes if runtime is not None else Phase8SceneManager(data_dir)
     _set_phase8_scene_manager(phase8_sm)
     _LOG.info("Phase 8 SceneManager initialized with %d scenes", len(phase8_sm.list_scenes()))
 
     _LOG.info(f"Persistent storage initialized at {data_dir}")
 
     # Flic Integrations Auto-Discovery
-    app.router.add_post("/api/integrations/flic/register", handle_register_flic_buttons)
-    app.router.add_get("/api/integrations/flic/buttons", handle_get_flic_buttons)
+    if integration_routes is not None:
+        for method, path, handler in integration_routes:
+            app.router.add_route(method, path, handler)
+    elif runtime is None:
+        # Legacy direct app construction retains its route defaults when Flic is enabled.
+        if os.environ.get("FLIC_ENABLED", "").strip().lower() not in {"false", "0", "no", "off"}:
+            from hub.integrations.flic import FlicButtonRegistry, FlicIntegration
+
+            flic = FlicIntegration(registry=FlicButtonRegistry(data_dir=data_dir))
+            app["flic_integration"] = flic
+            app.router.add_post("/api/integrations/flic/register", flic.handle_register)
+            app.router.add_get("/api/integrations/flic/buttons", flic.handle_get_buttons)
+
 
     # WebSocket for real-time updates
     app.router.add_get("/ws", handle_websocket)
@@ -536,7 +553,8 @@ def create_rest_app(data_dir: Path | None = None) -> web.Application:
 class RestApiServer:
     """REST API server wrapper for integration with the main driver."""
 
-    def __init__(self, host: str = "0.0.0.0", port: int = 8080):
+    def __init__(self, host: str = "0.0.0.0", port: int = 8080, *, data_dir=None,
+                 runtime=None, integration_routes=None):
         """
         Initialize the REST API server.
 
@@ -545,6 +563,9 @@ class RestApiServer:
         """
         self.host = host
         self.port = port
+        self.data_dir = data_dir
+        self.runtime = runtime
+        self.integration_routes = integration_routes
         self.app: web.Application | None = None
         self.runner: web.AppRunner | None = None
         self.site: web.TCPSite | None = None
@@ -557,7 +578,8 @@ class RestApiServer:
             return
 
         try:
-            self.app = create_rest_app()
+            self.app = create_rest_app(self.data_dir, runtime=self.runtime,
+                                       integration_routes=self.integration_routes)
             # aiohttp's default access log includes query strings, which can carry ?key=.
             self.runner = web.AppRunner(self.app, access_log=None)
             await self.runner.setup()
@@ -568,18 +590,23 @@ class RestApiServer:
             self._running = True
             _LOG.info(f"✓ REST API server started on http://{self.host}:{self.port}")
             _LOG.info(f"  API docs: http://{self.host}:{self.port}/api")
-        except Exception as e:
+        except BaseException as e:
+            await self.stop()
             _LOG.exception(f"Failed to start REST API server: {e}")
             raise
 
     async def stop(self):
         """Stop the REST API server."""
-        if not self._running:
+        if not self._running and self.runner is None:
             return
 
         try:
-            if self.runner:
-                await self.runner.cleanup()
+            try:
+                if self.app is not None and "event_stream" in self.app:
+                    await self.app["event_stream"].stop()
+            finally:
+                if self.runner:
+                    await self.runner.cleanup()
         except Exception as e:
             _LOG.warning(f"Error stopping REST API server: {e}")
         finally:

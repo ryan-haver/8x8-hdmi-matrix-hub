@@ -1,0 +1,1884 @@
+{
+  "schema_version": 1,
+  "features": ["F-API-002"],
+  "level": "V2",
+  "scenario": "contracts.api_root",
+  "scenario_title": "GET /: public API documentation and catalog without device mutation",
+  "scenario_kind": "happy",
+  "target": "sim",
+  "client": "api",
+  "result": "pass",
+  "gate": "ok",
+  "blocked_reason": null,
+  "commit": {
+    "sha": "310d8b65a9fce3c9069523d4ac5ce21157e75c9f",
+    "branch": "ryan-haver/wp-w03-close-evidence",
+    "dirty_files": [],
+    "short": "310d8b65",
+    "dirty": false
+  },
+  "timestamp": {
+    "started": "2026-10-26T22:27:14.611Z",
+    "finished": "2026-10-26T22:27:14.781Z"
+  },
+  "operator": "automation",
+  "environment": {
+    "target": "sim",
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "hub": {
+      "entry": "run.py -> hub.cli shared runtime (UC_ENABLED=false)",
+      "version": "2.10.0",
+      "api_version": "2.10.0",
+      "image_digest": null,
+      "env": {
+        "UC_ENABLED": "false",
+        "MATRIX_HOST": "127.0.0.1",
+        "MATRIX_PORT": "50855",
+        "OREI_TELNET_PORT": "50856",
+        "OREI_USE_TELNET_CEC": "false",
+        "OREI_STATUS_CACHE_TTL": "3",
+        "TRUST_PROXY_HEADERS": "true",
+        "TRUSTED_PROXY_IPS": "127.0.0.1",
+        "LOG_LEVEL": "INFO",
+        "FLIC_ENABLED": "true",
+        "HA_DISCOVERY_ENABLED": "false"
+      }
+    },
+    "client": {
+      "name": "api",
+      "aiohttp": "3.13.3"
+    },
+    "simulator": {
+      "source_sha256": "23f7439ea94f5fcc",
+      "seed_state": "tools/simulator/states/default.json",
+      "model": "BK-808",
+      "firmware_version": "V1.10.01",
+      "web_version": "V2.00.03"
+    }
+  },
+  "procedure": [
+    "reset the simulator to the seed state",
+    "wait for the simulator Telnet link before setup and fault injection",
+    "let the hub read the matrix (/ws get_status), so it is in sync before the action",
+    "action (api): request(method='GET', path='/')",
+    "  GET / -> HTTP 200"
+  ],
+  "observations": {
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "name": "OREI HDMI Matrix REST API",
+            "version": "2.10.0",
+            "endpoints": {
+              "websocket": {
+                "GET /ws": "WebSocket for real-time status updates"
+              },
+              "status": {
+                "GET /api/health": "Health check",
+                "GET /api/openapi.json": "OpenAPI 3.1.0 specification (JSON)",
+                "GET /api/docs": "Interactive Swagger UI API documentation",
+                "GET /api/status": "Basic matrix status",
+                "GET /api/status/full": "Comprehensive status from all endpoints",
+                "GET /api/presets": "List all presets with names",
+                "GET /api/inputs": "List all inputs with names",
+                "GET /api/outputs": "List all outputs with names"
+              },
+              "extended_status": {
+                "GET /api/status/outputs": "Detailed output status (connection detection, HDCP, HDR, etc.)",
+                "GET /api/status/inputs": "Detailed input status (signal detection, EDID)",
+                "GET /api/status/edid": "EDID configuration per input",
+                "GET /api/status/ext-audio": "External audio matrix status",
+                "GET /api/status/cec": "CEC configuration per port",
+                "GET /api/status/system": "System settings (beep, panel lock, mode)",
+                "GET /api/status/device": "Device/firmware information"
+              },
+              "control": {
+                "POST /api/preset/{1-8}": "Recall a preset",
+                "POST /api/preset/{1-8}/save": "Save current routing to preset",
+                "POST /api/switch": "Route input to output (body: {input: N, output: N})",
+                "POST /api/power/on": "Power on matrix",
+                "POST /api/power/off": "Power off matrix"
+              },
+              "input_cycling": {
+                "POST /api/input/next": "Cycle to next input on output (query: ?output=1)",
+                "POST /api/input/previous": "Cycle to previous input on output (query: ?output=1)",
+                "POST /api/output/{1-8}/source": "Set source for specific output (body: {input: N})"
+              },
+              "output_control": {
+                "POST /api/output/{1-8}/enable": "Enable/disable output stream (body: {enabled: bool})",
+                "POST /api/output/{1-8}/hdcp": "Set HDCP mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/hdr": "Set HDR mode (body: {mode: 1-3})",
+                "POST /api/output/{1-8}/scaler": "Set scaler mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/arc": "Enable/disable ARC (body: {enabled: bool})",
+                "POST /api/output/{1-8}/mute": "Mute/unmute audio (body: {muted: bool})"
+              },
+              "system_control": {
+                "POST /api/system/beep": "Enable/disable beep (body: {enabled: bool})",
+                "POST /api/system/panel_lock": "Lock/unlock front panel (body: {locked: bool})",
+                "POST /api/system/reboot": "Reboot the matrix",
+                "GET /api/system/lcd/modes": "List available LCD timeout modes",
+                "POST /api/system/lcd": "Set LCD display timeout (body: {mode: 0-4})"
+              },
+              "edid_control": {
+                "GET /api/edid/modes": "List available EDID modes",
+                "POST /api/input/{1-8}/edid": "Set EDID mode for input (body: {mode: N})"
+              },
+              "ext_audio_control": {
+                "GET /api/ext-audio/modes": "List available ext-audio modes",
+                "POST /api/ext-audio/mode": "Set ext-audio mode (body: {mode: 0-2})",
+                "POST /api/ext-audio/{1-8}/enable": "Enable/disable ext-audio output (body: {enabled: bool})",
+                "POST /api/ext-audio/{1-8}/source": "Set ext-audio source (body: {input: 1-8})"
+              },
+              "scenes": {
+                "GET /api/scenes": "List all saved scenes (legacy)",
+                "GET /api/scene/{id}": "Get scene details (legacy)",
+                "POST /api/scene": "Create/update scene (legacy)",
+                "DELETE /api/scene/{id}": "Delete a scene (legacy)",
+                "POST /api/scene/{id}/recall": "Apply scene to matrix (legacy)",
+                "POST /api/scene/save-current": "Save current state as scene (legacy)"
+              },
+              "profiles": {
+                "GET /api/profiles": "List all saved profiles",
+                "GET /api/profile/{id}": "Get profile details",
+                "POST /api/profile": "Create profile (body: {id, name, outputs, icon?, macros?, power_on_macro?, power_off_macro?})",
+                "PUT /api/profile/{id}": "Update profile properties",
+                "DELETE /api/profile/{id}": "Delete a profile",
+                "POST /api/profile/{id}/recall": "Apply profile to matrix (runs power_on_macro if set)",
+                "GET /api/profile/{id}/cec": "Get profile CEC configuration",
+                "POST /api/profile/{id}/cec": "Update profile CEC configuration",
+                "GET /api/profile/{id}/macros": "Get macros assigned to profile",
+                "POST /api/profile/{id}/macros": "Update profile macro assignments"
+              },
+              "cec": {
+                "GET /api/cec/commands": "List available CEC commands",
+                "POST /api/cec/input/{1-8}/{command}": "Send CEC to input device",
+                "POST /api/cec/output/{1-8}/{command}": "Send CEC to output device (TV)",
+                "POST /api/cec/{input|output}/{1-8}/enable": "Enable/disable CEC on port"
+              },
+              "cec_macros": {
+                "GET /api/cec/macros": "List all CEC macros",
+                "GET /api/cec/macro/{id}": "Get macro details",
+                "POST /api/cec/macro": "Create macro (body: {name, steps: [{command, targets, delay_ms}]})",
+                "PUT /api/cec/macro/{id}": "Update macro",
+                "DELETE /api/cec/macro/{id}": "Delete macro",
+                "POST /api/cec/macro/{id}/execute": "Execute macro",
+                "POST /api/cec/macro/{id}/test": "Validate macro (dry run)"
+              }
+            },
+            "websocket_events": {
+              "connected": "Sent on initial connection with client count",
+              "routing_change": "Sent when input routing changes on an output",
+              "connection_change": "Sent when display connection status changes",
+              "signal_change": "Sent when input signal status changes",
+              "status_update": "Full status response (on request or periodic)",
+              "pong": "Response to ping command",
+              "error": "Error message"
+            },
+            "websocket_commands": {
+              "ping": "Request a pong response",
+              "get_status": "Request full status update"
+            },
+            "mode_values": {
+              "hdcp": {
+                "1": "HDCP 1.4",
+                "2": "HDCP 2.2",
+                "3": "Follow Sink",
+                "4": "Follow Source",
+                "5": "User Mode"
+              },
+              "hdr": {
+                "1": "Passthrough",
+                "2": "HDR to SDR",
+                "3": "Auto"
+              },
+              "scaler": {
+                "1": "Passthrough",
+                "2": "8K→4K",
+                "3": "8K/4K→1080p",
+                "4": "Auto",
+                "5": "Audio Only"
+              },
+              "edid": {
+                "1": "1080p 2CH",
+                "2": "1080p 5.1CH",
+                "3": "1080p 7.1CH",
+                "4": "1080p 3D 2CH",
+                "5": "1080p 3D 5.1CH",
+                "6": "1080p 3D 7.1CH",
+                "7": "4K30 2CH",
+                "8": "4K30 5.1CH",
+                "9": "4K30 7.1CH",
+                "10": "4K60 420 2CH",
+                "11": "4K60 420 5.1CH",
+                "12": "4K60 420 7.1CH",
+                "13": "4K60 444 2CH",
+                "14": "4K60 444 7.1CH",
+                "15-22": "Copy from Output 1-8",
+                "33": "4K60 HDR 2CH",
+                "34": "4K60 HDR 5.1CH",
+                "35": "4K60 HDR 7.1CH",
+                "36": "4K60 HDR Atmos",
+                "37": "8K30",
+                "38": "8K60"
+              },
+              "lcd_timeout": {
+                "0": "Off",
+                "1": "Always On",
+                "2": "15 seconds",
+                "3": "30 seconds",
+                "4": "60 seconds"
+              },
+              "ext_audio_mode": {
+                "0": "Bind to Input",
+                "1": "Bind to Output",
+                "2": "Matrix Mode"
+              }
+            },
+            "cec_commands": {
+              "navigation": ["up", "down", "left", "right", "select", "menu", "back"],
+              "playback": ["play", "pause", "stop", "previous", "next", "rewind", "fast_forward"],
+              "power": ["power_on", "power_off"],
+              "volume": ["volume_up", "volume_down", "mute"]
+            },
+            "examples": {
+              "websocket_connect": "wscat -c ws://HOST:8080/ws",
+              "websocket_ping": "{\"command\": \"ping\"}",
+              "websocket_status": "{\"command\": \"get_status\"}",
+              "recall_preset": "curl -X POST http://HOST:8080/api/preset/2",
+              "save_preset": "curl -X POST http://HOST:8080/api/preset/3/save",
+              "switch_routing": "curl -X POST http://HOST:8080/api/switch -d '{\"input\": 3, \"output\": 1}'",
+              "next_input": "curl -X POST 'http://HOST:8080/api/input/next?output=1'",
+              "set_hdcp": "curl -X POST http://HOST:8080/api/output/1/hdcp -d '{\"mode\": 2}'",
+              "set_hdr": "curl -X POST http://HOST:8080/api/output/1/hdr -d '{\"mode\": 1}'",
+              "enable_arc": "curl -X POST http://HOST:8080/api/output/1/arc -d '{\"enabled\": true}'",
+              "mute_output": "curl -X POST http://HOST:8080/api/output/1/mute -d '{\"muted\": true}'",
+              "disable_output": "curl -X POST http://HOST:8080/api/output/3/enable -d '{\"enabled\": false}'",
+              "enable_cec": "curl -X POST http://HOST:8080/api/cec/input/2/enable -d '{\"enabled\": true}'",
+              "cec_play": "curl -X POST http://HOST:8080/api/cec/input/2/play",
+              "reboot": "curl -X POST http://HOST:8080/api/system/reboot",
+              "get_edid_modes": "curl http://HOST:8080/api/edid/modes",
+              "get_edid_status": "curl http://HOST:8080/api/status/edid",
+              "set_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 36}'",
+              "copy_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 15}'",
+              "get_lcd_modes": "curl http://HOST:8080/api/system/lcd/modes",
+              "set_lcd_timeout": "curl -X POST http://HOST:8080/api/system/lcd -d '{\"mode\": 3}'",
+              "get_ext_audio_status": "curl http://HOST:8080/api/status/ext-audio",
+              "get_ext_audio_modes": "curl http://HOST:8080/api/ext-audio/modes",
+              "set_ext_audio_mode": "curl -X POST http://HOST:8080/api/ext-audio/mode -d '{\"mode\": 2}'",
+              "enable_ext_audio": "curl -X POST http://HOST:8080/api/ext-audio/1/enable -d '{\"enabled\": true}'",
+              "set_ext_audio_source": "curl -X POST http://HOST:8080/api/ext-audio/1/source -d '{\"input\": 3}'",
+              "list_scenes": "curl http://HOST:8080/api/scenes",
+              "get_scene": "curl http://HOST:8080/api/scene/movie_night",
+              "create_scene": "curl -X POST http://HOST:8080/api/scene -d '{\"id\": \"movie_night\", \"name\": \"Movie Night\", \"outputs\": {\"1\": {\"input\": 2}, \"2\": {\"input\": 2}}}'",
+              "recall_scene": "curl -X POST http://HOST:8080/api/scene/movie_night/recall",
+              "save_current_as_scene": "curl -X POST http://HOST:8080/api/scene/save-current -d '{\"id\": \"current\", \"name\": \"Current Setup\"}'",
+              "delete_scene": "curl -X DELETE http://HOST:8080/api/scene/movie_night"
+            }
+          },
+          "error": null
+        },
+        "response_headers": {
+          "content-type": "application/json; charset=utf-8",
+          "vary": "Origin",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-headers": "Content-Type, X-API-Key, X-Admin-PIN",
+          "access-control-max-age": "86400",
+          "content-length": "***",
+          "date": "***",
+          "server": "***"
+        },
+        "response_headers_redacted": ["content-length", "date", "server"],
+        "elapsed_ms": 0.6
+      }
+    ],
+    "response_status": 200,
+    "hub_reads": [
+      {
+        "method": "GET",
+        "path": "/",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "name": "OREI HDMI Matrix REST API",
+            "version": "2.10.0",
+            "endpoints": {
+              "websocket": {
+                "GET /ws": "WebSocket for real-time status updates"
+              },
+              "status": {
+                "GET /api/health": "Health check",
+                "GET /api/openapi.json": "OpenAPI 3.1.0 specification (JSON)",
+                "GET /api/docs": "Interactive Swagger UI API documentation",
+                "GET /api/status": "Basic matrix status",
+                "GET /api/status/full": "Comprehensive status from all endpoints",
+                "GET /api/presets": "List all presets with names",
+                "GET /api/inputs": "List all inputs with names",
+                "GET /api/outputs": "List all outputs with names"
+              },
+              "extended_status": {
+                "GET /api/status/outputs": "Detailed output status (connection detection, HDCP, HDR, etc.)",
+                "GET /api/status/inputs": "Detailed input status (signal detection, EDID)",
+                "GET /api/status/edid": "EDID configuration per input",
+                "GET /api/status/ext-audio": "External audio matrix status",
+                "GET /api/status/cec": "CEC configuration per port",
+                "GET /api/status/system": "System settings (beep, panel lock, mode)",
+                "GET /api/status/device": "Device/firmware information"
+              },
+              "control": {
+                "POST /api/preset/{1-8}": "Recall a preset",
+                "POST /api/preset/{1-8}/save": "Save current routing to preset",
+                "POST /api/switch": "Route input to output (body: {input: N, output: N})",
+                "POST /api/power/on": "Power on matrix",
+                "POST /api/power/off": "Power off matrix"
+              },
+              "input_cycling": {
+                "POST /api/input/next": "Cycle to next input on output (query: ?output=1)",
+                "POST /api/input/previous": "Cycle to previous input on output (query: ?output=1)",
+                "POST /api/output/{1-8}/source": "Set source for specific output (body: {input: N})"
+              },
+              "output_control": {
+                "POST /api/output/{1-8}/enable": "Enable/disable output stream (body: {enabled: bool})",
+                "POST /api/output/{1-8}/hdcp": "Set HDCP mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/hdr": "Set HDR mode (body: {mode: 1-3})",
+                "POST /api/output/{1-8}/scaler": "Set scaler mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/arc": "Enable/disable ARC (body: {enabled: bool})",
+                "POST /api/output/{1-8}/mute": "Mute/unmute audio (body: {muted: bool})"
+              },
+              "system_control": {
+                "POST /api/system/beep": "Enable/disable beep (body: {enabled: bool})",
+                "POST /api/system/panel_lock": "Lock/unlock front panel (body: {locked: bool})",
+                "POST /api/system/reboot": "Reboot the matrix",
+                "GET /api/system/lcd/modes": "List available LCD timeout modes",
+                "POST /api/system/lcd": "Set LCD display timeout (body: {mode: 0-4})"
+              },
+              "edid_control": {
+                "GET /api/edid/modes": "List available EDID modes",
+                "POST /api/input/{1-8}/edid": "Set EDID mode for input (body: {mode: N})"
+              },
+              "ext_audio_control": {
+                "GET /api/ext-audio/modes": "List available ext-audio modes",
+                "POST /api/ext-audio/mode": "Set ext-audio mode (body: {mode: 0-2})",
+                "POST /api/ext-audio/{1-8}/enable": "Enable/disable ext-audio output (body: {enabled: bool})",
+                "POST /api/ext-audio/{1-8}/source": "Set ext-audio source (body: {input: 1-8})"
+              },
+              "scenes": {
+                "GET /api/scenes": "List all saved scenes (legacy)",
+                "GET /api/scene/{id}": "Get scene details (legacy)",
+                "POST /api/scene": "Create/update scene (legacy)",
+                "DELETE /api/scene/{id}": "Delete a scene (legacy)",
+                "POST /api/scene/{id}/recall": "Apply scene to matrix (legacy)",
+                "POST /api/scene/save-current": "Save current state as scene (legacy)"
+              },
+              "profiles": {
+                "GET /api/profiles": "List all saved profiles",
+                "GET /api/profile/{id}": "Get profile details",
+                "POST /api/profile": "Create profile (body: {id, name, outputs, icon?, macros?, power_on_macro?, power_off_macro?})",
+                "PUT /api/profile/{id}": "Update profile properties",
+                "DELETE /api/profile/{id}": "Delete a profile",
+                "POST /api/profile/{id}/recall": "Apply profile to matrix (runs power_on_macro if set)",
+                "GET /api/profile/{id}/cec": "Get profile CEC configuration",
+                "POST /api/profile/{id}/cec": "Update profile CEC configuration",
+                "GET /api/profile/{id}/macros": "Get macros assigned to profile",
+                "POST /api/profile/{id}/macros": "Update profile macro assignments"
+              },
+              "cec": {
+                "GET /api/cec/commands": "List available CEC commands",
+                "POST /api/cec/input/{1-8}/{command}": "Send CEC to input device",
+                "POST /api/cec/output/{1-8}/{command}": "Send CEC to output device (TV)",
+                "POST /api/cec/{input|output}/{1-8}/enable": "Enable/disable CEC on port"
+              },
+              "cec_macros": {
+                "GET /api/cec/macros": "List all CEC macros",
+                "GET /api/cec/macro/{id}": "Get macro details",
+                "POST /api/cec/macro": "Create macro (body: {name, steps: [{command, targets, delay_ms}]})",
+                "PUT /api/cec/macro/{id}": "Update macro",
+                "DELETE /api/cec/macro/{id}": "Delete macro",
+                "POST /api/cec/macro/{id}/execute": "Execute macro",
+                "POST /api/cec/macro/{id}/test": "Validate macro (dry run)"
+              }
+            },
+            "websocket_events": {
+              "connected": "Sent on initial connection with client count",
+              "routing_change": "Sent when input routing changes on an output",
+              "connection_change": "Sent when display connection status changes",
+              "signal_change": "Sent when input signal status changes",
+              "status_update": "Full status response (on request or periodic)",
+              "pong": "Response to ping command",
+              "error": "Error message"
+            },
+            "websocket_commands": {
+              "ping": "Request a pong response",
+              "get_status": "Request full status update"
+            },
+            "mode_values": {
+              "hdcp": {
+                "1": "HDCP 1.4",
+                "2": "HDCP 2.2",
+                "3": "Follow Sink",
+                "4": "Follow Source",
+                "5": "User Mode"
+              },
+              "hdr": {
+                "1": "Passthrough",
+                "2": "HDR to SDR",
+                "3": "Auto"
+              },
+              "scaler": {
+                "1": "Passthrough",
+                "2": "8K→4K",
+                "3": "8K/4K→1080p",
+                "4": "Auto",
+                "5": "Audio Only"
+              },
+              "edid": {
+                "1": "1080p 2CH",
+                "2": "1080p 5.1CH",
+                "3": "1080p 7.1CH",
+                "4": "1080p 3D 2CH",
+                "5": "1080p 3D 5.1CH",
+                "6": "1080p 3D 7.1CH",
+                "7": "4K30 2CH",
+                "8": "4K30 5.1CH",
+                "9": "4K30 7.1CH",
+                "10": "4K60 420 2CH",
+                "11": "4K60 420 5.1CH",
+                "12": "4K60 420 7.1CH",
+                "13": "4K60 444 2CH",
+                "14": "4K60 444 7.1CH",
+                "15-22": "Copy from Output 1-8",
+                "33": "4K60 HDR 2CH",
+                "34": "4K60 HDR 5.1CH",
+                "35": "4K60 HDR 7.1CH",
+                "36": "4K60 HDR Atmos",
+                "37": "8K30",
+                "38": "8K60"
+              },
+              "lcd_timeout": {
+                "0": "Off",
+                "1": "Always On",
+                "2": "15 seconds",
+                "3": "30 seconds",
+                "4": "60 seconds"
+              },
+              "ext_audio_mode": {
+                "0": "Bind to Input",
+                "1": "Bind to Output",
+                "2": "Matrix Mode"
+              }
+            },
+            "cec_commands": {
+              "navigation": ["up", "down", "left", "right", "select", "menu", "back"],
+              "playback": ["play", "pause", "stop", "previous", "next", "rewind", "fast_forward"],
+              "power": ["power_on", "power_off"],
+              "volume": ["volume_up", "volume_down", "mute"]
+            },
+            "examples": {
+              "websocket_connect": "wscat -c ws://HOST:8080/ws",
+              "websocket_ping": "{\"command\": \"ping\"}",
+              "websocket_status": "{\"command\": \"get_status\"}",
+              "recall_preset": "curl -X POST http://HOST:8080/api/preset/2",
+              "save_preset": "curl -X POST http://HOST:8080/api/preset/3/save",
+              "switch_routing": "curl -X POST http://HOST:8080/api/switch -d '{\"input\": 3, \"output\": 1}'",
+              "next_input": "curl -X POST 'http://HOST:8080/api/input/next?output=1'",
+              "set_hdcp": "curl -X POST http://HOST:8080/api/output/1/hdcp -d '{\"mode\": 2}'",
+              "set_hdr": "curl -X POST http://HOST:8080/api/output/1/hdr -d '{\"mode\": 1}'",
+              "enable_arc": "curl -X POST http://HOST:8080/api/output/1/arc -d '{\"enabled\": true}'",
+              "mute_output": "curl -X POST http://HOST:8080/api/output/1/mute -d '{\"muted\": true}'",
+              "disable_output": "curl -X POST http://HOST:8080/api/output/3/enable -d '{\"enabled\": false}'",
+              "enable_cec": "curl -X POST http://HOST:8080/api/cec/input/2/enable -d '{\"enabled\": true}'",
+              "cec_play": "curl -X POST http://HOST:8080/api/cec/input/2/play",
+              "reboot": "curl -X POST http://HOST:8080/api/system/reboot",
+              "get_edid_modes": "curl http://HOST:8080/api/edid/modes",
+              "get_edid_status": "curl http://HOST:8080/api/status/edid",
+              "set_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 36}'",
+              "copy_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 15}'",
+              "get_lcd_modes": "curl http://HOST:8080/api/system/lcd/modes",
+              "set_lcd_timeout": "curl -X POST http://HOST:8080/api/system/lcd -d '{\"mode\": 3}'",
+              "get_ext_audio_status": "curl http://HOST:8080/api/status/ext-audio",
+              "get_ext_audio_modes": "curl http://HOST:8080/api/ext-audio/modes",
+              "set_ext_audio_mode": "curl -X POST http://HOST:8080/api/ext-audio/mode -d '{\"mode\": 2}'",
+              "enable_ext_audio": "curl -X POST http://HOST:8080/api/ext-audio/1/enable -d '{\"enabled\": true}'",
+              "set_ext_audio_source": "curl -X POST http://HOST:8080/api/ext-audio/1/source -d '{\"input\": 3}'",
+              "list_scenes": "curl http://HOST:8080/api/scenes",
+              "get_scene": "curl http://HOST:8080/api/scene/movie_night",
+              "create_scene": "curl -X POST http://HOST:8080/api/scene -d '{\"id\": \"movie_night\", \"name\": \"Movie Night\", \"outputs\": {\"1\": {\"input\": 2}, \"2\": {\"input\": 2}}}'",
+              "recall_scene": "curl -X POST http://HOST:8080/api/scene/movie_night/recall",
+              "save_current_as_scene": "curl -X POST http://HOST:8080/api/scene/save-current -d '{\"id\": \"current\", \"name\": \"Current Setup\"}'",
+              "delete_scene": "curl -X DELETE http://HOST:8080/api/scene/movie_night"
+            }
+          },
+          "error": null
+        },
+        "response_headers": {
+          "content-type": "application/json; charset=utf-8",
+          "vary": "Origin",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-headers": "Content-Type, X-API-Key, X-Admin-PIN",
+          "access-control-max-age": "86400",
+          "content-length": "***",
+          "date": "***",
+          "server": "***"
+        },
+        "response_headers_redacted": ["content-length", "date", "server"],
+        "elapsed_ms": 0.4
+      },
+      {
+        "method": "GET",
+        "path": "/",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "name": "OREI HDMI Matrix REST API",
+            "version": "2.10.0",
+            "endpoints": {
+              "websocket": {
+                "GET /ws": "WebSocket for real-time status updates"
+              },
+              "status": {
+                "GET /api/health": "Health check",
+                "GET /api/openapi.json": "OpenAPI 3.1.0 specification (JSON)",
+                "GET /api/docs": "Interactive Swagger UI API documentation",
+                "GET /api/status": "Basic matrix status",
+                "GET /api/status/full": "Comprehensive status from all endpoints",
+                "GET /api/presets": "List all presets with names",
+                "GET /api/inputs": "List all inputs with names",
+                "GET /api/outputs": "List all outputs with names"
+              },
+              "extended_status": {
+                "GET /api/status/outputs": "Detailed output status (connection detection, HDCP, HDR, etc.)",
+                "GET /api/status/inputs": "Detailed input status (signal detection, EDID)",
+                "GET /api/status/edid": "EDID configuration per input",
+                "GET /api/status/ext-audio": "External audio matrix status",
+                "GET /api/status/cec": "CEC configuration per port",
+                "GET /api/status/system": "System settings (beep, panel lock, mode)",
+                "GET /api/status/device": "Device/firmware information"
+              },
+              "control": {
+                "POST /api/preset/{1-8}": "Recall a preset",
+                "POST /api/preset/{1-8}/save": "Save current routing to preset",
+                "POST /api/switch": "Route input to output (body: {input: N, output: N})",
+                "POST /api/power/on": "Power on matrix",
+                "POST /api/power/off": "Power off matrix"
+              },
+              "input_cycling": {
+                "POST /api/input/next": "Cycle to next input on output (query: ?output=1)",
+                "POST /api/input/previous": "Cycle to previous input on output (query: ?output=1)",
+                "POST /api/output/{1-8}/source": "Set source for specific output (body: {input: N})"
+              },
+              "output_control": {
+                "POST /api/output/{1-8}/enable": "Enable/disable output stream (body: {enabled: bool})",
+                "POST /api/output/{1-8}/hdcp": "Set HDCP mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/hdr": "Set HDR mode (body: {mode: 1-3})",
+                "POST /api/output/{1-8}/scaler": "Set scaler mode (body: {mode: 1-5})",
+                "POST /api/output/{1-8}/arc": "Enable/disable ARC (body: {enabled: bool})",
+                "POST /api/output/{1-8}/mute": "Mute/unmute audio (body: {muted: bool})"
+              },
+              "system_control": {
+                "POST /api/system/beep": "Enable/disable beep (body: {enabled: bool})",
+                "POST /api/system/panel_lock": "Lock/unlock front panel (body: {locked: bool})",
+                "POST /api/system/reboot": "Reboot the matrix",
+                "GET /api/system/lcd/modes": "List available LCD timeout modes",
+                "POST /api/system/lcd": "Set LCD display timeout (body: {mode: 0-4})"
+              },
+              "edid_control": {
+                "GET /api/edid/modes": "List available EDID modes",
+                "POST /api/input/{1-8}/edid": "Set EDID mode for input (body: {mode: N})"
+              },
+              "ext_audio_control": {
+                "GET /api/ext-audio/modes": "List available ext-audio modes",
+                "POST /api/ext-audio/mode": "Set ext-audio mode (body: {mode: 0-2})",
+                "POST /api/ext-audio/{1-8}/enable": "Enable/disable ext-audio output (body: {enabled: bool})",
+                "POST /api/ext-audio/{1-8}/source": "Set ext-audio source (body: {input: 1-8})"
+              },
+              "scenes": {
+                "GET /api/scenes": "List all saved scenes (legacy)",
+                "GET /api/scene/{id}": "Get scene details (legacy)",
+                "POST /api/scene": "Create/update scene (legacy)",
+                "DELETE /api/scene/{id}": "Delete a scene (legacy)",
+                "POST /api/scene/{id}/recall": "Apply scene to matrix (legacy)",
+                "POST /api/scene/save-current": "Save current state as scene (legacy)"
+              },
+              "profiles": {
+                "GET /api/profiles": "List all saved profiles",
+                "GET /api/profile/{id}": "Get profile details",
+                "POST /api/profile": "Create profile (body: {id, name, outputs, icon?, macros?, power_on_macro?, power_off_macro?})",
+                "PUT /api/profile/{id}": "Update profile properties",
+                "DELETE /api/profile/{id}": "Delete a profile",
+                "POST /api/profile/{id}/recall": "Apply profile to matrix (runs power_on_macro if set)",
+                "GET /api/profile/{id}/cec": "Get profile CEC configuration",
+                "POST /api/profile/{id}/cec": "Update profile CEC configuration",
+                "GET /api/profile/{id}/macros": "Get macros assigned to profile",
+                "POST /api/profile/{id}/macros": "Update profile macro assignments"
+              },
+              "cec": {
+                "GET /api/cec/commands": "List available CEC commands",
+                "POST /api/cec/input/{1-8}/{command}": "Send CEC to input device",
+                "POST /api/cec/output/{1-8}/{command}": "Send CEC to output device (TV)",
+                "POST /api/cec/{input|output}/{1-8}/enable": "Enable/disable CEC on port"
+              },
+              "cec_macros": {
+                "GET /api/cec/macros": "List all CEC macros",
+                "GET /api/cec/macro/{id}": "Get macro details",
+                "POST /api/cec/macro": "Create macro (body: {name, steps: [{command, targets, delay_ms}]})",
+                "PUT /api/cec/macro/{id}": "Update macro",
+                "DELETE /api/cec/macro/{id}": "Delete macro",
+                "POST /api/cec/macro/{id}/execute": "Execute macro",
+                "POST /api/cec/macro/{id}/test": "Validate macro (dry run)"
+              }
+            },
+            "websocket_events": {
+              "connected": "Sent on initial connection with client count",
+              "routing_change": "Sent when input routing changes on an output",
+              "connection_change": "Sent when display connection status changes",
+              "signal_change": "Sent when input signal status changes",
+              "status_update": "Full status response (on request or periodic)",
+              "pong": "Response to ping command",
+              "error": "Error message"
+            },
+            "websocket_commands": {
+              "ping": "Request a pong response",
+              "get_status": "Request full status update"
+            },
+            "mode_values": {
+              "hdcp": {
+                "1": "HDCP 1.4",
+                "2": "HDCP 2.2",
+                "3": "Follow Sink",
+                "4": "Follow Source",
+                "5": "User Mode"
+              },
+              "hdr": {
+                "1": "Passthrough",
+                "2": "HDR to SDR",
+                "3": "Auto"
+              },
+              "scaler": {
+                "1": "Passthrough",
+                "2": "8K→4K",
+                "3": "8K/4K→1080p",
+                "4": "Auto",
+                "5": "Audio Only"
+              },
+              "edid": {
+                "1": "1080p 2CH",
+                "2": "1080p 5.1CH",
+                "3": "1080p 7.1CH",
+                "4": "1080p 3D 2CH",
+                "5": "1080p 3D 5.1CH",
+                "6": "1080p 3D 7.1CH",
+                "7": "4K30 2CH",
+                "8": "4K30 5.1CH",
+                "9": "4K30 7.1CH",
+                "10": "4K60 420 2CH",
+                "11": "4K60 420 5.1CH",
+                "12": "4K60 420 7.1CH",
+                "13": "4K60 444 2CH",
+                "14": "4K60 444 7.1CH",
+                "15-22": "Copy from Output 1-8",
+                "33": "4K60 HDR 2CH",
+                "34": "4K60 HDR 5.1CH",
+                "35": "4K60 HDR 7.1CH",
+                "36": "4K60 HDR Atmos",
+                "37": "8K30",
+                "38": "8K60"
+              },
+              "lcd_timeout": {
+                "0": "Off",
+                "1": "Always On",
+                "2": "15 seconds",
+                "3": "30 seconds",
+                "4": "60 seconds"
+              },
+              "ext_audio_mode": {
+                "0": "Bind to Input",
+                "1": "Bind to Output",
+                "2": "Matrix Mode"
+              }
+            },
+            "cec_commands": {
+              "navigation": ["up", "down", "left", "right", "select", "menu", "back"],
+              "playback": ["play", "pause", "stop", "previous", "next", "rewind", "fast_forward"],
+              "power": ["power_on", "power_off"],
+              "volume": ["volume_up", "volume_down", "mute"]
+            },
+            "examples": {
+              "websocket_connect": "wscat -c ws://HOST:8080/ws",
+              "websocket_ping": "{\"command\": \"ping\"}",
+              "websocket_status": "{\"command\": \"get_status\"}",
+              "recall_preset": "curl -X POST http://HOST:8080/api/preset/2",
+              "save_preset": "curl -X POST http://HOST:8080/api/preset/3/save",
+              "switch_routing": "curl -X POST http://HOST:8080/api/switch -d '{\"input\": 3, \"output\": 1}'",
+              "next_input": "curl -X POST 'http://HOST:8080/api/input/next?output=1'",
+              "set_hdcp": "curl -X POST http://HOST:8080/api/output/1/hdcp -d '{\"mode\": 2}'",
+              "set_hdr": "curl -X POST http://HOST:8080/api/output/1/hdr -d '{\"mode\": 1}'",
+              "enable_arc": "curl -X POST http://HOST:8080/api/output/1/arc -d '{\"enabled\": true}'",
+              "mute_output": "curl -X POST http://HOST:8080/api/output/1/mute -d '{\"muted\": true}'",
+              "disable_output": "curl -X POST http://HOST:8080/api/output/3/enable -d '{\"enabled\": false}'",
+              "enable_cec": "curl -X POST http://HOST:8080/api/cec/input/2/enable -d '{\"enabled\": true}'",
+              "cec_play": "curl -X POST http://HOST:8080/api/cec/input/2/play",
+              "reboot": "curl -X POST http://HOST:8080/api/system/reboot",
+              "get_edid_modes": "curl http://HOST:8080/api/edid/modes",
+              "get_edid_status": "curl http://HOST:8080/api/status/edid",
+              "set_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 36}'",
+              "copy_edid": "curl -X POST http://HOST:8080/api/input/1/edid -d '{\"mode\": 15}'",
+              "get_lcd_modes": "curl http://HOST:8080/api/system/lcd/modes",
+              "set_lcd_timeout": "curl -X POST http://HOST:8080/api/system/lcd -d '{\"mode\": 3}'",
+              "get_ext_audio_status": "curl http://HOST:8080/api/status/ext-audio",
+              "get_ext_audio_modes": "curl http://HOST:8080/api/ext-audio/modes",
+              "set_ext_audio_mode": "curl -X POST http://HOST:8080/api/ext-audio/mode -d '{\"mode\": 2}'",
+              "enable_ext_audio": "curl -X POST http://HOST:8080/api/ext-audio/1/enable -d '{\"enabled\": true}'",
+              "set_ext_audio_source": "curl -X POST http://HOST:8080/api/ext-audio/1/source -d '{\"input\": 3}'",
+              "list_scenes": "curl http://HOST:8080/api/scenes",
+              "get_scene": "curl http://HOST:8080/api/scene/movie_night",
+              "create_scene": "curl -X POST http://HOST:8080/api/scene -d '{\"id\": \"movie_night\", \"name\": \"Movie Night\", \"outputs\": {\"1\": {\"input\": 2}, \"2\": {\"input\": 2}}}'",
+              "recall_scene": "curl -X POST http://HOST:8080/api/scene/movie_night/recall",
+              "save_current_as_scene": "curl -X POST http://HOST:8080/api/scene/save-current -d '{\"id\": \"current\", \"name\": \"Current Setup\"}'",
+              "delete_scene": "curl -X DELETE http://HOST:8080/api/scene/movie_night"
+            }
+          },
+          "error": null
+        },
+        "response_headers": {
+          "content-type": "application/json; charset=utf-8",
+          "vary": "Origin",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-headers": "Content-Type, X-API-Key, X-Admin-PIN",
+          "access-control-max-age": "86400",
+          "content-length": "***",
+          "date": "***",
+          "server": "***"
+        },
+        "response_headers_redacted": ["content-length", "date", "server"],
+        "elapsed_ms": 0.3
+      },
+      {
+        "method": "GET",
+        "path": "/api/info",
+        "body": null,
+        "status": 200,
+        "response": {
+          "success": true,
+          "data": {
+            "version": "1.0.0rc1",
+            "api_version": "2.10.0",
+            "service": "orei-hdmi-matrix",
+            "input_count": 8,
+            "output_count": 8,
+            "driver_id": "hdmi_matrix",
+            "driver_name": "HDMI Matrix",
+            "matrix_host": "127.0.0.1",
+            "matrix_port": 50855,
+            "connected": true,
+            "model": "BK-808",
+            "firmware_version": "V1.10.01"
+          },
+          "error": null
+        },
+        "response_headers": {
+          "content-type": "application/json; charset=utf-8",
+          "vary": "Origin",
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-headers": "Content-Type, X-API-Key, X-Admin-PIN",
+          "access-control-max-age": "86400",
+          "content-length": "***",
+          "date": "***",
+          "server": "***"
+        },
+        "response_headers_redacted": ["content-length", "date", "server"],
+        "elapsed_ms": 1.2
+      }
+    ],
+    "state_before": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.01",
+        "web_version": "V2.00.03",
+        "key_mcu_version": "V1.00.08",
+        "cpld_version": "V1.00.06",
+        "type": "8x8 hdmi2.1 matrix",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000,
+        "network_username": 1
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "baudrate": 6
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 4,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0,
+        "index": 1
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "saved": true
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "saved": true
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "saved": true
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "saved": true
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_after": {
+      "schema_version": 1,
+      "auth": {
+        "user": "Admin",
+        "password": "admin"
+      },
+      "device": {
+        "model": "BK-808",
+        "hostname": "BK-808",
+        "firmware_version": "V1.10.01",
+        "web_version": "V2.00.03",
+        "key_mcu_version": "V1.00.08",
+        "cpld_version": "V1.00.06",
+        "type": "8x8 hdmi2.1 matrix",
+        "ip_module_version": "10.01.17",
+        "mac_address": "02:00:00:0B:08:08",
+        "ip_address": "192.168.0.100",
+        "netmask": "255.255.255.0",
+        "gateway": "192.168.0.1",
+        "dhcp": 0,
+        "telnet_port": 23,
+        "tcp_port": 8000,
+        "network_username": 1
+      },
+      "system": {
+        "power": 1,
+        "beep": 1,
+        "panel_lock": 0,
+        "lcd_timeout": 3,
+        "baudrate": 6
+      },
+      "inputs": [
+        {
+          "name": "PS3",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "AppleTV",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Computer",
+          "edid": 3,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Switch",
+          "edid": 36,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Shield",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "PS5",
+          "edid": 36,
+          "signal": 1,
+          "cable": 1,
+          "cec_enabled": 1
+        },
+        {
+          "name": "Analogue",
+          "edid": 3,
+          "signal": 0,
+          "cable": 1,
+          "cec_enabled": 0
+        },
+        {
+          "name": "Input 8",
+          "edid": 36,
+          "signal": 0,
+          "cable": 0,
+          "cec_enabled": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TV",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 1,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Soundbar",
+          "source": 2,
+          "connected": 1,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 4,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 1,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 3",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 4",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 5",
+          "source": 5,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 6",
+          "source": 6,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 7",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        },
+        {
+          "name": "Output 8",
+          "source": 1,
+          "connected": 0,
+          "stream": 1,
+          "hdcp": 3,
+          "hdr": 0,
+          "scaler": 0,
+          "arc": 0,
+          "audio_mute": 0,
+          "cec_enabled": 0,
+          "ext_audio_enabled": 0,
+          "ext_audio_source": 1
+        }
+      ],
+      "ext_audio": {
+        "mode": 0,
+        "index": 1
+      },
+      "presets": [
+        {
+          "name": "Apple TV",
+          "routing": [2, 2, 2, 2, 2, 2, 2, 2],
+          "saved": true
+        },
+        {
+          "name": "Shield",
+          "routing": [5, 5, 5, 5, 5, 5, 5, 5],
+          "saved": true
+        },
+        {
+          "name": "PS5",
+          "routing": [6, 6, 6, 6, 6, 6, 6, 6],
+          "saved": true
+        },
+        {
+          "name": "Retro",
+          "routing": [7, 7, 1, 1, 1, 1, 1, 1],
+          "saved": true
+        },
+        {
+          "name": "Preset 5",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 6",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 7",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        },
+        {
+          "name": "Preset 8",
+          "routing": [1, 2, 3, 4, 5, 6, 7, 8],
+          "saved": true
+        }
+      ],
+      "routing": [2, 2, 1, 1, 5, 6, 1, 1]
+    },
+    "state_diff": [],
+    "device_log": [
+      {
+        "t": 1793053634.773,
+        "channel": "http",
+        "command": "get status",
+        "recognised": true
+      }
+    ],
+    "ws_events": [
+      {
+        "t_ms": -153,
+        "event": "connected",
+        "data": {
+          "message": "Connected to the HDMI matrix hub",
+          "client_count": 1,
+          "protocol": 1,
+          "matrix": {
+            "configured": true,
+            "connected": true,
+            "state": "connected",
+            "host": "127.0.0.1"
+          }
+        }
+      },
+      {
+        "t_ms": -153,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "power": "on",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "state": "connected",
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "TV",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Soundbar",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      },
+      {
+        "t_ms": -35,
+        "event": "status",
+        "data": {
+          "connected": true,
+          "host": "127.0.0.1",
+          "power": "on",
+          "routing": {
+            "1": 2,
+            "2": 2,
+            "3": 1,
+            "4": 1,
+            "5": 5,
+            "6": 6,
+            "7": 1,
+            "8": 1
+          },
+          "outputs": [2, 2, 1, 1, 5, 6, 1, 1],
+          "input_names": {
+            "1": "PS3",
+            "2": "AppleTV",
+            "3": "Computer",
+            "4": "Switch",
+            "5": "Shield",
+            "6": "PS5",
+            "7": "Analogue",
+            "8": "Input 8"
+          },
+          "output_names": {
+            "1": "TV",
+            "2": "Soundbar",
+            "3": "Output 3",
+            "4": "Output 4",
+            "5": "Output 5",
+            "6": "Output 6",
+            "7": "Output 7",
+            "8": "Output 8"
+          },
+          "preset_names": {
+            "1": "Apple TV",
+            "2": "Shield",
+            "3": "PS5",
+            "4": "Retro",
+            "5": "Preset 5",
+            "6": "Preset 6",
+            "7": "Preset 7",
+            "8": "Preset 8"
+          },
+          "state": "connected",
+          "inputs": [
+            {
+              "number": 1,
+              "name": "PS3",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 2,
+              "name": "AppleTV",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 3,
+              "name": "Computer",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 3
+            },
+            {
+              "number": 4,
+              "name": "Switch",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 5,
+              "name": "Shield",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 6,
+              "name": "PS5",
+              "inactive": false,
+              "signalActive": true,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 36
+            },
+            {
+              "number": 7,
+              "name": "Analogue",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": true,
+              "sourceDetected": true,
+              "edid": 3
+            },
+            {
+              "number": 8,
+              "name": "Input 8",
+              "inactive": true,
+              "signalActive": false,
+              "cableConnected": false,
+              "sourceDetected": false,
+              "edid": 36
+            }
+          ],
+          "outputs_detail": [
+            {
+              "number": 1,
+              "name": "TV",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": true
+            },
+            {
+              "number": 2,
+              "name": "Soundbar",
+              "connected": true,
+              "cableConnected": true,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 5,
+              "arc": false
+            },
+            {
+              "number": 3,
+              "name": "Output 3",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 4,
+              "name": "Output 4",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 5,
+              "name": "Output 5",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 6,
+              "name": "Output 6",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 7,
+              "name": "Output 7",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            },
+            {
+              "number": 8,
+              "name": "Output 8",
+              "connected": false,
+              "cableConnected": false,
+              "enabled": true,
+              "muted": false,
+              "hdcp": 3,
+              "hdr": 1,
+              "scaler": 1,
+              "arc": false
+            }
+          ]
+        }
+      }
+    ],
+    "screenshots": [],
+    "client_diagnostics": null,
+    "operator": [],
+    "restore": null,
+    "notes": []
+  },
+  "checks": [
+    {
+      "description": "response HTTP 200 and body contains {'success': True, 'error': None, 'data': {'name': 'OREI HDMI Matrix REST API', 'version': '2.10.0', 'endpoints': {'status': {'GET /api/openapi.json': 'OpenAPI 3.1.0 specification (JSON)', 'GET /api/docs': 'Interactive Swagger UI API documentation'}, 'websocket': {'GET /ws': 'WebSocket for real-time status updates'}}}}",
+      "result": "pass",
+      "detail": "HTTP 200; body {\"success\": true, \"data\": {\"name\": \"OREI HDMI Matrix REST API\", \"version\": \"2.10.0\", \"endpoints\": {\"websocket\": {\"GET /ws\": \"WebSocket for real-time status updates\"}, \"status\": {\"GET /api/health\": \"Health check\", \"GET /api/openapi.json\": \"OpenAPI 3.1.0 specification (JSON)\", \"GET /api/docs\": \"Intera",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET / -> data.endpoints.edid_control != {}",
+      "result": "pass",
+      "detail": "HTTP 200; data.endpoints.edid_control = {\"GET /api/edid/modes\": \"List available EDID modes\", \"POST /api/input/{1-8}/edid\": \"Set EDID mode for input (body: {mode: N})\"}",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET / -> data.endpoints.scenes != {}",
+      "result": "pass",
+      "detail": "HTTP 200; data.endpoints.scenes = {\"GET /api/scenes\": \"List all saved scenes (legacy)\", \"GET /api/scene/{id}\": \"Get scene details (legacy)\", \"POST /api/scene\": \"Create/update scene (legacy)\", \"DELETE /api/scene/{id}\": \"Delete a scene ",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "hub GET /api/info -> data.api_version == '2.10.0' (HTTP 200)",
+      "result": "pass",
+      "detail": "HTTP 200; data.api_version = \"2.10.0\"",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "device otherwise unchanged",
+      "result": "pass",
+      "detail": "no other changes",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "no write command reached the device",
+      "result": "pass",
+      "detail": "write commands seen: []",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "simulator raised no protocol warnings",
+      "result": "pass",
+      "detail": "none",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    },
+    {
+      "description": "every WebSocket message follows docs/api/websocket.schema.json",
+      "result": "pass",
+      "detail": "3 message(s) checked",
+      "finding": null,
+      "linked_finding": null,
+      "note": null
+    }
+  ],
+  "findings": [],
+  "covers": [
+    "run.py",
+    "src/hub/cli.py",
+    "src/hub/runtime_paths.py",
+    "src/hub/runtime",
+    "src/hub/core",
+    "src/hub/persistence",
+    "src/hub/domain/action_runner.py",
+    "src/hub/integrations/hub_client_local.py",
+    "src/orei_matrix.py",
+    "src/telnet_client.py",
+    "src/_task_supervisor.py",
+    "src/rest_api/app.py",
+    "src/rest_api/utils.py",
+    "src/rest_api/websocket.py",
+    "src/rest_api/events.py",
+    "docs/api/websocket.schema.json",
+    "src/rest_api/static.py",
+    "src/rest_api/core.py",
+    "src/rest_api/security.py",
+    "src/hub/__init__.py",
+    "driver.json",
+    "scripts/bump_version.py",
+    "docs/API_REFERENCE.md",
+    "tests/test_rest_api.py",
+    "tests/test_openapi_and_config_docs.py",
+    "tests/sim/test_sim_rest_reads.py",
+    "tests/sim/conftest.py",
+    "tests/validation/scenarios/_paths.py",
+    "tests/validation/scenarios/api_documentation.py",
+    "tests/validation/scenarios/sw_api_read_01.py",
+    "tools/validate",
+    "tools/simulator",
+    "tests/e2e/fixtures/data"
+  ]
+}

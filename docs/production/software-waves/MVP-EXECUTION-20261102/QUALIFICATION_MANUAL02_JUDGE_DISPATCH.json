@@ -1,0 +1,76 @@
+{
+  "observed_utc": "2026-11-03T17:23:10.565362+00:00",
+  "status": "one fresh independent six-axis judge launched for owner-approved manualattempt02",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "judge": {
+      "task_id": "task_c8b55f48fcff",
+      "dispatch_id": "ctx_6f1b83d8f673",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+      "actual_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+      "exact_entry_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "observed_head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 418832,
+        "sha256": "a4f5052cb1b07c865353303411e58539b2c3eed43f48cc3ae7bf3a8f8c15e59a"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
+  },
+  "publication_before_wave": "56ac5061f208b6aa19958e1fae1d02e5b58478c2",
+  "fleet": {
+    "total": 123,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 123,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMjoxNzozMCIsImRpc3BhdGNoSWQiOiJjdHhfYjAxNDkxYjk3OGU5IiwiZGF0YWJhc2VJZCI6NjY3fX0"
+      },
+      {
+        "limit": 100,
+        "total": 123,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 116
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 1,
+    "accounting": "running keep-open judge also reads retained; not seven active workers"
+  },
+  "concurrency": "one newjudge+coordinator+protectedexternal3<=4, no nesting",
+  "qualification": "Originalattempt1FAIL unchanged; manualattempt02 evaluator delivered/preserved but not qualified, fresh independent judge must decide allsix unchanged axes before coordinator disposition",
+  "further_qualification_retry_authorized": false,
+  "source_or_feature_or_release_acceptance": false
+}

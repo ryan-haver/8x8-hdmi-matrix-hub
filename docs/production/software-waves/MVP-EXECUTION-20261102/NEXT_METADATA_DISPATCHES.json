@@ -1,0 +1,80 @@
+{
+  "observed_utc": "2026-11-03T02:44:00.942242+00:00",
+  "status": "both tasks delivered and released; inventory re-review requires changes, preservation report awaits review",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "rereview": {
+      "task_id": "task_2e497661d2af",
+      "dispatch_id": "ctx_4ec26c6917ca",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview01",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview01",
+      "base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f48-dbae-7561-9580-ed81f10d70ad",
+        "model": "gpt-6-astra",
+        "effort": "high native",
+        "bytes": 705411,
+        "sha256": "fd92b9c7567bdf73ee8c1fdaa07cf7b6873c326dff07b97cbcb92f1b3dbdfa6c"
+      },
+      "status": "require_changes",
+      "report_commit": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "terminal_state": "released"
+    },
+    "preservation": {
+      "task_id": "task_9456469c267b",
+      "dispatch_id": "ctx_f2864b9be31e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+      "actual_branch": "execution/wp-exec-ev-preservation-gaps",
+      "base": "f2dc1dbf683d8f96200d1517b0786e3441105b36",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e60b68c49ffeG8Vb3xTKg7JyqF",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 287448,
+        "sha256": "997490e7a0fa731642f884140c898ae685046f6f3db98d73fb5f849817ac5371",
+        "effort": "CLI override unsupported, project config inherited; no unsupported override"
+      },
+      "status": "independent exact-commit factual review pending",
+      "report_commit": "ed78321e51156f229507e654f0cf3faae100b935",
+      "terminal_state": "released"
+    }
+  },
+  "concurrency": "max2newworkers+coordinator+protectedoldexternalreservation=4; no nesting",
+  "rereview_scope": "corrected M3 report981 canonical Git f2870b27...; new CORRECTION_REVIEW_01.md only, old reviewers/workspaces/reports untouched",
+  "preservation_scope": "EV-PRESERVATION-GAPS exactly two historical lost/overwritten-original gaps, no recreated bytes or preservation pass; independent OpenAI factual review after exact author commit",
+  "core_qualification": "attempt1FAIL, noqualifieddomain; owner retake decision pending, no answer/approval inferred, no retake launched",
+  "source_or_feature_acceptance": false,
+  "completed_observed_utc": "2026-11-03T02:59:30.202947+00:00"
+}

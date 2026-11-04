@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "round": 3,
+  "status": "frozen final decision inputs; approval recorded in separate CONSENSUS.json",
+  "source_floor": "e2161484459da65aee14433136a14963507b499c",
+  "inputs": {
+    "FINAL_EXECUTION_PINS.json": "e68f1ff2843676e24d8a9f6757edf78e90bc5bf167c0c53ae591b552a9615b1d",
+    "FINAL_PROGRAM.md": "9f1f9e5e6692a7c14b855fbfd6b1133bf2d616b023e379e541498708c50331cd",
+    "RECONCILIATION_R2.md": "d3a9f6c4268374408f074bcbcb8b4ea6684ec58403f8546b1fedfeb09b3d89eb",
+    "FEATURE_CONTRACTS.json": "ec5ec2378bf79510966d3e4d8498923e1b60ce28008852ea8b85ce8864f4bb76",
+    "INPUT_INTEGRITY_ERRATUM.json": "d53c9801fdc37c8af4f634ac7c615c87afe5f50d009a91ea218e28180da802aa",
+    "RECONCILIATION_R1.md": "9ee7c9d958b2732edcf2397cae4f3659abec1167919780145303c6971d1400fb",
+    "reports/anthropic/ROUND1.md": "faf667b39aafea74ad4d5172e75edfd23e1882dcfbbbc52e3aeab86030361217",
+    "reports/openai/ROUND1.md": "405a9a6d84d1327d293de18874480001bf641235760edeab421a282bd3ea7a52",
+    "reports/minimax/ROUND1.md": "0da3837e115f3a2647535e73583fc7ed29c575963d9aaff806a1b5771027faa4",
+    "reports/anthropic/ROUND2.md": "3a2a02f9458eab176c712bf7f58eb23746272c4553d3beacfb9f87e9be65930a",
+    "reports/openai/ROUND2.md": "8c51c61d7a573d4b3c28515a1f0973555493de5c9ba6dc6030260b7f833bc418",
+    "reports/minimax/ROUND2.md": "2dec63faf29c03b57a460fff477c39a1656a784fc10ecd5880220bb063715363"
+  },
+  "required_decisions": [
+    "program",
+    "P0_residual",
+    "P1_remainder",
+    "P2",
+    "P3",
+    "P4",
+    "P5"
+  ],
+  "families": [
+    "OpenAI",
+    "Anthropic",
+    "MiniMax"
+  ],
+  "no_source_or_owner_acceptance": true
+}

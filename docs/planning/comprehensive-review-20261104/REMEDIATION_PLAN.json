@@ -1,0 +1,4013 @@
+{
+  "created_utc": "2026-11-04T06:26:06.185894+00:00",
+  "source_head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+  "status": "Coordinator comprehensive review and proposed corrective crosswalk; not new phase approval, consensus, source qualification, dispatch, implementation or release",
+  "authority": "Owner requested comprehensive review of gaps/issues and a plan; no phase/worker/source change launched",
+  "existing_plan": "docs/planning/software-waves/EXECUTION_PINS.json",
+  "accepted_plan_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "planning_policy": "Preserve accepted P0-P5/OWNER scope, feature ownership and historical outcomes. New material outcome/contract/strategy/staffing-family changes need actual prospective three-family/three-round decisions; no such new consensus asserted here. Covered fixes retain ordinary exact-commit review/launch gates.",
+  "new_phase_launched": false,
+  "new_workers": 0,
+  "new_worktrees": 0,
+  "source_implementation_changed": false,
+  "issues": [
+    {
+      "id": "CR-01",
+      "title": "Bound WebSocket get_status work and connection-owned cleanup",
+      "priority": "P1",
+      "classification": "NEW confirmed source resource-control gap; Medium impact rating; production denial-of-service magnitude not measured",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "src/rest_api/websocket.py:29,85-88,104-109",
+        "tools/validate runtime refresh source; private source-probes.json:1000frames=>1000pending tasks, all probe tasks drained"
+      ],
+      "existing_execution_pins": [
+        "SW-API-READ-02",
+        "SW-API-READ-03",
+        "SW-SEC-AUTH-03"
+      ],
+      "acceptance": [
+        "Qualified author implements bounded/coalesced per-connection status requests with a documented response policy and connection/application-owned cancellation.",
+        "Negative tests hold refresh pending, send a burst, close one socket, and shut down: admitted task count stays bounded and all owned tasks drain; another client still works.",
+        "Preserve ping/status schema and refresh semantics; exact-commit different-family review and applicable REST/WS registry/route coverage pipeline."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-02",
+      "title": "Validate Home Assistant API-key capability during setup/reconfigure",
+      "priority": "P1",
+      "classification": "NEW source/coverage gap with bounded actual transport reproduction; full real-HA flow reproduction pending",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "custom_components/hdmi_matrix/config_flow.py:54-75,105-123",
+        "custom_components/hdmi_matrix/api.py:42-72,82-86",
+        "src/rest_api/security.py:267-269; private ha-auth-probe.json:invalid key passes health, auth status none, control write401"
+      ],
+      "existing_execution_pins": [
+        "SW-HA-PREP-01",
+        "SW-HA-PREP-03"
+      ],
+      "acceptance": [
+        "Add real-HA config-flow cases for wrong/missing/revoked and valid keys on a control-locked hub, including reconfigure/options and recovery.",
+        "Use nonmutating /api/auth/status capability information with its actual bare-JSON contract; public health/device reads alone cannot authenticate a key.",
+        "Invalid credentials give a meaningful correctable error; offline matrix and unlocked/no-key setup continue to work. No disruptive probe action."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-03",
+      "title": "Repair settings/scenes keyboard shortcuts",
+      "priority": "P2",
+      "classification": "RECONFIRMED bounded existing UI-06 behavior, not a new duplicate finding",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "web/js/components/keyboard-shortcuts.js:35-44",
+        "web/js/app.js:141; web/index.html:165",
+        "private keyboard-probe.json:settings calls0, scenes absent, matrix positive control clicks"
+      ],
+      "existing_execution_pins": [
+        "SW-UI-PRESENT-01"
+      ],
+      "acceptance": [
+        "Wire advertised shortcuts to the actual application controller and existing Profiles/Scenes view.",
+        "Browser negative/positive tests cover s,4,Matrix navigation, editing-field suppression and Escape/focus behavior.",
+        "Preserve approved UI/entity identifiers and existing shortcuts where required; visual owner approval only for newly changed rendering."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-04",
+      "title": "Finish validation credential redaction before admitting evidence",
+      "priority": "P0",
+      "classification": "RECONFIRMED existing VAL-15 Medium tooling defect, not an observed real credential disclosure",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "tools/validate/evidence.py:109-130",
+        "docs/validation/findings_pending.yaml:VAL-15",
+        "private source-probes.json:nested X-Admin-PIN survives while X-API-Key/Authorization mask",
+        "retained privacy chain final2d02004d"
+      ],
+      "existing_execution_pins": [
+        "RV-PRIVACY-CHAIN",
+        "SW-SEC-DATA-02",
+        "EV-PRIVACY-ADMISSION",
+        "EV-FLIC-ADMISSION"
+      ],
+      "acceptance": [
+        "Review the full retained C1/C2/C3 chain against its actual base and preserve original author provenance; do not rewrite an already implemented fix.",
+        "Synthetic credential-marker controls cover nested headers/actions/procedure text, response capture, failure paths and actual artifact writes; public values/request behavior remain intact.",
+        "Qualified different-family source review plus evidence/privacy admission before canonical import; preserve historical raw/private bytes without publishing secrets."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-05",
+      "title": "Resolve three retained source chains through sequential integration",
+      "priority": "P0",
+      "classification": "Confirmed integration backlog, not six independent missing implementations",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "Six retained trees are clean; API C1 is ancestor of C2, privacy C1 ancestor C2 ancestor C3; API-read chain independent",
+        "docs/production/software-waves/RV-API034/execution-20261101/SOURCE_REVIEW_DISPOSITION_20261103.json"
+      ],
+      "existing_execution_pins": [
+        "RV-API034",
+        "RV-WS040",
+        "RV-PRIVACY-CHAIN",
+        "INTEGRATE-P1-CANDIDATES",
+        "P1-ACCEPTANCE-CLOSURE"
+      ],
+      "acceptance": [
+        "Finish required exact-report evaluation and domain-qualified independent reviews; retain all original failures and findings.",
+        "Integrate one accepted chain at a time with coordinator resolution of shared runner/model/evidence/client changes; no blind six-branch merge or duplicate author.",
+        "Combined tests and exact ref/diff/provenance receipts pass before published P1 checkpoint; bounded API review PASS alone is not full P1 acceptance."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [
+        "CR-04"
+      ],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-06",
+      "title": "Refresh F-SEC-007 evidence after covered code is frozen",
+      "priority": "P0",
+      "classification": "Confirmed candidate-specific freshness/integration blocker M-1; not a proven product-security regression",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "RV-API034 REVIEW.md:M-1 at caaa4faa against938ae303",
+        "ee3f2e7f changes covered runner/model; all16 V3 records stale, four freshV2 remain"
+      ],
+      "existing_execution_pins": [
+        "EV-API034-SECURITY-REFRESH",
+        "EV-COMBINED-P1",
+        "P1-PUBLISH-CHECKPOINT"
+      ],
+      "acceptance": [
+        "After shared tool/source corrections are frozen, run separately scoped eight existing browser security scenarios and the required API controls on the exact accepted branch/candidate.",
+        "Keep separate original API/browser summaries and actual combined-input checks, explicit raw exit/status/artifact hashes, qualified security review and privacy admission.",
+        "No unchanged failed-gate retry, registry downgrade, nonancestor evidence borrowing or original-failure reconstruction."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [
+        "CR-04",
+        "CR-05",
+        "CR-07"
+      ],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-07",
+      "title": "Bind accepted evidence to a real candidate ref rather than relabel PR-merge records",
+      "priority": "P0",
+      "classification": "Confirmed evidence-admission/provenance gap despite passing CI",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "CI41756761049 headac1dc745 success; records namec9dac37a synthetic PR merge",
+        "Private ci-record-source-binding.json:identical Git trees2bf33c50, c9 nonancestor of ac1",
+        "Original artifact zip SHA digests verified;1513scenario+19HA+4deployment passing records"
+      ],
+      "existing_execution_pins": [
+        "EV-CI-ATTRIBUTION",
+        "EV-PRIVACY-ADMISSION",
+        "EV-COMBINED-P1",
+        "SW-SOFTWARE-GATE-01"
+      ],
+      "acceptance": [
+        "Retain PR-merge CI as integration testing; create new canonical proof on an explicitly checked-out accepted RC/integration ref with valid ancestry and source/image/client binding.",
+        "Alternatively adopt a tested exact candidate only through the existing explicit integration/acceptance process; identical tree is not permission to edit record commit fields.",
+        "Independent assertion/privacy/freshness review before canonical admission. Keep original merge-commit artifacts and hashes unchanged; reconcile existing56 historical attribution units separately."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-08",
+      "title": "Reconcile finding closure and contradictory current-status prose",
+      "priority": "P1",
+      "classification": "Confirmed metadata/decision-quality gap;61parser-open records are not61verified current bugs",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "docs/REMEDIATION_PLAN.md \u00a74; load_findings265total/61open",
+        "accepted SW-FINDINGS delta:R candidates and HIL/owner/source-inspection distinctions",
+        "EXECUTION_READINESS.md current paragraph vs scopedPASS; EXECUTION_GATE_STATUS.json stale owner_decision_pending field"
+      ],
+      "existing_execution_pins": [
+        "SW-FINDINGS-01",
+        "SW-AUDIT-01",
+        "SW-REPO-01",
+        "SW-DOCS-01"
+      ],
+      "acceptance": [
+        "For each61open ID keep exact row assertions, surviving conditions, original accepted source/image/client proof and a resolved/partial/reproduce/hardware/owner disposition.",
+        "Do not close HIL-09 from source or remove its12caps without accepted physical proof; do not call UC-18/old LICENSE-stub text current reproduced defects.",
+        "Add one clearly dated authoritative current summary and label superseded narrative as historical; preserve old decisions/failures and immutable planning packet."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-09",
+      "title": "Complete UI/kiosk accessibility, mobile and persistence acceptance",
+      "priority": "P2",
+      "classification": "Confirmed source settings plus uncompleted feature evidence; broader historical UI complaints require reproduction",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "web/index.html:7; web/kiosk.html:5 explicitly suppress user zoom",
+        "CSS521baseline findings; ESLint15suppressions in11files",
+        "UI/Kiosk below-target24+7; previous Tron3 approvals remain accepted"
+      ],
+      "existing_execution_pins": [
+        "SW-UI-CONTROL-01",
+        "SW-UI-CONTROL-02",
+        "SW-UI-MANAGE-01",
+        "SW-UI-MANAGE-02",
+        "SW-UI-PRESENT-01",
+        "SW-UI-PRESENT-02",
+        "SW-KIOSK-CONTROL-01",
+        "SW-KIOSK-CONTROL-02",
+        "SW-KIOSK-STATE-01",
+        "SW-KIOSK-STATE-02"
+      ],
+      "acceptance": [
+        "Reproduce residual UI issues on supported phone/tablet/kiosk sizes and check zoom, keyboard/focus, modal semantics, contrast, error/offline/recovery and data persistence.",
+        "Run actual browser action/request/device-state controls for each residual contract; screenshots alone are not behavior proof.",
+        "Keep baselines immutable; seek approval only for new changed visuals. Treat style/dead-code/module refactors as separately justified debt, not automatically MVP blockers."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-10",
+      "title": "Prove declared Home Assistant/HACS and Python support boundaries",
+      "priority": "P1",
+      "classification": "Confirmed support-matrix coverage gap; no unsupported-version failure demonstrated",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "hacs.json declares2025.1.0; historical2025.1.4 is not exact floor proof",
+        "requirements-test-ha.txt uses Python3.13/pytest plugin0.13.316; normal CI corePython3.12",
+        "pyproject.toml requiresPython>=3.11; local reviewPython3.12.10"
+      ],
+      "existing_execution_pins": [
+        "SW-HA-PREP-01",
+        "SW-HA-PREP-03",
+        "SW-RUNTIME-PREP-01",
+        "SW-DOCS-01",
+        "SW-BUILD-01"
+      ],
+      "acceptance": [
+        "Test exact HA2025.1.0 plus the supported/current selected version with install, setup, auth/reconfigure/unload/reload and HACS custom-repository upgrade; or explicitly revise the claimed floor through approved compatibility policy.",
+        "Prove supported Python3.11 behavior in an appropriate environment or reconcile the minimum-version claim; do not infer failure from absence of a job.",
+        "HACS default-catalog admission is distinct from custom-repository install and is not invented as a new MVP gate."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-11",
+      "title": "Complete real-client and physical protocol acceptance",
+      "priority": "Release gate",
+      "classification": "Known environment/physical gaps, not missing Flic/HA/UC implementation",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "268feature baseline:120belowV4; HA18andUC17stilltargetV4",
+        "Flic generated-JS/Node replay is not physical button/radio/SDK proof",
+        "docs/validation/RELEASE_VALIDATION_CHECKLIST.md:HIL-B/C/E and physicalCEC"
+      ],
+      "existing_execution_pins": [
+        "SW-FLIC-01",
+        "SW-FLIC-02",
+        "SW-PROTOCOL-PREP-01",
+        "SW-PROTOCOL-PREP-02",
+        "SW-PROTOCOL-PREP-03",
+        "SW-PROTOCOL-PREP-04",
+        "SW-PROTOCOL-PREP-05",
+        "SW-PROTOCOL-PREP-06",
+        "SW-PROTOCOL-PREP-07",
+        "SW-UC-PREP-01",
+        "SW-UC-PREP-02",
+        "SW-UC-PREP-03",
+        "SW-HA-PREP-01",
+        "SW-HA-PREP-02",
+        "SW-HA-PREP-03",
+        "SW-DOM-HIL-PREP-01",
+        "OWNER-HIL-B",
+        "OWNER-PHYSICAL-CEC",
+        "OWNER-HIL-C",
+        "OWNER-HIL-E"
+      ],
+      "acceptance": [
+        "Complete software SDK/replay/auth/error/recovery preparation first; qualify actual HA custom-repository install and real-client command/request/effect mapping.",
+        "Owner-present matrix/firmware/source/display/Remote/Flic/deployedHA checks, LANdiscovery, physical CEC effects, agreed outage/recovery and restored starting settings on one accepted digest.",
+        "Simulator, scriptedRemote, containerHA, command logs and source presence never substitute for physical acceptance; preserve unavailable devices as explicit gaps."
+      ],
+      "owner": "owner supplies physical access/session scope; qualified agents prepare and analyze",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-12",
+      "title": "Finish release artifact, dependency-advisory, licensing and documentation closure",
+      "priority": "Release gate",
+      "classification": "Known release obligations plus unavailable advisory audit; current version synchronization is healthy",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "Current canonical hub, driver and HA manifests agree1.0.0rc1",
+        "CI current release publish job correctly skipped on PR; hygiene and gitleaks jobs pass",
+        "Dependency advisory readHTTP403, no clean/adverse vulnerability conclusion",
+        "SEC-14 remaining cache-purge owner condition; current MPL license exists"
+      ],
+      "existing_execution_pins": [
+        "SW-REPO-01",
+        "SW-DOCS-01",
+        "SW-VERSION-01",
+        "SW-BUILD-01",
+        "SW-SOFTWARE-GATE-01",
+        "OWNER-FINAL-RELEASE"
+      ],
+      "acceptance": [
+        "Reconcile exact remaining license/history/support statements and dependency advisories without new accounts/spend/token scopes or history rewrite; retain verified historical purge disposition.",
+        "Synchronize authorized final version/manifests/discovery metadata, build matching amd64/arm64 artifacts, inspect shipped-content/lock/license parity and bind their immutable digests before final acceptance.",
+        "Final required CI/source/client/browser/image tests,100%routes, schema/ledger/gate and independent output audit must match actual RC; owner separately authorizes main/tag/artifact release."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-13",
+      "title": "Complete uninterrupted72-hour soak and owner field week",
+      "priority": "Release gate",
+      "classification": "Known unexecuted physical/field evidence requirement",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "F-REL-018 targetV5; no fresh committed passing field proof",
+        "docs/validation/RUNTIME_FIELD_GATE_RUNBOOK.md existing sampler and acceptance"
+      ],
+      "existing_execution_pins": [
+        "SW-SOAK-PREP-01",
+        "OWNER-SOAK-72H",
+        "OWNER-FIELD-WEEK"
+      ],
+      "acceptance": [
+        "Qualify sampler, restart/continuity detection and durable raw CPU/memory/PID/task/loop-lag/availability capture before starting.",
+        "One accepted candidate digest, continuous72hours plus documented week of real use and owner sign-off; explain every restart/change/gap and do not combine discontinuous intervals.",
+        "Windows may overlap only when owner-approved and candidate identity/continuity are preserved. No collector is started by this plan."
+      ],
+      "owner": "owner approves window and field observations; agents prepare/preserve/analyze",
+      "depends_on": [
+        "CR-11",
+        "CR-12"
+      ],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    },
+    {
+      "id": "CR-14",
+      "title": "Match real reviewer capacity and settle protected workspace recovery",
+      "priority": "P1 execution/P3 cleanup",
+      "classification": "Known operational constraints, not product defects",
+      "status": "identified; proposed disposition, not fixed/closed/canonical finding registration",
+      "evidence": [
+        "Only scoped Opus5.5 runner/model qualification; no blanket privacy/security/UI/HA entitlement",
+        "Fresh06:30UTC supported remaining weekly observations:OpenAI15%,Anthropic76%,MiniMax69%; no route is qualified or funded solely by percentage. DeepSeek unavailable; Gemini unverified.",
+        "Two older unverifiable workspaces and stale persistence folder remain protected;33retirements already safely completed"
+      ],
+      "existing_execution_pins": [
+        "QUAL-ANTHROPIC-CORE-01",
+        "SW-AUDIT-01",
+        "SW-REPO-01"
+      ],
+      "acceptance": [
+        "Rematch task-qualified allowed providers with supported exact model/family/helper routing, live quota>=30%or suitable verified fallback and reserved author/review/correction capacity.",
+        "Use accepted narrowly relevant competence or a real bounded independently judged useful domain evaluation; no automatic failed-qualification retries or relabelled authorship.",
+        "No new phase/material staffing/contract decision without required actual three-provider rounds; reuse accepted covered corrections without ceremonial repeats.",
+        "Recover uncertain oldresources through installed Orca guide, preserve originals/bundles/publishedrefs and remove only exact proven owned settled resources. No broad prune."
+      ],
+      "owner": "coordinator assigns qualified author and different-family reviewer",
+      "depends_on": [],
+      "dispatch_state": "not_launched",
+      "new_source_lease": null
+    }
+  ],
+  "stages": [
+    {
+      "id": "A0",
+      "phase": "P0/P1 readiness",
+      "actions": [
+        "CR-08",
+        "CR-14"
+      ],
+      "depends_on": [],
+      "exit": "Current truth/triage and exact task/domain/family/capacity assignments are reviewable; affected material plan decisions have actual required provider coverage. Unrelated ready work continues."
+    },
+    {
+      "id": "A1",
+      "phase": "P1 privacy and source review",
+      "actions": [
+        "CR-04",
+        "CR-05"
+      ],
+      "depends_on": [
+        "A0"
+      ],
+      "exit": "Retained three chains have complete required independent exact-commit review and explicit privacy/preservation dispositions; required source fixes remain with authors."
+    },
+    {
+      "id": "A2",
+      "phase": "P1/P2/P3 bounded functional corrections",
+      "actions": [
+        "CR-01",
+        "CR-02",
+        "CR-03",
+        "CR-09",
+        "CR-10"
+      ],
+      "depends_on": [
+        "A0"
+      ],
+      "exit": "Each reproduced in-scope defect fixed/tested/qualified different-family reviewed; unresolved historical UI hypotheses remain hypotheses. Can overlap A1 on exclusive paths within actual slots."
+    },
+    {
+      "id": "A3",
+      "phase": "P1 sequential combined candidate",
+      "actions": [
+        "CR-05"
+      ],
+      "depends_on": [
+        "A1",
+        "A2"
+      ],
+      "completion_inputs": [
+        "accepted A2 changes selected for this candidate"
+      ],
+      "exit": "Coordinator serially composes accepted changes, resolves shared APIs/runner/model/registry conflicts and freezes full source SHA before new proof. Do not regenerate evidence repeatedly between covered-code edits."
+    },
+    {
+      "id": "A4",
+      "phase": "P1/P2/P3 feature/client evidence",
+      "actions": [
+        "CR-06",
+        "CR-07",
+        "CR-09",
+        "CR-10",
+        "CR-11"
+      ],
+      "depends_on": [
+        "A3"
+      ],
+      "exit": "Branch-correct security/browser/API proof and residual147software-target contract dispositions; exact client attribution, independent device-effect controls, privacy/admission and no unexplained failures. Covered code changes trigger revalidation."
+    },
+    {
+      "id": "A5",
+      "phase": "P4/P5 software RC",
+      "actions": [
+        "CR-08",
+        "CR-12"
+      ],
+      "depends_on": [
+        "A4"
+      ],
+      "exit": "All30package/65unit residual software/preparation acceptances reconciled; matching authorized version/artifacts, complete exact-candidate pipeline and independent output audit,100%routes, fresh ledger and exact remote/local checkpoint. No physical gate implied."
+    },
+    {
+      "id": "A6",
+      "phase": "OWNER HIL/field",
+      "actions": [
+        "CR-11",
+        "CR-13"
+      ],
+      "depends_on": [
+        "A5"
+      ],
+      "exit": "Owner-present physical/CEC/recovery/client results, restored state, uninterrupted72hmeasurements and owner week sign-off on accepted stable artifact. No automatic inheritance after material candidate changes."
+    },
+    {
+      "id": "A7",
+      "phase": "OWNER final release",
+      "actions": [
+        "CR-12"
+      ],
+      "depends_on": [
+        "A6"
+      ],
+      "exit": "Every planned target/gate/finding disposition and final digest/version checked; explicit final owner release authority before main/tag/publication."
+    }
+  ],
+  "packages": [
+    {
+      "id": "SW-AUDIT",
+      "phase": "P0",
+      "units": [
+        {
+          "id": "SW-AUDIT-01",
+          "features": [],
+          "author_route_reservation": "m3",
+          "review_route_reservation": "sol",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-audit-01",
+            "branch_reservation": "execution/wp-exec-sw-audit-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-audit-01-review",
+            "branch_reservation": "execution/wp-exec-sw-audit-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-AUDIT-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-FINDINGS",
+      "phase": "P0",
+      "units": [
+        {
+          "id": "SW-FINDINGS-01",
+          "features": [],
+          "author_route_reservation": "m3",
+          "review_route_reservation": "sol",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-findings-01",
+            "branch_reservation": "execution/wp-exec-sw-findings-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-findings-01-review",
+            "branch_reservation": "execution/wp-exec-sw-findings-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-FINDINGS-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-HARNESS",
+      "phase": "P0",
+      "units": [
+        {
+          "id": "SW-HARNESS-01",
+          "features": [],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-harness-01",
+            "branch_reservation": "execution/wp-exec-sw-harness-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-harness-01-review",
+            "branch_reservation": "execution/wp-exec-sw-harness-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-HARNESS-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-API-READ",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-API-READ-01",
+          "features": [
+            "F-API-002"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-01",
+            "branch_reservation": "execution/wp-exec-sw-api-read-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-01-review",
+            "branch_reservation": "execution/wp-exec-sw-api-read-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-READ-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-READ-02",
+          "features": [
+            "F-API-014",
+            "F-API-016",
+            "F-API-026",
+            "F-API-028"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-02",
+            "branch_reservation": "execution/wp-exec-sw-api-read-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-02-review",
+            "branch_reservation": "execution/wp-exec-sw-api-read-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-READ-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-READ-03",
+          "features": [
+            "F-API-039",
+            "F-API-040",
+            "F-API-042"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-03",
+            "branch_reservation": "execution/wp-exec-sw-api-read-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-03-review",
+            "branch_reservation": "execution/wp-exec-sw-api-read-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-READ-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-READ-04",
+          "features": [
+            "F-API-031",
+            "F-API-032"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-04",
+            "branch_reservation": "execution/wp-exec-sw-api-read-04",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-read-04-review",
+            "branch_reservation": "execution/wp-exec-sw-api-read-04-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-READ-04",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-API-002",
+        "F-API-014",
+        "F-API-016",
+        "F-API-026",
+        "F-API-028",
+        "F-API-031",
+        "F-API-032",
+        "F-API-039",
+        "F-API-040",
+        "F-API-042"
+      ],
+      "feature_count": 10,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 2
+    },
+    {
+      "id": "SW-SEC-AUTH",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-SEC-AUTH-01",
+          "features": [
+            "F-SEC-007"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-01",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-01-review",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SEC-AUTH-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-SEC-AUTH-02",
+          "features": [
+            "F-SEC-009",
+            "F-SEC-015"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-02",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-02-review",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SEC-AUTH-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-SEC-AUTH-03",
+          "features": [
+            "F-SEC-001",
+            "F-SEC-002",
+            "F-SEC-003",
+            "F-SEC-006",
+            "F-SEC-008"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-03",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-sec-auth-03-review",
+            "branch_reservation": "execution/wp-exec-sw-sec-auth-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SEC-AUTH-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-SEC-001",
+        "F-SEC-002",
+        "F-SEC-003",
+        "F-SEC-006",
+        "F-SEC-007",
+        "F-SEC-008",
+        "F-SEC-009",
+        "F-SEC-015"
+      ],
+      "feature_count": 8,
+      "below_target": 6,
+      "without_fresh_passing_committed_record": 7
+    },
+    {
+      "id": "SW-API-WRITE",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-API-WRITE-01",
+          "features": [
+            "F-API-008",
+            "F-API-010",
+            "F-API-011",
+            "F-API-012",
+            "F-API-013",
+            "F-API-017"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-01",
+            "branch_reservation": "execution/wp-exec-sw-api-write-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-01-review",
+            "branch_reservation": "execution/wp-exec-sw-api-write-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-WRITE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-WRITE-02",
+          "features": [
+            "F-API-018",
+            "F-API-019",
+            "F-API-020",
+            "F-API-021",
+            "F-API-022",
+            "F-API-023"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-02",
+            "branch_reservation": "execution/wp-exec-sw-api-write-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-02-review",
+            "branch_reservation": "execution/wp-exec-sw-api-write-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-WRITE-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-WRITE-03",
+          "features": [
+            "F-API-024",
+            "F-API-025",
+            "F-API-027",
+            "F-API-030",
+            "F-API-036",
+            "F-API-037"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-03",
+            "branch_reservation": "execution/wp-exec-sw-api-write-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-03-review",
+            "branch_reservation": "execution/wp-exec-sw-api-write-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-WRITE-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-WRITE-04",
+          "features": [
+            "F-API-038",
+            "F-API-041"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-04",
+            "branch_reservation": "execution/wp-exec-sw-api-write-04",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-write-04-review",
+            "branch_reservation": "execution/wp-exec-sw-api-write-04-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-WRITE-04",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-API-008",
+        "F-API-010",
+        "F-API-011",
+        "F-API-012",
+        "F-API-013",
+        "F-API-017",
+        "F-API-018",
+        "F-API-019",
+        "F-API-020",
+        "F-API-021",
+        "F-API-022",
+        "F-API-023",
+        "F-API-024",
+        "F-API-025",
+        "F-API-027",
+        "F-API-030",
+        "F-API-036",
+        "F-API-037",
+        "F-API-038",
+        "F-API-041"
+      ],
+      "feature_count": 20,
+      "below_target": 13,
+      "without_fresh_passing_committed_record": 14
+    },
+    {
+      "id": "SW-SEC-DATA",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-SEC-DATA-01",
+          "features": [
+            "F-SEC-004",
+            "F-SEC-005",
+            "F-SEC-010",
+            "F-SEC-011",
+            "F-SEC-012",
+            "F-SEC-013"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-sec-data-01",
+            "branch_reservation": "execution/wp-exec-sw-sec-data-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-sec-data-01-review",
+            "branch_reservation": "execution/wp-exec-sw-sec-data-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SEC-DATA-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-SEC-DATA-02",
+          "features": [
+            "F-SEC-014"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-sec-data-02",
+            "branch_reservation": "execution/wp-exec-sw-sec-data-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-sec-data-02-review",
+            "branch_reservation": "execution/wp-exec-sw-sec-data-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SEC-DATA-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-SEC-004",
+        "F-SEC-005",
+        "F-SEC-010",
+        "F-SEC-011",
+        "F-SEC-012",
+        "F-SEC-013",
+        "F-SEC-014"
+      ],
+      "feature_count": 7,
+      "below_target": 6,
+      "without_fresh_passing_committed_record": 7
+    },
+    {
+      "id": "SW-API-CLIENT",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-API-CLIENT-01",
+          "features": [
+            "F-API-001",
+            "F-API-003",
+            "F-API-004",
+            "F-API-005",
+            "F-API-006",
+            "F-API-007"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-client-01",
+            "branch_reservation": "execution/wp-exec-sw-api-client-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-client-01-review",
+            "branch_reservation": "execution/wp-exec-sw-api-client-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-CLIENT-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-API-CLIENT-02",
+          "features": [
+            "F-API-009",
+            "F-API-015",
+            "F-API-029",
+            "F-API-033",
+            "F-API-034",
+            "F-API-035"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-api-client-02",
+            "branch_reservation": "execution/wp-exec-sw-api-client-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-api-client-02-review",
+            "branch_reservation": "execution/wp-exec-sw-api-client-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-HARNESS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-API-CLIENT-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-API-001",
+        "F-API-003",
+        "F-API-004",
+        "F-API-005",
+        "F-API-006",
+        "F-API-007",
+        "F-API-009",
+        "F-API-015",
+        "F-API-029",
+        "F-API-033",
+        "F-API-034",
+        "F-API-035"
+      ],
+      "feature_count": 12,
+      "below_target": 11,
+      "without_fresh_passing_committed_record": 10
+    },
+    {
+      "id": "SW-DOM-PROFILE",
+      "phase": "P1",
+      "units": [
+        {
+          "id": "SW-DOM-PROFILE-01",
+          "features": [
+            "F-DOM-001",
+            "F-DOM-005",
+            "F-DOM-006",
+            "F-DOM-007",
+            "F-DOM-008",
+            "F-DOM-009"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-profile-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-profile-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-profile-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-profile-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-PROFILE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-DOM-PROFILE-02",
+          "features": [
+            "F-DOM-018"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-profile-02",
+            "branch_reservation": "execution/wp-exec-sw-dom-profile-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-profile-02-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-profile-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-PROFILE-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-001",
+        "F-DOM-005",
+        "F-DOM-006",
+        "F-DOM-007",
+        "F-DOM-008",
+        "F-DOM-009",
+        "F-DOM-018"
+      ],
+      "feature_count": 7,
+      "below_target": 6,
+      "without_fresh_passing_committed_record": 6
+    },
+    {
+      "id": "SW-DOM-SCENE",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-DOM-SCENE-01",
+          "features": [
+            "F-DOM-010",
+            "F-DOM-013",
+            "F-DOM-014",
+            "F-DOM-015",
+            "F-DOM-016",
+            "F-DOM-017"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-scene-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-scene-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-scene-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-scene-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-SCENE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-010",
+        "F-DOM-013",
+        "F-DOM-014",
+        "F-DOM-015",
+        "F-DOM-016",
+        "F-DOM-017"
+      ],
+      "feature_count": 6,
+      "below_target": 1,
+      "without_fresh_passing_committed_record": 1
+    },
+    {
+      "id": "SW-DOM-MACRO",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-DOM-MACRO-01",
+          "features": [
+            "F-DOM-019",
+            "F-DOM-021",
+            "F-DOM-022"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-macro-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-macro-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-macro-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-macro-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-MACRO-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-019",
+        "F-DOM-021",
+        "F-DOM-022"
+      ],
+      "feature_count": 3,
+      "below_target": 3,
+      "without_fresh_passing_committed_record": 3
+    },
+    {
+      "id": "SW-DOM-SHORTCUT",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-DOM-SHORTCUT-01",
+          "features": [
+            "F-DOM-023",
+            "F-DOM-024",
+            "F-DOM-025",
+            "F-DOM-026",
+            "F-DOM-027",
+            "F-DOM-028"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-shortcut-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-shortcut-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-shortcut-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-shortcut-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-DOM-MACRO-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-SHORTCUT-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-DOM-SHORTCUT-02",
+          "features": [
+            "F-DOM-029",
+            "F-DOM-030"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-shortcut-02",
+            "branch_reservation": "execution/wp-exec-sw-dom-shortcut-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-shortcut-02-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-shortcut-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-DOM-MACRO-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-SHORTCUT-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-023",
+        "F-DOM-024",
+        "F-DOM-025",
+        "F-DOM-026",
+        "F-DOM-027",
+        "F-DOM-028",
+        "F-DOM-029",
+        "F-DOM-030"
+      ],
+      "feature_count": 8,
+      "below_target": 3,
+      "without_fresh_passing_committed_record": 3
+    },
+    {
+      "id": "SW-DOM-PRESENT",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-DOM-PRESENT-01",
+          "features": [
+            "F-DOM-031",
+            "F-DOM-032",
+            "F-DOM-033",
+            "F-DOM-034",
+            "F-DOM-035",
+            "F-DOM-036"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-present-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-present-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-present-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-present-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-PRESENT-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-031",
+        "F-DOM-032",
+        "F-DOM-033",
+        "F-DOM-034",
+        "F-DOM-035",
+        "F-DOM-036"
+      ],
+      "feature_count": 6,
+      "below_target": 6,
+      "without_fresh_passing_committed_record": 6
+    },
+    {
+      "id": "SW-UI-CONTROL",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-UI-CONTROL-01",
+          "features": [
+            "F-UI-001",
+            "F-UI-002",
+            "F-UI-003",
+            "F-UI-004",
+            "F-UI-005",
+            "F-UI-006"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-01",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-01-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-CONTROL-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UI-CONTROL-02",
+          "features": [
+            "F-UI-007",
+            "F-UI-010",
+            "F-UI-011",
+            "F-UI-017",
+            "F-UI-024",
+            "F-UI-025"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-02",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-02-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-CONTROL-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UI-CONTROL-03",
+          "features": [
+            "F-UI-026",
+            "F-UI-027"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-03",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-control-03-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-control-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-CONTROL-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-UI-001",
+        "F-UI-002",
+        "F-UI-003",
+        "F-UI-004",
+        "F-UI-005",
+        "F-UI-006",
+        "F-UI-007",
+        "F-UI-010",
+        "F-UI-011",
+        "F-UI-017",
+        "F-UI-024",
+        "F-UI-025",
+        "F-UI-026",
+        "F-UI-027"
+      ],
+      "feature_count": 14,
+      "below_target": 7,
+      "without_fresh_passing_committed_record": 11
+    },
+    {
+      "id": "SW-UI-MANAGE",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-UI-MANAGE-01",
+          "features": [
+            "F-UI-008",
+            "F-UI-009",
+            "F-UI-012",
+            "F-UI-013",
+            "F-UI-014",
+            "F-UI-015"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-manage-01",
+            "branch_reservation": "execution/wp-exec-sw-ui-manage-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-manage-01-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-manage-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-SCENE-01",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-MANAGE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UI-MANAGE-02",
+          "features": [
+            "F-UI-016",
+            "F-UI-022",
+            "F-UI-023",
+            "F-UI-034",
+            "F-UI-035",
+            "F-UI-036"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-manage-02",
+            "branch_reservation": "execution/wp-exec-sw-ui-manage-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-manage-02-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-manage-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-SCENE-01",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-MANAGE-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-UI-008",
+        "F-UI-009",
+        "F-UI-012",
+        "F-UI-013",
+        "F-UI-014",
+        "F-UI-015",
+        "F-UI-016",
+        "F-UI-022",
+        "F-UI-023",
+        "F-UI-034",
+        "F-UI-035",
+        "F-UI-036"
+      ],
+      "feature_count": 12,
+      "below_target": 8,
+      "without_fresh_passing_committed_record": 9
+    },
+    {
+      "id": "SW-UI-PRESENT",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-UI-PRESENT-01",
+          "features": [
+            "F-UI-018",
+            "F-UI-019",
+            "F-UI-020",
+            "F-UI-021",
+            "F-UI-028",
+            "F-UI-029"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-present-01",
+            "branch_reservation": "execution/wp-exec-sw-ui-present-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-present-01-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-present-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-PRESENT-01",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-PRESENT-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UI-PRESENT-02",
+          "features": [
+            "F-UI-030",
+            "F-UI-031",
+            "F-UI-032",
+            "F-UI-033"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ui-present-02",
+            "branch_reservation": "execution/wp-exec-sw-ui-present-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ui-present-02-review",
+            "branch_reservation": "execution/wp-exec-sw-ui-present-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-PRESENT-01",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UI-PRESENT-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-UI-018",
+        "F-UI-019",
+        "F-UI-020",
+        "F-UI-021",
+        "F-UI-028",
+        "F-UI-029",
+        "F-UI-030",
+        "F-UI-031",
+        "F-UI-032",
+        "F-UI-033"
+      ],
+      "feature_count": 10,
+      "below_target": 9,
+      "without_fresh_passing_committed_record": 10
+    },
+    {
+      "id": "SW-KIOSK-CONTROL",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-KIOSK-CONTROL-01",
+          "features": [
+            "F-KIO-002",
+            "F-KIO-003",
+            "F-KIO-005",
+            "F-KIO-006",
+            "F-KIO-007",
+            "F-KIO-008"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-control-01",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-control-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-control-01-review",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-control-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-KIOSK-CONTROL-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-KIOSK-CONTROL-02",
+          "features": [
+            "F-KIO-009"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-control-02",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-control-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-control-02-review",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-control-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-KIOSK-CONTROL-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-KIO-002",
+        "F-KIO-003",
+        "F-KIO-005",
+        "F-KIO-006",
+        "F-KIO-007",
+        "F-KIO-008",
+        "F-KIO-009"
+      ],
+      "feature_count": 7,
+      "below_target": 4,
+      "without_fresh_passing_committed_record": 6
+    },
+    {
+      "id": "SW-KIOSK-STATE",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-KIOSK-STATE-01",
+          "features": [
+            "F-KIO-001",
+            "F-KIO-004",
+            "F-KIO-010",
+            "F-KIO-011",
+            "F-KIO-012",
+            "F-KIO-013"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-state-01",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-state-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-state-01-review",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-state-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-PRESENT-01",
+            "SW-KIOSK-CONTROL-01",
+            "SW-KIOSK-CONTROL-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-KIOSK-STATE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-KIOSK-STATE-02",
+          "features": [
+            "F-KIO-014"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-state-02",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-state-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-kiosk-state-02-review",
+            "branch_reservation": "execution/wp-exec-sw-kiosk-state-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-PRESENT-01",
+            "SW-KIOSK-CONTROL-01",
+            "SW-KIOSK-CONTROL-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-KIOSK-STATE-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-KIO-001",
+        "F-KIO-004",
+        "F-KIO-010",
+        "F-KIO-011",
+        "F-KIO-012",
+        "F-KIO-013",
+        "F-KIO-014"
+      ],
+      "feature_count": 7,
+      "below_target": 3,
+      "without_fresh_passing_committed_record": 5
+    },
+    {
+      "id": "SW-FLIC",
+      "phase": "P2",
+      "units": [
+        {
+          "id": "SW-FLIC-01",
+          "features": [
+            "F-FLIC-001",
+            "F-FLIC-002",
+            "F-FLIC-003",
+            "F-FLIC-004",
+            "F-FLIC-005",
+            "F-FLIC-006"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-flic-01",
+            "branch_reservation": "execution/wp-exec-sw-flic-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-flic-01-review",
+            "branch_reservation": "execution/wp-exec-sw-flic-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-FLIC-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-FLIC-02",
+          "features": [
+            "F-FLIC-007",
+            "F-FLIC-008",
+            "F-FLIC-009",
+            "F-FLIC-010"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-flic-02",
+            "branch_reservation": "execution/wp-exec-sw-flic-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-flic-02-review",
+            "branch_reservation": "execution/wp-exec-sw-flic-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-FLIC-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-FLIC-001",
+        "F-FLIC-002",
+        "F-FLIC-003",
+        "F-FLIC-004",
+        "F-FLIC-005",
+        "F-FLIC-006",
+        "F-FLIC-007",
+        "F-FLIC-008",
+        "F-FLIC-009",
+        "F-FLIC-010"
+      ],
+      "feature_count": 10,
+      "below_target": 3,
+      "without_fresh_passing_committed_record": 3
+    },
+    {
+      "id": "SW-PROTOCOL-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-PROTOCOL-PREP-01",
+          "features": [
+            "F-MTX-001",
+            "F-MTX-002",
+            "F-MTX-003",
+            "F-MTX-004",
+            "F-MTX-005",
+            "F-MTX-006"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-02",
+          "features": [
+            "F-MTX-007",
+            "F-MTX-008",
+            "F-MTX-009",
+            "F-MTX-010",
+            "F-MTX-011",
+            "F-MTX-012"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-02",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-02-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-03",
+          "features": [
+            "F-MTX-013",
+            "F-MTX-014",
+            "F-MTX-015",
+            "F-MTX-016",
+            "F-MTX-017",
+            "F-MTX-018"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-03",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-03-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-04",
+          "features": [
+            "F-MTX-019",
+            "F-MTX-020",
+            "F-MTX-021",
+            "F-MTX-022",
+            "F-MTX-023",
+            "F-MTX-024"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-04",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-04",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-04-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-04-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-04",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-05",
+          "features": [
+            "F-MTX-025",
+            "F-MTX-026",
+            "F-MTX-027",
+            "F-MTX-028",
+            "F-MTX-029",
+            "F-MTX-030"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-05",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-05",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-05-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-05-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-05",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-06",
+          "features": [
+            "F-MTX-031",
+            "F-CEC-001",
+            "F-CEC-002",
+            "F-CEC-003",
+            "F-CEC-004",
+            "F-CEC-005"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-06",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-06",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-06-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-06-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-06",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-PROTOCOL-PREP-07",
+          "features": [
+            "F-CEC-006",
+            "F-CEC-007",
+            "F-CEC-008",
+            "F-CEC-009",
+            "F-CEC-010",
+            "F-CEC-011"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-07",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-07",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-protocol-prep-07-review",
+            "branch_reservation": "execution/wp-exec-sw-protocol-prep-07-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-PROTOCOL-PREP-07",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-CEC-001",
+        "F-CEC-002",
+        "F-CEC-003",
+        "F-CEC-004",
+        "F-CEC-005",
+        "F-CEC-006",
+        "F-CEC-007",
+        "F-CEC-008",
+        "F-CEC-009",
+        "F-CEC-010",
+        "F-CEC-011",
+        "F-MTX-001",
+        "F-MTX-002",
+        "F-MTX-003",
+        "F-MTX-004",
+        "F-MTX-005",
+        "F-MTX-006",
+        "F-MTX-007",
+        "F-MTX-008",
+        "F-MTX-009",
+        "F-MTX-010",
+        "F-MTX-011",
+        "F-MTX-012",
+        "F-MTX-013",
+        "F-MTX-014",
+        "F-MTX-015",
+        "F-MTX-016",
+        "F-MTX-017",
+        "F-MTX-018",
+        "F-MTX-019",
+        "F-MTX-020",
+        "F-MTX-021",
+        "F-MTX-022",
+        "F-MTX-023",
+        "F-MTX-024",
+        "F-MTX-025",
+        "F-MTX-026",
+        "F-MTX-027",
+        "F-MTX-028",
+        "F-MTX-029",
+        "F-MTX-030",
+        "F-MTX-031"
+      ],
+      "feature_count": 42,
+      "below_target": 42,
+      "without_fresh_passing_committed_record": 33
+    },
+    {
+      "id": "SW-RUNTIME-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-RUNTIME-PREP-01",
+          "features": [
+            "F-OPS-001",
+            "F-OPS-002",
+            "F-OPS-003",
+            "F-OPS-004",
+            "F-OPS-005",
+            "F-OPS-006"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-02",
+          "features": [
+            "F-OPS-007",
+            "F-OPS-008",
+            "F-OPS-009",
+            "F-OPS-010",
+            "F-OPS-011",
+            "F-OPS-012"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-02",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-02-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-03",
+          "features": [
+            "F-OPS-013",
+            "F-OPS-014",
+            "F-OPS-015",
+            "F-OPS-016",
+            "F-OPS-017",
+            "F-OPS-018"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-03",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-03-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-04",
+          "features": [
+            "F-OPS-019",
+            "F-OPS-020",
+            "F-REL-001",
+            "F-REL-002",
+            "F-REL-003",
+            "F-REL-004"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-04",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-04",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-04-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-04-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-04",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-05",
+          "features": [
+            "F-REL-005",
+            "F-REL-006",
+            "F-REL-007",
+            "F-REL-008",
+            "F-REL-009",
+            "F-REL-010"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-05",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-05",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-05-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-05-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-05",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-06",
+          "features": [
+            "F-REL-011",
+            "F-REL-012",
+            "F-REL-013",
+            "F-REL-014",
+            "F-REL-015",
+            "F-REL-016"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-06",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-06",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-06-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-06-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-06",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-RUNTIME-PREP-07",
+          "features": [
+            "F-REL-017"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-07",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-07",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-runtime-prep-07-review",
+            "branch_reservation": "execution/wp-exec-sw-runtime-prep-07-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-AUDIT-01",
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-RUNTIME-PREP-07",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-OPS-001",
+        "F-OPS-002",
+        "F-OPS-003",
+        "F-OPS-004",
+        "F-OPS-005",
+        "F-OPS-006",
+        "F-OPS-007",
+        "F-OPS-008",
+        "F-OPS-009",
+        "F-OPS-010",
+        "F-OPS-011",
+        "F-OPS-012",
+        "F-OPS-013",
+        "F-OPS-014",
+        "F-OPS-015",
+        "F-OPS-016",
+        "F-OPS-017",
+        "F-OPS-018",
+        "F-OPS-019",
+        "F-OPS-020",
+        "F-REL-001",
+        "F-REL-002",
+        "F-REL-003",
+        "F-REL-004",
+        "F-REL-005",
+        "F-REL-006",
+        "F-REL-007",
+        "F-REL-008",
+        "F-REL-009",
+        "F-REL-010",
+        "F-REL-011",
+        "F-REL-012",
+        "F-REL-013",
+        "F-REL-014",
+        "F-REL-015",
+        "F-REL-016",
+        "F-REL-017"
+      ],
+      "feature_count": 37,
+      "below_target": 37,
+      "without_fresh_passing_committed_record": 34
+    },
+    {
+      "id": "SW-UC-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-UC-PREP-01",
+          "features": [
+            "F-UC-001",
+            "F-UC-002",
+            "F-UC-003",
+            "F-UC-004",
+            "F-UC-005",
+            "F-UC-006"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UC-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UC-PREP-02",
+          "features": [
+            "F-UC-007",
+            "F-UC-008",
+            "F-UC-009",
+            "F-UC-010",
+            "F-UC-011",
+            "F-UC-012"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-02",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-02-review",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UC-PREP-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-UC-PREP-03",
+          "features": [
+            "F-UC-013",
+            "F-UC-014",
+            "F-UC-015",
+            "F-UC-016",
+            "F-UC-017"
+          ],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-03",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-uc-prep-03-review",
+            "branch_reservation": "execution/wp-exec-sw-uc-prep-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-UC-PREP-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-UC-001",
+        "F-UC-002",
+        "F-UC-003",
+        "F-UC-004",
+        "F-UC-005",
+        "F-UC-006",
+        "F-UC-007",
+        "F-UC-008",
+        "F-UC-009",
+        "F-UC-010",
+        "F-UC-011",
+        "F-UC-012",
+        "F-UC-013",
+        "F-UC-014",
+        "F-UC-015",
+        "F-UC-016",
+        "F-UC-017"
+      ],
+      "feature_count": 17,
+      "below_target": 17,
+      "without_fresh_passing_committed_record": 9
+    },
+    {
+      "id": "SW-HA-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-HA-PREP-01",
+          "features": [
+            "F-HA-001",
+            "F-HA-002",
+            "F-HA-003",
+            "F-HA-004",
+            "F-HA-005",
+            "F-HA-006"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-HA-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-HA-PREP-02",
+          "features": [
+            "F-HA-007",
+            "F-HA-008",
+            "F-HA-009",
+            "F-HA-010",
+            "F-HA-011",
+            "F-HA-012"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-02",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-02",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-02-review",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-02-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-HA-PREP-02",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        },
+        {
+          "id": "SW-HA-PREP-03",
+          "features": [
+            "F-HA-013",
+            "F-HA-014",
+            "F-HA-015",
+            "F-HA-016",
+            "F-HA-017",
+            "F-HA-018"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-03",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-03",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-ha-prep-03-review",
+            "branch_reservation": "execution/wp-exec-sw-ha-prep-03-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-HA-PREP-03",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-HA-001",
+        "F-HA-002",
+        "F-HA-003",
+        "F-HA-004",
+        "F-HA-005",
+        "F-HA-006",
+        "F-HA-007",
+        "F-HA-008",
+        "F-HA-009",
+        "F-HA-010",
+        "F-HA-011",
+        "F-HA-012",
+        "F-HA-013",
+        "F-HA-014",
+        "F-HA-015",
+        "F-HA-016",
+        "F-HA-017",
+        "F-HA-018"
+      ],
+      "feature_count": 18,
+      "below_target": 18,
+      "without_fresh_passing_committed_record": 18
+    },
+    {
+      "id": "SW-DOM-HIL-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-DOM-HIL-PREP-01",
+          "features": [
+            "F-DOM-002",
+            "F-DOM-003",
+            "F-DOM-004",
+            "F-DOM-011",
+            "F-DOM-012",
+            "F-DOM-020"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-dom-hil-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-dom-hil-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-dom-hil-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-dom-hil-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-SCENE-01",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOM-HIL-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-DOM-002",
+        "F-DOM-003",
+        "F-DOM-004",
+        "F-DOM-011",
+        "F-DOM-012",
+        "F-DOM-020"
+      ],
+      "feature_count": 6,
+      "below_target": 6,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-SOAK-PREP",
+      "phase": "P3",
+      "units": [
+        {
+          "id": "SW-SOAK-PREP-01",
+          "features": [
+            "F-REL-018"
+          ],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-soak-prep-01",
+            "branch_reservation": "execution/wp-exec-sw-soak-prep-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-soak-prep-01-review",
+            "branch_reservation": "execution/wp-exec-sw-soak-prep-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SOAK-PREP-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [
+        "F-REL-018"
+      ],
+      "feature_count": 1,
+      "below_target": 1,
+      "without_fresh_passing_committed_record": 1
+    },
+    {
+      "id": "SW-REPO",
+      "phase": "P4",
+      "units": [
+        {
+          "id": "SW-REPO-01",
+          "features": [],
+          "author_route_reservation": "m3",
+          "review_route_reservation": "sol",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-repo-01",
+            "branch_reservation": "execution/wp-exec-sw-repo-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-repo-01-review",
+            "branch_reservation": "execution/wp-exec-sw-repo-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "SW-FINDINGS-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-REPO-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-DOCS",
+      "phase": "P4",
+      "units": [
+        {
+          "id": "SW-DOCS-01",
+          "features": [],
+          "author_route_reservation": "m3",
+          "review_route_reservation": "sol",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-docs-01",
+            "branch_reservation": "execution/wp-exec-sw-docs-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-docs-01-review",
+            "branch_reservation": "execution/wp-exec-sw-docs-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02",
+            "SW-API-READ-01",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-DOM-HIL-PREP-01",
+            "SW-DOM-PROFILE-01",
+            "SW-FLIC-01",
+            "SW-FLIC-02",
+            "SW-HA-PREP-01",
+            "SW-HA-PREP-02",
+            "SW-HA-PREP-03",
+            "SW-KIOSK-STATE-01",
+            "SW-KIOSK-STATE-02",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02",
+            "SW-SOAK-PREP-01",
+            "SW-UC-PREP-01",
+            "SW-UC-PREP-02",
+            "SW-UC-PREP-03",
+            "SW-UI-CONTROL-01",
+            "SW-UI-CONTROL-02",
+            "SW-UI-CONTROL-03",
+            "SW-UI-MANAGE-01",
+            "SW-UI-MANAGE-02",
+            "SW-UI-PRESENT-01",
+            "SW-UI-PRESENT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-DOCS-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-VERSION",
+      "phase": "P4",
+      "units": [
+        {
+          "id": "SW-VERSION-01",
+          "features": [],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-version-01",
+            "branch_reservation": "execution/wp-exec-sw-version-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-version-01-review",
+            "branch_reservation": "execution/wp-exec-sw-version-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "P1-ACCEPTANCE-CLOSURE",
+            "P1-PUBLISH-CHECKPOINT",
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-DOCS-01",
+            "SW-DOM-HIL-PREP-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-PRESENT-01",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-DOM-SCENE-01",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02",
+            "SW-FLIC-01",
+            "SW-FLIC-02",
+            "SW-HA-PREP-01",
+            "SW-HA-PREP-02",
+            "SW-HA-PREP-03",
+            "SW-KIOSK-CONTROL-01",
+            "SW-KIOSK-CONTROL-02",
+            "SW-KIOSK-STATE-01",
+            "SW-KIOSK-STATE-02",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-REPO-01",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02",
+            "SW-SOAK-PREP-01",
+            "SW-UC-PREP-01",
+            "SW-UC-PREP-02",
+            "SW-UC-PREP-03",
+            "SW-UI-CONTROL-01",
+            "SW-UI-CONTROL-02",
+            "SW-UI-CONTROL-03",
+            "SW-UI-MANAGE-01",
+            "SW-UI-MANAGE-02",
+            "SW-UI-PRESENT-01",
+            "SW-UI-PRESENT-02"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-VERSION-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-BUILD",
+      "phase": "P4",
+      "units": [
+        {
+          "id": "SW-BUILD-01",
+          "features": [],
+          "author_route_reservation": "astra",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-build-01",
+            "branch_reservation": "execution/wp-exec-sw-build-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-build-01-review",
+            "branch_reservation": "execution/wp-exec-sw-build-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-VERSION-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-BUILD-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    },
+    {
+      "id": "SW-SOFTWARE-GATE",
+      "phase": "P5",
+      "units": [
+        {
+          "id": "SW-SOFTWARE-GATE-01",
+          "features": [],
+          "author_route_reservation": "sol",
+          "review_route_reservation": "claude",
+          "author_worktree_reservation": {
+            "name": "wp-exec-sw-software-gate-01",
+            "branch_reservation": "execution/wp-exec-sw-software-gate-01",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "review_worktree_reservation": {
+            "name": "wp-exec-sw-software-gate-01-review",
+            "branch_reservation": "execution/wp-exec-sw-software-gate-01-review",
+            "status": "dated reservation; rediscover at actual dispatch"
+          },
+          "base_rule": {
+            "kind": "accepted_integration_after_dependencies",
+            "fixed_sha": null,
+            "planning_floor_sha": "e2161484459da65aee14433136a14963507b499c"
+          },
+          "dependencies": [
+            "P1-ACCEPTANCE-CLOSURE",
+            "P1-PUBLISH-CHECKPOINT",
+            "QUAL-ANTHROPIC-CORE-01",
+            "SW-API-CLIENT-01",
+            "SW-API-CLIENT-02",
+            "SW-API-READ-01",
+            "SW-API-READ-02",
+            "SW-API-READ-03",
+            "SW-API-READ-04",
+            "SW-API-WRITE-01",
+            "SW-API-WRITE-02",
+            "SW-API-WRITE-03",
+            "SW-API-WRITE-04",
+            "SW-AUDIT-01",
+            "SW-BUILD-01",
+            "SW-DOCS-01",
+            "SW-DOM-HIL-PREP-01",
+            "SW-DOM-MACRO-01",
+            "SW-DOM-PRESENT-01",
+            "SW-DOM-PROFILE-01",
+            "SW-DOM-PROFILE-02",
+            "SW-DOM-SCENE-01",
+            "SW-DOM-SHORTCUT-01",
+            "SW-DOM-SHORTCUT-02",
+            "SW-FINDINGS-01",
+            "SW-FLIC-01",
+            "SW-FLIC-02",
+            "SW-HA-PREP-01",
+            "SW-HA-PREP-02",
+            "SW-HA-PREP-03",
+            "SW-HARNESS-01",
+            "SW-KIOSK-CONTROL-01",
+            "SW-KIOSK-CONTROL-02",
+            "SW-KIOSK-STATE-01",
+            "SW-KIOSK-STATE-02",
+            "SW-PROTOCOL-PREP-01",
+            "SW-PROTOCOL-PREP-02",
+            "SW-PROTOCOL-PREP-03",
+            "SW-PROTOCOL-PREP-04",
+            "SW-PROTOCOL-PREP-05",
+            "SW-PROTOCOL-PREP-06",
+            "SW-PROTOCOL-PREP-07",
+            "SW-REPO-01",
+            "SW-RUNTIME-PREP-01",
+            "SW-RUNTIME-PREP-02",
+            "SW-RUNTIME-PREP-03",
+            "SW-RUNTIME-PREP-04",
+            "SW-RUNTIME-PREP-05",
+            "SW-RUNTIME-PREP-06",
+            "SW-RUNTIME-PREP-07",
+            "SW-SEC-AUTH-01",
+            "SW-SEC-AUTH-02",
+            "SW-SEC-AUTH-03",
+            "SW-SEC-DATA-01",
+            "SW-SEC-DATA-02",
+            "SW-SOAK-PREP-01",
+            "SW-UC-PREP-01",
+            "SW-UC-PREP-02",
+            "SW-UC-PREP-03",
+            "SW-UI-CONTROL-01",
+            "SW-UI-CONTROL-02",
+            "SW-UI-CONTROL-03",
+            "SW-UI-MANAGE-01",
+            "SW-UI-MANAGE-02",
+            "SW-UI-PRESENT-01",
+            "SW-UI-PRESENT-02",
+            "SW-VERSION-01"
+          ],
+          "acceptance_source": "docs/planning/software-waves/EXECUTION_PINS.json#SW-SOFTWARE-GATE-01",
+          "state": "residual/acceptance determined by current scoped dispositions; not a new dispatch"
+        }
+      ],
+      "features": [],
+      "feature_count": 0,
+      "below_target": 0,
+      "without_fresh_passing_committed_record": 0
+    }
+  ],
+  "coverage": {
+    "packages": 30,
+    "mapped_units": 65,
+    "feature_ids": 268,
+    "existing_total_execution_pins": 85,
+    "new_canonical_findings_registered": 0
+  },
+  "boundaries": {
+    "coordinator_only": [
+      "shared APIs/contracts",
+      "root manifests/locks",
+      "canonical registry/ledger",
+      "integration",
+      "publication/acceptance"
+    ],
+    "reviewers": "Report findings; authors fix, qualified different-family exact-commit independent review required for new implementation/tests/tooling",
+    "temp_and_ownership": "Exact bases/fullsha, exclusive leases and dedicated Orca worktrees at future dispatch; current reservations are not permanent launch args. Max2newworkers+coordinator+protectedexternal<=4; no nesting.",
+    "protection": "Root/private data, lost/failed evidence, baselines, historical routing/reviews and protected uncertain workspaces remain intact. No releases/destructive cleanup from this audit."
+  },
+  "test_summary": {
+    "core": {
+      "passed": 4082,
+      "skipped": 6,
+      "deselected": 35,
+      "warnings": 4,
+      "direct_exit": 0
+    },
+    "scripted_remote": {
+      "passed": 100,
+      "direct_exit": 0
+    },
+    "ruff": "pass",
+    "mypy": "pass91sourcefiles",
+    "pip_check": "pass, not CVE scan",
+    "eslint": "pass with15existing suppressions",
+    "stylelint": "pass against521finding baseline, not zero-debt",
+    "hygiene_all": "0errors0warnings",
+    "scope": "Windows current integration only; no local realHA/image/physical run, route inventory disabled to preserve existing root report; CI jobs separately inspected."
+  },
+  "CI": {
+    "run": 41756761049,
+    "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/41756761049",
+    "head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+    "event": "pull_request",
+    "job_counts": {
+      "success": 14,
+      "skipped": 1
+    },
+    "record_binding": {
+      "head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+      "record_commit": "c9dac37abccbe66cfed383379c44cf6061cbc787",
+      "record_parents": [
+        "6debe5a9d1ce3b5993bbd1f6c16d14550d11141b",
+        "ac1dc745ebf552b4d762fc33bc25382052b0e9d6"
+      ],
+      "branch_tree": "2bf33c502f0a6a2b4e106608c7d4574426ca5877",
+      "record_tree": "2bf33c502f0a6a2b4e106608c7d4574426ca5877",
+      "changed_paths": [],
+      "record_is_ancestor_of_branch": false,
+      "branch_is_ancestor_of_record": true,
+      "policy": "Identical tree does not make a nonancestor record fresh under current gitinfo.changed_since; no record relabel/import or policy waiver performed"
+    },
+    "artifacts": [
+      {
+        "id": 13290040262,
+        "name": "validation-evidence",
+        "bytes": 30304980,
+        "sha256": "64fc20ebf5b40aa0dfc58422de59a1d5b78f740f53fdaea327c8daf6811d4684",
+        "GitHub_digest": "sha256:64fc20ebf5b40aa0dfc58422de59a1d5b78f740f53fdaea327c8daf6811d4684",
+        "digest_equal": true,
+        "run": 41756761049,
+        "run_head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+        "summaries": [
+          {
+            "path": "run-summary.json",
+            "bytes": 549233,
+            "sha256": "f189aa2390eba9062b8e29905781367f41a17134c6866ada12e6a28d809fc8b5",
+            "outcomes": 1513,
+            "statuses": {
+              "pass": 1513
+            },
+            "aborted": null,
+            "clients": [
+              "api",
+              "browser",
+              "uc"
+            ],
+            "gates": {
+              "ok": 1513
+            }
+          }
+        ],
+        "records": 1513,
+        "record_statuses": {
+          "pass": 1513
+        },
+        "record_levels": {
+          "V2": 1433,
+          "V3": 80
+        },
+        "record_commits": {
+          "c9dac37abccbe66cfed383379c44cf6061cbc787": 1513
+        },
+        "declared_feature_ids": [
+          "F-API-001",
+          "F-API-002",
+          "F-API-004",
+          "F-API-005",
+          "F-API-007",
+          "F-API-008",
+          "F-API-009",
+          "F-API-013",
+          "F-API-014",
+          "F-API-015",
+          "F-API-016",
+          "F-API-017",
+          "F-API-018",
+          "F-API-019",
+          "F-API-020",
+          "F-API-021",
+          "F-API-022",
+          "F-API-023",
+          "F-API-024",
+          "F-API-025",
+          "F-API-026",
+          "F-API-027",
+          "F-API-028",
+          "F-API-031",
+          "F-API-032",
+          "F-API-033",
+          "F-API-034",
+          "F-API-035",
+          "F-API-036",
+          "F-API-037",
+          "F-API-038",
+          "F-API-040",
+          "F-API-041",
+          "F-CEC-001",
+          "F-CEC-002",
+          "F-CEC-003",
+          "F-CEC-004",
+          "F-CEC-005",
+          "F-CEC-006",
+          "F-CEC-007",
+          "F-CEC-008",
+          "F-CEC-009",
+          "F-CEC-010",
+          "F-CEC-011",
+          "F-DOM-001",
+          "F-DOM-002",
+          "F-DOM-003",
+          "F-DOM-004",
+          "F-DOM-005",
+          "F-DOM-006",
+          "F-DOM-007",
+          "F-DOM-008",
+          "F-DOM-009",
+          "F-DOM-010",
+          "F-DOM-011",
+          "F-DOM-012",
+          "F-DOM-013",
+          "F-DOM-014",
+          "F-DOM-015",
+          "F-DOM-016",
+          "F-DOM-017",
+          "F-DOM-018",
+          "F-DOM-019",
+          "F-DOM-020",
+          "F-DOM-021",
+          "F-DOM-022",
+          "F-DOM-023",
+          "F-DOM-024",
+          "F-DOM-025",
+          "F-DOM-026",
+          "F-DOM-027",
+          "F-DOM-028",
+          "F-DOM-031",
+          "F-DOM-034",
+          "F-KIO-002",
+          "F-KIO-003",
+          "F-KIO-008",
+          "F-KIO-010",
+          "F-KIO-011",
+          "F-MTX-001",
+          "F-MTX-002",
+          "F-MTX-003",
+          "F-MTX-004",
+          "F-MTX-005",
+          "F-MTX-006",
+          "F-MTX-007",
+          "F-MTX-008",
+          "F-MTX-009",
+          "F-MTX-010",
+          "F-MTX-011",
+          "F-MTX-012",
+          "F-MTX-013",
+          "F-MTX-014",
+          "F-MTX-015",
+          "F-MTX-016",
+          "F-MTX-017",
+          "F-MTX-018",
+          "F-MTX-019",
+          "F-MTX-020",
+          "F-MTX-021",
+          "F-MTX-022",
+          "F-MTX-023",
+          "F-MTX-024",
+          "F-MTX-025",
+          "F-MTX-026",
+          "F-MTX-027",
+          "F-MTX-028",
+          "F-MTX-029",
+          "F-MTX-030",
+          "F-MTX-031",
+          "F-REL-001",
+          "F-REL-005",
+          "F-REL-008",
+          "F-REL-009",
+          "F-REL-012",
+          "F-SEC-001",
+          "F-SEC-002",
+          "F-SEC-003",
+          "F-SEC-004",
+          "F-SEC-005",
+          "F-SEC-006",
+          "F-SEC-007",
+          "F-SEC-010",
+          "F-SEC-011",
+          "F-UC-004",
+          "F-UC-005",
+          "F-UC-006",
+          "F-UC-007",
+          "F-UC-008",
+          "F-UC-009",
+          "F-UC-010",
+          "F-UC-016",
+          "F-UI-002",
+          "F-UI-004",
+          "F-UI-005",
+          "F-UI-006",
+          "F-UI-008",
+          "F-UI-012",
+          "F-UI-014",
+          "F-UI-024",
+          "F-UI-027"
+        ],
+        "zip_members": 1743
+      },
+      {
+        "id": 13289044235,
+        "name": "ui-review",
+        "bytes": 312488,
+        "sha256": "535e413e17bbdf168266ad21db98207714af891953e03136ab68c617be9d4acb",
+        "GitHub_digest": "sha256:535e413e17bbdf168266ad21db98207714af891953e03136ab68c617be9d4acb",
+        "digest_equal": true,
+        "run": 41756761049,
+        "run_head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+        "summaries": [],
+        "records": 0,
+        "record_statuses": {},
+        "record_levels": {},
+        "record_commits": {},
+        "declared_feature_ids": [],
+        "zip_members": 12
+      },
+      {
+        "id": 13288733617,
+        "name": "validation-ha-evidence",
+        "bytes": 104541,
+        "sha256": "9bf353f153767a5cd38ebdb768b08079963f278c9036a0e8b2af1c6b73a328f7",
+        "GitHub_digest": "sha256:9bf353f153767a5cd38ebdb768b08079963f278c9036a0e8b2af1c6b73a328f7",
+        "digest_equal": true,
+        "run": 41756761049,
+        "run_head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+        "summaries": [
+          {
+            "path": "run-summary.json",
+            "bytes": 6714,
+            "sha256": "853011026a1344e2102ce9de2465461ff4d3878e37b24fb5fab4d80ea8a678a3",
+            "outcomes": 19,
+            "statuses": {
+              "pass": 19
+            },
+            "aborted": null,
+            "clients": [
+              "ha"
+            ],
+            "gates": {
+              "ok": 19
+            }
+          }
+        ],
+        "records": 19,
+        "record_statuses": {
+          "pass": 19
+        },
+        "record_levels": {
+          "V3": 19
+        },
+        "record_commits": {
+          "c9dac37abccbe66cfed383379c44cf6061cbc787": 19
+        },
+        "declared_feature_ids": [
+          "F-CEC-005",
+          "F-HA-001",
+          "F-HA-002",
+          "F-HA-003",
+          "F-HA-004",
+          "F-HA-005",
+          "F-HA-006",
+          "F-HA-007",
+          "F-HA-008",
+          "F-HA-009",
+          "F-HA-010",
+          "F-HA-011",
+          "F-HA-012",
+          "F-HA-013",
+          "F-HA-015",
+          "F-HA-016",
+          "F-HA-017",
+          "F-HA-018",
+          "F-MTX-001",
+          "F-MTX-003",
+          "F-MTX-006",
+          "F-MTX-007",
+          "F-MTX-031",
+          "F-REL-009"
+        ],
+        "zip_members": 30
+      },
+      {
+        "id": 13288728164,
+        "name": "deployment-evidence",
+        "bytes": 8202,
+        "sha256": "6f7066787b619038924d3745861a46167a37f1edab565a9c3204c0cf94eedf0a",
+        "GitHub_digest": "sha256:6f7066787b619038924d3745861a46167a37f1edab565a9c3204c0cf94eedf0a",
+        "digest_equal": true,
+        "run": 41756761049,
+        "run_head": "ac1dc745ebf552b4d762fc33bc25382052b0e9d6",
+        "summaries": [],
+        "records": 4,
+        "record_statuses": {
+          "pass": 4
+        },
+        "record_levels": {
+          "V3": 4
+        },
+        "record_commits": {
+          "c9dac37abccbe66cfed383379c44cf6061cbc787": 4
+        },
+        "declared_feature_ids": [
+          "F-OPS-001",
+          "F-OPS-002",
+          "F-OPS-003",
+          "F-OPS-005",
+          "F-OPS-006",
+          "F-OPS-011",
+          "F-OPS-015"
+        ],
+        "zip_members": 4
+      }
+    ],
+    "admission": "Not imported; source/assertion/privacy/ancestry/client checks remain explicit"
+  },
+  "evidence_files": {
+    "baseline.json": {
+      "bytes": 101027,
+      "sha256": "68447600264979fc452dc38bb8576f6ad4612406fdee62fe61ec2f1adf0edb5c"
+    },
+    "source-probes.json": {
+      "bytes": 996,
+      "sha256": "7b04ecc3962995d2bda39d9a1175fdbb7dd98092b198ee54d7f82ddb2b0cd89b"
+    },
+    "ha-auth-probe.json": {
+      "bytes": 804,
+      "sha256": "719f49c9cd1c58fe0113b2e6f0ed8a6ba1b1e1be527f90110861b19401d28f15"
+    },
+    "keyboard-probe.json": {
+      "bytes": 629,
+      "sha256": "6dc8170dba22e9c8b2b469a8595f96c577e911356a60538b412641f8e1be9825"
+    },
+    "check-summary.json": {
+      "bytes": 10667,
+      "sha256": "a12a7c84d44fd0fce419685b3d732511922459b7e6d9b8a4865725edc9a5d975"
+    },
+    "ci-head.stdout.json": {
+      "bytes": 27536,
+      "sha256": "17a7f6db5b7b71e02f03b136560d308207c317139e0d5a92f20002a1ec1ba61e"
+    },
+    "ci-artifact-audit.json": {
+      "bytes": 747495,
+      "sha256": "c6b6b824bbce48b15a6a7482c44a8a8a273b777e7bc3899a80787d3f4dc571f1"
+    },
+    "ci-record-source-binding.json": {
+      "bytes": 642,
+      "sha256": "0d3884828eb04d2e786ca4668f5da3567288839f63d9ea5fdb5be1f86bf58aed"
+    }
+  },
+  "private_originals": "build/comprehensive-review-20261104 and C:/t/comprehensive-review-20261104; preserve original CIzip archives, direct stdout/stderr/JUnit/argv/isolation receipts and failed audit-helper scripts. No claim that every private file is published.",
+  "capacity_observation": {
+    "observed_utc": "2026-11-04T06:30:48.870485+00:00",
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "run": "run_37205f6095b3",
+    "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+    "generation": 5,
+    "fleet_total": 135,
+    "fleet_pages": 2,
+    "counts": {
+      "released": 129,
+      "retained": 6
+    },
+    "capacity": {
+      "claude": {
+        "status": "ok",
+        "weekly_remaining_percent": 76,
+        "updatedAt": 1793773767388,
+        "age_seconds": 81,
+        "reset_UTC": "2026-11-06T12:00:00.026000+00:00"
+      },
+      "codex": {
+        "status": "ok",
+        "weekly_remaining_percent": 15,
+        "updatedAt": 1793773726520,
+        "age_seconds": 122,
+        "reset_UTC": "2026-11-04T06:36:04+00:00"
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly_remaining_percent": 69,
+        "updatedAt": 1793773725949,
+        "age_seconds": 123,
+        "reset_UTC": "2026-11-04T20:25:32.860000+00:00"
+      }
+    },
+    "new_workers_or_worktrees_for_this_review": 0,
+    "scope": "Dated supported observations only; no dispatch/phase headroom promise"
+  }
+}

@@ -64,6 +64,22 @@ def _rec(sha: str, covers: list[str], **over) -> LoadedRecord:
 # ------------------------------------------------------------------ staleness
 
 
+@pytest.mark.parametrize("staged", [False, True])
+def test_dirty_files_preserves_first_path_with_inherited_git_location(repo, monkeypatch, staged):
+    """Porcelain's first status column must survive evidence metadata collection."""
+    for name in ("a.py", "b.py"):
+        (repo / "src" / name).write_text("changed = True\n")
+    if staged:
+        _git(repo, "add", "src/a.py")
+    for key in gitinfo._GIT_LOCATION_VARS:
+        monkeypatch.setenv(key, str(repo / "unrelated-location"))
+    assert gitinfo.dirty_files(repo) == ["src/a.py", "src/b.py"]
+    head = gitinfo.head_sha(repo)
+    record = _rec(head, ["src/a.py"])
+    record.data["commit"]["dirty_files"] = gitinfo.dirty_files(repo)
+    assert freshness(record, head, repo) == "stale"
+
+
 def test_freshness_follows_covered_paths(repo):
     sha1 = _git(repo, "rev-parse", "HEAD")
     rec = _rec(sha1, ["src/a.py"])

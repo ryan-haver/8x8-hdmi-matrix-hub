@@ -18,7 +18,8 @@ Matrix connection settings
 
 Test isolation (TST-06)
     ``_isolate_global_state`` (autouse) points ``MATRIX_DATA_DIR`` at a fresh
-    temporary directory for every test and resets all REST API module globals
+    temporary directory for every test, isolates config through ``UC_CONFIG_HOME``,
+    and resets all REST API module globals
     (matrix device, name caches, managers, rate limiter, WebSocket clients,
     persistence caches) before and after each test, so state cannot leak
     between tests or into the developer's ``data/`` directory.
@@ -150,10 +151,13 @@ def _reset_rest_api_globals() -> None:
 def _isolate_global_state(tmp_path_factory, monkeypatch):
     """Give every test a private data dir and pristine REST module globals."""
     data_dir = tmp_path_factory.mktemp("matrix-data")
+    config_dir = tmp_path_factory.mktemp("matrix-config")
     # monkeypatch restores the original values afterwards, even if a test (or
     # rest_api.create_rest_app(data_dir=...)) overwrote os.environ directly.
     monkeypatch.setenv("MATRIX_DATA_DIR", str(data_dir))
-    monkeypatch.delenv("UC_CONFIG_HOME", raising=False)
+    # Macro/profile defaults resolve configuration separately from data. Merely
+    # clearing UC_CONFIG_HOME lets HOME or ./config select a developer catalog.
+    monkeypatch.setenv("UC_CONFIG_HOME", str(config_dir))
     _reset_rest_api_globals()
     yield
     _reset_rest_api_globals()

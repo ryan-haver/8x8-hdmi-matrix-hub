@@ -196,7 +196,7 @@ def test_uc_client_runs_against_the_hub_with_the_integration(tmp_path: Path, sch
     for rec in records.values():
         assert list(schema_validator.iter_errors(rec)) == [], rec["scenario"]
     select = records[("remote.select_source", "uc")]
-    assert select["environment"]["hub"]["entry"].startswith("run.py legacy mode")
+    assert select["environment"]["hub"]["entry"] == "run.py -> hub.cli shared runtime (UC_ENABLED=true)"
     assert select["environment"]["hub"]["env"]["UC_DISABLE_MDNS_PUBLISH"] == "true"
     assert select["observations"]["requests"][0]["body"]["cmd_id"] == "select_source"
     assert select["observations"]["requests"][0]["body"]["params"] == {"source": "PS5"}  # the name the Remote lists
@@ -204,4 +204,5 @@ def test_uc_client_runs_against_the_hub_with_the_integration(tmp_path: Path, sch
     power_on = records[("remote.output_cec_on", "uc")]
     assert power_on["observations"]["requests"][0]["status"] == 200
     assert "closed" not in power_on["observations"]["requests"][0]
-    assert records[("routing.switch_one", "api")]["environment"]["hub"]["entry"].startswith("run.py (USE_MODULAR")
+    assert records[("routing.switch_one", "api")]["environment"]["hub"]["entry"] == \
+        "run.py -> hub.cli shared runtime (UC_ENABLED=false)"

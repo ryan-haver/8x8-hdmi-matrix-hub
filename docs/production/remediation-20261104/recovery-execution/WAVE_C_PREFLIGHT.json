@@ -1,0 +1,76 @@
+{
+  "observed_utc": "2026-11-04T12:18:05.039603+00:00",
+  "status": "PREPARED / no new worker or worktree yet",
+  "judge_packet_sha256": "75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9",
+  "frozen_standard_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "job": {
+    "name": "wp-recovery-privacy-m3-judge",
+    "branch": "qualification/recovery-privacy-m3-judge",
+    "base": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "title": "PRIV-JUDGE single independent exact MiniMax privacy-domain assessment judgment",
+    "report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/REVIEW.md",
+    "spec": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_TASK.md",
+    "deps": [
+      "task_eef2d2e8f289"
+    ],
+    "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e"
+  },
+  "capacity": {
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793794426489,
+      "error": null,
+      "age_seconds": 144
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400120,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 5,
+        "windowMinutes": 300,
+        "resetsAt": 1793796600120,
+        "resetDescription": "5:50 AM"
+      },
+      "updatedAt": 1793794426087,
+      "error": null,
+      "age_seconds": 144
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932878,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 1,
+        "windowMinutes": 300,
+        "resetsAt": 1793812424231,
+        "resetDescription": null
+      },
+      "updatedAt": 1793794426072,
+      "error": null,
+      "age_seconds": 144
+    }
+  },
+  "fleet": "154rows/allpages147released/sevenretainedmetadata/0current",
+  "concurrency": "one planned judge + coordinator + protectedexternal=3of4; no nesting",
+  "capacity_decision": "Bounded one exact report/domain judge; reserve future qualifiedsource-review/evaluation/authorfix conditional and freshlygated, no absoluteallowance/otherhostdemand guarantee. Unknown/<30%/insufficient needs qualifiedverifiedfallback or holds only affected dispatch; no extrajudge/family-retake from quota.",
+  "other_track": "WS review PASS with nonblocking wording observation, originalauthorcompetence/wiring held; no sourcefix/extraattempt automatic. D6source target independence stillunproven; noasync candidate or wirelease."
+}

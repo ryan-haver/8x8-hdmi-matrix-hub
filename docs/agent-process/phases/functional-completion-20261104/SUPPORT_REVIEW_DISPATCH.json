@@ -1,0 +1,250 @@
+{
+  "observed_utc": "2026-11-04T20:50:00.250210+00:00",
+  "status": "FC-SUPPORT-RUN report PARTIAL, reserved independent receipt-fidelity review ACTIVE",
+  "actor": {
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-support-run-review",
+    "branch": "review/wp-fc26-fc-support-run-review",
+    "exact_base": "abb52542858845cf488a63b01f6ac619f3f38173",
+    "integration_prelaunch_published": "0b5c5e37a0f07752c9e5d371aa1c05103e70ee95",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-SUPPORT-RUN.md",
+    "spec_sha256": "fd38ca4b12bb42885f9a8cdc5190a3aac4bdc8b3cb636bf38c78edf6fb7b9bf1",
+    "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "exclusive_report": "docs/production/functional-completion-20261104/FC-SUPPORT-RUN/REVIEW.md",
+    "dependency": "task_2d9ebaaea545",
+    "role": "independent MiniMax receipt-fidelity review of Sol report; no support/domain/source acceptance",
+    "task_id": "task_14f236edde4f",
+    "dispatch_id": "ctx_e2922f3f76f4",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "actual native entry Task/Dispatch/directory verified",
+      "session": "ses_e57ad6a09ffeQHNRlh7GLGfJWQ",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variants": [
+        "thinking"
+      ],
+      "bytes": 170681,
+      "sha256": "4e9f8360f73cd4fc34060a624223b54fbc7490f8624d113232d63701c56ea67a",
+      "helper_calls_observed": false,
+      "scope": "entry only; no completion/competence/all-host claim"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "status": "ACTIVE exact-commit independent receipt-fidelity review only"
+  },
+  "author_delivery": "SUPPORT_DELIVERY_REVIEW_READY.json",
+  "integration_prelaunch_published_verified": "0b5c5e37a0f07752c9e5d371aa1c05103e70ee95",
+  "capacity": {
+    "prepare": {
+      "minimax": {
+        "provider": "minimax",
+        "session": {
+          "usedPercent": 59,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 1,
+          "windowMinutes": 10080,
+          "resetsAt": 1794428735069,
+          "resetDescription": null
+        },
+        "updatedAt": 1793825197309,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {
+          "source": "web",
+          "lastSuccessfulSource": "web"
+        },
+        "age_seconds": 139
+      },
+      "claude": {
+        "provider": "claude",
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600366,
+          "resetDescription": "3:50 PM"
+        },
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400366,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "fableWeekly": {
+          "usedPercent": 0,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400000,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "monthly": null,
+        "extraUsage": null,
+        "updatedAt": 1793825197318,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 139
+      },
+      "codex": {
+        "provider": "codex",
+        "session": null,
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "rateLimitResetCredits": {
+          "availableCount": 2,
+          "totalEarnedCount": 0,
+          "nextExpiresAt": 1796068349636,
+          "credits": [
+            {
+              "status": "available",
+              "expiresAt": 1796068349636,
+              "grantedAt": 1793476349636
+            },
+            {
+              "status": "available",
+              "expiresAt": 1796164096174,
+              "grantedAt": 1793572096174
+            }
+          ]
+        },
+        "updatedAt": 1793825197660,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 138
+      }
+    },
+    "launch": {
+      "minimax": {
+        "provider": "minimax",
+        "session": {
+          "usedPercent": 59,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 1,
+          "windowMinutes": 10080,
+          "resetsAt": 1794428735069,
+          "resetDescription": null
+        },
+        "updatedAt": 1793825197309,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {
+          "source": "web",
+          "lastSuccessfulSource": "web"
+        },
+        "age_seconds": 146
+      },
+      "claude": {
+        "provider": "claude",
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600366,
+          "resetDescription": "3:50 PM"
+        },
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400366,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "fableWeekly": {
+          "usedPercent": 0,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400000,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "monthly": null,
+        "extraUsage": null,
+        "updatedAt": 1793825197318,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 146
+      },
+      "codex": {
+        "provider": "codex",
+        "session": null,
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "rateLimitResetCredits": {
+          "availableCount": 2,
+          "totalEarnedCount": 0,
+          "nextExpiresAt": 1796068349636,
+          "credits": [
+            {
+              "status": "available",
+              "expiresAt": 1796068349636,
+              "grantedAt": 1793476349636
+            },
+            {
+              "status": "available",
+              "expiresAt": 1796164096174,
+              "grantedAt": 1793572096174
+            }
+          ]
+        },
+        "updatedAt": 1793825197660,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 146
+      }
+    }
+  },
+  "fleet": {
+    "total": 173,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 173,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDY1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDoyOToxMSIsImRpc3BhdGNoSWQiOiJjdHhfNjg1NWI4OGYzZTE4IiwiZGF0YWJhc2VJZCI6MTM4MH19"
+      },
+      {
+        "limit": 100,
+        "total": 173,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 164,
+      "null": 1
+    }
+  },
+  "concurrency": "original M3inventory correction + M3support review + coordinator + protected external=4; no nesting",
+  "holds": "All support/domain/source/core route/HACS installupgrade/qualification/ownerprivacybudget/physicalvisual72hweekrelease unchanged",
+  "storage_registration": "6e86d613d6c64ec2aa2f29c909260b6a",
+  "storage_note": "Author original143680593regularbytes plus912unfollowed special entries retained in place. Worker extractedHACS removal rejected blocked by policy, no repeat/bypass/removal. Newcoor compact custody/fullGitbundle/native/manifest only; newactive reviewsource tree separate.",
+  "next": "Publish scoped records/exactremoteequality, retain storage receipt then end turn for Orca wake; no completion polling"
+}

@@ -74,9 +74,9 @@ def config_from_env(environ: Mapping[str, str] | None = None) -> UCIntegrationCo
     - ``UC_INTEGRATION_HTTP_PORT`` (int, default ``9095``, alias ``UC_PORT``)
     - ``UC_INTEGRATION_INTERFACE`` (str | None)
     - ``UC_DISABLE_MDNS_PUBLISH`` (bool, default ``False``, alias ``UC_DISABLE_MDNS``)
-    - ``UC_CONFIG_HOME`` (Path, default ``DATA_DIR / "uc"`` or ``./config``)
+    - ``UC_CONFIG_HOME`` (Path, default ``DATA_DIR`` or ``./config``)
     - ``UC_DRIVER_URL`` (str | None)
-    - ``UC_AUTH_TOKEN`` (str | None)
+    - ``UC_AUTH_TOKEN`` (str | None, alias ``ADMIN_PIN``)
     - ``HUB_URL`` (str, default ``"http://127.0.0.1:8080"``)
     - ``HUB_API_KEY`` (str | None)
     """
@@ -95,13 +95,13 @@ def config_from_env(environ: Mapping[str, str] | None = None) -> UCIntegrationCo
         config_home = Path(config_home_raw)
     else:
         data_dir_raw = _first_non_empty(env, "DATA_DIR", "MATRIX_DATA_DIR")
-        config_home = Path(data_dir_raw) / "uc" if data_dir_raw is not None else Path("./config")
+        config_home = Path(data_dir_raw) if data_dir_raw is not None else Path("./config")
 
     driver_url = _first_non_empty(env, "UC_DRIVER_URL")
     if driver_url is not None and not driver_url.startswith(("ws://", "wss://")):
         raise ValueError(f"UC_DRIVER_URL must start with ws:// or wss://, got {driver_url!r}")
 
-    auth_token = _first_non_empty(env, "UC_AUTH_TOKEN")
+    auth_token = _first_non_empty(env, "UC_AUTH_TOKEN", "ADMIN_PIN")
     hub_url = _first_non_empty(env, "HUB_URL") or DEFAULT_HUB_URL
     hub_api_key = _first_non_empty(env, "HUB_API_KEY")
 

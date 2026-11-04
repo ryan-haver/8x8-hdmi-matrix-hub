@@ -1,0 +1,71 @@
+{
+  "observed_utc": "2026-11-04T16:44:40.264259+00:00",
+  "run": 41843691782,
+  "url": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub/actions/runs/41843691782",
+  "head_sha": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "Type check (mypy)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Home Assistant tests",
+      "conclusion": "success"
+    },
+    {
+      "name": "Remote 3 integration (scripted Remote)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Secret scan (gitleaks)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Lint (ruff)",
+      "conclusion": "success"
+    },
+    {
+      "name": "UI (smoke + visual)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Tests (pytest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "HACS validation",
+      "conclusion": "success"
+    },
+    {
+      "name": "hassfest",
+      "conclusion": "success"
+    },
+    {
+      "name": "Validation (Home Assistant container)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Docker image (build + deployment tests)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Repository hygiene (binary/size guard)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Validation (scenarios + ledger)",
+      "conclusion": "success"
+    },
+    {
+      "name": "UI review comment",
+      "conclusion": "success"
+    },
+    {
+      "name": "Build and push to GHCR",
+      "conclusion": "skipped"
+    }
+  ],
+  "scope": "14success/1publishes-skipped; qualified local software pipeline only. PR checkout/artifact commit/tree/source/image/client binding not yet adjudicated for canonical feature evidence, not owner hardware/visual approval.",
+  "not_closed": "CR01 stillUNWIRED, CR02HAauthgap/CR03shortcuts andothersource/evidencefindings not closed bygreenCI; originalvisual/HIL/72h/week/finalreleasegatesremain."
+}

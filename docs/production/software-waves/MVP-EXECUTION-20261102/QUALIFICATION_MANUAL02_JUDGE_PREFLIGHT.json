@@ -1,0 +1,173 @@
+{
+  "observed_utc": "2026-11-03T17:21:30.692620+00:00",
+  "status": "fresh independent judge prepared, not launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, fresh supported discovery receipts retained privately",
+  "capacity": {
+    "observed_utc": "2026-11-03T17:21:30.692620+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 59,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793726483814,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800432,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400432,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793726483474,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 5,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932911,
+        "resetDescription": null
+      },
+      "updatedAt": 1793726483305,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 122,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTY4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMToyODoyNCIsImRpc3BhdGNoSWQiOiJjdHhfMGUzZjAwM2VlZjQ2IiwiZGF0YWJhc2VJZCI6NjYzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 116,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "evaluator": {
+    "observed_utc": "2026-11-03T17:16:24.130615+00:00",
+    "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+    "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "tree": "wp-exec-qual-anthropic-core-01-manual02",
+    "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+    "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+    "bytes": 16677,
+    "sha256": "4dfbfc8a77c6ad910dc34eac55b62611195fe601ee6996dc2818ded7de988942",
+    "working_identical": true,
+    "cr_bytes": 0,
+    "task_id": "task_1d3db0c0e0e8",
+    "dispatch_id": "ctx_ea6771c3440b",
+    "terminal": "released",
+    "publication": "exact task ref remote/local verified",
+    "cleanup": "exact worktree retained read-only pending independent judgement; no removal",
+    "acceptance": "evaluation submission only, no qualification or source acceptance",
+    "native_final": {
+      "session": "646a8df5-036f-4b59-a94a-809cbaf76015",
+      "models": [
+        "claude-opus-4-7"
+      ],
+      "effort": "high explicit supported launch/localconfig; native per-turn effort not independently exposed",
+      "bytes": 1294061,
+      "sha256": "1538b9810b23f8ec7e5733b81c353e5864ca769523b63a42120a98f0ec21a8a5",
+      "unassigned_helper_tools_observed": [],
+      "scope": "complete captured session, not complete OS descendant census"
+    },
+    "worker_reported_checks": "54focused/489docs passed once each; judge must corroborate direct originals, assertions, scope/calibration",
+    "further_qualification_retry_authorized": false,
+    "integration_commit": "7c38016c77adb69c607b2033f0324b2abd9f473e",
+    "archives": [
+      {
+        "archive_sha256": "175c7536ce423e83051f263f9d3868a35766dbafe342467c7cd2e01c3ed56b84",
+        "archive_bytes": 207276698,
+        "regular_files": 4652,
+        "regular_bytes": 298183314,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      {
+        "archive_sha256": "a2e13b224ae77e2bfe64a2323cfa13637b78961b0a6e9a4be972ddc84555db85",
+        "archive_bytes": 145242,
+        "regular_files": 283,
+        "regular_bytes": 687290,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    ]
+  },
+  "job": {
+    "base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+    "spec": "QUALIFICATION_MANUAL02_JUDGE_TASK.txt",
+    "worktree_name": "wp-exec-qual-anthropic-core-01-manual02-review",
+    "dependency": "task_1d3db0c0e0e8",
+    "title": "Fresh independent six-axis judgement of manual qualification attempt02",
+    "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+    "gate_path": [
+      "core_reviewer_qualification",
+      "manual_attempt02",
+      "independent_judge"
+    ],
+    "budget": "15min bounded exact-report six-axis judgement, no repeated full focused campaign by default",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "fetched_at": "2026-11-03T17:21:23.786234800Z",
+    "supported": true
+  },
+  "reviewer_qualification": "Actual independent evaluation-quality judgement5b70 and bounded factual/source-claim reviews2187/fd166/ac9/79b08; this judges Anthropic evaluation, not independent acceptance of OpenAI-authored code",
+  "independence": "OpenAI judge versus Anthropic evaluator; native identities/Task/Dispatch/cwd attested, no helpers/nesting; allsourceauthors remain accurate",
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "mandatory_axes": [
+    "provenance",
+    "invariants",
+    "counterexamples",
+    "behavior_and_tools",
+    "calibration",
+    "review_quality"
+  ],
+  "decision": "explicit pass/hold/fail everyaxis; allpassrequired, unknownholds, actualmandatoryfailfails; independent materiality judgement, no forcedverdict",
+  "demand": "ONE fresh15min-target judgement under explicit approval; preserved primaryoriginals and source assertions, required5docscheck. No automaticfailedqualificationretry, no report-rewrite campaign or secondjudge authorization",
+  "alternatives": "Same approved OpenAI family, Astra actualrecentavailability and judgementcompetence vs historicalSol capacity event; M3 not qualified for this source-evaluation judgement, Anthropic same evaluatorfamily cannotjudgeitself, Google primaryunavailable, DeepSeek exhausted; no silentfallback",
+  "concurrency": "one newjudge+coordinator+protectedexternal3<=4; no nesting",
+  "protected": "Original and new failed/private bytes, native transcripts, all retainedworkspaces/baselines/runtime data/odd untrackedhook artifact unchanged, no cleanup/reset/prune/forcepush",
+  "source_admission": "No source/RV-API034 acceptance, featurepromotion, privacy/physical/release approval from this task; eligible domainonlyexactrubricboundedrunner/modelAPIrefusalcompatibility ifactuallyqualified",
+  "first_attempt_status": "FAIL unchanged",
+  "manual_attempt02_qualified_domains_now": [],
+  "further_retry_authorized": false,
+  "material_plan_change": false
+}

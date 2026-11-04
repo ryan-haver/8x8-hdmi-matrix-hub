@@ -1,0 +1,269 @@
+{
+  "observed_utc": "2026-11-04T21:31:16.126289+00:00",
+  "status": "FC-TRUTH actual-author correction complete/preserved; exact7996 Sol rereview ACTIVE, no canonical acceptance",
+  "actor": {
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-rereview",
+    "branch": "review/wp-fc26-fc-truth-rereview",
+    "exact_base": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+    "integration_prelaunch_published": "ffe4039df0cb7cf18708e7555bb6da5498a9d066",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REREVIEW_FC-TRUTH.md",
+    "spec_sha256": "b342c6935bede98181aa74fe9ccf48b2f373817f8f78f40547995680089390f7",
+    "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+    "exclusive_report": "docs/production/functional-completion-20261104/FC-TRUTH/REREVIEW.md",
+    "dependencies": [
+      "task_5305a1b797cc",
+      "task_999c32971b04"
+    ],
+    "role": "Reserved exact7996 Sol different-family factual rereview after original-M3-author correction; no new assessment",
+    "task_id": "task_ba4c0694e78e",
+    "dispatch_id": "ctx_72b222ccb718",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native Task/Dispatch/cwd entry verified",
+      "session": "01a1a878-42a0-78a1-88c8-fdda75996e7f",
+      "models": [
+        "gpt-6.1-sol"
+      ],
+      "effort": "high native",
+      "bytes": 734831,
+      "sha256": "3e8cbdb37fb7566433fc4691315cffaa7f6889950c5e3642053f11cae018e07e",
+      "helper_calls_observed": false,
+      "scope": "entry only, no competence/completion/all-host proof"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "status": "ACTIVE reserved exact-corrected-commit different-family factual rereview"
+  },
+  "integration_prelaunch_published_verified": "ffe4039df0cb7cf18708e7555bb6da5498a9d066",
+  "capacity": {
+    "prepare": {
+      "observed_utc": "2026-11-04T21:28:53.089318+00:00",
+      "intended_codex": {
+        "provider": "codex",
+        "session": null,
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "rateLimitResetCredits": {
+          "availableCount": 2,
+          "totalEarnedCount": 0,
+          "nextExpiresAt": 1796068349636,
+          "credits": [
+            {
+              "status": "available",
+              "expiresAt": 1796068349636,
+              "grantedAt": 1793476349636
+            },
+            {
+              "status": "available",
+              "expiresAt": 1796164096174,
+              "grantedAt": 1793572096174
+            }
+          ]
+        },
+        "updatedAt": 1793827583366,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 150
+      },
+      "other_provider_observations": {
+        "claude": {
+          "provider": "claude",
+          "session": {
+            "usedPercent": 7,
+            "windowMinutes": 300,
+            "resetsAt": 1793832599832,
+            "resetDescription": "3:49 PM"
+          },
+          "weekly": {
+            "usedPercent": 27,
+            "windowMinutes": 10080,
+            "resetsAt": 1793966399832,
+            "resetDescription": "Fri 4:59 AM"
+          },
+          "fableWeekly": {
+            "usedPercent": 0,
+            "windowMinutes": 10080,
+            "resetsAt": 1793966400000,
+            "resetDescription": "Fri 5:00 AM"
+          },
+          "extraUsage": null,
+          "updatedAt": 1793827702575,
+          "error": null,
+          "status": "ok",
+          "usageMetadata": {
+            "source": "live-session",
+            "lastSuccessfulSource": "live-session",
+            "authProvenance": "profile:e660794f-b737-4d4a-b985-cdc9951cc999"
+          }
+        },
+        "minimax": {
+          "provider": "minimax",
+          "session": {
+            "usedPercent": 67,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "weekly": {
+            "usedPercent": 2,
+            "windowMinutes": 10080,
+            "resetsAt": 1794428735065,
+            "resetDescription": null
+          },
+          "updatedAt": 1793827582821,
+          "error": null,
+          "status": "ok",
+          "usageMetadata": {
+            "source": "web",
+            "lastSuccessfulSource": "web"
+          }
+        }
+      },
+      "scope": "Sol factual rereview; no new other-provider dispatch; future stages separately fresh-gated, absoluteallowance/otherhostdemand unknown"
+    },
+    "launch-confirmed": {
+      "observed_utc": "2026-11-04T21:30:13.758658+00:00",
+      "intended_codex": {
+        "provider": "codex",
+        "session": null,
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "rateLimitResetCredits": {
+          "availableCount": 2,
+          "totalEarnedCount": 0,
+          "nextExpiresAt": 1796068349636,
+          "credits": [
+            {
+              "status": "available",
+              "expiresAt": 1796068349636,
+              "grantedAt": 1793476349636
+            },
+            {
+              "status": "available",
+              "expiresAt": 1796164096174,
+              "grantedAt": 1793572096174
+            }
+          ]
+        },
+        "updatedAt": 1793827583366,
+        "error": null,
+        "status": "ok",
+        "usageMetadata": {},
+        "age_seconds": 230
+      },
+      "other_provider_observations": {
+        "claude": {
+          "provider": "claude",
+          "session": {
+            "usedPercent": 7,
+            "windowMinutes": 300,
+            "resetsAt": 1793832599832,
+            "resetDescription": "3:49 PM"
+          },
+          "weekly": {
+            "usedPercent": 27,
+            "windowMinutes": 10080,
+            "resetsAt": 1793966399832,
+            "resetDescription": "Fri 4:59 AM"
+          },
+          "fableWeekly": {
+            "usedPercent": 0,
+            "windowMinutes": 10080,
+            "resetsAt": 1793966400000,
+            "resetDescription": "Fri 5:00 AM"
+          },
+          "extraUsage": null,
+          "updatedAt": 1793827750163,
+          "error": null,
+          "status": "ok",
+          "usageMetadata": {
+            "source": "live-session",
+            "lastSuccessfulSource": "live-session",
+            "authProvenance": "profile:e660794f-b737-4d4a-b985-cdc9951cc999"
+          }
+        },
+        "minimax": {
+          "provider": "minimax",
+          "session": {
+            "usedPercent": 67,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "weekly": {
+            "usedPercent": 2,
+            "windowMinutes": 10080,
+            "resetsAt": 1794428735065,
+            "resetDescription": null
+          },
+          "updatedAt": 1793827582821,
+          "error": null,
+          "status": "ok",
+          "usageMetadata": {
+            "source": "web",
+            "lastSuccessfulSource": "web"
+          }
+        }
+      },
+      "scope": "Sol factual rereview; no new other-provider dispatch; future stages separately fresh-gated, absoluteallowance/otherhostdemand unknown"
+    }
+  },
+  "fleet": {
+    "total": 174,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 174,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDo0MToxMCIsImRpc3BhdGNoSWQiOiJjdHhfNWEzZjQ2ODgzZGRmIiwiZGF0YWJhc2VJZCI6MTM4M319"
+      },
+      {
+        "limit": 100,
+        "total": 174,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 165,
+      "null": 1
+    }
+  },
+  "concurrency": "M3support fidelity reviewer + Soltruth rereviewer + coordinator + protectedexternal=4/no nesting",
+  "coordinator_prelaunch_error": {
+    "initial_error": "FileNotFoundError review-binding.json because prepare exec had yielded and was still running",
+    "stage": "Coordinator helper before worker-start API/argument construction; no Task/Dispatch created",
+    "prepare_final_exit": 0,
+    "prepare_result": "Exact7996 dedicated Sol rereview prepared",
+    "read_only_inspection_error": "worktree ps rejects --worktree; original error preserved. Consulted help and used exact scoped terminal list instead.",
+    "census": "Exact prepared tree has one ordinary PowerShell terminal, no agent identity; no truncation. Final launch guards recheck branch/head/config/spec/prior release/fresh intended-pool quota.",
+    "action": "FIRST worker-start on completed existing prepared tree; no recreation/failed-worker retry/duplicate writer"
+  },
+  "storage_registration": "6b6b0c08cfd64ef5997d668e0974257c",
+  "review_date": "2026-12-04",
+  "holds": "Correction not selfaccepted; support/source/Q/D6/WSR03/privacyFAIL/fullchain/ownerbudget/physicalvisual72hweekrelease unchanged",
+  "next": "Publish scoped records/exactremoteequality, retain storage then end turn for Orca wake; no completion polling or extra correction cycle"
+}

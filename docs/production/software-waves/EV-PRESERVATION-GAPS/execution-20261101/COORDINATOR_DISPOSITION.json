@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-11-03T03:40:07.523938+00:00",
+  "unit": "EV-PRESERVATION-GAPS",
+  "coordinator_decision": "ACCEPT completed bounded negative-gap documentation disposition",
+  "author_family": "MiniMax",
+  "author_commit": "816755055028d37aa62c0ff62caace473288654d",
+  "author_git_blob_sha256": "ebaa6fb49c0f052c8ae9e5ec61e8855a77c1b49584cce5930972dd81a8095b78",
+  "independent_review_family": "OpenAI",
+  "independent_review_commit": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+  "independent_review_verdict": "accept",
+  "independent_review_git_blob_sha256": "4efd57a0d5bbbecfd7f6e920e5b61e8d874b1df1b7b3d106827e9e38eb93ae26",
+  "plan_acceptance": "Preserve surviving originals and recorded irrecoverable gaps; new diagnostics separate; never reconstruct historical bytes or call preservation acceptance passed.",
+  "unit_documentation_acceptance_satisfied": true,
+  "negative_gap_dispositions": {
+    "G1": "Original API-C1 managed-failure artifacts recorded lost; current bounded inspection did not recover originals and copies elsewhere unknown. Historical FAILED/partial/UNMET remains, managed/all-scenario compatibility/qualified review/privacy admission/integration/cleanup HELD.",
+    "G2": "Original mangled freshness scratch bytes recorded overwritten; diagnostic preservation gap, accepted historical mapping and retention limits unchanged, originals unknown/unreconstructed."
+  },
+  "original_preservation_pass": false,
+  "source_or_feature_qualification": false,
+  "source_or_privacy_admission": false,
+  "finding_or_level_changed": false,
+  "cleanup_authorized": false,
+  "owner_gates": "physical/HIL/72h/week/final version-artifact release unchanged, no new approval or closure",
+  "representation": "review uses exact Git blob; author own workingLF identical, reviewer checkoutCRLF separately recorded and preserved without normalization",
+  "history": "original reports/reviewrequire_changes/correction overrun/natives/archives preserved; acceptance does not relabel historical failure or time budget",
+  "integration_mapping": {
+    "corrected_author": "733c2d36656995fdc0e108fd2954cf45885e1bb5",
+    "accepted_review": "2dc385ac60c23715e25dc1a1dbbc33b8fd50e0cd"
+  },
+  "settlement": "both author/reviewer released, exact task refs published/verified, full natives and verified workspace/temp archives retained privately; exact trees explicitly retained read-only",
+  "publication": "coordinator acceptance is committed/pushed and independently exact-head verified by this wave publication receipt; receipt outside referenced commit"
+}

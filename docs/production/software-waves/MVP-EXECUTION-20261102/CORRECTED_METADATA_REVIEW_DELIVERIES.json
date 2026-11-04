@@ -1,0 +1,85 @@
+{
+  "observed_utc": "2026-11-03T03:40:07.523938+00:00",
+  "actors": {
+    "preservation": {
+      "head": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+      "base": "816755055028d37aa62c0ff62caace473288654d",
+      "tree": "wp-exec-ev-preservation-gaps-rereview01",
+      "report": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/CORRECTION_REVIEW_01.md",
+      "bytes": 9547,
+      "sha256": "4efd57a0d5bbbecfd7f6e920e5b61e8d874b1df1b7b3d106827e9e38eb93ae26",
+      "task_id": "task_cc2af79f455c",
+      "dispatch_id": "ctx_5011d343f010",
+      "session": "01a19f74-5c84-7903-97e0-d649983b9705",
+      "verdict": "accept bounded corrected negative-gap metadata only",
+      "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-rereview01",
+      "native_final": {
+        "session": "01a19f74-5c84-7903-97e0-d649983b9705",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 814934,
+        "sha256": "77818df2d9a6950be1adf98cea1e37f4c5b7b02dc9474387416fb3b0bad3c9de"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention for evidence/negative-history and unresolved source dispositions; no removal",
+      "archives": [
+        {
+          "archive_sha256": "5ccb7d374df5cdb21ff11e0451dc93907cafb4e7f21fdc1129db5f96daea24c3",
+          "regular_files": 4577,
+          "regular_bytes": 300012190,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "9d144ae3aacfdcd7784c70a28a0c363c78b455a308751d34338c0c51eba582a4",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    },
+    "audit": {
+      "head": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+      "base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "tree": "wp-exec-sw-audit-01-rereview02",
+      "report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_02.md",
+      "bytes": 12879,
+      "sha256": "d1876271a9242807cd887bbbecd61faf5069fafc48c9f54a7c81455990a0f5bc",
+      "task_id": "task_afbc5357eb0e",
+      "dispatch_id": "ctx_c0dcf402e9f3",
+      "session": "01a19f74-1e4f-7790-a9c1-171634277e45",
+      "verdict": "require_changes; three residual report/metadata fixes only",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview02",
+      "native_final": {
+        "session": "01a19f74-1e4f-7790-a9c1-171634277e45",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 1035405,
+        "sha256": "e4a64fa863cdbf2ef62ae70d53b69680d57345b5d8e430ea6ac3754039b54743"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention for evidence/negative-history and unresolved source dispositions; no removal",
+      "archives": [
+        {
+          "archive_sha256": "7876b6e66b6975e6c7ae1b3de10250e5f2dd50cdedc179815df076086fd83884",
+          "regular_files": 4559,
+          "regular_bytes": 300775141,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "2ce7bc88b66ba8efadcb6f39d5fe6b5fcb379121e28dfda4b3f21f2a9ada6876",
+          "regular_files": 106,
+          "regular_bytes": 165738,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    }
+  },
+  "source_or_feature_qualification": false,
+  "states": "EV corrected negative-gap report accepted below; global inventory still require_changes with three targeted residual fixes"
+}

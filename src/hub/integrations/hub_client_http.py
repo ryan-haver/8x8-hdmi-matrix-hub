@@ -172,10 +172,11 @@ class HubClientHttp(EventPublisher, HubClient):
             body["output"] = output_num
         return (await self._post("/api/switch", body)).get("success") is True
 
-    async def cycle_input(self, direction: str, output_num: int = 1) -> bool:
+    async def cycle_input(self, direction: str, output_num: int = 1, *, cycle: bool = True) -> bool:
         if direction not in {"next", "previous"}:
             raise ValueError("direction must be next or previous")
-        return (await self._post(f"/api/input/{direction}?output={output_num}")).get("success") is True
+        query = f"?output={output_num}" + ("&cycle=false" if not cycle else "")
+        return (await self._post(f"/api/input/{direction}{query}")).get("success") is True
 
     async def recall_preset(self, preset: int) -> bool:
         return (await self._post(f"/api/preset/{preset}")).get("success") is True
@@ -194,7 +195,7 @@ class HubClientHttp(EventPublisher, HubClient):
     async def run_action(self, kind: str, action_id: str, *, passcode: str | None = None) -> dict[str, Any]:
         paths = {
             "profile": "/api/profile/{}/recall",
-            "scene": "/api/scene/{}/recall",
+            "scene": "/api/v2/scenes/{}/execute",
             "shortcut": "/api/shortcuts/{}/execute",
             "macro": "/api/cec/macro/{}/execute",
         }

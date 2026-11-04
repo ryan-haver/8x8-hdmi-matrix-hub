@@ -2,6 +2,12 @@
 
 **Disposition: release candidate; final v1.0.0 gates remain open.**
 
+**Scope:** this is the historical Phase 6/7 candidate report for the commits
+listed below. Later runtime changes need a new validation campaign; their
+current implementation and unresolved checks are tracked in the
+[runtime execution record](../planning/RUNTIME_EXECUTION.md). The results here
+do not establish acceptance of the current runtime branch.
+
 This report records available evidence and its limits. The release gate in [VALIDATION_PLAN.md](VALIDATION_PLAN.md) requires every feature at its target with fresh evidence, hardware regression/fault/client sessions, and the 72-hour soak plus owner sign-off. Passing the CI regression gate does not establish those release gates.
 
 ## Candidate checks

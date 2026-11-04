@@ -1,0 +1,19 @@
+{
+  "version": "peer-challenge-round2",
+  "round": 2,
+  "root_path": "docs/agent-process/phases/execution-pinning-20261101",
+  "hash_recipe": "SHA256 of exact UTF8 LF file bytes; expected equal to committed Git blobs and independent worker reads",
+  "inputs": {
+    "CHALLENGE_EXECUTION_PINS.json": "2e5f2098d2bb48aada8ff09ba5ea799d991b24c637aa7d60190c56043f464463",
+    "FEATURE_CONTRACTS.json": "ec5ec2378bf79510966d3e4d8498923e1b60ce28008852ea8b85ce8864f4bb76",
+    "PROGRAM_V2.md": "07daa97b831bbc6c62de4e32021815229b89d715774b7d9d8630fee5299ebcf6",
+    "RECONCILIATION_R1.md": "9ee7c9d958b2732edcf2397cae4f3659abec1167919780145303c6971d1400fb",
+    "INPUT_INTEGRITY_ERRATUM.json": "d53c9801fdc37c8af4f634ac7c615c87afe5f50d009a91ea218e28180da802aa",
+    "CHALLENGE_SUMMARY.md": "99d7fb57863e12f57bf25d8037422b7e85ac328cd089e7a0d1a7509e730fbc67",
+    "reports/anthropic/ROUND1.md": "faf667b39aafea74ad4d5172e75edfd23e1882dcfbbbc52e3aeab86030361217",
+    "reports/openai/ROUND1.md": "405a9a6d84d1327d293de18874480001bf641235760edeab421a282bd3ea7a52",
+    "reports/minimax/ROUND1.md": "0da3837e115f3a2647535e73583fc7ed29c575963d9aaff806a1b5771027faa4"
+  },
+  "source_qualification": "not conferred by planning",
+  "source_floor": "e2161484459da65aee14433136a14963507b499c"
+}

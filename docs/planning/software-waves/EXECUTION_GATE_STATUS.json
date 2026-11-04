@@ -1,0 +1,3672 @@
+{
+  "observed_utc": "2026-11-04T22:02:46.465965+00:00",
+  "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "planning_acceptance_unchanged": true,
+  "core_reviewer_qualification": {
+    "status": "SCOPED_PASS",
+    "attempt": "replacement-opus55-20261103",
+    "qualified_domains": [
+      "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards"
+    ],
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "manual_attempt02": {
+      "status": "FAIL, allsix independently judged; no qualifieddomain",
+      "authorization": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_MANUAL02_AUTHORIZATION.json",
+      "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+      "task_id": null,
+      "dispatch_id": null,
+      "qualified_domains": [],
+      "further_retry_authorized": false,
+      "evaluator": {
+        "task_id": "task_1d3db0c0e0e8",
+        "dispatch_id": "ctx_ea6771c3440b",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+        "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+        "exact_entry_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+        "launch": {
+          "requested": {
+            "agent": "claude",
+            "model": "claude-opus-4-7",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "claude",
+            "model": "claude-opus-4-7",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Anthropic Opus4.7 attested at exact Task/Dispatch/cwd",
+          "session": "646a8df5-036f-4b59-a94a-809cbaf76015",
+          "models": [
+            "claude-opus-4-7"
+          ],
+          "effort": "high explicit supported launch and localconfig; native per-turn effort field not independently exposed",
+          "bytes": 1015598,
+          "sha256": "1f97169851ffa5345d4a47bcf2ddb01b478e1e981ba919c82b92d0c404c85668",
+          "unassigned_helper_tools_observed": [],
+          "scope": "point-in-time native trace, not complete process descendant census"
+        },
+        "status": "launched, no verdict/qualification/acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "evaluator_delivery": {
+        "observed_utc": "2026-11-03T17:16:24.130615+00:00",
+        "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "tree": "wp-exec-qual-anthropic-core-01-manual02",
+        "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+        "bytes": 16677,
+        "sha256": "4dfbfc8a77c6ad910dc34eac55b62611195fe601ee6996dc2818ded7de988942",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "task_id": "task_1d3db0c0e0e8",
+        "dispatch_id": "ctx_ea6771c3440b",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "exact worktree retained read-only pending independent judgement; no removal",
+        "acceptance": "evaluation submission only, no qualification or source acceptance",
+        "native_final": {
+          "session": "646a8df5-036f-4b59-a94a-809cbaf76015",
+          "models": [
+            "claude-opus-4-7"
+          ],
+          "effort": "high explicit supported launch/localconfig; native per-turn effort not independently exposed",
+          "bytes": 1294061,
+          "sha256": "1538b9810b23f8ec7e5733b81c353e5864ca769523b63a42120a98f0ec21a8a5",
+          "unassigned_helper_tools_observed": [],
+          "scope": "complete captured session, not complete OS descendant census"
+        },
+        "worker_reported_checks": "54focused/489docs passed once each; judge must corroborate direct originals, assertions, scope/calibration",
+        "further_qualification_retry_authorized": false,
+        "integration_commit": "7c38016c77adb69c607b2033f0324b2abd9f473e",
+        "archives": [
+          {
+            "archive_sha256": "175c7536ce423e83051f263f9d3868a35766dbafe342467c7cd2e01c3ed56b84",
+            "archive_bytes": 207276698,
+            "regular_files": 4652,
+            "regular_bytes": 298183314,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          {
+            "archive_sha256": "a2e13b224ae77e2bfe64a2323cfa13637b78961b0a6e9a4be972ddc84555db85",
+            "archive_bytes": 145242,
+            "regular_files": 283,
+            "regular_bytes": 687290,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        ]
+      },
+      "prepared_judge": {
+        "base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "spec": "QUALIFICATION_MANUAL02_JUDGE_TASK.txt",
+        "worktree_name": "wp-exec-qual-anthropic-core-01-manual02-review",
+        "dependency": "task_1d3db0c0e0e8",
+        "title": "Fresh independent six-axis judgement of manual qualification attempt02",
+        "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "gate_path": [
+          "core_reviewer_qualification",
+          "manual_attempt02",
+          "independent_judge"
+        ],
+        "budget": "15min bounded exact-report six-axis judgement, no repeated full focused campaign by default",
+        "task_id": null,
+        "dispatch_id": null
+      },
+      "independent_judge": {
+        "task_id": "task_c8b55f48fcff",
+        "dispatch_id": "ctx_6f1b83d8f673",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+        "actual_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+        "exact_entry_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "observed_head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "new_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 418832,
+          "sha256": "a4f5052cb1b07c865353303411e58539b2c3eed43f48cc3ae7bf3a8f8c15e59a"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "judge_delivery": {
+        "observed_utc": "2026-11-03T17:34:10.902069+00:00",
+        "review_commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+        "review_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "bytes": 18514,
+        "sha256": "23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2",
+        "task_id": "task_c8b55f48fcff",
+        "dispatch_id": "ctx_6f1b83d8f673",
+        "worktree": "wp-exec-qual-anthropic-core-01-manual02-review",
+        "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+        "verdict": "FAIL mandatoryprovenance/calibration/review_quality; invariants/counterexamples/behavior_and_tools PASS, no qualified domain",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 1088133,
+          "sha256": "b7e23d43d24c1ce22f14275fee2454711629629c12973e7634f2f992b9ea8754"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "integration_commit": "a87df0927d857ae1bf40687b0e9180bb8ab7de3f",
+        "archives": [
+          {
+            "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+            "archive_bytes": 206071336,
+            "regular_files": 4608,
+            "regular_bytes": 295604926,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          {
+            "archive_sha256": "628223a8a01683b3f12eaafd09d8f31b11e357ffa863cdf3d31367b716e6c5f7",
+            "archive_bytes": 67537,
+            "regular_files": 106,
+            "regular_bytes": 167143,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        ]
+      },
+      "coordinator_disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json"
+    },
+    "historical_attempts": [
+      {
+        "attempt": 1,
+        "status": "FAIL",
+        "qualified_domains": [],
+        "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json"
+      }
+    ],
+    "per_axis_verdicts": {
+      "provenance": "fail",
+      "invariants": "pass",
+      "counterexamples": "pass",
+      "behavior_and_tools": "pass",
+      "calibration": "fail",
+      "review_quality": "fail"
+    },
+    "further_retry_authorized": false,
+    "historical_pre_replacement_summary": {
+      "status": "FAIL",
+      "attempt": 2,
+      "qualified_domains": [],
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json"
+    },
+    "current_qualification": {
+      "model": "claude-opus-5-5",
+      "family": "Anthropic",
+      "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+      "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+      "status": "PASS",
+      "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+      "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+      "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+      "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "independent_judge_family": "OpenAI",
+      "independent_judge_model": "gpt-6-astra/high",
+      "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+      "fresh_task_match_required": true,
+      "automatic_reservation_unlock": false
+    },
+    "generic_core_qualification": "NOT_GRANTED",
+    "automatic_reservation_unlock": false
+  },
+  "direct_qualification_dependent_reservations": [
+    "SW-HARNESS-01",
+    "SW-API-READ-01",
+    "SW-API-READ-02",
+    "SW-API-READ-03",
+    "SW-SEC-AUTH-01",
+    "SW-SEC-AUTH-02",
+    "SW-API-WRITE-01",
+    "SW-API-WRITE-02",
+    "SW-API-WRITE-03",
+    "SW-API-WRITE-04",
+    "SW-SEC-DATA-01",
+    "SW-SEC-DATA-02",
+    "SW-API-CLIENT-01",
+    "SW-API-CLIENT-02",
+    "SW-DOM-PROFILE-01",
+    "SW-DOM-PROFILE-02",
+    "SW-DOM-SCENE-01",
+    "SW-DOM-MACRO-01",
+    "SW-DOM-SHORTCUT-01",
+    "SW-DOM-SHORTCUT-02",
+    "SW-DOM-PRESENT-01",
+    "SW-UI-CONTROL-01",
+    "SW-UI-CONTROL-02",
+    "SW-UI-CONTROL-03",
+    "SW-UI-MANAGE-01",
+    "SW-UI-MANAGE-02",
+    "SW-UI-PRESENT-01",
+    "SW-UI-PRESENT-02",
+    "SW-KIOSK-CONTROL-01",
+    "SW-KIOSK-CONTROL-02",
+    "SW-KIOSK-STATE-01",
+    "SW-KIOSK-STATE-02",
+    "SW-FLIC-01",
+    "SW-FLIC-02",
+    "SW-PROTOCOL-PREP-01",
+    "SW-PROTOCOL-PREP-02",
+    "SW-PROTOCOL-PREP-03",
+    "SW-PROTOCOL-PREP-04",
+    "SW-PROTOCOL-PREP-05",
+    "SW-PROTOCOL-PREP-06",
+    "SW-PROTOCOL-PREP-07",
+    "SW-RUNTIME-PREP-01",
+    "SW-RUNTIME-PREP-02",
+    "SW-RUNTIME-PREP-03",
+    "SW-RUNTIME-PREP-04",
+    "SW-RUNTIME-PREP-05",
+    "SW-RUNTIME-PREP-06",
+    "SW-RUNTIME-PREP-07",
+    "SW-UC-PREP-01",
+    "SW-UC-PREP-02",
+    "SW-UC-PREP-03",
+    "SW-HA-PREP-01",
+    "SW-HA-PREP-02",
+    "SW-HA-PREP-03",
+    "SW-DOM-HIL-PREP-01",
+    "SW-SOAK-PREP-01",
+    "SW-VERSION-01",
+    "SW-BUILD-01",
+    "SW-SOFTWARE-GATE-01",
+    "SW-API-READ-04",
+    "SW-SEC-AUTH-03",
+    "RV-PRIVACY-CHAIN",
+    "RV-WS040",
+    "RV-API034",
+    "EV-API034-SECURITY-REFRESH",
+    "EV-PRIVACY-ADMISSION",
+    "EV-FLIC-ADMISSION",
+    "INTEGRATE-P1-CANDIDATES",
+    "EV-COMBINED-P1",
+    "P1-PUBLISH-CHECKPOINT",
+    "OWNER-HIL-B",
+    "OWNER-PHYSICAL-CEC",
+    "OWNER-HIL-C",
+    "OWNER-HIL-E",
+    "OWNER-SOAK-72H",
+    "OWNER-FIELD-WEEK",
+    "OWNER-FINAL-RELEASE",
+    "P1-ACCEPTANCE-CLOSURE"
+  ],
+  "meaning": "Exact independently reviewed unwired WS component is integrated with local combinedproof. Failed mandatory privacy qualification remains failed; no general author/domain/feature/physical/release acceptance follows. Current budget-expansion proposal is owner-only and not authorized by elapsedtime or prior remediation approval.",
+  "inventory": {
+    "original_author": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+    "independent_review": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+    "verdict": "accept bounded inventory documentation only",
+    "material_findings": [],
+    "next": "bounded inventory routing accepted; proceed independent planned metadata while qualified source/CI/privacy and owner gates remain unsatisfied",
+    "correction": {
+      "task_id": "task_1a5ca9009556",
+      "dispatch_id": "ctx_f2343717872b",
+      "status": "delivered; independent d44 re-review requires further targeted changes",
+      "base": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+      "report_commit": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "git_blob_sha256": "f2870b27b3ad12a4f9e0a9d332acfab80a7d2fa23ef128e6fce193cd5d3223c2",
+      "representation_erratum": "reported07c5836d is workingCRLF hash, canonicalGitLF f2870b27; exact normalization, no substantive drift",
+      "re_review_commit": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "re_review_verdict": "require_changes"
+    },
+    "accepted_factual_corrections": [
+      "R2",
+      "R3"
+    ],
+    "correction02": {
+      "task_id": "task_4c7cf7c289ff",
+      "dispatch_id": "ctx_14d9b1569d7e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "ses_e60a60154ffe3ynfNFDflaLE6d",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project routing; native thinking",
+        "bytes": 57882,
+        "sha256": "48dcc3528a166b6772f2102b6454b92d7c152631155d4af8405fbb8ac9344f9b"
+      },
+      "status": "delivered; independent exact-ac97 re-review active",
+      "report_commit": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "independent_rereview": {
+        "task_id": "task_afbc5357eb0e",
+        "dispatch_id": "ctx_c0dcf402e9f3",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview02",
+        "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview02",
+        "exact_entry_base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19f74-1e4f-7790-a9c1-171634277e45",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 718506,
+          "sha256": "f06d39aaa41987cfca90ea540a70f3d4af1f2858eb23952f4f35ea98e6d76f44"
+        },
+        "status": "delivered require_changes; released/preserved/published",
+        "report_commit": "394dd8670ab59bbe82a88e0188bc7d474615645b"
+      }
+    },
+    "review_instruction_erratum": "docs/production/software-waves/MVP-EXECUTION-20261102/REVIEW_INSTRUCTION_ERRATUM.json",
+    "correction03": {
+      "task_id": "task_a1d5fdadce54",
+      "dispatch_id": "ctx_597f4ffe52bf",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6080e92bffegPPto3UPYr8ozy",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project model, native thinking",
+        "bytes": 126496,
+        "sha256": "464e674ed36f0a551042f72172518e8e8f28db47dbb52477b95dbb1b5873a736"
+      },
+      "status": "delivered, independent exact-f2ee re-review launched",
+      "report_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "independent_review": {
+        "task_id": "task_d3524ee17f00",
+        "dispatch_id": "ctx_d77b1f25e526",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+        "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+        "exact_entry_base": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "observed_head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19f8f-91d5-74b3-8605-3440a87faf38",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 550023,
+          "sha256": "980674846fdfe48aa112cacc5e3a6ee53c3399355c43fdd5ca3924bd79e428f8"
+        },
+        "status": "delivered accept; released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "report_commit": "577bfe6b1475183ab0881a1f2d70a7691540e2b8"
+      }
+    },
+    "current_author_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+    "current_review_commit": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+    "bounded_inventory_acceptance_supported": true,
+    "coordinator_disposition": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "source_or_feature_qualification": false
+  },
+  "automatic_retakes": false,
+  "owner_decision_pending": "Bounded privacy reassessment budget proposal requires explicit owner approval; current exhaustedattemptsremainterminal/noautomaticretake. Separate physical/visual/finalreleasegates remain.",
+  "proposed_manual_attempt": "docs/production/remediation-20261104/recovery-execution/PRIVACY_REASSESSMENT_BUDGET_REQUEST.json",
+  "product_source_changed_by_this_batch": true,
+  "preservation_gaps": {
+    "author_commit": "ed78321e51156f229507e654f0cf3faae100b935",
+    "status": "completed and coordinator accepted as bounded negative-gap documentation only",
+    "original_preservation_pass": false,
+    "independent_review": {
+      "task_id": "task_eea6f443f108",
+      "dispatch_id": "ctx_70e7d15a49fc",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-review",
+      "exact_entry_base": "ed78321e51156f229507e654f0cf3faae100b935",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "01a19f5a-2166-7a02-8b5a-9181fae48770",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 522495,
+        "sha256": "f8c1d02aadcf875723c0708ec2df370e7c12a96648060dac56ef6c9b0b7b1572"
+      },
+      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
+    },
+    "review_commit": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+    "review_verdict": "accept",
+    "correction01": {
+      "task_id": "task_e1d5c3589200",
+      "dispatch_id": "ctx_f56a5a99bfee",
+      "base": "ed78321e51156f229507e654f0cf3faae100b935",
+      "status": "delivered; released/preserved/published, re-review pending",
+      "report_commit": "816755055028d37aa62c0ff62caace473288654d",
+      "independent_rereview": {
+        "task_id": "task_cc2af79f455c",
+        "dispatch_id": "ctx_5011d343f010",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-rereview01",
+        "exact_entry_base": "816755055028d37aa62c0ff62caace473288654d",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19f74-5c84-7903-97e0-d649983b9705",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 658112,
+          "sha256": "eedf6c09c09fdb83b13b919705d3084b228b1898e35dc16fcafbd1c8a6a2588c"
+        },
+        "status": "active independent re-review; no delivery/verdict/integration/qualification claimed"
+      }
+    },
+    "coordinator_disposition": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "unit_documentation_acceptance_satisfied": true
+  },
+  "independent_findings_delta": {
+    "task_id": "task_003f9f06ee62",
+    "dispatch_id": "ctx_8f2f304eeed7",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+    "exact_entry_base": "3602a4e4ad3333d4be989ce34b8285e73cbd472c",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+      "session": "ses_e6080b9f5ffen66hRLrq2lTFjt",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "effort": "CLI override unsupported; inherited exact project model, native thinking",
+      "bytes": 85484,
+      "sha256": "a2afc3371cc51f9e11b4e322c8a686d512c385db42bd7a6e9254d457666fde21"
+    },
+    "status": "accepted bounded corrected delta documentation only",
+    "scope": "current remaining delta to accepted59-row historical DeepSeek triage, no finding/source closure",
+    "report_commit": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+    "parser_state_claim": "265total/61open/204closed/exact61IDs verified by initial review and preserved by correction diffs; no new finding closure",
+    "independent_review": {
+      "task_id": "task_14ca62be7c5f",
+      "dispatch_id": "ctx_f5097c9b3ca5",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "exact_entry_base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "observed_head": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f8f-c5dc-78f0-9c89-4eb72483536b",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 723363,
+        "sha256": "f4eb43d59c164b4f02d10c5595afd53e0e398571ea1cc3613527638df7cbaf4d"
+      },
+      "status": "review launched; author report still unaccepted until actual verdict/disposition",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "review_commit": "00b7b04994a08d45961c67619d402506ba2a65a3",
+    "review_verdict": "accept within bounded documentation scope",
+    "correction01": {
+      "task_id": "task_cd5957604678",
+      "dispatch_id": "ctx_92d5aa88ea41",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_entry_base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e60630eb6ffeGn01v1VKJMqeOk",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project route inherited",
+        "bytes": 76801,
+        "sha256": "4997cafa00fad2028a6be2533d3a72a3dcb5bad8ac8980088b4249624ca29c4b"
+      },
+      "status": "delivered487a, released/preserved/published, exact-commit re-review prepared",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "report_commit": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "independent_review": {
+        "task_id": "task_f76d52b72a2e",
+        "dispatch_id": "ctx_3ae35200ca22",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+        "exact_entry_base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "observed_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fbb-97a0-7da3-baf6-65d81d8f7343",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 804384,
+          "sha256": "9a6435ab4eeb680405009530cef958d577cbf3766b31be9064786dbacea4393e"
+        },
+        "status": "delivered require_changes R3/R5; released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "report_commit": "43356a0c0d0948719bf989d7bd824631d8c89a0e"
+      },
+      "review_state": "independent exact-commit review launched, no verdict acceptance"
+    },
+    "correction02": {
+      "task_id": "task_37183952cac7",
+      "dispatch_id": "ctx_160f933c1154",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_entry_base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "scope": "R3 _SECRET_KEYS versus _SECRET_QUERY, R5 six separate Ruff tokens only; no new audit/selfcheck harness",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6036b300ffe9koOcJWNjCrEKr",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 84616,
+        "sha256": "e3e01dcb4a98bebf31898e98415e00b2d92e14b38182dd0b8d54e52a6828051f"
+      },
+      "status": "author correction launched, no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "delivery": {
+        "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "tree": "wp-exec-sw-findings-01",
+        "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+        "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+        "bytes": 26988,
+        "sha256": "56989fd60a7817facde500511e6be0b05286a256679f940da07c91591af19798",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "task_id": "task_37183952cac7",
+        "dispatch_id": "ctx_160f933c1154",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "read-only retention pending exact-commit independent re-review; no removal",
+        "acceptance": "unaccepted submission",
+        "native_final": {
+          "session": "ses_e6036b300ffe9koOcJWNjCrEKr",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "bytes": 335731,
+          "sha256": "0c065600d979d072d25f4702a780ed888f80d9d4bfa2772c08887f18b5f00ae1"
+        },
+        "budget": "target exceeded, actual history retained with no deadline pass",
+        "scope": "exact two residual substitutions,4insertions2deletions per delivery;3min target exceeded with about6.5min wallclock reported",
+        "integrated_as": "unaccepted submission record only",
+        "integration_commit": "aeb906a3ee48c79c136b440c4b9d4285579e4248",
+        "original_integrity": {
+          "old_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+          "new_head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+          "preexisting_regular_files": 4631,
+          "changed_existing_files": [
+            "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md"
+          ],
+          "all_old_private_author_files_unchanged": true
+        },
+        "preservation": {
+          "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+          "archive_sha256": "52bf1bf8588399d21d6d93fc3983b3e6c915c1e1a02d3ec96695c33f6224f4f3",
+          "archive_bytes": 206957960,
+          "regular_files": 4647,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "review_state": "accepted bounded corrected prose; no source/finding/freshness acceptance",
+      "prepared_independent_review": {
+        "base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "spec": "FINDINGS_CORRECTION02_REREVIEW_TASK.txt",
+        "worktree_name": "wp-exec-sw-findings-01-rereview02",
+        "dependency": "task_37183952cac7",
+        "title": "SW-FINDINGS correction02 exact two-edit factual re-review",
+        "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+        "gate_path": [
+          "independent_findings_delta",
+          "correction02",
+          "independent_review"
+        ],
+        "budget": "5min target; complete4insertions2deletions/context, no61row re-audit",
+        "task_id": null,
+        "dispatch_id": null
+      },
+      "independent_review": {
+        "task_id": "task_5016bec03442",
+        "dispatch_id": "ctx_b4174280ec27",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview02",
+        "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+        "exact_entry_base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "observed_head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fde-fbe9-78a3-8565-555b8692359a",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 412857,
+          "sha256": "e516ba5c1387dcc0d0dba4d7d03a1c0bb2b350bdd683026f83de4e46c1d231e8"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "independent_review_delivery": {
+        "observed_utc": "2026-11-03T05:28:35.644748+00:00",
+        "review_commit": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+        "review_base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+        "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+        "bytes": 7045,
+        "sha256": "499590ef49fffe198fe67bbc4cb885af9a5884ccbab54a7a81a97afa299cb542",
+        "task_id": "task_5016bec03442",
+        "dispatch_id": "ctx_b4174280ec27",
+        "worktree": "wp-exec-sw-findings-01-rereview02",
+        "branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+        "verdict": "accept R3/R5 bounded correction delta only",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a19fde-fbe9-78a3-8565-555b8692359a",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 557281,
+          "sha256": "168aafff9d0bc87e04cc197283bee99908f311552548e198b1d9e0b0373ae18b"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "preservation": {
+          "archive_sha256": "8de7ea656768dc6b9cbcbd53f89287c601fde64a4917ff5037393948f11072cc",
+          "archive_bytes": 206797289,
+          "regular_files": 4598,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "22fd6d10fa03bbbe7901d8c2bdca1756a1a4dbc8"
+      }
+    },
+    "author_correction_state": "delivered/reviewed/accepted bounded metadata; authors and reviewers released",
+    "current_accepted_author_commit": "a2dab11cdc871d6a98c563b019a361371a9af710",
+    "current_review_commit": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+    "coordinator_disposition": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "source_or_feature_qualification": false
+  },
+  "CI_attribution": {
+    "status": "accepted bounded corrected attribution documentation only",
+    "source": "bdcf06dc6723aad7da63ecfed3d3555ab0d02e55",
+    "units": 56,
+    "original_freshness_admission": false,
+    "task_id": null,
+    "dispatch_id": null,
+    "author": {
+      "task_id": "task_5fa43f7367b0",
+      "dispatch_id": "ctx_c2550304397b",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "exact_entry_base": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6062e8bdffe634RQCVgif2KlM",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project route inherited",
+        "bytes": 171678,
+        "sha256": "7b3c61b1138b5c8dc7cc1c46e8624a443676726b2c3dbce556e8160ceeab19af"
+      },
+      "status": "delivered, released/preserved/published",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
+    },
+    "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+    "independent_review": {
+      "task_id": "task_e8646aacd637",
+      "dispatch_id": "ctx_a83af2c61fa3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "exact_entry_base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "observed_head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19fbb-cf1e-7991-b040-862d4c2a2eeb",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 715562,
+        "sha256": "9f04f9a9365223032fb720f6411346cb0f325f31b88a6f44af4251fdc14fb56d"
+      },
+      "status": "delivered require_changes; released/preserved/published",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "report_commit": "81ac391cdc07ca8885b3b2237aa467aee0625675"
+    },
+    "review_state": "accepted bounded attribution prose only; freshness admission false",
+    "correction01": {
+      "task_id": "task_f88cda2cf757",
+      "dispatch_id": "ctx_c3d0257ab154",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "exact_entry_base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+      "scope": "R1-R7 arithmetic/future-path/Flic-API context/gates/qualification/method wording only;56core mappings untouched",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6036a1caffef30r0KYYPYu178",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 176800,
+        "sha256": "ec79e0efc1301fbb9d26b30641524095f3493b4f8f790f61d7f5e074841cc456"
+      },
+      "status": "author correction launched, no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "delivery": {
+        "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+        "tree": "wp-exec-ev-ci-attribution",
+        "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+        "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+        "bytes": 26899,
+        "sha256": "5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "task_id": "task_f88cda2cf757",
+        "dispatch_id": "ctx_c3d0257ab154",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "read-only retention pending exact-commit independent re-review; no removal",
+        "acceptance": "unaccepted submission",
+        "native_final": {
+          "session": "ses_e6036a1caffef30r0KYYPYu178",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "bytes": 543379,
+          "sha256": "01c7b65b79ff4cc7d921d8dbf1e9e82bb1054b3e828663f69e7e42a71609ecbe"
+        },
+        "budget": "target exceeded, actual history retained with no deadline pass",
+        "process_deviation": "Author reports new private51check script and two failed attempts despite no-new-harness instruction; preserve this deviation and originals, do not promote selfchecks to independent proof. No new public/product tool was committed.",
+        "delivery_hash_erratum": {
+          "message_id": "msg_bb9ad34f38ff",
+          "reported_digest": "5954a2ac675fc1f7919431e114a1cba865d0fba2a7a5f55599ce01e69404b9f5d",
+          "reported_length": 65,
+          "actual_digest": "5954a2ac675fc1f7919431e114a1cba865d0fb2a7a5f55599ce01e69404b9f5d",
+          "actual_bytes": 26899,
+          "report_commit": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+          "error": "malformed delivery digest; extra character, no report-byte drift inferred"
+        },
+        "integrated_as": "unaccepted submission record only",
+        "integration_commit": "3434e953869171f31e99146296aec73c829ff892",
+        "original_integrity": {
+          "old_head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+          "new_head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+          "preexisting_regular_files": 4674,
+          "changed_existing_files": [
+            "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md"
+          ],
+          "all_old_private_author_files_unchanged": true
+        },
+        "preservation": {
+          "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+          "archive_sha256": "b6d7e7434196156d0cfd168579fef9d3e4d42f51b2f2c9cc87691ebcacb3e77d",
+          "archive_bytes": 206885843,
+          "regular_files": 4698,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "review_state": "accepted bounded corrected prose; no source/finding/freshness acceptance",
+      "prepared_independent_review": {
+        "base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "spec": "CI_ATTRIBUTION_CORRECTION01_REREVIEW_TASK.txt",
+        "worktree_name": "wp-exec-ev-ci-attribution-rereview01",
+        "dependency": "task_f88cda2cf757",
+        "title": "EV-CI-ATTRIBUTION seven corrected claims exact-commit re-review",
+        "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+        "gate_path": [
+          "CI_attribution",
+          "correction01",
+          "independent_review"
+        ],
+        "budget": "10min target; complete R1-R7 correction/context, prior56unit proof preserved without repeat audit",
+        "task_id": null,
+        "dispatch_id": null
+      },
+      "independent_review": {
+        "task_id": "task_3916f3c5ba32",
+        "dispatch_id": "ctx_67980920fabd",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+        "exact_entry_base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "observed_head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a19fdf-372c-7de2-9bd8-d04d13266db1",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 175526,
+          "sha256": "a8dddc41a7e314231a0d681dcaa4beeb3ff872d5205819ea5aa30eb50364d245"
+        },
+        "status": "launched; no verdict or report acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "independent_review_delivery": {
+        "observed_utc": "2026-11-03T05:29:37.474326+00:00",
+        "review_commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+        "review_base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+        "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+        "bytes": 9199,
+        "sha256": "18d3598b176d0173945187521eda6e2d5aac5a0ddf479581822638c8e0375fd9",
+        "task_id": "task_3916f3c5ba32",
+        "dispatch_id": "ctx_67980920fabd",
+        "worktree": "wp-exec-ev-ci-attribution-rereview01",
+        "branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+        "verdict": "accept R1-R7 bounded attribution prose only",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a19fdf-372c-7de2-9bd8-d04d13266db1",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 844428,
+          "sha256": "42e80513dbcb835349c5a4a5538e5e2a08855ac998932ab7e37a3082eb79f6fc"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "preservation": {
+          "archive_sha256": "5e081ad9e5e16b691938ec12c392f971d39c838acf08ac9c5023bd6f1c86a9d5",
+          "archive_bytes": 206867853,
+          "regular_files": 4620,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "4d88b4c6d145bbe18811cc1345f6d725815189ea"
+      }
+    },
+    "author_correction_state": "delivered/reviewed/accepted bounded metadata; authors and reviewers released",
+    "current_accepted_author_commit": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+    "current_review_commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+    "review_verdict": "accept within bounded documentation scope",
+    "coordinator_disposition": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "source_or_feature_qualification": false
+  },
+  "repo_early_intake": {
+    "status": "accepted corrected early three-finding metadata intake only",
+    "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "scoped_ids": [
+      "SEC-14",
+      "SEC-15",
+      "DEP-05"
+    ],
+    "coordinator_authorized_scoped_intake": {
+      "scope": "accepted current findings metadata for these three IDs plus preserved accepted historical SW-REPO inventory",
+      "accepted_published_commit": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+      "publication_receipt": "private cf-accepted-publication.json exact remote/local equality verified again now",
+      "current_findings_author": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "review_chain": [
+        "00b7b04994a08d45961c67619d402506ba2a65a3",
+        "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+        "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7"
+      ],
+      "coordinator_disposition": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+      "remaining": "All SW-REPO completion dependencies and actual candidate security/license/history/hygiene/secret-scan proof remain mandatory and unsatisfied; no silent dependency deletion",
+      "coordinator_authorization": "existing scoped-intake resolver applied to these three accepted intake rows only; no source lease or phase/release approval"
+    },
+    "task_id": null,
+    "dispatch_id": null,
+    "package_completion": false,
+    "source_or_feature_qualification": false,
+    "author": {
+      "task_id": "task_5486db7aed82",
+      "dispatch_id": "ctx_e47c86a8e4ee",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+      "scope": "SEC14/15/DEP05 accepted-source metadata delta only; no new history/secret/CI audit",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project routing inherited",
+        "bytes": 34865,
+        "sha256": "5ac53244d0b8f2b7f62c43cba16352eccc4ffa7094fe30e9f8dc4de48bc5f9a7"
+      },
+      "status": "launched; no delivery/review/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "author_delivery": {
+      "head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+      "tree": "wp-exec-sw-repo-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+      "bytes": 6892,
+      "sha256": "749ee4f2029c35a4e7be617854aa739320b4590f158f9c4579773586a47f4d82",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "whole_report_whitespace_tokens": 821,
+      "task_id": "task_5486db7aed82",
+      "dispatch_id": "ctx_e47c86a8e4ee",
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "exact tree retained read-only, no removal",
+      "acceptance": "unaccepted author submission; exact-commit independent factual review required",
+      "native_final": {
+        "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 591613,
+        "sha256": "707c8548af2a57fa76ec3e05dac6fb38b7d6cf9fe0ce755ae5563bbd23f17dc1"
+      },
+      "budget": "5min target exceeded; worker reports683bodywords plus required JSON, whole-report count separately recorded; no deadline or full-budget-conformance pass",
+      "preservation": {
+        "archive_sha256": "d47c5f5bcd3a366d8243ba8206c37fc08387b696ee4fa12e5116e36ae2c28b9c",
+        "archive_bytes": 206916510,
+        "regular_files": 4636,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "integration_commit": "00217291ef008c4c4bbf9d78e34013a3fcb450b2"
+    },
+    "prepared_independent_review": {
+      "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "spec": "REPO_EARLY_INTAKE_REVIEW_TASK.txt",
+      "worktree_name": "wp-exec-sw-repo-01-review",
+      "dependency": "task_5486db7aed82",
+      "title": "SW-REPO early three-row independent exact-commit factual review",
+      "new_report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "gate_path": [
+        "repo_early_intake",
+        "independent_review"
+      ],
+      "budget": "6min target; complete three-row report and named source references, no repeated history/secret/CI/global audit",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "correction_capacity": {
+      "observed_utc": "2026-11-03T16:54:02.494640+00:00",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 55,
+          "windowMinutes": 10080,
+          "resetsAt": 1793774164000,
+          "resetDescription": "11:36 PM"
+        },
+        "updatedAt": 1793724226436,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 2,
+          "windowMinutes": 300,
+          "resetsAt": 1793740313659,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 23,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932889,
+          "resetDescription": null
+        },
+        "updatedAt": 1793724226653,
+        "error": null
+      }
+    },
+    "independent_review": {
+      "task_id": "task_dd9f6e3c9c49",
+      "dispatch_id": "ctx_d29018e7a4a3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "exact_entry_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "observed_head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "new_report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 360214,
+        "sha256": "425ecf8a5256d50768fec62ba2d555e825d4547dafdff652d15fade8bfeb28d1"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "review_delivery": {
+      "observed_utc": "2026-11-03T05:50:01.316313+00:00",
+      "review_commit": "218744b088a505461f33065e672559c9edbccae3",
+      "review_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "bytes": 7896,
+      "sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+      "task_id": "task_dd9f6e3c9c49",
+      "dispatch_id": "ctx_d29018e7a4a3",
+      "worktree": "wp-exec-sw-repo-01-review",
+      "branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "verdict": "require_changes R1 LICENSE row and JSON; SEC15/DEP05 accepted metadata only",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 703380,
+        "sha256": "18c5452dee545300c98ab017771a907a7c809d942c8cd5b0d3c098561c1b658b"
+      },
+      "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+      "cleanup": "retain exact review tree read-only; no removal",
+      "preservation": {
+        "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+        "archive_bytes": 206908437,
+        "regular_files": 4634,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
+    },
+    "review_verdict": "accept bounded metadata",
+    "coordinator_disposition": "docs/production/software-waves/SW-REPO-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "correction01": {
+      "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "worktree_name": "wp-exec-sw-repo-01",
+      "expected_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "spec": "REPO_CORRECTION01_TASK.txt",
+      "dependency": "task_dd9f6e3c9c49",
+      "title": "SW-REPO exact two-passage LICENSE metadata correction01",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+      "gate_path": [
+        "repo_early_intake",
+        "correction01"
+      ],
+      "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
+      "budget": "3min target <=100newwords, exactly2in-place passages",
+      "status": "delivered/reviewed/accepted bounded correction, authors/reviewersreleased",
+      "task_id": null,
+      "dispatch_id": null,
+      "current_preflight": "docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json",
+      "current_author_assignment": {
+        "task_id": "task_418b22e1e9b2",
+        "dispatch_id": "ctx_20ac5203bd5e",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+        "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+        "exact_entry_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+        "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+          "session": "ses_e5daa9932ffeko1EzAMEboL7hv",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported; exact project routing inherited",
+          "bytes": 13139,
+          "sha256": "70fdbe30f38d55b7e9761e01ad2f260b66ae9bae071b870245516f646b10bff7"
+        },
+        "status": "author correction launched, no delivery/review/acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "author_delivery": {
+        "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+        "tree": "wp-exec-sw-repo-01",
+        "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+        "bytes": 7113,
+        "sha256": "8b1ddcce3c3f5f2007fe6abcf0f7dbbf42e1bcab3dae8f813093350f75f02890",
+        "working_identical": true,
+        "cr_bytes": 0,
+        "whole_report_whitespace_tokens": 848,
+        "task_id": "task_418b22e1e9b2",
+        "dispatch_id": "ctx_20ac5203bd5e",
+        "terminal": "released",
+        "publication": "exact task ref remote/local verified",
+        "cleanup": "exact tree retained read-only, no removal",
+        "acceptance": "unaccepted corrected submission, exact-commit independent factual re-review required",
+        "native_final": {
+          "session": "ses_e5daa9932ffeko1EzAMEboL7hv",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "bytes": 364028,
+          "sha256": "52e3ddd943321bde1010dc7f0835a85f9f382868dc13036d1a0510588b593352"
+        },
+        "budget": "3min correction target exceeded; original5min/<=700budget deviations preserved; no deadline or full-word-budget conformance",
+        "reference_precision": "Worker reported absent shared-root filename after ambiguous shorthand. Actual preflight exists at full docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json. Corrected future specs use full paths; no file loss inferred.",
+        "preservation": {
+          "archive_sha256": "88c3db7ba3152d8677196abc8f0acc5748ba71390d5f09c94650ead166aa72e3",
+          "archive_bytes": 206921261,
+          "regular_files": 4642,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "original_integrity": {
+          "preexisting_regular_files": 4636,
+          "changed_existing_files": [
+            "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md"
+          ],
+          "all_old_private_author_files_unchanged": true
+        },
+        "integration_commit": "7d8ab17d9741b947f207c51356d6a88ccf98a86d"
+      },
+      "independent_review": {
+        "task_id": "task_0e44c7b07b03",
+        "dispatch_id": "ctx_fb0e59b59685",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-rereview01",
+        "actual_branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+        "exact_entry_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native OpenAI Astra/high attested at exact Task/Dispatch/cwd",
+          "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native",
+          "bytes": 494039,
+          "sha256": "3c12a7063a250dd954e35c31b1c9bdfdb69e15ab83bf703989a0d1687f0cc8b8"
+        },
+        "status": "launched, no verdict/qualification/acceptance inferred",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready"
+      },
+      "independent_review_delivery": {
+        "observed_utc": "2026-11-03T17:10:24.963710+00:00",
+        "review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+        "review_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+        "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+        "bytes": 5461,
+        "sha256": "8caba84ce4c086134f495194ac573b4e72ab88c5f4d7491a722345b4c2bc6bf4",
+        "task_id": "task_0e44c7b07b03",
+        "dispatch_id": "ctx_fb0e59b59685",
+        "worktree": "wp-exec-sw-repo-01-rereview01",
+        "branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+        "verdict": "accept bounded R1 two-passage correction; allotherlines and prior accepted scope preserved",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high",
+          "bytes": 514333,
+          "sha256": "0b2778587532cf022e6c7881cd146ec80ae0a18ad455bb5f082dad29a76a3272"
+        },
+        "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+        "cleanup": "retain exact review tree read-only; no removal",
+        "preservation": {
+          "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+          "archive_bytes": 206914073,
+          "regular_files": 4635,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "integration_commit": "6c26cd3dc78b1771a938f2a3e42e06b53cd22191"
+      }
+    },
+    "current_author_commit": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+    "current_review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+    "current_intake_documentation_complete": true,
+    "source_security_license_qualification": false
+  },
+  "test_session_preparation": {
+    "status": "pending-candidate checklist prepared in existing fieldrunbook; documentation only",
+    "path": "docs/validation/RUNTIME_FIELD_GATE_RUNBOOK.md",
+    "execution_result": false,
+    "owner_signoff": false
+  },
+  "prospective_replacement_qualification": {
+    "status": "proposalonly, noapprovalorlaunch",
+    "path": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_REPLACEMENT_MODEL_QUALIFICATION.json",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "replacement_qualification": {
+    "status": "COMPLETED_SCOPED_PASS; all current workers released, no source acceptance",
+    "authorization": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
+    "input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+    "candidate": {
+      "task_id": "task_5b5162506677",
+      "dispatch_id": "ctx_5e62800cd2dc",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103",
+      "actual_branch": "execution/qual-opus55-20261103",
+      "exact_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md",
+      "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "consensus_sha256": "d599b857a014e7d1fbb731893b527b93ea2ccb99bc3ef08dfbf03b08f6808306",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+        "session": "f2d52957-9554-4636-917b-b83780388faa",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit supported launch/local config; native per-turn effort unavailable",
+        "bytes": 850790,
+        "sha256": "366e3554e60a59b514e62455f452c4bf71e62a7c8e0fb3a79693a494082215c6",
+        "unassigned_helper_tools_observed": [],
+        "scope": "point-in-time native attestation, not descendant census or task competence"
+      },
+      "status": "delivered/released/preserved/published, UNJUDGED",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "delivery_metadata": {
+        "observed_utc": "2026-11-03T19:12:15.219176+00:00",
+        "head": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+        "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "tree": "wp-exec-qual-opus55-20261103",
+        "actual_branch": "execution/qual-opus55-20261103",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md",
+        "bytes": 27505,
+        "sha256": "34074c8cd6719eb15a63729441631c82ba2112c04452e0013910516f2f0f1a00",
+        "task_id": "task_5b5162506677",
+        "dispatch_id": "ctx_5e62800cd2dc",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "f2d52957-9554-4636-917b-b83780388faa",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "effort": "high explicit launch/config; native per-turn effort not exposed",
+          "bytes": 2182789,
+          "sha256": "76a5ef49087827f0874bcd8bfdf41586bceb8302e8d08bbedeb7406fc3b533aa",
+          "unassigned_helper_tools_observed": []
+        },
+        "checks": {
+          "preflight-01": {
+            "manifest_bytes": 4076,
+            "manifest_sha256": "926274ca52cb7b730af252c0f7ed7a1e53c356e2f63d7dd59c6c830b7dbc4aad",
+            "direct_exit": 0,
+            "argv": [
+              "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+              "-B",
+              "-c",
+              "\nimport importlib, json, os, sys\nimport pytest\nmods = {}\nfor name in (\"orei_matrix\", \"rest_api\", \"tools.validate.model\", \"tools.validate.runner\",\n             \"tools.validate.stack\", \"tools.validate.clients.api\",\n             \"tests.validation.scenarios.sw_api_client_02_c1\"):\n    m = importlib.import_module(name)\n    mods[name] = os.path.realpath(m.__file__)\nfrom tools.validate.model import Scenario\nprint(json.dumps({\n    \"sys_executable\": sys.executable, \"sys_version\": sys.version, \"pytest_version\": pytest.__version__,\n    \"cwd\": os.getcwd(), \"sys_path_head\": sys.path[:4],\n    \"flags\": {k: getattr(sys.flags, k) for k in (\"isolated\", \"ignore_environment\", \"dont_write_bytecode\",\n                                                   \"utf8_mode\", \"safe_path\", \"no_user_site\")},\n    \"dont_write_bytecode\": sys.dont_write_bytecode,\n    \"resolved_modules\": mods,\n    \"scenario_last_field\": list(Scenario.__dataclass_fields__)[-1],\n}, indent=1))\n"
+            ],
+            "start_utc": "2026-11-03T19:04:04.626930+00:00",
+            "end_utc": "2026-11-03T19:04:05.217930+00:00",
+            "stdout": {
+              "bytes": 2229,
+              "sha256": "f9891f02c6816bdfd8cab281b4ec31cd25b2ab6dc7bde22060aefb9feebf2556"
+            },
+            "stderr": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "boundary": "structural receipt identity only, not semantic qualification"
+          },
+          "collect-01": {
+            "manifest_bytes": 3339,
+            "manifest_sha256": "011d08c9023baf3e2b17a2e743589002673123204f0089ca5a2e0f3fd6fd0e1e",
+            "direct_exit": 0,
+            "argv": [
+              "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+              "-B",
+              "-m",
+              "pytest",
+              "tests/validation/test_sw_api_client_02_c1.py",
+              "tests/validation/test_sw_api_client_02_c2.py",
+              "--collect-only",
+              "-q",
+              "-p",
+              "no:tests.route_inventory",
+              "-p",
+              "no:cacheprovider",
+              "--basetemp=C:/t/qr-route-20261103/candidate-opus55/collect-01/pytest-temp"
+            ],
+            "start_utc": "2026-11-03T19:04:12.511775+00:00",
+            "end_utc": "2026-11-03T19:04:13.355758+00:00",
+            "stdout": {
+              "bytes": 6115,
+              "sha256": "5a6865f254e0bee89de8f9f6d4a1074db0a5bb1e8b2a9664bb877e0ed4ae388c"
+            },
+            "stderr": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "boundary": "structural receipt identity only, not semantic qualification"
+          },
+          "focused-01": {
+            "manifest_bytes": 37609,
+            "manifest_sha256": "53daecd5d00a9ab5ad2d4203245a08611fc438c0e7f403260c29855491930e44",
+            "direct_exit": 0,
+            "argv": [
+              "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+              "-B",
+              "-m",
+              "pytest",
+              "tests/validation/test_sw_api_client_02_c1.py",
+              "tests/validation/test_sw_api_client_02_c2.py",
+              "-q",
+              "-p",
+              "no:tests.route_inventory",
+              "-p",
+              "no:cacheprovider",
+              "--basetemp=C:/t/qr-route-20261103/candidate-opus55/focused-01/pytest-temp",
+              "--junitxml=C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103/build/qualification-route-20261103/candidate-opus55/focused-01/focused.junit.xml"
+            ],
+            "start_utc": "2026-11-03T19:04:19.701881+00:00",
+            "end_utc": "2026-11-03T19:05:15.140105+00:00",
+            "stdout": {
+              "bytes": 102,
+              "sha256": "6f03aa271fee91f561bfdc8f062dc6b1ed5fc9396f39f6c831d025bb2ba974a1"
+            },
+            "stderr": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "boundary": "structural receipt identity only, not semantic qualification",
+            "junit": {
+              "bytes": 8433,
+              "sha256": "e2d60dcb54fdb881a18c8ad4779d87b2cccee3f26f5e54e75ae1e57286a0c112",
+              "tests": 54,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "docs-01": {
+            "manifest_bytes": 23334,
+            "manifest_sha256": "5727dc10192f91c1e54377e777cb68cfa7a2c70fccf61aff078382073b3237d3",
+            "direct_exit": 0,
+            "argv": [
+              "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+              "-B",
+              "-m",
+              "pytest",
+              "tests/test_core_documentation.py",
+              "tests/test_client_guides_docs.py",
+              "tests/test_openapi_and_config_docs.py",
+              "tests/test_security_docs.py",
+              "tests/test_license_and_protocol_docs.py",
+              "-q",
+              "-p",
+              "no:tests.route_inventory",
+              "-p",
+              "no:cacheprovider",
+              "--basetemp=C:/t/qr-route-20261103/candidate-opus55/docs-01/pytest-temp",
+              "--junitxml=C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103/build/qualification-route-20261103/candidate-opus55/docs-01/docs.junit.xml"
+            ],
+            "start_utc": "2026-11-03T19:10:17.752839+00:00",
+            "end_utc": "2026-11-03T19:10:21.859607+00:00",
+            "stdout": {
+              "bytes": 588,
+              "sha256": "076fa887713d5ec3f0d174209c2211ad8adf5edb53bf7ff49b56d24b1641356f"
+            },
+            "stderr": {
+              "bytes": 0,
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "boundary": "structural receipt identity only, not semantic qualification",
+            "junit": {
+              "bytes": 63691,
+              "sha256": "ed596be050c35c1cab3aadd311c5515187a15e0430bfafc55298ee5c7587ed9c",
+              "tests": 489,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          }
+        },
+        "reported_findings": "one Low F1 plus I1-I3; substantive correctness not adjudicated by coordinator metadata audit",
+        "qualification": "UNJUDGED; no qualified domain or source acceptance",
+        "process_history": "one read-only path-separator query failed then corrected; no collection/focused/docs rerun reported; full native/raw receipts retained",
+        "cleanup": "retain exact tree read-only; no removal",
+        "preservation": {
+          "wp-exec-qual-opus55-20261103": {
+            "archive_sha256": "67bf77a89fb7e48f81a57be7a9deb69e5dcd704512c74408c788a55b9fc15943",
+            "archive_bytes": 206147498,
+            "regular_files": 4788,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-candidate-opus55": {
+            "archive_sha256": "64ec861b02108c5ce32c6421cb5d035e4bfff9731186f008e9e175e2e21c4949",
+            "archive_bytes": 125785,
+            "regular_files": 275,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        },
+        "integration_commit": "091d5f56f1dcb2e5facb2a73604f7079e44e7e05"
+      }
+    },
+    "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+    "qualified_domains": [],
+    "round1": {
+      "anthropic": {
+        "task_id": "task_b2647dfbc03e",
+        "dispatch_id": "ctx_cf269c96096f",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+          "session": "b4f339f3-b571-43e2-b310-90b7c14299c2",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "effort": "high explicit supportedlaunch/localconfig; nativeperturneffortnotexposed",
+          "bytes": 558861,
+          "sha256": "fef6a0b59c7819e120898401f4853b629a06aee0d7a62fad1ccca22f7e6d1d1e",
+          "unassigned_helper_tools_observed": [],
+          "scope": "pointintime nativecapture, not descendantcensus"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "head": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+          "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+          "tree": "wp-qr-r1-anthropic",
+          "actual_branch": "planning/qr-20261103-r1-anthropic",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+          "bytes": 4458,
+          "sha256": "813366cf7626fa00d62ce76eac23d90ce0ee203401d6b9d86e8676d7e6a4b4c6",
+          "working_identical": true,
+          "task_id": "task_b2647dfbc03e",
+          "dispatch_id": "ctx_cf269c96096f",
+          "terminal": "released",
+          "task_ref_publication": "exactremote/localverified",
+          "native_final": {
+            "session": "b4f339f3-b571-43e2-b310-90b7c14299c2",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "bytes": 687386,
+            "sha256": "f54b29792b82137e59abcdabaacdb102b763d73cc13742cce13b29dcf547fa57"
+          },
+          "acceptance": "genuineindependentR1contribution delivered; no planningconsensus/qualification/sourcepass",
+          "peer_barrier": "recommendation/materialconditions not shared until all3R1preserved",
+          "retention": "readonlyexacttree, originalartifacts retained; no removal",
+          "process_history": "604words versus600aim retained; own4file %SystemDrive% cache sideeffect reportedly movedintact into assignedignored stray-side-effect, fullnative/source/artifacts retained for verification; not a protocolconformance pass",
+          "preservation": {
+            "wp-qr-r1-anthropic": {
+              "archive_sha256": "870721d2c905724efa2dd38ca88cefb33f6010d097f713ce195efb79bdb071a2",
+              "archive_bytes": 207172257,
+              "regular_files": 4671,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r1-anthropic": {
+              "archive_sha256": "695ad62fd62d10e4f22957f6a4e4cc4d67443575c1987b9aefc01bca75236cbc",
+              "archive_bytes": 59582,
+              "regular_files": 103,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "4a6496c85abc1ca6d69571ec0556521b403da677",
+          "recommendation": "require_changes"
+        }
+      },
+      "minimax": {
+        "task_id": "task_8fda5920c385",
+        "dispatch_id": "ctx_11e7bd819fd5",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "native MiniMaxM3 attested at exact Task/Dispatch/directory",
+          "session": "ses_e5d7845e8ffe7Y93J2oaPGju3F",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, exact projectrouteinherited",
+          "bytes": 121158,
+          "sha256": "ebcb5217ace8affe1d5b1adef8b8b54534f5094cdcecb77222171824302e6ae7"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "head": "6307afb565a8b564536185079d9e16118512dab9",
+          "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+          "tree": "wp-qr-r1-minimax",
+          "actual_branch": "planning/qr-20261103-r1-minimax",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+          "bytes": 4931,
+          "sha256": "887dd64f72fec1489e9772dc04c4e9e58445fde328d0089bf7b911675354f3c2",
+          "working_identical": true,
+          "task_id": "task_8fda5920c385",
+          "dispatch_id": "ctx_11e7bd819fd5",
+          "terminal": "released",
+          "task_ref_publication": "exactremote/localverified",
+          "native_final": {
+            "session": "ses_e5d7845e8ffe7Y93J2oaPGju3F",
+            "models": [
+              "minimax-coding-plan/MiniMax-M3"
+            ],
+            "bytes": 279453,
+            "sha256": "1af48051759ccc13567ea48c24ca9c0cceb4ac8afb52ac3ebcaa59ed18da8de2"
+          },
+          "acceptance": "genuineindependentR1contribution delivered; no planningconsensus/qualification/sourcepass",
+          "peer_barrier": "recommendation/materialconditions not shared until all3R1preserved",
+          "retention": "readonlyexacttree, originalartifacts retained; no removal",
+          "process_history": "Three docs invocations reported (two pretrim, onefinal) despite taskONE; alloriginals retained in distinctdata/config/temp-r2/r3. These r2/r3filenames are testattempts WITHIN R1, not phaseRounds2/3 contributions. No single-invocation conformance pass.",
+          "preservation": {
+            "wp-qr-r1-minimax": {
+              "archive_sha256": "83e246a50dc4b2f34d93fdd148f54134763ab160f1c811532ae988d7883bc91f",
+              "archive_bytes": 207017249,
+              "regular_files": 4674,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r1-minimax": {
+              "archive_sha256": "166e01b2a8c43b92cf8869537ad0206a22b1cb3c72663ecab260c4c15d712a61",
+              "archive_bytes": 202431,
+              "regular_files": 311,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "c0e168dd66437a6515e46d3f7a08ff1fe35df647",
+          "recommendation": "proceed with binding conditions"
+        }
+      },
+      "openai": {
+        "task_id": "task_62000ea30205",
+        "dispatch_id": "ctx_f2421e534169",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "exact_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+        "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+          "session": "01a1a293-aef8-7693-bc71-ba1ddae999fc",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "highnative",
+          "bytes": 533873,
+          "sha256": "060aa97f0c88164d4200ee9998e680aac3289cc83a2393cdeefea59b936d69de"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "head": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+          "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+          "tree": "wp-qr-r1-openai",
+          "actual_branch": "ryan-haver/wp-qr-r1-openai",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+          "bytes": 5138,
+          "sha256": "5f257fc06c67b1eaa421e6ae73b0087a2ef33a66bd1592ef427a428e6de4228f",
+          "task_id": "task_62000ea30205",
+          "dispatch_id": "ctx_f2421e534169",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "01a1a293-aef8-7693-bc71-ba1ddae999fc",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high",
+            "bytes": 606346,
+            "sha256": "397693a165a1daa5193ae02033c6984884d31bea7cb5d5e748004666b5bc1f6c"
+          },
+          "process_history": "one documentation invocation, 489 passed/direct exit 0; no semantic qualification",
+          "preservation": {
+            "wp-qr-r1-openai": {
+              "archive_sha256": "3239b686a867d50bce44dcb068b110d7e817c91ae2bac0153049277f9f4c6f0e",
+              "archive_bytes": 207019424,
+              "regular_files": 4668,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r1-openai": {
+              "archive_sha256": "c67ef88eb7b262d4b57b0c4d32411d8f5cfbf5495b7992f32d5310186084c43a",
+              "archive_bytes": 57760,
+              "regular_files": 102,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "a2f85019efa902f7c99ab58e5f6cc823c2ab608d",
+          "recommendation": "require_changes"
+        }
+      }
+    },
+    "source_or_release_acceptance": false,
+    "round1_barrier": "docs/agent-process/phases/qualification-replacement-20261103/ROUND1_BARRIER.json",
+    "round2_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+    "round2": {
+      "anthropic": {
+        "task_id": "task_06770011f5e7",
+        "dispatch_id": "ctx_8cbcabfc43d2",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "exact_base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+        "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+        "launch": {
+          "requested": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+          "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "effort": "high explicit supportedlaunch/localconfig; nativeperturneffortnotexposed",
+          "bytes": 596716,
+          "sha256": "17261fde8152a9ce0140421e166c2f1f976b2b178653466615e22405321c9f91",
+          "unassigned_helper_tools_observed": [],
+          "scope": "pointintime nativecapture, not descendantcensus"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:19:57.909253+00:00",
+          "head": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+          "base": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+          "tree": "wp-qr-r1-anthropic",
+          "actual_branch": "planning/qr-20261103-r1-anthropic",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+          "bytes": 5047,
+          "sha256": "77cb03883ace830324cda67658f8e89c6996b8ac0bfa55c518b26f533eecc29b",
+          "task_id": "task_06770011f5e7",
+          "dispatch_id": "ctx_8cbcabfc43d2",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "bytes": 768680,
+            "sha256": "ff37d80d21f5e1cca267f110440fd479589ef225214b3d7733857a662e0731ad"
+          },
+          "R1_original_files_rehashed_unchanged": 4671,
+          "acceptance": "R2 contribution delivered; no consensus or qualification",
+          "peer_barrier": "substantive recommendation/conditions withheld until all three R2 preserved",
+          "process_history": "reported715 words versus600 aim retained; one489 doc invocation/direct0 and original streams/JUnit/receipt/temp preserved",
+          "cleanup": "retain exact tree read-only, no removal",
+          "preservation": {
+            "wp-qr-r1-anthropic": {
+              "archive_sha256": "5a1049ab115aee1e50da2c919c5c41f4e8ed5731eca6cb2485f6a1ba6eec84ef",
+              "archive_bytes": 207192840,
+              "regular_files": 4676,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r2-anthropic": {
+              "archive_sha256": "edbdf04f6178bff4d1ad1fca1fbfc224acc16998cd8aa24118e98f56a91da855",
+              "archive_bytes": 59813,
+              "regular_files": 103,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "0d78a4eccd6f55d93f12ea085579e3c4fe396fbe",
+          "recommendation": "require_changes"
+        }
+      },
+      "minimax": {
+        "task_id": "task_8c044cfcdce5",
+        "dispatch_id": "ctx_e407d807e727",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "exact_base": "6307afb565a8b564536185079d9e16118512dab9",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+        "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "native MiniMaxM3 attested at exact Task/Dispatch/directory",
+          "session": "ses_e5d5ff869ffeJam18NX7cmNIPm",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, exact projectrouteinherited",
+          "bytes": 69284,
+          "sha256": "7aa7299399e9257819663d0c5adb6c3d63f6534a3becfa0880b90cd6f3016ba3"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:39:03.507773+00:00",
+          "head": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+          "base": "6307afb565a8b564536185079d9e16118512dab9",
+          "tree": "wp-qr-r1-minimax",
+          "actual_branch": "planning/qr-20261103-r1-minimax",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+          "bytes": 5221,
+          "sha256": "8b019d0950998f2576ca66f5f9ce740d8be28531e3893aa624f4b4a5e8d1c9b8",
+          "task_id": "task_8c044cfcdce5",
+          "dispatch_id": "ctx_e407d807e727",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "ses_e5d5ff869ffeJam18NX7cmNIPm",
+            "models": [
+              "minimax-coding-plan/MiniMax-M3"
+            ],
+            "bytes": 1245073,
+            "sha256": "98c7b11da4b482a1e4587f18b12c23356061c8f9916bfb633b07f943e4d26427"
+          },
+          "R1_original_files_rehashed_unchanged": 4674,
+          "acceptance": "R2 contribution delivered; no consensus or qualification",
+          "peer_barrier": "substantive recommendation/conditions withheld until all three R2 preserved",
+          "process_history": "one489 doc invocation/direct0; elapsed target overrun retained. Case-sensitive SystemDrive/SystemRoot membership booleans false in receipt despite env.copy preserving uppercase Windows keys; does not prove actual OS variables absent. Private single-use invocation script preserved, no implementation deliverable accepted.",
+          "cleanup": "retain exact tree read-only, no removal",
+          "preservation": {
+            "wp-qr-r1-minimax": {
+              "archive_sha256": "0a40e8899df5703eaf3ff754231befa503d62ef6642c8d55582116d1c6967d52",
+              "archive_bytes": 207018625,
+              "regular_files": 4681,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r2-minimax": {
+              "archive_sha256": "c0b3a9364037524f8357d843d5a886bacc18ce029aa9bee04b5d91059892c9dd",
+              "archive_bytes": 66781,
+              "regular_files": 103,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+          "recommendation": "require_changes"
+        }
+      },
+      "openai": {
+        "task_id": "task_d065f4c36365",
+        "dispatch_id": "ctx_c9e525312e2e",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "exact_base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+        "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+          "session": "01a1a2a4-fd0e-7d03-91dc-be9d4c41c553",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "highnative",
+          "bytes": 390463,
+          "sha256": "deafecdd81593bbc4b09effb3b00e1dee9be31746587b5465529058075d52f7c"
+        },
+        "status": "delivered/released/preserved/published",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:25:58.808822+00:00",
+          "review_commit": "1ac7d96d7000f85e072a97512f35095906d7934c",
+          "review_base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+          "bytes": 4481,
+          "sha256": "1c68b2e8d8c10e94743f4b7e76cb8e003897b7084d01996489cbe332f587849a",
+          "task_id": "task_d065f4c36365",
+          "dispatch_id": "ctx_c9e525312e2e",
+          "worktree": "wp-qr-r1-openai",
+          "branch": "ryan-haver/wp-qr-r1-openai",
+          "verdict": "R2 peer challenge delivered; no consensus or qualification",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "01a1a2a4-fd0e-7d03-91dc-be9d4c41c553",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high",
+            "bytes": 763522,
+            "sha256": "8843e98b695114c1e0d4d8de0bbf00b6a32e0bf6381941f4ebeeaaae179bab74"
+          },
+          "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+          "R1_original_files_rehashed_unchanged": 4668,
+          "process_history": "reported488words, four-minute target overrun and initial read/pre-pytest env-key assertion errors retained; exactly one docs invocation489/direct0; no qualification or source pass",
+          "peer_barrier": "R2 substantive conditions withheld until all three preserved",
+          "cleanup": "retain exact review tree read-only; no removal",
+          "head": "1ac7d96d7000f85e072a97512f35095906d7934c",
+          "base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+          "tree": "wp-qr-r1-openai",
+          "actual_branch": "ryan-haver/wp-qr-r1-openai",
+          "preservation": {
+            "wp-qr-r1-openai": {
+              "archive_sha256": "18289dd6002ac905e3f0cb7ed7a0ffc9482eb73f11da19c52f5863e628af6527",
+              "archive_bytes": 207042102,
+              "regular_files": 4677,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r2-openai": {
+              "archive_sha256": "b53c0858ec4409e734780ee960b7b86bbc2902a3e827f130ee61d06546626b2b",
+              "archive_bytes": 57709,
+              "regular_files": 102,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "7482868dd42eba2c3516d839326f14ace1e7e585",
+          "recommendation": "require_changes"
+        }
+      }
+    },
+    "round2_barrier": "docs/agent-process/phases/qualification-replacement-20261103/ROUND2_BARRIER.json",
+    "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+    "round3": {
+      "anthropic": {
+        "task_id": "task_9dff86280e44",
+        "dispatch_id": "ctx_516e9f13d9fa",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+        "actual_branch": "planning/qr-20261103-r1-anthropic",
+        "exact_base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+        "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "launch": {
+          "requested": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "claude",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+          "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "effort": "high explicit supportedlaunch/localconfig; nativeperturneffortnotexposed",
+          "bytes": 779569,
+          "sha256": "7a3cc792b4efc6496b35dec17a5277d5d3983d6e25f5abe45f34f21d22b43643",
+          "unassigned_helper_tools_observed": [],
+          "scope": "pointintime nativecapture, not descendantcensus"
+        },
+        "status": "delivered/released/preserved/published; accept",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:46:02.196270+00:00",
+          "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+          "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+          "tree": "wp-qr-r1-anthropic",
+          "actual_branch": "planning/qr-20261103-r1-anthropic",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+          "bytes": 3960,
+          "sha256": "d4df5baf81b8410286a6561fbea9d9a73dfb68d2443a647b61826bc13100e711",
+          "task_id": "task_9dff86280e44",
+          "dispatch_id": "ctx_516e9f13d9fa",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "bytes": 980357,
+            "sha256": "24fe44a7aa7d0d68465837450a310835983ceb24f27931140a1327948d1e4465"
+          },
+          "R2_original_files_rehashed_unchanged": 4676,
+          "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+          "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+          "process_history": "one489 docs/direct0 and full original streams/JUnit/temp retained; failed first commit attempt from PowerShell here-string/pathspec parse preserved in process-notes; no source hook/full CI claim",
+          "cleanup": "retain exact tree read-only, no removal",
+          "preservation": {
+            "wp-qr-r1-anthropic": {
+              "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+              "archive_bytes": 207200028,
+              "regular_files": 4682,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r3-anthropic": {
+              "archive_sha256": "2fcc9f7712f6e141c823d21bb6144986a056a8c3560a5f721f5dea20888e8563",
+              "archive_bytes": 61367,
+              "regular_files": 104,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "22a696cb9a1e613dc88d88e6fb346ca9ba39979a"
+        }
+      },
+      "minimax": {
+        "task_id": "task_06484235023d",
+        "dispatch_id": "ctx_55dc79dcba80",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+        "actual_branch": "planning/qr-20261103-r1-minimax",
+        "exact_base": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+        "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "native MiniMaxM3 attested at exact Task/Dispatch/directory",
+          "session": "ses_e5d4720acffe2srGP4Nnd05N39",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, exact projectrouteinherited",
+          "bytes": 118601,
+          "sha256": "9e0db36780394203beba5a24ade85553f6717515e124a6e5635f77319004905f"
+        },
+        "status": "delivered/released/preserved/published; accept",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:50:49.394279+00:00",
+          "head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+          "base": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+          "tree": "wp-qr-r1-minimax",
+          "actual_branch": "planning/qr-20261103-r1-minimax",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+          "bytes": 14091,
+          "sha256": "379eb88de9cc5d9a530375343cd86f8df3bec9ee4be408820d4cbdc5916a51ba",
+          "task_id": "task_06484235023d",
+          "dispatch_id": "ctx_55dc79dcba80",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "ses_e5d4720acffe2srGP4Nnd05N39",
+            "models": [
+              "minimax-coding-plan/MiniMax-M3"
+            ],
+            "bytes": 432414,
+            "sha256": "17b5bc42525355d8d36b270636a5a83c246d8c95fb3ca39fe2a7fdf7608bcedc"
+          },
+          "R2_original_files_rehashed_unchanged": 4681,
+          "acceptance": "R3 decision delivered; no all-three consensus or qualification inferred",
+          "peer_barrier": "R3 decision contents withheld until all three originals preserved",
+          "process_history": "one489 docs/direct0, full stdout/stderr embedded in receipt, JUnit and temp retained. Correct case-insensitive Windows checks. Long14091-byte prose and target overrun preserved; own sanitized native export cannot attest per-message model, coordinator preserves full raw native export with actual M3 identity.",
+          "cleanup": "retain exact tree read-only, no removal",
+          "preservation": {
+            "wp-qr-r1-minimax": {
+              "archive_sha256": "8e345a2b8d2232ff8f1bd6ee3783434eea7cfec990a36e2139170bdefde93acf",
+              "archive_bytes": 207016611,
+              "regular_files": 4683,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r3-minimax": {
+              "archive_sha256": "e2550017598e4797ea905a551fa60381afaa2b1b92a6c757d90893458bc6e4cd",
+              "archive_bytes": 127211,
+              "regular_files": 122,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "18e92bd62eddcd37eb2916c14970895bc097f4ae"
+        }
+      },
+      "openai": {
+        "task_id": "task_59ba5ac247bd",
+        "dispatch_id": "ctx_48e9a1a9c523",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+        "actual_branch": "ryan-haver/wp-qr-r1-openai",
+        "exact_base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+        "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+        "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        },
+        "turn_start": "observed",
+        "native_entry": {
+          "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+          "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "highnative",
+          "bytes": 475828,
+          "sha256": "3981d19a804d095ee27cd7d6c5692c7a8e2c6e43cc8354b0fe3a41cec9df7c69"
+        },
+        "status": "delivered/released/preserved/published; accept",
+        "observed_dispatch_status": "dispatched",
+        "observed_worker_state": "ready",
+        "delivery_metadata": {
+          "observed_utc": "2026-11-03T18:50:09.545003+00:00",
+          "review_commit": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+          "review_base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+          "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+          "bytes": 4655,
+          "sha256": "306affeebeb63f69e469440c81f593602128f7fc76bf160b72004bec743a43fd",
+          "task_id": "task_59ba5ac247bd",
+          "dispatch_id": "ctx_48e9a1a9c523",
+          "worktree": "wp-qr-r1-openai",
+          "branch": "ryan-haver/wp-qr-r1-openai",
+          "verdict": "R3 final decision delivered; no all-three consensus or qualification inferred",
+          "terminal": "released",
+          "task_ref_publication": "exact remote/local verified",
+          "native_final": {
+            "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high",
+            "bytes": 894191,
+            "sha256": "ca447e06e8c63b56605d1119ab98efc0ab4238adba3510dac080b5258f1c5fe6"
+          },
+          "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+          "R2_original_files_rehashed_unchanged": 4677,
+          "process_history": "two-minute target overrun and initial truncated reads followed by bounded packet reads retained; exactly one docs invocation489/direct0; no qualification/source/full CI pass",
+          "peer_barrier": "R3 decision contents withheld from peers until all three originals preserved",
+          "cleanup": "retain exact review tree read-only; no removal",
+          "head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+          "base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+          "tree": "wp-qr-r1-openai",
+          "actual_branch": "ryan-haver/wp-qr-r1-openai",
+          "preservation": {
+            "wp-qr-r1-openai": {
+              "archive_sha256": "a4fa332ecbe9fb8a387cbcf138e0cb5a5365d7557caee9b66e2505e32ba581c6",
+              "archive_bytes": 207041835,
+              "regular_files": 4684,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            },
+            "external-r3-openai": {
+              "archive_sha256": "d3412e6e8a14ab408cc5fae9ea0f661f26b071b2912d8436c5c2fb473bdd5812",
+              "archive_bytes": 57303,
+              "regular_files": 102,
+              "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+            }
+          },
+          "integration_commit": "0a12644216c184999edc75440e03d6c26275943c"
+        }
+      }
+    },
+    "consensus": "docs/agent-process/phases/qualification-replacement-20261103/CONSENSUS.json",
+    "judge": {
+      "task_id": "task_ea5e42f11e94",
+      "dispatch_id": "ctx_4492909a6860",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103-review",
+      "actual_branch": "execution/qual-opus55-20261103-review",
+      "exact_base": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+      "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+        "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "highnative",
+        "bytes": 621688,
+        "sha256": "1d23789bb22ab5ffb0cb6da7f698c90a0c4a971efba7d3788eb3fb8efa0ffb45"
+      },
+      "status": "delivered/released/preserved/published; six-axisPASS",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "delivery_metadata": {
+        "observed_utc": "2026-11-03T19:27:27.312104+00:00",
+        "head": "dda63d661d143a591d6d3d82346457fb52199795",
+        "base": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+        "tree": "wp-exec-qual-opus55-20261103-review",
+        "actual_branch": "execution/qual-opus55-20261103-review",
+        "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+        "bytes": 21770,
+        "sha256": "c10d4c5c1c784528a5969769a57fb607305845f8486909f7bb5c219cf2681a1a",
+        "task_id": "task_ea5e42f11e94",
+        "dispatch_id": "ctx_4492909a6860",
+        "terminal": "released",
+        "task_ref_publication": "exact remote/local verified",
+        "native_final": {
+          "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+          "models": [
+            "gpt-6-astra"
+          ],
+          "effort": "high native turn_context",
+          "bytes": 1875545,
+          "sha256": "6d0ddf7d31f89fc6003bd4bd5d23388e4ac51d8c89b27cfdfd7309c996f76672",
+          "unassigned_helper_calls_observed": []
+        },
+        "decision": {
+          "evaluator_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+          "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+          "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+          "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+          "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+          "actual_model": "gpt-6-astra",
+          "family": "OpenAI",
+          "effort": "high; own native turn_context attested",
+          "candidate_model": "claude-opus-5-5",
+          "candidate_family": "Anthropic",
+          "axes": {
+            "provenance": {
+              "status": "pass",
+              "evidence": "Original native 166-335/473-474; all nine pinned blobs and full changed-report content; exact evaluator SHA."
+            },
+            "invariants": {
+              "status": "pass",
+              "evidence": "Original native 200-289; model 472-482, runner 467-485/553-554/620-631; original schema-valid refusal records; J1 breadth excluded."
+            },
+            "counterexamples": {
+              "status": "pass",
+              "evidence": "Full C1/C2 assertions, native 393-438, focused JUnit e2d60dcb54fdb881a18c8ad4779d87b2cccee3f26f5e54e75ae1e57286a0c112: 54/0/0/0."
+            },
+            "behavior_and_tools": {
+              "status": "pass",
+              "evidence": "Original manifests 926274ca/011d08c9/53daecd5/5727dc10, unchanged recorder 4831d299, 275 original/copy files matched, native 451/452 process limits."
+            },
+            "calibration": {
+              "status": "pass",
+              "evidence": "AUTHOR sections 8-9; original failed/partial C1/C2 histories retained; no global retry, source acceptance or private-publication claim."
+            },
+            "review_quality": {
+              "status": "pass",
+              "evidence": "F1 static/historical timing support and exact assertions; I1-I3 verified; J1 Low/J2 informational scope corrections explicit; all material execution claims corroborated."
+            }
+          },
+          "verdict": "PASS",
+          "qualified_domain_recommendation": "Coordinator consideration only: bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+          "source_or_release_acceptance": false,
+          "automatic_reservation_unlock": false,
+          "automatic_retry_authorized": false,
+          "judge_focused_reexecution": false,
+          "remaining_unknowns": [
+            "process termination cause",
+            "complete descendant census",
+            "historical FSEC007 onset",
+            "complete host side-effect inventory"
+          ]
+        },
+        "judge_docs": {
+          "tests": 489,
+          "direct_exit": 0,
+          "receipt_sha256": "30d6aca16af0b7e3bca0aaf873881c4719530014d59c63c62fcba38bf47c244b"
+        },
+        "minor_observations": [
+          "J1 Low capped tools/tests serialization grep does not prove repo-wide negative; rejected breadth not used as invariant proof",
+          "J2 informational omitted ancillary exit2 from absent conftest path, no hidden test retry",
+          "candidate native scratch public-input/report copies outside275 invocation file count, supplemental preservation next"
+        ],
+        "process_history": "judge one UnicodeEncodeError read corrected with UTF8; no focused reexecution or test retry",
+        "cleanup": "retain exact tree read-only; no removal",
+        "preservation": {
+          "wp-exec-qual-opus55-20261103-review": {
+            "archive_sha256": "bfefb25033d5b61268cbc20da95a73b5a800f54d43ab94c33020ba4717b9b710",
+            "archive_bytes": 206080963,
+            "regular_files": 4609,
+            "regular_bytes": 295630211,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-judge-opus55": {
+            "archive_sha256": "35f039b6f9dbee72217974e9e52c49094c555e845a670960d3cdafefb816606e",
+            "archive_bytes": 57637,
+            "regular_files": 102,
+            "regular_bytes": 100735,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          },
+          "external-candidate-native-scratch": {
+            "archive_sha256": "fc5aab9844ab7c80bc84f9cb42543188b58a5e715b3438e1436d328b50919641",
+            "archive_bytes": 94063,
+            "regular_files": 7,
+            "regular_bytes": 238594,
+            "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+          }
+        },
+        "integration_commit": "aeb044775b9773c5970c1b828b264f6de0f98d9e"
+      }
+    },
+    "qualification": {
+      "model": "claude-opus-5-5",
+      "family": "Anthropic",
+      "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+      "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+      "status": "PASS",
+      "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+      "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+      "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+      "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "independent_judge_family": "OpenAI",
+      "independent_judge_model": "gpt-6-astra/high",
+      "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+      "fresh_task_match_required": true,
+      "automatic_reservation_unlock": false
+    },
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "phase_complete": true,
+    "remaining_authorized_attempts": 0,
+    "automatic_reservation_unlock": false
+  },
+  "independent_source_reviews": {
+    "RV-API034": {
+      "status": "SOURCE_REVIEW_DELIVERED; RV-API034 PARTIAL / SOURCE_INTEGRATION_HOLD",
+      "report_commit": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+      "report_sha256": "145c899d9196ad672f2db014d5c7d8d8337835ca46e26973f64e15a7d18e5e17",
+      "source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+      "reviewer": "Anthropic claude-opus-5-5/high",
+      "bounded_verdict": "PASS",
+      "full_RV_completed": false,
+      "source_integrated": false,
+      "integration_hold": "M-1 F-SEC-007 freshness; privacy/artifact/combined source acceptance remain; report-quality evaluation no longer pending",
+      "disposition": "docs/production/software-waves/RV-API034/execution-20261101/SOURCE_REVIEW_DISPOSITION_20261103.json",
+      "next_pin": "EV-API034-SECURITY-REFRESH",
+      "automatic_dispatch": false,
+      "secondary_evaluation": {
+        "status": "accepted report-quality only",
+        "commit": "c3fcace6260e31d6c176f9feb6ab0dfd6ead849e",
+        "report": "docs/production/software-waves/RV-API034/execution-20261101/EVALUATION.md",
+        "sha256": "9d3825744f43985efa65dd373778d1036891d8cd8696daca05dc70adfa0e67f4",
+        "delivery": "docs/production/remediation-20261104/WAVE1_API_EVALUATION_DELIVERY.json"
+      }
+    }
+  },
+  "historical_owner_decision_pending": [
+    {
+      "superseded_utc": "2026-11-04T06:44:59.365910+00:00",
+      "prior_text": "Explicit question presented: authorize one prepared controlled manual new qualification attempt, or assess a different provider. No answer/approval inferred; no retake launched.",
+      "resolution": "Manual attempt02 and Opus5.5 replacement already authorized/completed; dispositions and immutable historical records retained."
+    }
+  ],
+  "remediation_authority": {
+    "owner_request": "now enact the plan and remediate all findings",
+    "plan": "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
+    "state": "wave1 active: NEW bounded WS component authorship assessment and planned API-review evaluation",
+    "no_automatic_retakes": true,
+    "no_blanket_domain_grant": true
+  },
+  "remediation_execution": {
+    "wave1_record": "docs/production/remediation-20261104/WAVE1_DISPATCHES.json",
+    "actors": [
+      {
+        "key": "ws-component",
+        "task_id": "task_38756b76bd12",
+        "dispatch_id": "ctx_14a660b697ab",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01",
+        "actual_branch": "remediation/ws-work-01",
+        "exact_base": "460a190575e905f8350c454e63c4d570c8b560fa"
+      },
+      {
+        "key": "api-evaluation",
+        "task_id": "task_dca414868333",
+        "dispatch_id": "ctx_8017ffe0975e",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review-evaluation",
+        "actual_branch": "execution/wp-exec-rv-api034-review-evaluation",
+        "exact_base": "12eeef938857bfd740854ccbaad34f9bc1b6ce36"
+      }
+    ],
+    "new_bounded_authorship": "NOT_GRANTED; candidate component only",
+    "source_changed_in_integration": true,
+    "findings_closed": [],
+    "api_report_evaluation": "accepted/released/preserved/published; no source integration",
+    "WS_component_environment": "Node cause repaired, authorized normal hook67 PASS; failed66/prior originals preserved",
+    "WS_component": "independent exactreview1cc44220 completed: correctnessFAIL, acceptance/first-authorshipHOLD; no new competence, correction or wiring authorized automatically",
+    "privacy": "independent judgement e8ce3966 FAIL, no privacy review qualification or source acceptance",
+    "WS_component_reviewer": {
+      "task_id": "task_b9f4d569ee06",
+      "dispatch_id": "ctx_eae88fba1228",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01-review",
+      "branch": "remediation/ws-work-01-review",
+      "exact_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+        "session": "01a1a59a-f00e-7853-ae5a-9033ade1c9c1",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 658523,
+        "sha256": "0764df987100f846f550c177fdf7c7942122cf69913652ae68abd64a8a27ef75",
+        "unassigned_helpers_observed": [],
+        "scope": "entry point only; no competence/outcome/completion or descendant census"
+      },
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
+    "recovery_planning": {
+      "status": "ADOPTED: three genuine families explicitly ACCEPT same complete f8fe93c8 packet after all3rounds",
+      "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+      "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
+      "first_wave": [
+        "OpenAI",
+        "MiniMax"
+      ],
+      "third_family": "Anthropic R1 delivered3e7a83a1 and positively released/preserved/published; no source grant",
+      "round1_actors": {
+        "openai": {
+          "task_id": "task_3533f742d143",
+          "dispatch_id": "ctx_ad93f7ebf306",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/openai.md",
+          "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+          "launch": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+            "session": "01a1a5b5-0f2f-7d63-bd33-ecf5509ed499",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high native",
+            "bytes": 601583,
+            "sha256": "b84d574d32a69a3a260d71443cf20ff3660b535975a31e8aca5ecf27c9717b6f",
+            "unassigned_helpers_observed": [],
+            "scope": "entry capture only, not outcome or descendant census"
+          },
+          "configuration_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+          "status": "delivered/released/preserved/exacttaskrefpublished; substantive disposition pending all3R1",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        },
+        "minimax": {
+          "task_id": "task_30e8158c02a5",
+          "dispatch_id": "ctx_ba59b5829abe",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+          "branch": "planning/remediation-recovery-r1-minimax",
+          "exact_base": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round1/minimax.md",
+          "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+          "launch": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "turn_start": "unsupported",
+          "native_entry": {
+            "status": "actual native MiniMaxM3 at exact Task/Dispatch/directory",
+            "session": "ses_e5a4affb5ffeT3Mqxdy2LvA8cq",
+            "models": [
+              "minimax-coding-plan/MiniMax-M3"
+            ],
+            "variant": "thinking",
+            "CLI_effort_override": "unsupported; inherited configured route, native variant recorded",
+            "bytes": 140283,
+            "sha256": "e33f01fbd174c66644ccc0bf7a585945754fe364a899f2cdbbbfee2149cfa456",
+            "scope": "entry capture only, not outcome or descendant census"
+          },
+          "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+          "status": "delivered/released/preserved/exacttaskrefpublished; substantive disposition pending all3R1",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        }
+      },
+      "round1_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_DELIVERY_METADATA.json",
+      "R1_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_COMPLETE.json",
+      "R2_packet": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_PACKET.json",
+      "R2_packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+      "round2_actors": {
+        "openai": {
+          "task_id": "task_eb1c577c2685",
+          "dispatch_id": "ctx_ff74dc578167",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "exact_base": "480a27bd3e65ff657ef878abf11242be0360f735",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/openai.md",
+          "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "01a1a5d6-5bdc-7f21-bbc1-b9a522a729d6",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high native",
+            "bytes": 464900,
+            "sha256": "66ce1400c0c2429b278da32169992d6727b3169117483d8f4d1b73b1c115c8db",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "Delivered, positively released, evidence preserved, exact descendant task ref published; recommendation disposition pending all three R2 reports",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        },
+        "anthropic": {
+          "task_id": "task_da8abc159b3e",
+          "dispatch_id": "ctx_afe84a0eaa12",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "exact_base": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/anthropic.md",
+          "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "7bb02dc0-492c-4cc2-b640-81f0d7fc6300",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "effort": "high explicit launch/local config; native per-turn effort unexposed",
+            "bytes": 944159,
+            "sha256": "b36dd31a2474ec94627dc7a538011c73868bb52f20bb29e231cc2dfac686e39a",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "Delivered, positively released, evidence preserved, exact descendant task ref published; recommendation disposition pending all three R2 reports",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        }
+      },
+      "round2_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_DELIVERY_METADATA.json",
+      "round2_third_family": {
+        "task_id": "task_24b952fffacf",
+        "dispatch_id": "ctx_67cb65bc4f6e",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+        "branch": "planning/remediation-recovery-r1-minimax",
+        "exact_base": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+        "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/minimax.md",
+        "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+          "session": "ses_e5a182897ffeIQ74TxSBobK55y",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, configured route inherited",
+          "bytes": 235968,
+          "sha256": "746125638e30d6e935b74572ec54bffcd15788c1427911dfcbfbdc88a9e9369b",
+          "unassigned_helpers_observed": [],
+          "scope": "entry capture only, not source qualification/completion/descendant census"
+        },
+        "dispatch_status": "dispatched",
+        "worker_state": "ready",
+        "status": "MiniMax genuine R2 all-peer challenge ACTIVE, no final report or consensus"
+      },
+      "round2_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_COMPLETE.json",
+      "final_packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
+      "final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "round3_status": "ALL3ACCEPT verified; original reports/native/evidence preserved/released/task refs published",
+      "round3_actors": {
+        "openai": {
+          "task_id": "task_3c062bb9de42",
+          "dispatch_id": "ctx_6cb8482cdd03",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "exact_base": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/openai.md",
+          "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "01a1a608-cf9b-7fe1-af42-24c752a8ca18",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high native",
+            "bytes": 849461,
+            "sha256": "e01b0452e1b758cadca0e9b72b530113a3e70d63673e3162e969f71d6584e7d7",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "Decision delivered, originals preserved, exact current resource released and task ref verified; verdict withheld from pending peer",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        },
+        "anthropic": {
+          "task_id": "task_79d0d9028045",
+          "dispatch_id": "ctx_9d313bb15f8b",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "exact_base": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/anthropic.md",
+          "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "816774bf-9bb2-4931-95c6-942e6fe22021",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "effort": "high explicit launch/local config; native per-turn effort unexposed",
+            "bytes": 1135398,
+            "sha256": "9c6fbf132f35cc02a7ab7fb2b67f78614e18ae1a5bad51877b8cc7d57379dbd5",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "Decision delivered, originals preserved, exact current resource released and task ref verified; verdict withheld from pending peer",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        }
+      },
+      "MiniMax_R2_publication": "RESOLVED: third normal same-ref fast-forward succeeded, exact remote/local6671c927 verified; two earlier GitHub server errors/hold preserved",
+      "round3_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND3_DELIVERY_METADATA.json",
+      "round3_third_family": {
+        "task_id": "task_dfe340b7113e",
+        "dispatch_id": "ctx_500618559004",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+        "branch": "planning/remediation-recovery-r1-minimax",
+        "exact_base": "6671c92789d0de0590609590aeebc73772c00069",
+        "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/minimax.md",
+        "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+        "launch": {
+          "requested": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          },
+          "effective": {
+            "agent": "opencode2",
+            "model": null,
+            "effort": null
+          }
+        },
+        "turn_start": "unsupported",
+        "native_entry": {
+          "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+          "session": "ses_e59eab66fffeTpxkIFjV21JciX",
+          "models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "variant": "thinking",
+          "CLI_effort_override": "unsupported, configured route inherited",
+          "bytes": 283452,
+          "sha256": "891711f18c625e0f88ca32d8ef1eb923714f1434a3b35c65d404c885723b2c46",
+          "unassigned_helpers_observed": [],
+          "scope": "entry capture only, not source qualification/completion/descendant census"
+        },
+        "dispatch_status": "dispatched",
+        "worker_state": "ready",
+        "status": "Third genuine independent R3 same-packet decision ACTIVE; no verdict/adoption yet"
+      },
+      "consensus": "docs/agent-process/phases/remediation-recovery-20261104/CONSENSUS.json",
+      "sourceWaveA": {
+        "status": "Both source deliveries settled/released/preserved/exact taskrefpublished; qualified reviews and source acceptance pending",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_A_DISPATCHES.json",
+        "actors": {
+          "ws-c01": {
+            "task_id": "task_92d47e338d62",
+            "dispatch_id": "ctx_15d1617958e2",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+            "branch": "remediation/ws-work-c01",
+            "exact_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+            "status": "DELIVERED / RELEASED / PRESERVED / task-ref PUBLISHED; exact source review PENDING"
+          },
+          "privacy-c4": {
+            "task_id": "task_25a4c3572682",
+            "dispatch_id": "ctx_5ca1ba3f03ac",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
+            "branch": "remediation/privacy-c4",
+            "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+            "status": "DELIVERED / RELEASED / PRESERVED / exacttaskrefPUBLISHED; privacy acceptance HELD"
+          }
+        },
+        "privacy_acceptance": "HELD",
+        "WS_wiring": "HELD",
+        "privacy_self_audit": {
+          "status": "bounded pre-delivery same-assignment correction authorized; first hook preserved, exactly one changed-source hook",
+          "decision": "docs/production/remediation-20261104/recovery-execution/WAVE_A_C4_SELF_AUDIT_DECISION.json",
+          "future_review_fix_reserve": "unspent / conditional",
+          "acceptance": false
+        },
+        "ws_delivery": "docs/production/remediation-20261104/recovery-execution/WS_C01_DELIVERY.json",
+        "privacy_delivery": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_DELIVERY.json"
+      },
+      "waveB": {
+        "status": "Both reports delivered/released/preserved/taskrefsverified; exact WS component review PASS, M3 candidate pending single judge",
+        "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DISPATCHES.json",
+        "privacy_qualification": "NOT_GRANTED",
+        "source_acceptance": false,
+        "actors": {
+          "openai": {
+            "task_id": "task_dbebfdfebb1c",
+            "dispatch_id": "ctx_ecdde4971dc6",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01-review",
+            "branch": "remediation/ws-work-c01-review",
+            "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+            "status": "Qualified component SOURCE REVIEW active; no finding/verdict/acceptance yet"
+          },
+          "minimax": {
+            "task_id": "task_eef2d2e8f289",
+            "dispatch_id": "ctx_b6947db9e4fd",
+            "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-assess",
+            "branch": "qualification/recovery-privacy-m3",
+            "exact_base": "5385325722a39e6dd766352489f828f5e54b56d5",
+            "status": "FIRST privacy-review domain CANDIDATE active, NOT_QUALIFIED, no verdict/source acceptance"
+          }
+        },
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WAVE_B_DELIVERIES.json"
+      },
+      "waveC": {
+        "status": "DONE: exact judge FAIL/NOT_QUALIFIED, twoPASS/fourFAIL; worker released/preserved/taskrefpublished",
+        "judge_packet_sha256": "75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9",
+        "record": "docs/production/remediation-20261104/recovery-execution/WAVE_C_DISPATCH.json",
+        "qualification_granted": false,
+        "actor": {
+          "task_id": "task_32b607a54b40",
+          "dispatch_id": "ctx_aaa1ff6c95b5",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-judge",
+          "branch": "qualification/recovery-privacy-m3-judge",
+          "exact_base": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+          "status": "ONE independent exact MiniMax privacy-review candidate competence JUDGE active; no verdict/qualification/source acceptance"
+        },
+        "evidence_location_addendum": {
+          "record": "docs/production/remediation-20261104/recovery-execution/PRIV_CANDIDATE_PRESERVATION_ADDENDUM.json",
+          "state": "Judge question answered: pre-overwrite record/summary originals unavailable in known captures; two actual outside-root authored files newly preserved; qualification still pending"
+        },
+        "axes": {
+          "provenance": "PASS",
+          "dataflow_invariants": "FAIL",
+          "counterexamples": "PASS",
+          "behavior_and_tools": "FAIL",
+          "calibration": "FAIL",
+          "review_quality": "FAIL"
+        },
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_DELIVERY.json"
+      },
+      "ws_wording_followup": {
+        "status": "Exact78295ecd qualified re-reviewPASS/C01-R01corrected, worker released/preserved/taskrefpublished; sourceintake not yet performed",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_DISPATCH.json",
+        "reserve": "One reserved original-author product fix/re-review explicitly used for qualified C01-R01; no qualificationretry",
+        "actor": {
+          "task_id": "task_c4e3c9018634",
+          "dispatch_id": "ctx_5c6661149549",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+          "branch": "remediation/ws-work-c01",
+          "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+          "status": "Covered original-author WS C01-R01 wording correction ACTIVE; no delivery/source acceptance or qualification"
+        },
+        "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+        "delivery_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_DELIVERY.json",
+        "rereview_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_PREFLIGHT.json",
+        "review_actor": {
+          "task_id": "task_2baa71b16197",
+          "dispatch_id": "ctx_0c1b1f2300b7",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-wording-review",
+          "branch": "remediation/ws-wording-review",
+          "exact_base": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+          "status": "ONE reserved qualified different-family exact WS wording correction RE-REVIEW active; no verdict/intake"
+        },
+        "review_record": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_DISPATCH.json",
+        "review_commit": "9817554ed6d77df8b828d6d6c2e465bb77d26707"
+      },
+      "component_intake": {
+        "status": "INTEGRATED / combinedPASS / sourcecommitpublished, module UNWIRED",
+        "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_RESULT.json",
+        "qualified_source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+        "privacy_intake": false,
+        "wiring": false,
+        "integration_commit": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a"
+      }
+    },
+    "recovery_source_wave_A": {
+      "status": "PREPARED, no worktrees/Tasks/Dispatches",
+      "record": "docs/production/remediation-20261104/recovery-execution/WAVE_A_PREFLIGHT.json",
+      "jobs": [
+        {
+          "id": "WS-C01",
+          "model": "claude-opus-5-5",
+          "effort": "high",
+          "base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+          "name": "wp-remediation-ws-work-c01",
+          "branch": "remediation/ws-work-c01",
+          "tracked_paths": [
+            "src/rest_api/ws_request_work.py",
+            "tests/test_ws_request_work.py",
+            "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+          ]
+        },
+        {
+          "id": "PRIV-C4",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+          "name": "wp-sec-data-02-c4",
+          "branch": "remediation/privacy-c4",
+          "tracked_paths": [
+            "tools/validate/evidence.py",
+            "tools/validate/clients/api.py",
+            "tools/validate/model.py",
+            "tools/validate/runner.py",
+            "tools/validate/clients/ha.py",
+            "tests/validation/test_sw_sec_data_02_c4.py",
+            "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+          ]
+        }
+      ],
+      "source_changed_in_integration": false
+    },
+    "accepted_unwired_WS_component": {
+      "status": "INTEGRATED / locally combinedPASS / sourcecommitpublishedexactverified; UNWIRED",
+      "integration_commit": "e54228c0e3a9451f39b27caeef6aa77e1e1fa59a",
+      "reviewed_source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py"
+      ],
+      "record": "docs/production/remediation-20261104/recovery-execution/WS_COMPONENT_INTAKE_RESULT.json",
+      "CR01_closed": false
+    }
+  },
+  "prospective_privacy_review_domain": {
+    "status": "FAIL; mandatory six-axis competence not earned",
+    "packet": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/ASSESSMENT_PACKET.json",
+    "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+    "no_source_acceptance": true,
+    "attempt_budget": "one first candidate plus one fresh judge",
+    "actor": {
+      "task_id": "task_8b5496cdc9b2",
+      "dispatch_id": "ctx_408fa818297a",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104",
+      "actual_branch": "qualification/privacy-review-20261104",
+      "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/AUTHOR.md",
+      "packet_sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Opus5.5 at exact Task/Dispatch/cwd",
+        "session": "0c330b18-dc20-4251-96a1-82858470f91e",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high supported launch/local config, native per-turn effort not exposed",
+        "bytes": 687455,
+        "sha256": "8709219adbb7ae17caaa4cc150b4b16d7bbc13e23b77b8376803f69ebb0cb46f",
+        "unassigned_helpers_observed": [],
+        "scope": "entry attestation only, not competence or descendant census"
+      },
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "candidate_commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+    "candidate_sha256": "7b469ade0388e0de5a46051528992bfb675ba43addd871c48fdaeaf48aa01f2c",
+    "packet_representation": {
+      "scope": "Representation erratum only: previous94b28 digest binds working CRLF; canonical Git LF173270 digest differs only by CRLF normalization. Original task/packet/rubric/source content unchanged.",
+      "working_CRLF": {
+        "bytes": 8460,
+        "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4"
+      },
+      "canonical_Git_LF": {
+        "bytes": 8308,
+        "sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+      },
+      "normalization_exact_equal": true,
+      "parsed_content_exact_equal": true
+    },
+    "judge": {
+      "task_id": "task_8c32e92975a4",
+      "dispatch_id": "ctx_8009c76be684",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104-judge",
+      "actual_branch": "qualification/privacy-review-20261104-judge",
+      "exact_base": "1a38e2851f0223627f5377fa5e32584c233e1223",
+      "exclusive_report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+        "session": "01a1a57b-e9d1-7cc3-94ca-2408e2dfac3a",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 1864549,
+        "sha256": "c77f1d8524fe63ef93814b5bbfe4459194e1f5375b5e1eccc092906be509ba80",
+        "unassigned_helper_calls_observed": [],
+        "scope": "current native capture only, not competence/completion/descendant census"
+      },
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "judge_commit": "e8ce39660a37d277e735adce680b848210c8d9b4",
+    "axes": {
+      "provenance": "PASS",
+      "dataflow_invariants": "FAIL",
+      "counterexamples": "PASS",
+      "behavior_and_tools": "FAIL",
+      "calibration": "FAIL",
+      "review_quality": "FAIL"
+    },
+    "qualification_granted": false,
+    "no_automatic_retry": true,
+    "next": "Privacy source remains unaccepted. Preserve original defect evidence and plan source corrections for current_pin, supported shapes, summary and HA sibling plus public-value fidelity. Qualified non-OpenAI privacy source review still missing; alternative family/staffing material changes require actual prospective three-provider rounds. No new family allocation or retake launched."
+  },
+  "prospective_async_lifecycle_review_domain": {
+    "status": "HELD / NOT_DISPATCHABLE_AS_SCOPED",
+    "record": "docs/production/remediation-20261104/recovery-execution/D6_PROVENANCE_HOLD.json",
+    "qualification_granted": false
+  },
+  "prospective_privacy_m3_review_domain": {
+    "status": "FAIL/NOT_QUALIFIED; onefirstcandidate/onejudgeexhausted; noautomaticretry/extrajudge",
+    "frozen_standard_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "one_candidate_one_judge": true,
+    "source_acceptance": false,
+    "qualification_granted": false,
+    "axes": {
+      "provenance": "PASS",
+      "dataflow_invariants": "FAIL",
+      "counterexamples": "PASS",
+      "behavior_and_tools": "FAIL",
+      "calibration": "FAIL",
+      "review_quality": "FAIL"
+    },
+    "report_commit": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb"
+  },
+  "historical_proposed_manual_attempt": "docs/production/software-waves/MVP-EXECUTION-20261102/PROPOSED_MANUAL_QUALIFICATION_ATTEMPT02.txt",
+  "functional_completion_planning": {
+    "status": "FC-SUPPORT-RUN fidelity PASS with nonblocking errata; all eight current-wave dispatches settled/released; no compatibility/source acceptance",
+    "phase": "functional-completion-20261104",
+    "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+    "record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_DISPATCHES.json",
+    "implementation_authority": false,
+    "privacy_budget_expansion": "NOT_APPROVED / ownerdecisionrequested",
+    "actors": {
+      "openai": {
+        "task_id": "task_deec8833e817",
+        "dispatch_id": "ctx_87e7f6a55dc2",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact_report_base": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation"
+      },
+      "anthropic": {
+        "task_id": "task_db6cadf2bd1b",
+        "dispatch_id": "ctx_0c24940765ab",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact_report_base": "5097650314502686a845a714e638643d66087971",
+        "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation"
+      }
+    },
+    "latest_record": "docs/agent-process/phases/functional-completion-20261104/ROUND1_THIRD_DISPATCH.json",
+    "third_actor": {
+      "task_id": "task_cfa1b9a6672f",
+      "dispatch_id": "ctx_363592a96ee8",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "exact_report_base": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "product_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; ownhistoriccheckout prose only",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round1/minimax.md",
+      "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R1_minimax.md",
+      "packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported; not relabeled observed",
+      "native_entry": {
+        "status": "actual native MiniMax-M3/thinking exact Task/Dispatch/directory entry observed",
+        "session": "ses_e5877e364ffetA4XnicHVJnaEb",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; configured native variant independently observed",
+        "bytes": 61364,
+        "sha256": "390391e79a495580246deaddc6506d4d7eb476907a6ef52454cd22d0a3fcbffb",
+        "helper_calls_observed": false,
+        "scope": "entry only, not competence/completion/full host census"
+      },
+      "status": "independent R1 planning active; no implementation/qualification/consensus"
+    },
+    "round1_complete": "docs/agent-process/phases/functional-completion-20261104/ROUND1_COMPLETE.json",
+    "round2_packet": "docs/agent-process/phases/functional-completion-20261104/ROUND2_PACKET.json",
+    "round2_packet_sha256": "c37fc7200e6d6384e2b536132090c3affb2b0e98a08b95fc9e94ef8129b0e6fb",
+    "round2_dispatches": "docs/agent-process/phases/functional-completion-20261104/ROUND2_DISPATCHES.json",
+    "round2_actors": {
+      "openai": {
+        "task_id": "task_482a558b4a3c",
+        "dispatch_id": "ctx_75a90276c4f0",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact_report_base": "7baf8262976772ed3de6eac7a19d5fafc7b5a1b8",
+        "status": "R2 all-peer challenge active; no final vote/adoption/source implementation"
+      },
+      "anthropic": {
+        "task_id": "task_a78ba6ed9dc1",
+        "dispatch_id": "ctx_0736448ea192",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact_report_base": "4ae498baa200cf17f90430f6961c8f1fecd2b8d1",
+        "status": "R2 all-peer challenge active; no final vote/adoption/source implementation"
+      }
+    },
+    "round2_latest_record": "docs/agent-process/phases/functional-completion-20261104/ROUND2_SECOND_DELIVERY.json",
+    "round2_third_actor": {
+      "task_id": "task_c512bb417e83",
+      "dispatch_id": "ctx_02b4c54eb1fa",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "exact_report_base": "32f911a576de0251b06e77a46a39681c7d7dc679",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round2/minimax.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R2_minimax.md",
+      "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported, not relabeled observed",
+      "native_entry": {
+        "session": "ses_e58525cebffeeQ4LFmR3SDcX28",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 284532,
+        "sha256": "2e292a63db4f0480e4589fb3d5bc303080092f36ff347b313802a512d9fae59c",
+        "helper_calls_observed": false,
+        "scope": "actual native entry Task/Dispatch/directory; no competence/completion/full host census"
+      },
+      "status": "genuine all-peerR2 active, no implementation/qualification/consensus"
+    },
+    "round2_complete": "docs/agent-process/phases/functional-completion-20261104/ROUND2_COMPLETE.json",
+    "final_packet": "docs/agent-process/phases/functional-completion-20261104/FINAL_PACKET.json",
+    "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+    "round3_dispatches": "docs/agent-process/phases/functional-completion-20261104/ROUND3_DISPATCHES.json",
+    "round3_actors": {
+      "openai": {
+        "task_id": "task_908b71effe7d",
+        "dispatch_id": "ctx_02b138df77b6",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact_report_base": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+        "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation"
+      },
+      "anthropic": {
+        "task_id": "task_ae9877d75a18",
+        "dispatch_id": "ctx_37e0d2f0e439",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact_report_base": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+        "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation"
+      }
+    },
+    "round3_latest_record": "docs/agent-process/phases/functional-completion-20261104/ROUND3_THIRD_DISPATCH.json",
+    "round3_third_actor": {
+      "task_id": "task_e486754b791b",
+      "dispatch_id": "ctx_1cd734915060",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "exact_report_base": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round3/minimax.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_minimax.md",
+      "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported, not relabeled observed",
+      "native_entry": {
+        "session": "ses_e5824fc0affekRFh8Qy4RQllkn",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 311867,
+        "sha256": "e22c39b1d1be25d9b967c7f4c0d9dfe0e46de0a1755a2d2a4c7a2eeb2a895cab",
+        "helper_calls_observed": false,
+        "scope": "actual native entry Task/Dispatch/directory; no competence/completion/full host census"
+      },
+      "status": "actual samepacketR3 decision active; no vote/adoption/implementation yet"
+    },
+    "consensus": "docs/agent-process/phases/functional-completion-20261104/CONSENSUS.json",
+    "adoption_notes": "docs/agent-process/phases/functional-completion-20261104/ADOPTION_NOTES.md",
+    "execution_wave_A": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_PREFLIGHT.json",
+    "execution_wave_A_dispatches": "docs/agent-process/phases/functional-completion-20261104/EXECUTION_WAVE_A_DISPATCHES.json",
+    "execution_wave_A_actors": {
+      "truth": {
+        "package": "FC-TRUTH",
+        "task_id": "task_ae949bd12fff",
+        "dispatch_id": "ctx_2caca18359bf",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth",
+        "branch": "execution/wp-fc26-fc-truth",
+        "exact_base": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+        "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
+      },
+      "provenance": {
+        "package": "FC-PROVENANCE",
+        "task_id": "task_a7ee911f3245",
+        "dispatch_id": "ctx_d6197cc497ff",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance",
+        "branch": "execution/wp-fc26-fc-provenance",
+        "exact_base": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+        "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance"
+      }
+    },
+    "execution_wave_A_latest_record": "docs/agent-process/phases/functional-completion-20261104/SUPPORT_REVIEW_CLOSEOUT.json",
+    "execution_wave_A_reviewers": {
+      "truth": {
+        "package": "FC-TRUTH",
+        "task_id": "task_999c32971b04",
+        "dispatch_id": "ctx_465cf8734afd",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-review",
+        "branch": "review/wp-fc26-fc-truth-review",
+        "exact_base": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+        "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance"
+      },
+      "provenance": {
+        "package": "FC-PROVENANCE",
+        "task_id": "task_64e1d8cb5db6",
+        "dispatch_id": "ctx_f509f51a7c49",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance-review",
+        "branch": "review/wp-fc26-fc-provenance-review",
+        "exact_base": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+        "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance"
+      }
+    },
+    "correction_support_actors": {
+      "truth": {
+        "task_id": "task_5305a1b797cc",
+        "dispatch_id": "ctx_467d7a450979",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth",
+        "branch": "execution/wp-fc26-fc-truth",
+        "exact_base": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+        "status": "ACTIVE original-author factual correction, no assessment retake"
+      },
+      "support": {
+        "task_id": "task_2d9ebaaea545",
+        "dispatch_id": "ctx_982cda0c983a",
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-support-run",
+        "branch": "execution/wp-fc26-fc-support-run",
+        "exact_base": "436af63f44d2c4200c680909221343c9d6b976ae",
+        "status": "ACTIVE independent support evidence, domain acceptance held"
+      }
+    },
+    "support_review": {
+      "task_id": "task_14f236edde4f",
+      "dispatch_id": "ctx_e2922f3f76f4",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-support-run-review",
+      "branch": "review/wp-fc26-fc-support-run-review",
+      "exact_base": "abb52542858845cf488a63b01f6ac619f3f38173",
+      "status": "ACTIVE exact-commit independent receipt-fidelity review only"
+    },
+    "truth_rereview": {
+      "task_id": "task_ba4c0694e78e",
+      "dispatch_id": "ctx_72b222ccb718",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-rereview",
+      "branch": "review/wp-fc26-fc-truth-rereview",
+      "exact_base": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+      "status": "ACTIVE reserved exact-corrected-commit different-family factual rereview"
+    },
+    "truth_rereview_outcome": {
+      "verdict": "REQUIRE_CHANGES",
+      "review_head": "a18dea2d6f18f61117571fae22d3568cec8d4b5c",
+      "reviewed_head": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+      "resource": "released",
+      "canonical_proposals": "HOLD",
+      "correction_rereview_reserve": "exhausted; no automatic further cycle"
+    },
+    "support_review_outcome": {
+      "verdict": "PASS receipt fidelity only; support PARTIAL/FAIL/HOLD",
+      "review_head": "fad50dee3912847cf38f2dfff1a95254fd119006",
+      "reviewed_head": "abb52542858845cf488a63b01f6ac619f3f38173",
+      "resource": "released",
+      "compatibility_source_acceptance": "HELD"
+    },
+    "current_wave_workers": "all eight completed/released; six historical protected resources retained"
+  },
+  "latest_verified_CI": {
+    "head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+    "run": 41843691782,
+    "result": "14success/1publishskipped",
+    "record": "docs/production/remediation-20261104/recovery-execution/CI_9B783D72_RESULT.json",
+    "feature_or_hardware_acceptance": false
+  }
+}

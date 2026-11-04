@@ -21,13 +21,14 @@ from tools.validate.evidence import SCHEMA_VERSION, redact, write_record
 
 #: Files whose change makes deployment evidence stale.
 COVERS_COMMON = [
-    "Dockerfile", ".dockerignore", "run.py", "driver.json", "requirements.txt", "requirements-uc.txt",
-    "src/rest_api/app.py", "src/rest_api/core.py", "src/rest_api/static.py", "src/persistence.py",
+    "Dockerfile", ".dockerignore", "run.py", "run_server.py", "driver.json", "requirements.txt", "requirements-uc.txt",
+    "src", "web", "LICENSE", "THIRD_PARTY_NOTICES.md", "LICENSES",
+    "tests/deploy", "tools/simulator", "tools/uc_remote_sim.py",
 ]
 
 SCENARIOS: dict[str, dict[str, Any]] = {
     "deploy.image_core": {
-        "title": "Shipped image, integrations off (UC_ENABLED unset), against the simulator container",
+        "title": "Shipped image, UC disabled by default, against the simulator container",
         "client": "api",
         "features": ["F-OPS-001", "F-OPS-002", "F-OPS-005", "F-OPS-006", "F-OPS-011", "F-OPS-015"],
         "covers": COVERS_COMMON,
@@ -36,13 +37,19 @@ SCENARIOS: dict[str, dict[str, Any]] = {
         "title": "Shipped image, Remote 3 integration on (bridge, mDNS off, UC_DRIVER_URL), against the simulator",
         "client": "uc",
         "features": ["F-OPS-001", "F-OPS-005", "F-OPS-011", "F-OPS-015"],
-        "covers": [*COVERS_COMMON, "src/driver.py"],
+        "covers": COVERS_COMMON,
     },
     "deploy.compose": {
         "title": "docker-compose.yml alone, with the UC bridge override and with the UC host override",
         "client": "api",
         "features": ["F-OPS-003"],
         "covers": [*COVERS_COMMON, "docker-compose.yml", "docker-compose.uc-host.yml", "docker-compose.uc-bridge.yml"],
+    },
+    "deploy.discovery": {
+        "title": "Shipped HA discovery advertises a reachable API and withdraws on shutdown on a private bridge",
+        "client": "api",
+        "features": ["F-OPS-005", "F-OPS-011"],
+        "covers": [*COVERS_COMMON, "tests/deploy/test_runtime_discovery.py", "tests/deploy/fixtures/discovery_probe.py"],
     },
 }
 

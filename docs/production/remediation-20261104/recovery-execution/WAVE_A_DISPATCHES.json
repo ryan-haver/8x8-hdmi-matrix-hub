@@ -1,0 +1,315 @@
+{
+  "observed_utc": "2026-11-04T10:50:25.796175+00:00",
+  "phase": "remediation-recovery-20261104",
+  "wave": "A",
+  "status": "Two original-author source corrections LAUNCHED / OBSERVED_START; not completed/reviewed/integrated/qualified",
+  "actors": {
+    "ws-c01": {
+      "task_id": "task_92d47e338d62",
+      "dispatch_id": "ctx_15d1617958e2",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+      "branch": "remediation/ws-work-c01",
+      "exact_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "exclusive_paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py",
+        "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+      ],
+      "task_spec": "docs/production/remediation-20261104/recovery-execution/WS_C01_TASK.md",
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "48219381-d4ac-4e1a-8cb1-97fdf25364aa",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 1042225,
+        "sha256": "e8448efd97edae9693de7060504c723d5b78d915b8c05e23bc41cd1224286b7d",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "environment": {
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+        "base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+        "branch": "remediation/ws-work-c01",
+        "config": ".claude/settings.local.json",
+        "config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "expected_initial_status": "",
+        "coordinator_owned_config_never_stage": true,
+        "package_identity": [
+          {
+            "file": "package.json",
+            "normalized_sha256": "372f25ae601fd484ad9cd9f1d0deae02aac529a82d15d377e39b9c16d9191b05",
+            "exact_working_and_git_blob_equal": true
+          },
+          {
+            "file": "package-lock.json",
+            "normalized_sha256": "e398527e96d34abeb125aa6683eef37d56506e71ade44404b27778233ce65fdd",
+            "exact_working_and_git_blob_equal": true
+          }
+        ],
+        "node_dependency": {
+          "kind": "Windows Junction",
+          "source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01/node_modules",
+          "target": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/node_modules",
+          "original_link_target": "\\\\?\\C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\node_modules",
+          "root_target": "READ_ONLY; no install/download or target mutation; preserve link metadata without traversal",
+          "npm_lint_direct_exit": 0
+        },
+        "publication_before_creation": "ff27f7a8b157b9255acab5f76db931d2970a52e0",
+        "source_lease": [
+          "src/rest_api/ws_request_work.py",
+          "tests/test_ws_request_work.py",
+          "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+        ],
+        "role_limit": "PRODUCT correction only; WS author competence remains HOLD, privacy independent acceptance HELD; no handler wiring or source acceptance",
+        "helpers": "Claude deny team/subagent/plugin/MCP with high model config; Codex effective multi_agentfalse under exact managed profile/cwd; globals unchanged"
+      },
+      "status": "Source correction ACTIVE; no delivery/review/acceptance/integration",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "privacy-c4": {
+      "task_id": "task_25a4c3572682",
+      "dispatch_id": "ctx_5ca1ba3f03ac",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
+      "branch": "remediation/privacy-c4",
+      "exact_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "exclusive_paths": [
+        "tools/validate/evidence.py",
+        "tools/validate/clients/api.py",
+        "tools/validate/model.py",
+        "tools/validate/runner.py",
+        "tools/validate/clients/ha.py",
+        "tests/validation/test_sw_sec_data_02_c4.py",
+        "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+      ],
+      "task_spec": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_TASK.md",
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "01a1a62d-5b7d-7282-b691-753a3c38d963",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "effort": "high native",
+        "bytes": 964973,
+        "sha256": "becab1b51ead04f4ba2c24ce60468e803ff6fa09c7526a7a0346d1054e6c14e6",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "environment": {
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
+        "base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+        "branch": "remediation/privacy-c4",
+        "config": ".codex/config.toml",
+        "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+        "expected_initial_status": "?? .codex/config.toml",
+        "coordinator_owned_config_never_stage": true,
+        "package_identity": [
+          {
+            "file": "package.json",
+            "normalized_sha256": "372f25ae601fd484ad9cd9f1d0deae02aac529a82d15d377e39b9c16d9191b05",
+            "exact_working_and_git_blob_equal": true
+          },
+          {
+            "file": "package-lock.json",
+            "normalized_sha256": "e398527e96d34abeb125aa6683eef37d56506e71ade44404b27778233ce65fdd",
+            "exact_working_and_git_blob_equal": true
+          }
+        ],
+        "node_dependency": {
+          "kind": "Windows Junction",
+          "source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4/node_modules",
+          "target": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/node_modules",
+          "original_link_target": "\\\\?\\C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\node_modules",
+          "root_target": "READ_ONLY; no install/download or target mutation; preserve link metadata without traversal",
+          "npm_lint_direct_exit": 0
+        },
+        "publication_before_creation": "ff27f7a8b157b9255acab5f76db931d2970a52e0",
+        "source_lease": [
+          "tools/validate/evidence.py",
+          "tools/validate/clients/api.py",
+          "tools/validate/model.py",
+          "tools/validate/runner.py",
+          "tools/validate/clients/ha.py",
+          "tests/validation/test_sw_sec_data_02_c4.py",
+          "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+        ],
+        "role_limit": "PRODUCT correction only; WS author competence remains HOLD, privacy independent acceptance HELD; no handler wiring or source acceptance",
+        "helpers": "Claude deny team/subagent/plugin/MCP with high model config; Codex effective multi_agentfalse under exact managed profile/cwd; globals unchanged"
+      },
+      "status": "Source correction ACTIVE; no delivery/review/acceptance/integration",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "adopted_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "prewave_published_verified_head": "ff27f7a8b157b9255acab5f76db931d2970a52e0",
+  "capacity": {
+    "ws-c01": {
+      "observed_utc": "2026-11-04T10:48:56.389724+00:00",
+      "scope": "two bounded original-author corrections, Astra component review and one material-fix/re-review; privacy candidate/judge/actual independent review reserved conditionally with explicit HELD privacy acceptance; every later stage freshly gated",
+      "unknown": "Absolute allowance and other-host demand not exposed; no claimed qualified privacy fallback",
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400136,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 4,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600136,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793789026100,
+        "error": null
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 13,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793789026314,
+        "error": null
+      },
+      "minimax_future_conditional_observation": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932856,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 20,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793789026111,
+        "error": null
+      },
+      "minimax_future_qualification": "NOT_GRANTED; actual future creation/start requires fresh route/capacity and corrected-subject binding"
+    },
+    "privacy-c4": {
+      "observed_utc": "2026-11-04T10:49:10.929004+00:00",
+      "scope": "two bounded original-author corrections, Astra component review and one material-fix/re-review; privacy candidate/judge/actual independent review reserved conditionally with explicit HELD privacy acceptance; every later stage freshly gated",
+      "unknown": "Absolute allowance and other-host demand not exposed; no claimed qualified privacy fallback",
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400136,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 4,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600136,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793789026100,
+        "error": null
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 13,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793789026314,
+        "error": null
+      },
+      "minimax_future_conditional_observation": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932856,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 20,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793789026111,
+        "error": null
+      },
+      "minimax_future_qualification": "NOT_GRANTED; actual future creation/start requires fresh route/capacity and corrected-subject binding"
+    }
+  },
+  "fleet": {
+    "total": 152,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 152,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzYyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAyMToxMDo0MSIsImRpc3BhdGNoSWQiOiJjdHhfZGU0NzY0MjQxYWU3IiwiZGF0YWJhc2VJZCI6MTAxN319"
+      },
+      {
+        "limit": 100,
+        "total": 152,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 9,
+      "released": 143
+    },
+    "retained_metadata": 7,
+    "current_owned_resources": 2
+  },
+  "concurrency": "two current + coordinator + protected external =4of4; no nesting",
+  "routing": "Exact requested/effective selections and native captures separate from domain qualification. No DeepSeek, helpers, extra accounts, spend or remote dispatch. Former Run objective exclusion is historical and superseded by owner current direction.",
+  "review": {
+    "ws-c01": "qualified independent Astra/high component exact-commit review reserved; not launched, no verified backup; original first-authorship HOLD/NOT_GRANTED and WSR03 FAIL unchanged",
+    "privacy-c4": "Qualified independent privacy acceptance HELD. After corrected C4 settles/preserved/published, one first M3 candidate + one independent Astra judge, actual PASS then separate qualified full-chain exact-source review/report-quality evaluation; no automatic retake or self acceptance"
+  },
+  "holds": "D6 lifecycle review candidate and WS wiring remain HELD: required non-Anthropic target independence unestablished. API034 M-1/freshness, broader WS040/combined evidence and all owner visual/HIL/72h/week/final-release gates remain open. No canonical evidence generation/admission now.",
+  "settlement": "Preserve full actual source/dirty/native/config/ignored/temp/original failures; promptly positively release exact owned worker on delivery and publish task ref. Verified full Git bundle before destructive Orca cleanup; no cleanup now.",
+  "next": "Publish scoped launch records, independently verify integration remote/local equality, then end turn for Orca wake. Source authors fix, reviewers report; no completion polling."
+}

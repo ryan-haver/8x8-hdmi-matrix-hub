@@ -1,0 +1,137 @@
+{
+  "created_utc": "2026-11-04T09:13:15.813781+00:00",
+  "round": 2,
+  "status": "PROSPECTIVE all-peer challenge input; not final plan or consensus",
+  "original_packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+  "original_packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
+  "R1_reports": [
+    {
+      "family": "OpenAI",
+      "commit": "480a27bd3e65ff657ef878abf11242be0360f735",
+      "parent": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round1/openai.md",
+      "canonical_sha256": "d961a81627ace27b48e84774ff0284e12a5faf4184e1dd5d7e3d5c8e57e2b9cd"
+    },
+    {
+      "family": "MiniMax",
+      "commit": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+      "parent": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round1/minimax.md",
+      "canonical_sha256": "8c3298edd367228b2dd60b05d4d752247c4d5f7537468243ee9d527dff0517b2"
+    },
+    {
+      "family": "Anthropic",
+      "commit": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+      "parent": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round1/anthropic.md",
+      "canonical_sha256": "a83644445efaa1f666a4d7d40d05e32f8ddc095013593379ee3a74512913e59c"
+    }
+  ],
+  "barrier": "All3R1native/originals/archives/taskrefs preserved before these reports were shared; no early R1 peer synthesis",
+  "challenge_topics": [
+    "R1 conflict: original-author Opus WS correction as covered remediate-all/reviewers-report-authors-fix work versus first-authorship assessment no-automatic-rewrite/retry and no competence earned. Quote exact controlling current instructions/attempt budget, distinguish bounded code correction, component correctness acceptance, author competence and wiring lease. Determine which decisions R3 can adopt and which actually require a concrete owner choice. Do not expand a task-local limit into project-wide stop or waive it as cosmetic ordinary work.",
+    "Preserve WSR03 attempt-level boundary failure even if source fixed. Can any subsequent component review earn corrected-source acceptance while original first-authorship remains HOLD? Which qualified author/reviewer route can lawfully perform necessary existing-handler wiring? No new Task disguising a failed assessment, author relabel or retrospective PASS.",
+    "Compare WS concrete mechanisms: reservation/task state ownership, truthful remaining/requested/drained semantics during synchronous factory/eager/self cleanup, conservative bounded non-drained returns versus admission-settled notification loops, cross-loop lifecycle fences and explicit real pytest-asyncio debug configuration. Ensure old four deterministic counterexamples still meaningful and not excluded by revised prose. Identify deadlock, double-counting, callback/task leak or diagnostics pitfalls; no patch/probe execution in planning.",
+    "Compare privacy correction strategies for current_pin and actual supported credential names/carriers, tuples and header-pairs, serialized JSON data, Hub.query/run-summary and HA options api_key, while preserving public key/password_protected fields and raw on-wire/comparison identity. Verify any consequential assertion/caller that peers did not read; name remaining uncertainty honestly. Keep mask-before-format/truncation and raw verdict oracles.",
+    "Different-family source-review recovery: first MiniMax privacy review-domain assessment versus Gemini discovery-first/fallback, qualification and review/correction reserve. Do not wait for an unverified preferred route while a suitable available route can do useful bounded work; no source qualification from headroom/catalogue/prose. A genuinely new-family first useful assessment must not rejudge/retake Opus or merely repeat published judge findings as proof. Freeze meaningful criteria/original evidence discipline before any future implementation.",
+    "R1 disagreement/overclaims: API034 bounded source review and secondary evaluation are already complete, M-1/privacy/combined holds remain; do not call the entire chain unreviewed or repeat completed pins. WS040 client-runner review is distinct from new component. Evaluate actual relevant source-domain coverage and keep shared model/runner/registry integration serial.",
+    "Route/provenance: coordinator native M3/thinking attestation versus in-session catalogue limitation are different observations. No M3.1 evidence substituted. Verify live quota/route before dispatch; Google unknown/unavailable is not headroom, DeepSeek excluded. Read standing protocol supersession before interpreting historical Anthropic exclusion. Preserve all failed qualification/original evidence and owner visual/HIL/soak/week/release gates."
+  ],
+  "required_output": "For every peer substantive recommendation: accept, challenge or modify with source/policy evidence and reason; explicitly reconsider your own R1 claims. Produce a small consolidated recommended task/model/reviewer/worktree/exclusive-path/exact-base/acceptance/correction-reserve matrix, held gates, concrete any owner-only proposal, and unresolved disagreements for coordinator R3packet. Do not pretend majority is consensus or implement fixes.",
+  "preflight": {
+    "observed_utc": "2026-11-04T09:08:57.521997+00:00",
+    "integration_head": "f26536fc3ee2befda486310c2b787299986fac39",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 143,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 143,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzM4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAwNDowODoyMCIsImRpc3BhdGNoSWQiOiJjdHhfMGY1MDllZTEzYzAwIiwiZGF0YWJhc2VJZCI6ODE4fX0"
+        },
+        {
+          "limit": 100,
+          "total": 143,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 137,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 10,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793782726378,
+        "error": null,
+        "age_seconds": 611
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400006,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600000,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793783012290,
+        "error": null,
+        "age_seconds": 325
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932853,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 17,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793782726006,
+        "error": null,
+        "age_seconds": 612
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "2dbe17814f8e2499976b1c681bf4ca92098fb263848df6a3d62fe7703e57a9cd",
+      "catalog_modified_utc": "2026-11-04T09:08:49.981786+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 2 planned R2 contributors + coordinator + protected external = 4 of4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "round_order": "Reuse settled isolated same-family R1 worktrees at their exact R1heads, new genuine Task/Dispatch per R2. First OpenAI+Anthropic; MiniMax R2 same frozen packet at next free settled/preserved/released slot. No more than2current+coordinator+protectedexternal, no nesting.",
+  "future": "After all3R2reports preserved and actual disputes dispositioned, synthesize one complete final versioned plan/staffing packet+hash; each genuine family explicitly decides in R3. No R3launch from this input alone."
+}

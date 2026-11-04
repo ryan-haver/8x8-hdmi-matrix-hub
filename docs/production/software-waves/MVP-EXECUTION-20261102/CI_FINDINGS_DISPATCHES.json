@@ -1,0 +1,119 @@
+{
+  "observed_utc": "2026-11-03T04:15:07.782523+00:00",
+  "status": "both authors delivered and released, independent exact-commit review prepared",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "publication_before_wave": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+  "actors": {
+    "findings_fix01": {
+      "task_id": "task_cd5957604678",
+      "dispatch_id": "ctx_92d5aa88ea41",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_entry_base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e60630eb6ffeGn01v1VKJMqeOk",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project route inherited",
+        "bytes": 76801,
+        "sha256": "4997cafa00fad2028a6be2533d3a72a3dcb5bad8ac8980088b4249624ca29c4b"
+      },
+      "status": "delivered, released/preserved/published; unaccepted",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "report_commit": "487a6ca7afaf65882fb490880421f0026ae59cc5"
+    },
+    "ci_attribution": {
+      "task_id": "task_5fa43f7367b0",
+      "dispatch_id": "ctx_c2550304397b",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "exact_entry_base": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+        "session": "ses_e6062e8bdffe634RQCVgif2KlM",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported; exact project route inherited",
+        "bytes": 171678,
+        "sha256": "7b3c61b1138b5c8dc7cc1c46e8624a443676726b2c3dbce556e8160ceeab19af"
+      },
+      "status": "delivered, released/preserved/published; unaccepted",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready",
+      "report_commit": "d86b65c271cc06d95895b8abdce53e24210bc6d9"
+    }
+  },
+  "ci_provisioning": {
+    "base": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+    "path": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-ev-ci-attribution",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+    "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+    "local_ignored_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "spec_sha256": "29f32e6245095d9670a228bb3fd631bc0fdee9c4a16905c56e2d4facc1dd25af",
+    "provisioning": "agent-free Orca create solely for exact local routing before genuine worker-start, no global settings/bare agent"
+  },
+  "fleet": {
+    "total": 111,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 111,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTk5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMzo0Mzo1MiIsImRpc3BhdGNoSWQiOiJjdHhfZWMxM2MxZjU4MGIzIiwiZGF0YWJhc2VJZCI6NjI0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 111,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 103
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 2,
+    "accounting": "running keep-open resources also read retained; not eight active assignments"
+  },
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "accepted_outputs": "SW-AUDIT bounded inventory and EV negative-gap documentation accepted; no source/feature/original-preservation qualification",
+  "pending_outputs": "findings correction01 and CI attribution each require independent exact-commit OpenAI/Astra factual review; no author self-acceptance/admission",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no retake authority inferred"
+}

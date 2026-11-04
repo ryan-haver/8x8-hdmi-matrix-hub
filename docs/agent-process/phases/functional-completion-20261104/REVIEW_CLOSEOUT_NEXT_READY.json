@@ -1,0 +1,214 @@
+{
+  "observed_utc": "2026-11-04T20:11:56.977181+00:00",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "deliveries": {
+    "truth": {
+      "observed_utc": "2026-11-04T20:08:46.198474+00:00",
+      "task_id": "task_999c32971b04",
+      "dispatch_id": "ctx_465cf8734afd",
+      "head": "93bc4e4a2cdb3aac41b2db398bc865dd016abd59",
+      "parent": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+      "report": "docs/production/functional-completion-20261104/FC-TRUTH/REVIEW.md",
+      "report_sha256": "101797d39e3c0b08a3990848788a1fcd1b6db893948c7a6e3652a5b2ae19f85a",
+      "actual_model": "gpt-6.1-sol/high",
+      "native_bytes": 2655349,
+      "native_sha256": "9cb33fe515e59294eabb52990c34097afcaf219272bc9f44a453c3a98966f578",
+      "unassigned_helpers_observed": false,
+      "native_scope": "Final exact Task/Dispatch/cwd only, no all-host census",
+      "resource": "positively released; transcript captured",
+      "task_ref_published_exact": "93bc4e4a2cdb3aac41b2db398bc865dd016abd59",
+      "bundle_bytes": 14453696,
+      "bundle_sha256": "beb8aa7a5b700adad6304fa2ba1022a51c41279c0da66334ddaf9a5e7ae402f2",
+      "bundle_verify_exit": 0,
+      "original_registered_evidence": {
+        "registration": "02df1ad6c37b48a1b82a80dbf261e2e1",
+        "files": 144,
+        "bytes": 3396607,
+        "retained_in_place": true,
+        "review_date": "2026-12-04"
+      },
+      "docs_check": {
+        "tests": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "scope": "Reviewer once-only run, original receipt retained. No source/Markdown-semantic/qualification proof"
+      },
+      "verdict": "REQUIRE_CHANGES"
+    },
+    "provenance": {
+      "observed_utc": "2026-11-04T20:08:53.147189+00:00",
+      "task_id": "task_64e1d8cb5db6",
+      "dispatch_id": "ctx_f509f51a7c49",
+      "head": "29f5ba51ffa720cd478ae0d99f6a6b7a91ec0d74",
+      "parent": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+      "report": "docs/production/functional-completion-20261104/FC-PROVENANCE/REVIEW.md",
+      "report_sha256": "f5bd7357f77f2de0219623afc4f0076855e34831d7f81969bb7bf22ece5a05a8",
+      "actual_model": "minimax-coding-plan/MiniMax-M3/thinking",
+      "native_bytes": 1111411,
+      "native_sha256": "42fcef87db5aa04e4dba57c9d83ef5a8c9efa053e2d463fa75f9b99ab155e79c",
+      "unassigned_helpers_observed": false,
+      "native_scope": "Final exact Task/Dispatch/cwd only, no all-host census",
+      "resource": "positively released; transcript captured",
+      "task_ref_published_exact": "29f5ba51ffa720cd478ae0d99f6a6b7a91ec0d74",
+      "bundle_bytes": 14416454,
+      "bundle_sha256": "f547b1ffaa40ef6d5e9e4b9a8e6203495ce989cc0c53660eb7827e687a0c621f",
+      "bundle_verify_exit": 0,
+      "original_registered_evidence": {
+        "registration": "7568c4290b8f486695b9acf4104ea817",
+        "files": 131,
+        "bytes": 521660,
+        "retained_in_place": true,
+        "review_date": "2026-12-04"
+      },
+      "docs_check": {
+        "tests": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "scope": "Reviewer once-only run, original receipt retained. No source/Markdown-semantic/qualification proof"
+      },
+      "verdict": "PASS with nonblocking F1 wording erratum; no gates cleared"
+    }
+  },
+  "status": "Both reviewers delivered/released/published; truth negative correction prepared, provenance fidelity pass with erratum and all eligibility gates held",
+  "next": {
+    "truth": "ONE original-M3-author factual correction at own99e; exact Sol rereview reserved, no new assessment",
+    "support": "Sol bounded evidence operator at exact next published integration; M3 receipt-fidelity review reserved; no HA/packaging acceptance"
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T20:09:30.825879+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "52a7f96169b1c0869182a0b1a71d509885f8fa4b",
+    "remote_equal": true,
+    "fleet": {
+      "total": 170,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 170,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDUxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDoxNToyMyIsImRpc3BhdGNoSWQiOiJjdHhfM2Q1Y2JhMDMzMGEyIiwiZGF0YWJhc2VJZCI6MTM3Nn19"
+        },
+        {
+          "limit": 100,
+          "total": 170,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 163,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_f509f51a7c49",
+          "taskId": "task_64e1d8cb5db6",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_465cf8734afd",
+          "taskId": "task_999c32971b04",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_2caca18359bf",
+          "taskId": "task_ae949bd12fff",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 26,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793822964633,
+        "error": null,
+        "age_seconds": 6
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400229,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 5,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600229,
+          "resetDescription": "3:50 PM"
+        },
+        "updatedAt": 1793822964183,
+        "error": null,
+        "age_seconds": 7
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 40,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932836,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 51,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793822964208,
+        "error": null,
+        "age_seconds": 7
+      }
+    },
+    "scope": "Covered actual-author FC-TRUTH factual correction plus conditional support investigation; no source/material plan/qualification retry",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "Original M3 factual author correction, Sol support operator conditional on actual fit; different-family rereview reserved. All assessment entry holds remain. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "operator_fit": "Actual Sol exactmodel/high source/runtime operational history plus scoped independent review93bc/real command identity and bounded evidence capture; fresh healthy Docker29.6.2/Linux/no running containers. Environment prerequisites rechecked by operator, no domain qualification.",
+  "storage_registration": "13451d40ddac4c2d83718cb1cd81b8cf",
+  "review_date": "2026-12-04",
+  "holds": "all Q entry gates/D6/WSR03/privacyFAILs/unaccepted chain/ownerbudget/hardwarevisual72hweekrelease unchanged",
+  "publication_check_note": {
+    "docs_once": 489,
+    "direct_exit": 0,
+    "scope": "Existing documentation modules; do not read these new prose files",
+    "initial_publish_stop": "staged whitespace check: original immutable INVENTORY has one blank line at EOF (1180); no commit/push happened",
+    "resolution": "Exact original Git blob SHA256 verified; preserve evidence bytes, all other staged paths pass CR-aware whitespace. No product/source hook bypass. Metadata final edits checked structurally, docs not rerun."
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "observed_utc": "2026-11-04T01:35:15.025446+00:00",
+  "status": "LAUNCHED independent actual source review; no delivery/source acceptance/integration yet",
+  "pin": "RV-API034",
+  "actor": {
+    "task_id": "task_43fbf6bb49a2",
+    "dispatch_id": "ctx_4e0e187682b0",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review",
+    "actual_branch": "execution/wp-exec-rv-api034-review",
+    "exact_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "exclusive_report": "docs/production/software-waves/RV-API034/execution-20261101/REVIEW.md",
+    "dependencies": [
+      "task_5b5162506677",
+      "task_ea5e42f11e94"
+    ],
+    "launch": {
+      "requested": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "native_entry": {
+      "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+      "session": "ad131db1-c207-495f-ac80-371efd971b04",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high supported explicit launch/local config; native per-turn effort not exposed",
+      "bytes": 589365,
+      "sha256": "f0929fb2d8bcdab85a711cb20674bb1aff8c0daadf449203b9b9f59711ed6604",
+      "unassigned_helpers_observed": [],
+      "scope": "point-in-time entry evidence, not a descendant census or source competence"
+    }
+  },
+  "binding": {
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review",
+    "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "actual_branch": "execution/wp-exec-rv-api034-review",
+    "ignored_config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+    "prewave_publication": "a62b1b85bcce97de17a2fc6cde6eac8800cf3cef",
+    "agent_free_routing_provision": true
+  },
+  "capacity": {
+    "observed_utc": "2026-11-04T01:34:22.695970+00:00",
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400026,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 11,
+        "windowMinutes": 300,
+        "resetsAt": 1793759400026,
+        "resetDescription": "7:30 PM"
+      },
+      "updatedAt": 1793755726024,
+      "error": null
+    },
+    "other_host_demand": "unknown",
+    "demand": "one independent report-only source review, one same-route material-fix re-review conditional later; no absolute allowance exposed",
+    "OpenAI_followups": "HELD below30%, no author/evaluation dispatch or source integration in this subwave"
+  },
+  "fleet": {
+    "total": 135,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 135,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMjQ1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODoxNTozOCIsImRpc3BhdGNoSWQiOiJjdHhfYTQ0MWU3YmYzZDQ2IiwiZGF0YWJhc2VJZCI6NzMyfX0"
+      },
+      {
+        "limit": 100,
+        "total": 135,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 128
+    },
+    "historical_retained": 6,
+    "current_new": 1
+  },
+  "concurrency": "one reviewer+coordinator+protectedexternal=3<=4; no nesting",
+  "other_dispatches": "OpenAI author-fix/secondary evaluation below30% HELD pending fresh headroom or suitable verified qualified fallback; no promise of correction funding. Source integration/fullRV promotion held until required correction/evaluation/gates.",
+  "qualification": "Scoped reviewer competence established separately, not source acceptance; source authorship OpenAI unchanged.",
+  "disposition": "Keep reviewer open only for original/native/workspace/temp preservation and immediate coordinator settlement after delivery, not indefinite retention; no cleanup of other resources",
+  "publication": "Scoped launch records receive documentation checks, normal push and independent exact remote/local verification; then end turn for Orca wake, no polling"
+}

@@ -202,6 +202,7 @@ class ContractServer:
         app.router.add_post("/api/cec/{kind}/{port}/{command}", self.cec)
         app.router.add_post("/api/profile/{id}/recall", self.action)
         app.router.add_post("/api/scene/{id}/recall", self.action)
+        app.router.add_post("/api/v2/scenes/{id}/execute", self.action)
         app.router.add_post("/api/shortcuts/{id}/execute", self.action)
         app.router.add_post("/api/cec/macro/{id}/execute", self.action)
         app.router.add_get("/ws", self.websocket)
@@ -230,7 +231,10 @@ class ContractServer:
         return web.json_response({"success": True, "data": {}, "error": None})
 
     async def action(self, request):
-        kind = "macro" if "/cec/" in request.path else request.path.split("/")[2].rstrip("s")
+        if request.path.startswith("/api/v2/scenes/"):
+            kind = "scene"
+        else:
+            kind = "macro" if "/cec/" in request.path else request.path.split("/")[2].rstrip("s")
         body = await request.json() if request.can_read_body else {}
         result = await self.matrix.run_action(kind, request.match_info["id"], passcode=body.get("passcode"))
         return web.json_response(result, status=200 if result["success"] else 403)
@@ -575,7 +579,7 @@ async def test_loader_cleans_up_partial_start_and_attempts_all_stops(monkeypatch
     with pytest.raises(RuntimeError, match="start failed"):
         await loader.start(HubClientLocal(MemoryMatrix()))
     assert DemoIntegration.calls == ["start:demo", "start:broken", "stop:broken", "stop:demo"]
-    assert loader.health_summary() == {}
+    assert loader.health_summary() == {"broken": {"status": "error", "error": "shutdown failed"}}
 
 
 def test_registry_duplicate_and_registration_validation():
@@ -701,7 +705,12 @@ async def test_loader_stop_failure_and_health_failure(monkeypatch):
     assert loader.health_summary() == {"demo": {"status": "error"}}
     with pytest.raises(ExceptionGroup, match="shutdown failed"):
         await loader.stop()
+    assert loader.health_summary() == {"demo": {"status": "error", "error": "shutdown failed"}}
+    owner, = loader._failed_cleanup
+    owner.fail_stop = False
     await loader.stop()
+    assert loader.health_summary() == {}
+    assert DemoIntegration.calls == ["start:demo", "stop:demo", "stop:demo"]
     assert loader.routes() == []
 
 

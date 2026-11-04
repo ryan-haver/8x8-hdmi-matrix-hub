@@ -1,0 +1,75 @@
+{
+  "observed_utc": "2026-11-03T05:46:47.122141+00:00",
+  "status": "one genuine independent early repository factual review launched",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "repo_intake": {
+      "task_id": "task_dd9f6e3c9c49",
+      "dispatch_id": "ctx_d29018e7a4a3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "exact_entry_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "observed_head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+      "new_report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 360214,
+        "sha256": "425ecf8a5256d50768fec62ba2d555e825d4547dafdff652d15fade8bfeb28d1"
+      },
+      "status": "launched; no verdict or report acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
+  },
+  "publication_before_wave": "3aae5b2dc231e8807bb20235e24895ffff8a57d3",
+  "fleet": {
+    "total": 119,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MTowMSIsImRpc3BhdGNoSWQiOiJjdHhfNDNhMDA5MmQ3ODQ5IiwiZGF0YWJhc2VJZCI6NjU0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 112
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 1,
+    "accounting": "running keep-open reviewer also reads retained; not seven active assignments"
+  },
+  "concurrency": "one new reviewer+coordinator+protected external=3<=4; no nesting",
+  "acceptance": "early three-row intake is unaccepted until actual verdict/coordinator disposition; package/security/license/source/feature qualification false",
+  "capacity_disposition": "OpenAI current verified headroom for independent review; M3 author/fix creation/dispatch held below30% until suitable verified headroom/fallback, no assumed reset headroom",
+  "core_qualification": "attempt1 FAIL/no domain, explicit owner manual-retake choice pending; no answer/retry/source authority inferred"
+}

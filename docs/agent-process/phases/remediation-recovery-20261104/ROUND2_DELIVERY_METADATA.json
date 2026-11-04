@@ -1,0 +1,263 @@
+{
+  "observed_utc": "2026-11-04T09:32:51.236723+00:00",
+  "status": "Two R2 peer challenges preserved; MiniMax same-packet R2 PREPARED, no new Task/Dispatch",
+  "deliveries": {
+    "anthropic": {
+      "task_id": "task_da8abc159b3e",
+      "dispatch_id": "ctx_afe84a0eaa12",
+      "commit": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+      "parent": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+      "canonical_report_sha256": "0c8fb2b6dae659bd78716637af4a8cc0044d36e215644531160b7c9d414816e8",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round2/anthropic.md",
+      "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "dbf4280c709decdf325de3e4a6f2e49d8c940217b67c0c29fbfc71b456a29941",
+        "original": "C:\\t\\remediation-recovery\\anthropic-r2\\docs01"
+      },
+      "native": {
+        "session": "7bb02dc0-492c-4cc2-b640-81f0d7fc6300",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 2525239,
+        "sha256": "c5984d5cc0de21da621cb64a225e2e62ef0961033ecb1a3e0ce3a14b919b8e21",
+        "unassigned_helpers_observed": []
+      },
+      "preservation": {
+        "wp-remediation-recovery-r1-anthropic": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-anthropic",
+          "head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "status": "",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\anthropic-closeout\\preservation\\wp-remediation-recovery-r1-anthropic\\workspace.tar.gz",
+          "archive_sha256": "49b6298d04d7448543c005806d833a1b51c060b7bf1883c26448873e6356356b",
+          "archive_bytes": 207711488,
+          "regular_files": 4775,
+          "regular_bytes": 303727295,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-anthropic-r2": {
+          "workspace": "C:\\t\\remediation-recovery\\anthropic-r2",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\anthropic-closeout\\preservation\\external-anthropic-r2\\workspace.tar.gz",
+          "archive_sha256": "cc400129bc65832050bf172c990aaee13519481933a7bfdd2933774d26913b11",
+          "archive_bytes": 99244,
+          "regular_files": 118,
+          "regular_bytes": 305421,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "task_publication": {
+        "head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "remote_head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact": true,
+        "tree": "retained; no full Git bundle or cleanup",
+        "prior_head": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+        "prior_R1_publication": "Prior R1 commit remains ancestor, originals and old archives immutable; branch advanced normally without force"
+      },
+      "status": "Delivered, positively released, original evidence preserved and exact descendant task ref published; substantive recommendation not adopted",
+      "peer_visibility": "Full R2 report not imported or shared with pending MiniMax R2, which must challenge the same original three R1 inputs",
+      "limitations": "Original disclosed read/inspection errors retained; no documentation-test retry or source-role qualification inferred. Anthropic native had no auto-persisted preview paths; no complete host-write census claimed."
+    },
+    "openai": {
+      "task_id": "task_eb1c577c2685",
+      "dispatch_id": "ctx_ff74dc578167",
+      "commit": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+      "parent": "480a27bd3e65ff657ef878abf11242be0360f735",
+      "canonical_report_sha256": "ff24c5c725ab8f0411089ddbc9fe83f03bddc032aab56bd0a2521ccd33e3e58c",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round2/openai.md",
+      "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "00ab7ec1bb69e50e713a79869a7c37d1fce5fd967b0d39f6820acdf1978e1199",
+        "original": "C:\\t\\remediation-recovery\\openai-r2\\docs01"
+      },
+      "native": {
+        "session": "01a1a5d6-5bdc-7f21-bbc1-b9a522a729d6",
+        "model": "gpt-6-astra",
+        "effort": "high native",
+        "bytes": 1971529,
+        "sha256": "263fccaee16b9e9fa2cf661ad66afb2bdd541cbf9c590de35b0a5ee66e92ef91",
+        "no_helper_calls_observed": true
+      },
+      "preservation": {
+        "wp-remediation-recovery-r1-openai": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-openai",
+          "head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "status": "?? .codex/config.toml",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\openai-closeout\\preservation\\wp-remediation-recovery-r1-openai\\workspace.tar.gz",
+          "archive_sha256": "b92f301b34d79e34a298811afac27d8f28f94bb13d0038b4c086fc35b5f58d3d",
+          "archive_bytes": 209170360,
+          "regular_files": 4884,
+          "regular_bytes": 308063634,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-openai-r2": {
+          "workspace": "C:\\t\\remediation-recovery\\openai-r2",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\openai-closeout\\preservation\\external-openai-r2\\workspace.tar.gz",
+          "archive_sha256": "fcc6acb78073828f207668fa9755ce599b2e3d01487834517143732de6e30334",
+          "archive_bytes": 69252,
+          "regular_files": 115,
+          "regular_bytes": 172447,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "task_publication": {
+        "head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "remote_head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact": true,
+        "tree": "retained; no full Git bundle or cleanup",
+        "prior_head": "480a27bd3e65ff657ef878abf11242be0360f735",
+        "prior_R1_publication": "Prior R1commit remains ancestor, originals/archives immutable; normal fast-forward only"
+      },
+      "status": "Delivered, positively released, original evidence preserved and exact descendant task ref published; substantive recommendation not adopted",
+      "peer_visibility": "Full R2 report not imported or shared with pending MiniMax R2, which must challenge the same original three R1 inputs",
+      "limitations": "Original disclosed read/inspection errors retained; no documentation-test retry or source-role qualification inferred. Anthropic native had no auto-persisted preview paths; no complete host-write census claimed."
+    }
+  },
+  "report_contents_included": false,
+  "substantive_disposition": "Deferred until all three R2 reports are preserved. No early final plan, consensus or source-correction/qualification authority.",
+  "MiniMax": {
+    "key": "minimax",
+    "family": "MiniMax",
+    "agent": "opencode2",
+    "model": "minimax-coding-plan/MiniMax-M3",
+    "effort": null,
+    "name": "wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "base": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+    "report": "docs/agent-process/phases/remediation-recovery-20261104/round2/minimax.md",
+    "spec": "docs/agent-process/phases/remediation-recovery-20261104/tasks/minimax-r2.md",
+    "title": "Remediation recovery all-peer R2 challenge: MiniMax",
+    "deps": [
+      "task_3533f742d143",
+      "task_30e8158c02a5",
+      "task_ad18152bbe0f"
+    ],
+    "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+    "reuse": "same isolated R1worktree after positive release; original reports/config/source unchanged"
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T09:30:33.500833+00:00",
+    "integration_head": "bdf3f56c5e36da8f2ad91f42edc6d92c835d436b",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 145,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 145,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzQ0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNjozNzo0NSIsImRpc3BhdGNoSWQiOiJjdHhfNDFmNzViYzIzMDc5IiwiZGF0YWJhc2VJZCI6ODc4fX0"
+        },
+        {
+          "limit": 100,
+          "total": 145,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 139,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 11,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793784527577,
+        "error": null,
+        "age_seconds": 106
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400020,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 2,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600020,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793784525988,
+        "error": null,
+        "age_seconds": 108
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932856,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 18,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793784526080,
+        "error": null,
+        "age_seconds": 107
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "77b635b534ed895940a202f75ccf3fdbc0dfe620ba1fda8d4464264c9bdada7b",
+      "catalog_modified_utc": "2026-11-04T09:30:24.914907+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 1 planned MiniMaxR2 + coordinator + protected external = 3of4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "concurrency": "0 current + planned MiniMax + coordinator + protected external = 3 of 4; no nesting",
+  "cleanup": "Both workers positively released; workspace/temp/config/native and prior R1 archives retained. No full Git bundle or destructive cleanup.",
+  "future": "After MiniMax R2 delivery/preservation, read and resolve all three challenges and freeze one complete final plan/allocation packet for genuine three-family R3 decisions."
+}

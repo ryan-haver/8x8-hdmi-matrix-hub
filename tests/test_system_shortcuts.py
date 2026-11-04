@@ -6,6 +6,7 @@ CRUD/persistence, and the async execute_shortcut() function.
 """
 
 import json
+import re
 import tempfile
 from pathlib import Path
 from unittest.mock import AsyncMock, create_autospec
@@ -230,12 +231,17 @@ class TestExecuteShortcut:
         assert result["failed_outputs"] == [3, 7]
         assert matrix.set_output_audio_mute.await_count == 8
 
-    async def test_an_exception_is_a_failure(self):
+    async def test_an_exception_is_a_failure(self, caplog):
         matrix = make_matrix()
         matrix.recall_preset.side_effect = ConnectionError("gone")
         result = await execute_shortcut(shortcut("preset_recall_2"), matrix)
         assert result["success"] is False
-        assert "gone" in result["detail"]
+        assert result["type"] == "preset_recall_2"
+        match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", result["detail"])
+        assert match is not None
+        assert "gone" not in repr(result)
+        assert any(match[1] in record.getMessage() and "gone" in record.getMessage()
+                   and record.exc_info for record in caplog.records)
 
     async def test_unknown_shortcut_returns_failure(self, mock_matrix):
         result = await execute_shortcut(shortcut("unknown.key"), mock_matrix)

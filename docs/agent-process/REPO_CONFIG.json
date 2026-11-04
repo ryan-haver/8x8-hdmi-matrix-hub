@@ -1,0 +1,273 @@
+{
+  "template": false,
+  "process_version": "1.0.0",
+  "adaptation_status": "adopted_instruction_only",
+  "observed_utc": "2026-10-21T00:55:25.987039+00:00",
+  "repository": {
+    "root": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+    "project_name": "8x8-hdmi-matrix-hub",
+    "integration_branch": "wp-runtime-completion",
+    "remote_name": "origin",
+    "remote_url_redacted": "https://github.com/ryan-haver/8x8-hdmi-matrix-hub.git",
+    "git_common_directory": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.git",
+    "source_of_bindings": [
+      "git branch --show-current",
+      "git remote -v",
+      "git rev-parse HEAD",
+      "git ls-remote origin refs/heads/wp-runtime-completion",
+      "orca repo show --repo id:2d494566-13c3-4624-b834-7e0bc340801b --json"
+    ],
+    "publication_authorization": "Existing integration-branch publication authority persists. Do not push adoption descendants over locally merged implementation until pending combined verification/evidence gates are met; no main merge, tags or release."
+  },
+  "orchestration": {
+    "adapter": "Orca",
+    "resolved_executable": "orca",
+    "execution_host": "local / Zelu / win32",
+    "installed_version": "1.4.232",
+    "runtime_id": "113f2af8-5169-408a-9b81-00bd6316d35c",
+    "existing_run_id": "run_37205f6095b3",
+    "coordinator_handle": "term_259c5526-02c2-44a8-b469-bf171aa435a0",
+    "coordinator_generation": 2,
+    "binding_evidence": "state/DISCOVERY.json",
+    "max_active_workers": 3,
+    "max_nested_workers": 0,
+    "adoption_creates_run_or_workers": false,
+    "repo_id": "2d494566-13c3-4624-b834-7e0bc340801b",
+    "actual_new_workers_during_adoption": 0,
+    "concurrency_reservation": "Four total including coordinator; reserve one old external/unverifiable process pending positive settlement. At most two new active workers until revalidated. Historical retained rows are not new assignments.",
+    "launch_support": "worker-start advertises model/effort. OpenCode requires an existing worktree and verified execution-host CLI; effort unsupported. Help support is not a new successful launch."
+  },
+  "planning": {
+    "debate_minimum_distinct_families": 3,
+    "debate_rounds": 3,
+    "capacity_limited_debate_status": "provisional",
+    "missing_provider_does_not_stop_unrelated_ready_work": true,
+    "reassess_models_every_phase_and_wave": true,
+    "unplanned_material_change_requires_fresh_cycle": true
+  },
+  "model_policy": {
+    "candidate_families_to_assess": [
+      "OpenAI",
+      "Anthropic",
+      "Google",
+      "MiniMax"
+    ],
+    "assess_new_relevant_candidates": true,
+    "excluded_underlying_families": [],
+    "exclusion_basis": "Owner 2026-11-01 explicitly allows Anthropic, Gemini, OpenAI Codex and MiniMax via OpenCode 2, superseding earlier Anthropic exclusion for future work; historical reviews unchanged.",
+    "unknown_alias_identity": "unverified_not_independent_capacity",
+    "preferred_models_with_scope_and_evidence": [
+      {
+        "candidate": "gpt-6.1-sol",
+        "scope": "Core implementation; bounded REST review",
+        "evidence": "Existing wave03 AUTHOR/REVIEW records; reassess every task."
+      },
+      {
+        "candidate": "deepseek/deepseek-v4-pro",
+        "scope": "Qualified bounded controller authorship and CORS/assertion review",
+        "evidence": "Existing wave03 AUTHOR/REVIEW records; no general review entitlement."
+      },
+      {
+        "candidate": "minimax-coding-plan/MiniMax-M3",
+        "scope": "Bounded evidence inventories only",
+        "evidence": "SW-API-READ-02 corrected report; not core protocol reviewer qualification."
+      }
+    ],
+    "independent_review_requires_different_family": true,
+    "qualification_history_imported_from_source_repo": false,
+    "unavailable_routes": [
+      {
+        "family": "DeepSeek",
+        "status": "owner_reported_out_of_credit",
+        "dispatch_allowed": false,
+        "new_spend_authorized": false
+      }
+    ],
+    "current_owner_direction_utc_date": "2026-11-01"
+  },
+  "capacity": {
+    "monitoring_owner": "active_coordinator",
+    "supported_usage_sources": [
+      "orca account list --json (sanitize cached supported usage)",
+      "Supported provider read-only API/catalog already authorized for the intended route; do not read credential stores for adoption"
+    ],
+    "cadence_seconds": 900,
+    "cadence_rationale": "While actively coordinating, observe at natural checkpoints at least every 15 minutes and before every creation/dispatch; this is policy, not a background service.",
+    "additional_checks": [
+      "before_dispatch",
+      "worker_checkpoint",
+      "quota_or_rate_limit_event"
+    ],
+    "below_30_percent_is": "task_routing_signal_requires_suitable_verified_fallback_with_own_checked_headroom_under_stricter_local_policy",
+    "unknown_quota_policy": "unknown_is_not_headroom; hold_only_affected_creation_or_dispatch_without_verified_fallback; reroute_independent_ready_work",
+    "review_and_correction_reserve_policy": "Record task-sized demand and reserve qualified different-family review plus material-correction/re-review capacity before dispatch. No unsupported numeric token/cost forecast.",
+    "other_host_commitments": "unknown",
+    "persistent_monitor_status": "not_implemented_by_this_kit"
+  },
+  "protected_resources": [
+    "Coordinator/root checkout; main, integration/release refs and existing tags",
+    "Root/private data/, config/, runtime JSON, credentials, backups and relevant ignored artifacts",
+    "Immutable historical evidence and failed runs; visual baselines; owner changes",
+    "Odd encoded untracked hook-directory artifact (preserve exact path from Git status)",
+    "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-runtime-persistence-wiring (filesystem/Orca vs Git ownership discrepancy unresolved)",
+    "User-owned wp-sw-api-root and old external wp-ev02-name-review process/resources",
+    "All current wave03 worktrees until complete preservation, publication, integration and combined verification; no removal during adoption",
+    "Other repositories, unrelated worktrees/branches and historical empty residual directories"
+  ],
+  "coordinator_only_paths": [
+    "Shared APIs/contracts except exact serial leases",
+    "pyproject.toml",
+    "requirements*.txt",
+    "package.json",
+    "package-lock.json",
+    "docs/validation/features.yaml",
+    "docs/validation/LEDGER.md",
+    "docs/validation/findings_pending.yaml",
+    "docs/REMEDIATION_PLAN.md",
+    "docs/production/AGENT_ALLOCATION.md",
+    "docs/agent-process/REPO_CONFIG.json",
+    "docs/agent-process/state/",
+    "Integration/conflicts and canonical release/evidence metadata"
+  ],
+  "environment_requirements": [
+    "Preserve Python/aiohttp project architecture; metadata Python 3.11/3.12, HA suite requires its supported separate Python/dependencies (3.13+ in current contributing guide).",
+    "Use .venv/Scripts/python.exe on this Windows host; isolate MATRIX_DATA_DIR and UC_CONFIG_HOME for tests.",
+    "Pinned Node/npm/Playwright and Docker only for applicable explicitly authorized checks; adoption starts no services.",
+    "Strict complete core route inventory; partial documentation checks disable tests.route_inventory and do not overwrite route proof.",
+    "Never run ledger generation concurrently with registry checks or full source hooks.",
+    "Implementation commits use normal configured hook. Invocation-only core.hooksPath exception only for scoped instruction/evidence maintenance after actual checks.",
+    "Evidence bytes and original source/image/client attribution remain immutable; CR-aware whitespace checks."
+  ],
+  "verification_commands": [
+    {
+      "scope": "instruction_only",
+      "command": ".venv/Scripts/python.exe -m pytest tests/test_core_documentation.py tests/test_client_guides_docs.py tests/test_openapi_and_config_docs.py tests/test_security_docs.py tests/test_license_and_protocol_docs.py -q -p no:tests.route_inventory -p no:cacheprovider",
+      "environment": "Fresh isolated MATRIX_DATA_DIR / UC_CONFIG_HOME; no background services"
+    },
+    {
+      "scope": "instruction_only",
+      "command": "Parse all adopted JSON/JSONL, verify all MANIFEST.json members against source and destination, local Markdown targets/anchors, git -c core.whitespace=cr-at-eol diff --check"
+    },
+    {
+      "scope": "implementation_not_run_by_adoption",
+      "command": "Configured .githooks/pre-commit (Ruff + complete core pytest); ROUTE_COVERAGE_STRICT=1 for actual complete route gate; python -m mypy src/"
+    },
+    {
+      "scope": "REST_not_run_by_adoption",
+      "command": "Update features.yaml and tests/sim/test_sim_rest_reads.py; python -m tools.validate ledger alone, then registry/schema and tools.validate check serially"
+    },
+    {
+      "scope": "combined_pipeline_not_run_by_adoption",
+      "command": "Applicable .github/workflows/ci.yml jobs plus dedicated tests/uc, supported tests/ha/actual HA, pinned browser/UI, client campaigns and affected image/build checks as required by local protocol"
+    }
+  ],
+  "readiness": {
+    "authoritative_paths": [
+      "docs/validation/features.yaml",
+      "docs/validation/LEDGER.md",
+      "docs/validation/RELEASE_VALIDATION_CHECKLIST.md",
+      "docs/validation/TRON_OWNER_APPROVAL_20261020.md",
+      "docs/validation/RUNTIME_VALIDATION_INDEX.md",
+      "docs/planning/SOFTWARE_RELEASE_WAVES.md",
+      "docs/production/AGENT_ALLOCATION.md"
+    ],
+    "current_values": {
+      "canonical_features": 268,
+      "below_target": 203,
+      "stale": 57,
+      "source": "Last accepted wave02 ledger; wave03 qualification/evidence not yet applied. Adoption makes no readiness changes.",
+      "original_tron_owner_decisions": "closed; preserve recorded approval and affected verification",
+      "hardware_soak_field_final_artifact_gates": "open; explicit owner gates remain"
+    },
+    "change_requires_actual_qualifying_execution_and_independent_acceptance": true
+  },
+  "record_paths": {
+    "handoff": "docs/agent-process/state/HANDOFF.md",
+    "model_catalog": "docs/agent-process/state/MODEL_CATALOG.json",
+    "capacity_ledger": "docs/agent-process/state/CAPACITY.jsonl",
+    "allocation_ledger": "docs/production/AGENT_ALLOCATION.md",
+    "phase_records_root": "docs/agent-process/phases",
+    "archive_root": "build/ (private, campaign-specific immutable destinations; never overwrite populated evidence)"
+  },
+  "adoption_conflicts_and_unknowns": [
+    {
+      "topic": "quota",
+      "resolution": "Local stricter verified-fallback requirement overrides portable protocol section 5 permission for bounded unknown-quota routes. Capacity still never causes a project-wide stop."
+    },
+    {
+      "topic": "planning_transition",
+      "resolution": "Three-provider/family three-round preparation applies prospectively to future phase preparation/material changes. Historical program/source reviews and in-flight wave03 remain as recorded; no retrospective consensus or redo inferred."
+    },
+    {
+      "topic": "publication",
+      "resolution": "Local c9938f1 contains accepted source merges with combined evidence/verification pending, origin 411c664. Adopted docs can be committed locally; defer pushing descendants until release-work checks are complete. Existing push authority is sufficient; no new permission request."
+    },
+    {
+      "topic": "catalogs_and_capacity",
+      "resolution": "OpenCode catalog and cached Orca usage read during adoption. Codex effort catalog is dated 00:26:09Z; no app-server/background service started to refresh it. DeepSeek balance is dated, no new quota/launch qualification."
+    },
+    {
+      "topic": "routing",
+      "resolution": "Antigravity underlying backend/helper routing and used/remaining semantics unresolved; OpenCode catalog aliases are not qualified routes. Revalidate before affected tasks."
+    },
+    {
+      "topic": "external_resources",
+      "resolution": "Old external reservation and persistence workspace discrepancy remain protected; no cleanup authority inferred."
+    }
+  ],
+  "phase_execution_status": "not_started_by_adoption",
+  "current_execution_allocation_20261101": {
+    "observed_utc": "2026-11-01T07:29:05.058950+00:00",
+    "pins": "docs/planning/software-waves/EXECUTION_PINS.json",
+    "readiness": "docs/planning/software-waves/EXECUTION_READINESS.md",
+    "consensus": "docs/agent-process/phases/execution-pinning-20261101/CONSENSUS.json",
+    "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+    "current_owner_routing": "Anthropic/Gemini/OpenAI Codex/MiniMax allowed; DeepSeek exhausted. Prior exclusions/catalog/usage remain dated historical observations.",
+    "native_planning_routes": {
+      "OpenAI": "gpt-6.1-sol/high",
+      "Anthropic": "claude-opus-4-7/high launch receipt",
+      "MiniMax": "minimax-coding-plan/MiniMax-M3/thinking via opencode2; CLI effort unsupported"
+    },
+    "source_reviewer_qualification": "not granted by planning; see explicit per-row core/domain gates",
+    "runtime": "9a441843-8a87-4165-bfb7-1116dd285efb",
+    "orca_version": "1.4.245",
+    "run": "run_37205f6095b3",
+    "coordinator": "term_15310037-f316-4fe8-9bbd-012f4e5ce38f",
+    "max_new_active_workers": 2,
+    "integration_branch": "wp-runtime-completion",
+    "canonical_snapshot": {
+      "features": 268,
+      "below_target": 210,
+      "stale": 96,
+      "status": "unchanged by planning; earlier values in this file remain dated adoption snapshots"
+    },
+    "google_status": "held; exact native route/helpers/capacity not verified",
+    "deepseek_dispatch_allowed": false,
+    "implementation_launched_by_this_task": false
+  },
+  "current_recovery_allocation_20261104": {
+    "adopted_utc": "2026-11-04T10:40:42.423394+00:00",
+    "complete_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "consensus": "phases/remediation-recovery-20261104/CONSENSUS.json",
+    "scope": "Covered original-author product corrections plus prospective new-family/domain assessments; no qualification from planning",
+    "MiniMax_current_earned_scope": "Planning/prose/bounded inventories only; preserve historical qualification records",
+    "MiniMax_prospective_privacy_candidate": "ONE first assessment at corrected C4 tip, NOT qualified reviewer until exact independent all-six judgement PASS",
+    "async_review_candidate": "HELD exact-target provenance/conflict gate, no candidate launch or wiring lease",
+    "source_wave_A": {
+      "WS-C01": "Anthropic Opus5.5/high original component PRODUCT correction, Astra/high independent component source review; original author competence stays HOLD",
+      "PRIV-C4": "OpenAI Sol6.1/high original chain correction, explicit HELD qualified privacy acceptance; future exact M3review conditional on actual assessmentPASS"
+    },
+    "capacity": "At most2current+coordinator+protectedexternal=4; fresh intended-pool check before every creation/start and future review/correction gate",
+    "no_automatic_retakes": true
+  },
+  "current_functional_completion_allocation_20261104": {
+    "adopted_utc": "2026-11-04T18:57:44.618593+00:00",
+    "complete_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+    "consensus": "phases/functional-completion-20261104/CONSENSUS.json",
+    "scope": "AllCR01-14/30packages/65units retained, conditionalqualifiedsource/evidence/owner gates; firstFC-TRUTH+FC-PROVENANCE only",
+    "first_wave": "M3inventoryauthor/Solreview; Astranativeaudit/M3fidelityreview; independentreviewstaged/coordinatorchecksM3facts",
+    "failed_history": "UnchangedWSNOT_GRANTED/WSR03/D6wholehold/OpusM3privacyFAIL; no automaticretake",
+    "owner_budget": "ExistingextraOpusprivacyassessment+oneAstrajudge stillpendingexplicitanswer",
+    "no_release_authority": true
+  }
+}

@@ -10,6 +10,15 @@ import aiohttp
 from ..model import Action
 from .base import ActionResult, Client, HubInfo, NotSupportedError
 
+# Only public protocol values are persisted. Keep every observed name so a
+# masked cookie/auth/token/key header can never become evidence of absence.
+PUBLIC_RESPONSE_HEADERS = frozenset({
+    "access-control-allow-origin", "access-control-allow-methods", "access-control-allow-headers",
+    "access-control-max-age", "access-control-allow-credentials", "access-control-expose-headers", "vary",
+    "content-type", "x-content-type-options", "x-frame-options", "content-security-policy",
+    "referrer-policy", "permissions-policy", "strict-transport-security", "retry-after",
+})
+
 
 def rest_call(action: Action) -> tuple[str, str, Any]:
     """Map an intent to ``(method, path, json_body)``; the REST contract in one place."""
@@ -123,6 +132,14 @@ class ApiClient(Client):
                 "body": body if body is not None else data,
                 "status": resp.status,
                 "response": parsed,
+                "response_headers": {
+                    name.lower(): (", ".join(resp.headers.getall(name))
+                                   if name.lower() in PUBLIC_RESPONSE_HEADERS else "***")
+                    for name in resp.headers
+                },
+                "response_headers_redacted": sorted({
+                    name.lower() for name in resp.headers if name.lower() not in PUBLIC_RESPONSE_HEADERS
+                }),
                 "elapsed_ms": round((time.perf_counter() - t0) * 1000, 1),
             }
             return resp.status, parsed, record

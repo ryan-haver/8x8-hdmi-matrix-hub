@@ -1,0 +1,75 @@
+{
+  "observed_utc": "2026-11-04T12:55:48.038536+00:00",
+  "status": "PREPARED, not launched",
+  "job": {
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "name": "wp-remediation-ws-work-c01",
+    "branch": "remediation/ws-work-c01",
+    "base": "24c5170458200209836228646fdfc8784a967ad1",
+    "spec": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_TASK.md",
+    "title": "WS C01-R01 original-author wording correction within reserved product follow-up",
+    "tracked_paths": [
+      "src/rest_api/ws_request_work.py",
+      "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION.md"
+    ],
+    "deps": [
+      "task_dbebfdfebb1c"
+    ],
+    "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e"
+  },
+  "scope": "Only module docstring and _drain explanatory comment + NEW report; ASTequivalence removes only module docstring, testsunchanged. No runtime or planstrategy change.",
+  "reserve": "Explicit one conditional product correction/re-review used for genuine qualified C01-R01 finding; not new qualification/extrajudge/retake. Different-family Astra exact changed-commit review reserved, no verifiedbackup.",
+  "previous_writer": "Actual source Tasktask_92d47e338d62/ctx_15d1617958e2 positivelyreleased, archived and taskrefpublished; reviewworkerreleased too; current exact source head/status/config verified. Reuse originalownedtree, no worktree creation/reset.",
+  "capacity": {
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793796226364,
+      "error": null,
+      "age_seconds": 610
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400115,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": null,
+      "updatedAt": 1793796601418,
+      "error": null,
+      "age_seconds": 235
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932849,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 1,
+        "windowMinutes": 300,
+        "resetsAt": 1793812424231,
+        "resetDescription": null
+      },
+      "updatedAt": 1793796226013,
+      "error": null,
+      "age_seconds": 611
+    }
+  },
+  "fleet": "all155rows/twopages148released/sevenmetadata/0current",
+  "concurrency": "oneplannedauthor + coordinator + protectedexternal=3of4; no nesting",
+  "launch_capabilities": "ClaudeCode2.1.317 current --help supports full model selection/high; original actual Opus5.5native verified, no implicitfallback. Quota beforestart and futurereviewer independentlyfreshgated.",
+  "held": "PrivacyqualifiedreviewFAIL/NOverifiedfallback; D6/wiring and owner gates held. No newphase or sourceintake launched by prep."
+}

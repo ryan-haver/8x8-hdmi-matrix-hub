@@ -1,0 +1,16 @@
+{
+  "observed_utc": "2026-11-04T07:33:45.405390+00:00",
+  "scope": "Previous94b28 binding was correctly computed over working CRLF but its representation was not labelled. Canonical LF173270 now explicit; both original representations preserved privately and identical after exact normalization. No candidate retry, changed rubric, regrade or invented consensus.",
+  "working_CRLF": {
+    "bytes": 8460,
+    "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4"
+  },
+  "canonical_Git_LF": {
+    "bytes": 8308,
+    "sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+  },
+  "normalization_exact_equal": true,
+  "parsed_content_exact_equal": true,
+  "canonical_ref": "f0053aac4cb85a729f8455872086a61ce92a1d2d",
+  "no_packet_or_criteria_content_change": true
+}
