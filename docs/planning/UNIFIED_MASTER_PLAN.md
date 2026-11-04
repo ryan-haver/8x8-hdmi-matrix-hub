@@ -1,5 +1,8 @@
 # Unified master plan
 
+Latest diagnostic review (2026-11-04): [comprehensive source/evidence review](../audits/COMPREHENSIVE_PROJECT_REVIEW_20261104.md) and [corrective crosswalk](COMPREHENSIVE_REMEDIATION_20261104.md). These record current gaps and proposed acceptance work; the accepted phase packet, historical outcomes and owner gates remain authoritative. No implementation phase or workers were launched by the review.
+
+
 Current prospective execution allocation: [complete readiness and model/worktree reservations](software-waves/EXECUTION_READINESS.md), accepted through three genuine family planning rounds on2026-11-01. This supplements the historical roadmap; actual source qualification, dependencies, capacity and owner gates remain separate.
 
 
