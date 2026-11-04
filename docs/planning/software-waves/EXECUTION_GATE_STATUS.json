@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T06:48:27.330797+00:00",
+  "observed_utc": "2026-11-04T07:05:43.968061+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2666,10 +2666,17 @@
       "bounded_verdict": "PASS",
       "full_RV_completed": false,
       "source_integrated": false,
-      "integration_hold": "M-1 F-SEC-007 freshness; secondary evaluation pending/capacity-held",
+      "integration_hold": "M-1 F-SEC-007 freshness; privacy/artifact/combined source acceptance remain; report-quality evaluation no longer pending",
       "disposition": "docs/production/software-waves/RV-API034/execution-20261101/SOURCE_REVIEW_DISPOSITION_20261103.json",
       "next_pin": "EV-API034-SECURITY-REFRESH",
-      "automatic_dispatch": false
+      "automatic_dispatch": false,
+      "secondary_evaluation": {
+        "status": "accepted report-quality only",
+        "commit": "c3fcace6260e31d6c176f9feb6ab0dfd6ead849e",
+        "report": "docs/production/software-waves/RV-API034/execution-20261101/EVALUATION.md",
+        "sha256": "9d3825744f43985efa65dd373778d1036891d8cd8696daca05dc70adfa0e67f4",
+        "delivery": "docs/production/remediation-20261104/WAVE1_API_EVALUATION_DELIVERY.json"
+      }
     }
   },
   "historical_owner_decision_pending": [
@@ -2708,6 +2715,14 @@
     ],
     "new_bounded_authorship": "NOT_GRANTED; candidate component only",
     "source_changed_in_integration": false,
-    "findings_closed": []
+    "findings_closed": [],
+    "api_report_evaluation": "accepted/released/preserved/published; no source integration"
+  },
+  "prospective_privacy_review_domain": {
+    "status": "candidate prepared, NOT_QUALIFIED",
+    "packet": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/ASSESSMENT_PACKET.json",
+    "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+    "no_source_acceptance": true,
+    "attempt_budget": "one first candidate plus one fresh judge"
   }
 }
