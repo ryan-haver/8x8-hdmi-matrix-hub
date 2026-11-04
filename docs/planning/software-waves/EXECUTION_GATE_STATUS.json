@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T08:39:01.962393+00:00",
+  "observed_utc": "2026-11-04T08:54:00.926453+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,14 +2757,14 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "R1 OpenAI+MiniMax assessments ACTIVE; Anthropic same-input R1 reserved; no consensus/source execution",
+      "status": "OpenAI/MiniMax R1 delivered/released/preserved/task-ref-published; Anthropic R1 PREPARED, no peer content shared",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
         "OpenAI",
         "MiniMax"
       ],
-      "third_family": "Anthropic reserved R1 after slot release",
+      "third_family": "Anthropic same frozen packet PREPARED, not launched; no consensus/sourceexecution",
       "round1_actors": {
         "openai": {
           "task_id": "task_3533f742d143",
@@ -2800,7 +2800,7 @@
             "scope": "entry capture only, not outcome or descendant census"
           },
           "configuration_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
-          "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+          "status": "delivered/released/preserved/exacttaskrefpublished; substantive disposition pending all3R1",
           "dispatch_status": "dispatched",
           "worker_state": "ready"
         },
@@ -2838,11 +2838,12 @@
             "scope": "entry capture only, not outcome or descendant census"
           },
           "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
-          "status": "R1 independent assessment ACTIVE, no result/consensus/qualification",
+          "status": "delivered/released/preserved/exacttaskrefpublished; substantive disposition pending all3R1",
           "dispatch_status": "dispatched",
           "worker_state": "ready"
         }
-      }
+      },
+      "round1_delivery_metadata": "docs/agent-process/phases/remediation-recovery-20261104/ROUND1_DELIVERY_METADATA.json"
     }
   },
   "prospective_privacy_review_domain": {
