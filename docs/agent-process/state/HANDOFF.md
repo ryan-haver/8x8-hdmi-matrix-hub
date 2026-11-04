@@ -1,5 +1,14 @@
 # Current coordinator handoff
 
+## Privacy judge evidence-location limitation recorded — 2026-11-04T12:29:11.363581+00:00
+
+Same ONE PRIV-JUDGE Tasktask_32b607a54b40/ctx_aaa1ff6c95b5 askedmsg_1221f2fe5a54 about candidate repeated live/sensitivity output paths. No separate pre-overwrite record/summary bytes or immutable snapshots found/known in coordinator final-state captures or candidate owned build/temp roots. Earlier record bytes are UNAVAILABLE within known evidence; full original stdout/native/inventory remains separate evidence, never reconstructed replacement files. Prior archive/member/currentbyte verification measures final surviving state only, not preservation of overwritten artifacts or all-host writes. No host-wide backup claim.
+
+Two candidate-authored outside-assigned-root files prior-opus-assessment.md(24631bytes SHA987f7ef8...) andprior-opus-judge.md(27426bytes SHAd438aee4...) actuallystillpresent under AppData/Local/Temp/opencode were copied NOW byte-for-byte with source/current/copy/mtime checks into coordinator closeout/additional-outside-root-originals. They were not in earlier workspace/ownedtemparchives. Native shell creationcalls verified; no automatic-output relabel or leasewaiver. Originalfiles unchanged; originalreport/packets/manifests unchanged. Explicit current-byte receipt and nativeinputs remainprivate, public record docs/production/remediation-20261104/recovery-execution/PRIV_CANDIDATE_PRESERVATION_ADDENDUM.json.
+
+Repliedthroughsame livequestion with actual locations/unknowns; judgecontinues independent frozen6axes. No candidate rewrite/retry/new execution/extra judge, no predeterminedverdict/qualification/sourceacceptance or gateclosure. Retain every existing original/source/native/failed/candidateworkspace; no destructivecleanup.
+
+
 ## Single independent privacy-domain judge active — 2026-11-04T12:19:45.472143+00:00
 
 Genuine Astra/high Tasktask_32b607a54b40/ctx_aaa1ff6c95b5 now performs exactlyONE PRIV-JUDGE in NEW wp-recovery-privacy-m3-judge / qualification/recovery-privacy-m3-judge atf3a783b497786b36a08f302a9cd2fd7249526c35, unchanged source53853257. OnlyNEW PRIVACY-M3-ASSESSMENT/REVIEW.md/ownignoredtemp; source/tests/candidate frozen report readonly. Same adopted fullpacketSHAf8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e, exactjudgepacketSHA75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9, complete candidate reportSHAa06c1334b0e65d942078ece13a20979f56a4f2cb5e58b00a54f1c42acdfcfd0d, all6criteria unchanged. Judgecompetence/reportquality of actualM3review/native/tools/reads/invariants/oracles/calibration; no OpenAI source self-acceptance, forcedPASS/novelbugquota/newjudge/rewrite/retake. No verdict/qualificationyet.

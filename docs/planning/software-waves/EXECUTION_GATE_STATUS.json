@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T12:19:45.472143+00:00",
+  "observed_utc": "2026-11-04T12:29:11.363581+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -3157,6 +3157,10 @@
           "branch": "qualification/recovery-privacy-m3-judge",
           "exact_base": "f3a783b497786b36a08f302a9cd2fd7249526c35",
           "status": "ONE independent exact MiniMax privacy-review candidate competence JUDGE active; no verdict/qualification/source acceptance"
+        },
+        "evidence_location_addendum": {
+          "record": "docs/production/remediation-20261104/recovery-execution/PRIV_CANDIDATE_PRESERVATION_ADDENDUM.json",
+          "state": "Judge question answered: pre-overwrite record/summary originals unavailable in known captures; two actual outside-root authored files newly preserved; qualification still pending"
         }
       }
     },
