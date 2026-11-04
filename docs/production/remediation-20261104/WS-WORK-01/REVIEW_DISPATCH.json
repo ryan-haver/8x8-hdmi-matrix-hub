@@ -1,0 +1,106 @@
+{
+  "observed_utc": "2026-11-04T08:10:14.335991+00:00",
+  "status": "INDEPENDENT WS component review ACTIVE; no verdict or source acceptance",
+  "actor": {
+    "task_id": "task_b9f4d569ee06",
+    "dispatch_id": "ctx_eae88fba1228",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01-review",
+    "branch": "remediation/ws-work-01-review",
+    "exact_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "report": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+      "session": "01a1a59a-f00e-7853-ae5a-9033ade1c9c1",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native",
+      "bytes": 658523,
+      "sha256": "0764df987100f846f550c177fdf7c7942122cf69913652ae68abd64a8a27ef75",
+      "unassigned_helpers_observed": [],
+      "scope": "entry point only; no competence/outcome/completion or descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready"
+  },
+  "candidate_commit": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+  "author_family": "Anthropic",
+  "reviewer_family": "OpenAI",
+  "prewave_publication": "9e26c302694c05d22b6f58db7616de4e44baff8a",
+  "capacity": {
+    "observed_utc": "2026-11-04T08:09:15.130258+00:00",
+    "reserve": "two bounded tasks plus future independent WS component judgement/author correction/re-review; every future stage freshly gated",
+    "unknown": "absolute allowance/other-host demand not exposed",
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400157,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": 1793796600157,
+        "resetDescription": "5:50 AM"
+      },
+      "updatedAt": 1793779126187,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 7,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793779126598,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 140,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 140,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzIzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAwMzo0MTo1MiIsImRpc3BhdGNoSWQiOiJjdHhfZjEyY2IyMzIxYjc5IiwiZGF0YWJhc2VJZCI6Nzk2fX0"
+      },
+      {
+        "limit": 100,
+        "total": 140,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "all_pages": true,
+    "terminal_counts": {
+      "retained": 7,
+      "released": 133
+    },
+    "historical_retained": 6,
+    "current_resources": 1
+  },
+  "concurrency": "one current worker+coordinator+protectedexternal=3 of4; no nesting",
+  "qualification": "Component author NOT_GRANTED until allsix exact-component verdict and coordinator disposition; no generic grant. Reviewer async lifecycle scope already independently supported; no self-review.",
+  "scope": "NEW REVIEW and own ignored/temp only; source/test/AUTHOR read-only, untracked helper-disable config never staged. CR-01 existing handler wiring unchanged, no source integration.",
+  "privacy": "Independent privacy competence FAIL remains, no automatic retake/rewrite/additionaljudge; unrelated narrow API-refusal qualification unchanged. Privacy source/freshness/combined/owner gates open.",
+  "publication": "Publish scoped launch receipt with docs checks, independently verify remote/local and end for Orca wake. No completion polling."
+}

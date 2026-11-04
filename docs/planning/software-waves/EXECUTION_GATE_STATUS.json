@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T08:08:26.253454+00:00",
+  "observed_utc": "2026-11-04T08:10:14.335991+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2718,8 +2718,43 @@
     "findings_closed": [],
     "api_report_evaluation": "accepted/released/preserved/published; no source integration",
     "WS_component_environment": "Node cause repaired, authorized normal hook67 PASS; failed66/prior originals preserved",
-    "WS_component": "candidate15c069bd delivered/normal hook PASS; exact independent review PREPARED, no wiring or authorship acceptance",
-    "privacy": "independent judgement e8ce3966 FAIL, no privacy review qualification or source acceptance"
+    "WS_component": "candidate15c069bd normal hook PASS; independent Astra exact-component review ACTIVE, no verdict/wiring/authorship acceptance",
+    "privacy": "independent judgement e8ce3966 FAIL, no privacy review qualification or source acceptance",
+    "WS_component_reviewer": {
+      "task_id": "task_b9f4d569ee06",
+      "dispatch_id": "ctx_eae88fba1228",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01-review",
+      "branch": "remediation/ws-work-01-review",
+      "exact_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+        "session": "01a1a59a-f00e-7853-ae5a-9033ade1c9c1",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 658523,
+        "sha256": "0764df987100f846f550c177fdf7c7942122cf69913652ae68abd64a8a27ef75",
+        "unassigned_helpers_observed": [],
+        "scope": "entry point only; no competence/outcome/completion or descendant census"
+      },
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
   },
   "prospective_privacy_review_domain": {
     "status": "FAIL; mandatory six-axis competence not earned",
