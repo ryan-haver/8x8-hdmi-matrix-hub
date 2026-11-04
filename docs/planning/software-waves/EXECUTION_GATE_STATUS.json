@@ -1,5 +1,5 @@
 {
-  "observed_utc": "2026-11-04T10:07:14.003230+00:00",
+  "observed_utc": "2026-11-04T10:10:49.451150+00:00",
   "accepted_plan_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
   "planning_acceptance_unchanged": true,
   "core_reviewer_qualification": {
@@ -2757,7 +2757,7 @@
     },
     "WS_component_review_disposition": "docs/production/remediation-20261104/WS-WORK-01/REVIEW_DELIVERY.json",
     "recovery_planning": {
-      "status": "All3R2originals preserved and workers released; MiniMax R2 task-ref publication held on GitHub server errors. Final same-packet R3 plan/allocation prepared, NOT_ADOPTED",
+      "status": "R3 OpenAI+Anthropic actual same-packet decisions ACTIVE, MiniMax next slot; no verdict/adoption/source execution",
       "packet_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
       "packet": "docs/agent-process/phases/remediation-recovery-20261104/INPUT_PACKET.json",
       "first_wave": [
@@ -2967,7 +2967,86 @@
       "round2_complete": "docs/agent-process/phases/remediation-recovery-20261104/ROUND2_COMPLETE.json",
       "final_packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
       "final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
-      "round3_status": "PREPARED, no actual votes/Tasks/Dispatches yet"
+      "round3_status": "ACTIVE first two; all three explicit same-hash ACCEPT still required",
+      "round3_actors": {
+        "openai": {
+          "task_id": "task_3c062bb9de42",
+          "dispatch_id": "ctx_6cb8482cdd03",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "exact_base": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/openai.md",
+          "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "01a1a608-cf9b-7fe1-af42-24c752a8ca18",
+            "models": [
+              "gpt-6-astra"
+            ],
+            "effort": "high native",
+            "bytes": 849461,
+            "sha256": "e01b0452e1b758cadca0e9b72b530113a3e70d63673e3162e969f71d6584e7d7",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "R3 same-packet final decision ACTIVE; no verdict/adoption/source execution",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        },
+        "anthropic": {
+          "task_id": "task_79d0d9028045",
+          "dispatch_id": "ctx_9d313bb15f8b",
+          "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "exact_base": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+          "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/anthropic.md",
+          "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+          "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+          "launch": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-5-5",
+              "effort": "high"
+            }
+          },
+          "turn_start": "observed",
+          "native_entry": {
+            "status": "actual native model at exact Task/Dispatch/cwd",
+            "session": "816774bf-9bb2-4931-95c6-942e6fe22021",
+            "models": [
+              "claude-opus-5-5"
+            ],
+            "effort": "high explicit launch/local config; native per-turn effort unexposed",
+            "bytes": 1135398,
+            "sha256": "9c6fbf132f35cc02a7ab7fb2b67f78614e18ae1a5bad51877b8cc7d57379dbd5",
+            "unassigned_helpers_observed": [],
+            "scope": "entry only; no competence/completion/descendant census"
+          },
+          "status": "R3 same-packet final decision ACTIVE; no verdict/adoption/source execution",
+          "dispatch_status": "dispatched",
+          "worker_state": "ready"
+        }
+      },
+      "MiniMax_R2_publication": "RESOLVED: third normal same-ref fast-forward succeeded, exact remote/local6671c927 verified; two earlier GitHub server errors/hold preserved"
     }
   },
   "prospective_privacy_review_domain": {
