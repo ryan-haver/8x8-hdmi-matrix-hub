@@ -37,6 +37,22 @@
     "concurrency_reservation": "Four total including coordinator; reserve one old external/unverifiable process pending positive settlement. At most two new active workers until revalidated. Historical retained rows are not new assignments.",
     "launch_support": "worker-start advertises model/effort. OpenCode requires an existing worktree and verified execution-host CLI; effort unsupported. Help support is not a new successful launch."
   },
+  "temporary_storage": {
+    "owner_direction": "decision 21, 2026-11-10",
+    "ordinary_output": "Owned registered agent-storage payload or %TEMP%",
+    "short_path_pattern": "C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/",
+    "forbidden_new_location": "C:/t or any other new drive-root folder",
+    "owner_marker": ".owner.json, created before all other task output",
+    "owner_fields": ["repo", "run", "task", "dispatch", "created", "purpose", "keep"],
+    "default_keep": null,
+    "retention_fields": ["reason", "until"],
+    "short_path_is_evidence_storage": false,
+    "preservation": "Preserve required bytes in the repo, worktree or retained payload; compare source/destination SHA256 before removal. Verify decompressed bytes for lossless compression.",
+    "worker_closeout": "Delete owned short-path output before worker_done; close disposable registered payloads and report removed/kept bytes.",
+    "coordinator_cleanup": "Task done or worker released, no process user, and keep null or expired; untagged folders require age over two days and no process user. Follow installed SPOKE section 5a for locks.",
+    "historical_packets": "Dated/frozen paths remain immutable provenance. This policy overrides their temp-root directions for all future invocations.",
+    "environment_values": "Never print or serialize environment values, secrets or credentials."
+  },
   "planning": {
     "debate_minimum_distinct_families": 3,
     "debate_rounds": 3,

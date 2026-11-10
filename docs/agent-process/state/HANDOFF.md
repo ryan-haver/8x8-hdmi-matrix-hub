@@ -1,5 +1,34 @@
 # Current coordinator handoff
 
+## Owner decision 21: short-temp cleanup and prospective policy — 2026-11-10
+
+Removed all 34 completed-task folders and `C:/t` itself after classifying
+2,368,919,531 logical bytes. Preserved 1,451,788,039 original evidence bytes:
+12,765,120 bytes reuse hash-verified existing copies; newly retained receipts
+and losslessly compressed inventories occupy 120,314,386 bytes. The remaining
+917,131,492 bytes were regenerable fixtures/caches or Git-backed source copies.
+No process was ended. Restart Manager found no holders; hidden generated test
+directories explained the first removal refusal. Source-copy bytes were checked
+against reachable 938ae303 and bdcf06dc Git blobs before removal.
+
+Future workers use registered storage or `%TEMP%`, or tagged
+`C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/` for short paths.
+Create `.owner.json` first, preserve needed evidence elsewhere with SHA-256
+checks, and remove the task folder before `worker_done`. Historical task/plan
+paths remain immutable observations; current AGENTS/protocol/config policy
+overrides them prospectively. Do not recreate the retired root.
+
+The disposition is `docs/production/storage-cleanup-20261110/C_T_DISPOSITION.json`.
+Private byte-location crosswalk and hashes are in
+`build/short-temp-cleanup-20261110/preservation.json` (SHA-256
+`d353fee99b228c370d36d3274e34d2691c7244e44b19aee622cb45666ab8502c`). Five existing documentation modules passed 489 tests,
+zero failures/errors/skips, with route-inventory and pytest cache disabled;
+no product/source qualification or release gate changed. A documentation-only
+invocation-scoped hook exception is used for this scoped policy/record commit.
+The exact-commit independent prose audit and publication receipt are retained
+after this commit in the same private evidence directory; consult those actual
+outcomes before dispatching a later wave. No new development phase is started.
+
 ## Support fidelity PASS; current execution wave settled — 2026-11-04T22:02:46.465965+00:00
 
 MiniMax Tasktask_14f236edde4f/ctx_e2922f3f76f4 deliveredfad50dee3912847cf38f2dfff1a95254fd119006 parentabb5254, soleREVIEW SHA183e278f63511edb530bd2def19f7565badadbcb10e8b89fe644d0d84a64fd10. PASS receipt-fidelity only, with threeLOWnonblocking errata/free-space planinput/DockerTOTALvs24exitedcensus/trackedfilesvsrootdirs and fourrefinements. Formalcoornotesrecordthese alongsideimmutableSolreport, no authorfixcycle needed. Completionreviewed-report-worktreehash miscopied REVIEWdigest; actuale323CRLF/1b84GitLF identity independentlyverified and supplemented without rewritingoriginalreceipt.

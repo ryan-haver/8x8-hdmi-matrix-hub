@@ -52,6 +52,14 @@ Technical scope and release acceptance remain in the
 - Preserve root/private runtime data, unrelated edits, historical failed runs,
   evidence bytes, baselines and unresolved workspaces. A stale handle or missing
   status is not proof of exit. Follow the installed Orca recovery guide.
+- **Temporary storage (owner decision 21, 2026-11-10):** never create `C:/t`
+  or another new drive-root folder. Use a registered agent-storage payload or
+  `%TEMP%`; when a short path is necessary, use
+  `C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/` and create its
+  `.owner.json` first. Follow the [temporary-output rules](docs/ORCHESTRATION_PROTOCOL.md#temporary-output-and-short-paths)
+  for ownership, evidence preservation and task-end removal. Include them in
+  every worker spec. Historical task packets keep their original paths as
+  records; those paths never authorize a new invocation.
 - Commit scoped integration records, push the integration branch and verify
   exact remote/local head equality before another execution wave. Follow the
   [publication and verification rules](docs/ORCHESTRATION_PROTOCOL.md#verification-and-publication).

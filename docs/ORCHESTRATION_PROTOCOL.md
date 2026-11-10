@@ -258,6 +258,41 @@ acknowledgment; repeated old messages do not prove the inbox is current. This
 does not transfer the coordinator's ownership of completion acknowledgment or
 worker settlement to the worker.
 
+## Temporary output and short paths
+
+Owner decision 21 (2026-11-10) prohibits creating `C:/t` or another new folder
+at a drive root. Use an owned, registered agent-storage payload or `%TEMP%`
+for ordinary scratch. If Windows path limits require a short path, use
+`C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/`.
+
+Before writing anything else in that task folder, create `.owner.json` with
+`repo`, `run`, `task`, `dispatch` (or null), `created` (ISO UTC), `purpose`
+and `keep` (null). Retention past the task requires
+`"keep": {"reason": "<why>", "until": "<YYYY-MM-DD>"}`. Include these rules
+in every worker spec. Do not serialize environment values, credentials or
+secrets into a marker, log or receipt.
+
+`C:/tmp` is never evidence storage. Before `worker_done`, preserve only needed
+evidence in its established repository/worktree destination or a retained
+storage payload. Verify source and destination SHA-256, then remove the task's
+short-path folder and close disposable storage output. A receipt may point to
+an already retained copy only after verifying its exact bytes. Losslessly
+compressed evidence must verify the SHA-256 of its decompressed bytes.
+
+The coordinator may remove a tagged task folder when its task is done or its
+worker released, no process uses it, and `keep` is null or its `until` date is
+past. Untagged folders older than two days require proof that no process uses
+them. Use the installed SPOKE section 5a procedure for locks; never force a
+worktree removal or end an unrelated process.
+
+These rules override future temp-path instructions in dated task specs and
+frozen planning/configuration packets. Preserve their original path strings,
+hashes and attribution as history; resolve new invocations through the current
+`temporary_storage` policy in `docs/agent-process/REPO_CONFIG.json`. A historical
+path reference alone does not require retaining regenerable runtime fixtures.
+An open acceptance gate or committed record that requires original evidence
+bytes does require preserving those bytes and recording their new location.
+
 ## Independent review and qualification
 
 Every **new implementation deliverable**, including fixtures, tests and tooling,
