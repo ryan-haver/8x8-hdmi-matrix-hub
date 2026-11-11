@@ -38,7 +38,10 @@
     "launch_support": "worker-start advertises model/effort. OpenCode requires an existing worktree and verified execution-host CLI; effort unsupported. Help support is not a new successful launch."
   },
   "temporary_storage": {
-    "owner_direction": "decision 21, 2026-11-10",
+    "owner_direction": "decisions 21 and 22, 2026-11-10",
+    "build_outputs": "Only worktree output or tagged C:/tmp task folder; never %TEMP%, Claude/OpenCode temp or tool scratch",
+    "session_end_data_review": "Ignored/untracked paths >=50 MB against code and unattended consumers; preserve required evidence, credentials/user data/assets; list unknowns with path/bytes/recommendation",
+    "historical_build_crosswalk": "Primary build/data-review-20261110/historical-evidence-manifest.jsonl.gz; hashes in docs/production/storage-cleanup-20261110/DATA_REVIEW.json; RESTORATION.txt documents decoder and safe extraction",
     "ordinary_output": "Owned registered agent-storage payload or %TEMP%",
     "short_path_pattern": "C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/",
     "forbidden_new_location": "C:/t or any other new drive-root folder",

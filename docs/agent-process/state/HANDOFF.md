@@ -1,5 +1,37 @@
 # Current coordinator handoff
 
+## Owner decision 22: primary data review — 2026-11-10
+
+Reviewed large ignored/untracked paths across the primary and remaining
+worktrees. Removed 34,106,152,738 logical bytes: 33,607,044,141 bytes of historical
+evidence now preserved in one verified archive, 341,611,826 bytes of rebuildable
+output, 140,613,059 bytes of unused nested release Python environment and
+16,883,712 bytes of identified Mypy SQLite caches. No tracked files, credentials
+or user assets were deleted. Outer hook Python and both hook Node dependencies,
+original assets, current custody/visual evidence and unresolved data remain.
+
+The 19,994,174,041-byte archive preserves every original evidence content hash;
+2,504,954,385 duplicate source bytes use standard tar hardlinks. The verified
+manifest and safe restoration instructions are in primary
+`build/data-review-20261110/`. Windows tar needs the documented decoder pipeline
+with an explicit 2 GiB memory limit. A canonical/duplicate extraction probe
+recovered matching bytes. Gross/net figures are logical, not measured allocated
+space; the final storage receipt includes additional closeout metadata.
+
+The [disposition](../../production/storage-cleanup-20261110/DATA_REVIEW.json) pins
+archive/index hashes. Historical evidence paths resolve through that manifest;
+frozen records are unchanged. `additional-cache-removal.json` supersedes 32
+initial keep rows after Mypy schema identification. `needs-owner.json` privately
+lists retained data candidates, user-owned `wp-sw-api-root/build` (72,903,880
+bytes) and 397 unfollowed link/reparse entries (zero logical file bytes), with
+keep recommendations. No owner gate is needed for completed safe cleanup.
+
+Build outputs/caches now use worktree paths or tagged `C:/tmp` task paths, never
+ordinary temp or tool scratch. This is policy/evidence maintenance: scoped
+documentation checks, exact-SHA independent prose/fidelity audit and publication
+receipts are recorded privately, without changing source qualification or
+release gates. No product phase is started.
+
 ## Owner decision 21: short-temp cleanup and prospective policy — 2026-11-10
 
 Removed all 34 completed-task folders and `C:/t` itself after classifying

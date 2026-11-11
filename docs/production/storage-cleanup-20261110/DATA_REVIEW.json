@@ -1,0 +1,50 @@
+{
+  "ownerDirection": "decision 22, 2026-11-10",
+  "run": "run_37205f6095b3",
+  "sourceBase": "597827b0f6ef523209b69c95038750732c3ddd46",
+  "scope": "untracked/ignored paths >=50 MB in primary plus remaining worktrees; logical byte accounting",
+  "archive": {
+    "relativeDirectory": "build/data-review-20261110",
+    "name": "historical-evidence.tar.zst",
+    "sha256": "cd7c5df163b930304c64d72450cec92593d68558543a9ee5fa5b710523f26121",
+    "bytes": 19994174041,
+    "originalBytesPreserved": 33607044141,
+    "uniqueOriginalBytes": 31102089756,
+    "duplicateOriginalBytes": 2504954385,
+    "regularMembers": 60996,
+    "hardlinkMembers": 178823,
+    "manifest": "historical-evidence-manifest.jsonl.gz",
+    "manifestSha256": "d1efc8df102c89580b0c2c61e0d29d683d329479949fd597564081ec4a23e034",
+    "restoration": "RESTORATION.txt",
+    "decoder": "zstd window30 requires explicit 2 GiB memory limit; tested Python zstandard stream into Windows tar with canonical+duplicate hash verification"
+  },
+  "removal": {
+    "looseArchivedBytes": 33607044141,
+    "regenerableBuildBytes": 341611826,
+    "unusedNestedReleaseVenvBytes": 140613059,
+    "generatedMypyCacheBytes": 16883712,
+    "grossRemovedBytes": 34106152738,
+    "removedFiles": 310725,
+    "heldRemovalRows": [],
+    "netBeforeAdditionalCloseoutMetadataBytes": 14098668562
+  },
+  "kept": {
+    "outerVenvHookRuntimeBytes": 156643938,
+    "primaryNodeHookDependencyBytes": 63812410,
+    "externalWorktreeNodeHookDependencyBytes": 63811423,
+    "primaryArchiveUserAssetsBytes": 89015949,
+    "directBuildOriginalsBytes": 650313622,
+    "externalUserOwnedBuildBytes": 72903880,
+    "opaqueReparseEntries": 393,
+    "ordinaryLinks": 4,
+    "reasons": "Unattended commit-hook dependencies, code/custody inputs, current cleanup evidence, approved visual assets, credentials/config candidates and unresolved user data remain in place. No protected contents or environment values serialized."
+  },
+  "needsOwner": "Private build/data-review-20261110/needs-owner.json lists grouped paths, bytes and keep recommendations; retained unknowns do not block completed safe cleanup.",
+  "manifestSupplement": "Immutable initial manifest keep rows for 32 Mypy files/files2 SQLite shards are superseded by additional-cache-removal.json after read-only schema identification and fresh hash checks.",
+  "verification": "Every archived original content hash and duplicate link mapping checked before fresh-hash loose removal; two-file independent extraction probe passed. Receipts retained privately. Documentation checks and exact-SHA independent prose/fidelity audit recorded separately after candidate creation; no source/runtime qualification or release implied.",
+  "authorship": {
+    "family": "OpenAI",
+    "model": "Current coordinator runtime; exact model not separately attested"
+  },
+  "reviewDue": "2026-12-10"
+}

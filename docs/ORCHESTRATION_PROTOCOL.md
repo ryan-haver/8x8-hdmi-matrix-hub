@@ -265,6 +265,10 @@ at a drive root. Use an owned, registered agent-storage payload or `%TEMP%`
 for ordinary scratch. If Windows path limits require a short path, use
 `C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/`.
 
+Owner decision 22 restricts build outputs and caches to the worktree or its
+tagged `C:/tmp` task folder. They never go in `%TEMP%`, Claude/OpenCode temp
+folders or tool scratch; the ordinary scratch rule above covers small tool files.
+
 Before writing anything else in that task folder, create `.owner.json` with
 `repo`, `run`, `task`, `dispatch` (or null), `created` (ISO UTC), `purpose`
 and `keep` (null). Retention past the task requires
@@ -292,6 +296,22 @@ hashes and attribution as history; resolve new invocations through the current
 path reference alone does not require retaining regenerable runtime fixtures.
 An open acceptance gate or committed record that requires original evidence
 bytes does require preserving those bytes and recording their new location.
+
+At each session end, review ignored/untracked paths of at least 50 MB in the
+primary and remaining worktrees against code. Keep code-read data and unattended
+hook/tool/service dependencies. Remove proven rebuildable output; preserve required
+original evidence, credentials, `.env` files and user assets. Keep unknowns and
+report path, size and recommendation. Historical evidence now resolves through
+`build/data-review-20261110/historical-evidence-manifest.jsonl.gz` in the primary
+checkout. The [disposition](production/storage-cleanup-20261110/DATA_REVIEW.json)
+pins archive and manifest hashes. Original containers remain byte-exact inside
+one tar archive; duplicate members are hardlinks to canonical members. Consult
+`RESTORATION.txt`: the tested decoder permits 2 GiB for the zstd window before
+streaming to Windows tar. Native tar alone exceeds its default decoder limit.
+Restore into an empty owned directory; use the manifest to select canonical
+members before duplicate hardlinks. Frozen historical paths/hashes stay unchanged.
+The initial manifest is supplemented by `additional-cache-removal.json` for 32
+subsequently identified Mypy SQLite cache shards.
 
 ## Independent review and qualification
 

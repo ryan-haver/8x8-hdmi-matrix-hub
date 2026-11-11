@@ -60,6 +60,13 @@ Technical scope and release acceptance remain in the
   for ownership, evidence preservation and task-end removal. Include them in
   every worker spec. Historical task packets keep their original paths as
   records; those paths never authorize a new invocation.
+- **Build output placement (owner decision 22):** build outputs and caches go
+  in the worktree or its tagged `C:/tmp` task folder. Never put them in `%TEMP%`,
+  Claude/OpenCode temp folders or tool scratch. At session end review ignored
+  and untracked paths of at least 50 MB against code and unattended consumers;
+  preserve credentials, user data and required evidence. See the current
+  [archive crosswalk](docs/production/storage-cleanup-20261110/DATA_REVIEW.json)
+  before looking up historical `build/` evidence.
 - Commit scoped integration records, push the integration branch and verify
   exact remote/local head equality before another execution wave. Follow the
   [publication and verification rules](docs/ORCHESTRATION_PROTOCOL.md#verification-and-publication).
