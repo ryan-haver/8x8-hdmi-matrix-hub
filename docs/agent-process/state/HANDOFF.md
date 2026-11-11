@@ -1,5 +1,27 @@
 # Current coordinator handoff
 
+## Owner decision 23: bounded retention application — 2026-11-10
+
+Installed SPOKE5c supersedes indefinite evidence and recorded-path promises.
+[Repository retention policy](../../production/STORAGE_RETENTION.md) now distinguishes protected source,
+history and user assets from closed evidence, recovery archives, logs, builds
+and scratch. Original closure clocks never reset when bytes are copied or
+compressed. Longer keeps require reason/until metadata; owner alone renews.
+
+The verified owner22 aggregate stays unchanged now, per explicit hub guidance.
+A per-member manifest supplies classes, original-close evidence and deadlines;
+one monthly rebuild drops due eligible members. The original source/hash
+manifest remains unchanged. Bulletin 2026-11-10s replaces missing-date holds
+with newest original item mtime when no authoritative close record or open
+reference exists; no extra keep entries remain. Unique source and user data
+stay protected, without inventing task dates or source qualification. The [rollout record](../../production/storage-cleanup-20261110/RETENTION_POLICY.json) pins this manifest and
+the physical plan. 272 closed-work artifacts (21,399,548 bytes) have a verified
+8,604,322-byte compressed candidate before any loose copy is removed; 118,167
+bytes of completed-task bytecode are proposed for purge. Actual guarded
+application, blocked/held cases, independent review and publication receipts
+are written afterward in primary `build/retention-20261110/`; read them before
+claiming removal or reclaimed space. No product phase or release is started.
+
 ## Owner decision 22: primary data review — 2026-11-10
 
 Reviewed large ignored/untracked paths across the primary and remaining

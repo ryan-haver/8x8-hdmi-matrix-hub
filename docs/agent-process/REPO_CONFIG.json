@@ -38,7 +38,11 @@
     "launch_support": "worker-start advertises model/effort. OpenCode requires an existing worktree and verified execution-host CLI; effort unsupported. Help support is not a new successful launch."
   },
   "temporary_storage": {
-    "owner_direction": "decisions 21 and 22, 2026-11-10",
+    "owner_direction": "decisions 21, 22 and 23, 2026-11-10",
+    "retention_authority": "Installed Orca SPOKE section 5c / owner23 overrides indefinite evidence and recorded-path retention; docs/production/STORAGE_RETENTION.md",
+    "retention_clocks": "Original work closure, never copy/archive/review date; when no close record/open reference exists use newest original item mtime per bulletin5s; scratch/rebuildables task end; pinned builds/logs14d; shipped binary1y; closed evidence loose14d/archive90d; landed/abandoned recovery archives30d with surviving commits",
+    "longer_keep": "Explicit keep.reason and keep.until, at most1year; owner alone renews. Source/credentials/user assets and genuinely open dependencies remain protected.",
+    "aggregate_retention_manifest": "Primary build/retention-20261110/historical-member-retention.jsonl.gz; original source/hash manifest unchanged; monthly rebuild anchored to original deadlines per hub msg_d2a88a442999",
     "build_outputs": "Only worktree output or tagged C:/tmp task folder; never %TEMP%, Claude/OpenCode temp or tool scratch",
     "session_end_data_review": "Ignored/untracked paths >=50 MB against code and unattended consumers; preserve required evidence, credentials/user data/assets; list unknowns with path/bytes/recommendation",
     "historical_build_crosswalk": "Primary build/data-review-20261110/historical-evidence-manifest.jsonl.gz; hashes in docs/production/storage-cleanup-20261110/DATA_REVIEW.json; RESTORATION.txt documents decoder and safe extraction",

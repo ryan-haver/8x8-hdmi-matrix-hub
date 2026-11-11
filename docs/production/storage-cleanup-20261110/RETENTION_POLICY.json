@@ -1,0 +1,44 @@
+{
+  "ownerDirection": "decision23, 2026-11-10",
+  "authority": "Installed Orca SPOKE5c; hub bulletin msg_ead791f1a17b and clarification msg_d2a88a442999; missing-close-date fallback bulletin msg_9f608196bc4f",
+  "base": "89a9b43ff3b7304afa1eb51d2a26ab7d58c7e2b6",
+  "state": "Policy and SHA-bound application plan; no purge/prune performed yet. Independent exact-SHA review required before guarded application.",
+  "scope": "Primary, all repo workspaces, owned build-targets/worktree-archives and Git-internal artifact storage; source/history/refs/committed records/credentials/user assets protected",
+  "memberManifest": {
+    "path": "build/retention-20261110/historical-member-retention.jsonl.gz",
+    "sha256": "e712573cd9e4cc53b1dd65a03bc64beded423c982147bf2963268bfa1c69d774",
+    "bytes": 11334349,
+    "members": 239819,
+    "classOriginalBytes": {
+      "closed-work-evidence": 6146342963,
+      "source-preserved": 5834060,
+      "git-backed-source-copy": 109701903,
+      "recovery-or-worktree-archive": 26942173184,
+      "log": 204741902,
+      "rebuildable": 178080062,
+      "pinned-build-output": 20170067
+    },
+    "originalArchiveSha256": "cd7c5df163b930304c64d72450cec92593d68558543a9ee5fa5b710523f26121",
+    "originalSourceHashManifestSha256": "d1efc8df102c89580b0c2c61e0d29d683d329479949fd597564081ec4a23e034",
+    "nextMonthlyRebuildAt": "2026-11-20T23:59:59.999000+00:00",
+    "noRewriteNow": true,
+    "limits": "Native task-group completion, explicitly labelled accepted-phase bound or newest original item mtime fallback under bulletin5s after no open-reference check. No clock resets to new archive/review date. Actual source and open/credential/user-data guards remain."
+  },
+  "proposedPhysicalApplication": {
+    "pruneOriginalBytes": 21399548,
+    "pruneFiles": 272,
+    "verifiedCompressedBytes": 8604322,
+    "potentialPrunedReductionBytes": 12795226,
+    "pruneArchiveSha256": "74f1b77682e0e28dd89f07fea00586eb70f322b58def43828bb0e31bca464503",
+    "pruneManifestSha256": "a9b9fc242215482a38309178c91cdbf0b8462907be8766a36ed5a106670d9d47",
+    "rebuildablePurgeBytes": 118167,
+    "executionReceipt": "build/retention-20261110/application-receipt.json, written after actual guarded application; consult it for completed/held/blocked outcomes"
+  },
+  "keepExceptions": {
+    "entries": 0,
+    "reason": "Missing close dates use newest original item mtime under bulletin5s; no owner-review or keep entries solely for missing dates. Actual source/user data protected by class. Owner alone renews genuine longer keeps."
+  },
+  "sharedStorage": "No repo-owned entries found in current build-targets or worktree-archives inventories; unrelated entries untouched",
+  "verification": "Applicable existing documentation checks, JSON/anchor/whitespace and independent policy/fidelity review; no source/runtime/qualification or release acceptance implied",
+  "applicationPlanSha256": "9bfb7c69f82843d227852f0ce41321535181d41d10c0fdc981b55b1c4b182065"
+}
