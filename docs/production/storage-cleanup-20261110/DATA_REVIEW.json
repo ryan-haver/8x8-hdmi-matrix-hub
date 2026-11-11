@@ -16,7 +16,11 @@
     "manifest": "historical-evidence-manifest.jsonl.gz",
     "manifestSha256": "d1efc8df102c89580b0c2c61e0d29d683d329479949fd597564081ec4a23e034",
     "restoration": "RESTORATION.txt",
-    "decoder": "zstd window30 requires explicit 2 GiB memory limit; tested Python zstandard stream into Windows tar with canonical+duplicate hash verification"
+    "decoder": "zstd window30 requires explicit 2 GiB memory limit; tested Python zstandard stream into Windows tar with canonical+duplicate hash verification",
+    "looseRestorationSha256": "bf2c79b539d3ac32de37e08aab13448a5e8c45e457174c143845c06087380db3",
+    "embeddedRestorationSha256": "56c26dbbdaaac37ca1856443a501c029f110da1afefcf667d7842e601477763b",
+    "restorationDifference": "Archive-embedded text predates the successful native-tar restore probe. The loose RESTORATION.txt adds the tested decoder pipeline and Windows default memory-cap warning. Preserve both originals; consult the hash-pinned loose copy for restoration. Archive content/hash remains unchanged.",
+    "manifestActions": "Only action=archive rows map to archive members; action=keep rows remain at original paths except 32 supplemental Mypy cache removals; action=delete rows were intentionally discarded and are not recoverable from this archive."
   },
   "removal": {
     "looseArchivedBytes": 33607044141,
@@ -26,7 +30,10 @@
     "grossRemovedBytes": 34106152738,
     "removedFiles": 310725,
     "heldRemovalRows": [],
-    "netBeforeAdditionalCloseoutMetadataBytes": 14098668562
+    "preAuditMetadataBytes": 13310135,
+    "netAtPreAuditSnapshotBytes": 14098668562,
+    "netSnapshotFormula": "grossRemovedBytes - archive.bytes - preAuditMetadataBytes; final closeout metadata is additional",
+    "netSnapshotReceipt": "build/data-review-20261110/preaudit-accounting-snapshot.json (nine metadata/index files with sizes and hashes)"
   },
   "kept": {
     "outerVenvHookRuntimeBytes": 156643938,
@@ -37,7 +44,17 @@
     "externalUserOwnedBuildBytes": 72903880,
     "opaqueReparseEntries": 393,
     "ordinaryLinks": 4,
-    "reasons": "Unattended commit-hook dependencies, code/custody inputs, current cleanup evidence, approved visual assets, credentials/config candidates and unresolved user data remain in place. No protected contents or environment values serialized."
+    "reasons": "Unattended commit-hook dependencies, code/custody inputs, current cleanup evidence, approved visual assets, credentials/config candidates and unresolved user data remain in place. No protected contents or environment values serialized.",
+    "scopeByField": {
+      "outerVenvHookRuntimeBytes": "Primary .venv excluding removed nested release environment",
+      "primaryNodeHookDependencyBytes": "Primary node_modules",
+      "externalWorktreeNodeHookDependencyBytes": "wp-sw-api-root/node_modules",
+      "primaryArchiveUserAssetsBytes": "Primary archive directory",
+      "directBuildOriginalsBytes": "Primary build initial manifest keep population less 32 supplemental Mypy cache files; excludes newly created archive/index/closeout output",
+      "externalUserOwnedBuildBytes": "wp-sw-api-root/build",
+      "opaqueReparseEntries": "Primary build unfollowed opaque reparse entries; zero logical content bytes reported",
+      "ordinaryLinks": "Primary build four unfollowed ordinary links; zero logical content bytes reported"
+    }
   },
   "needsOwner": "Private build/data-review-20261110/needs-owner.json lists grouped paths, bytes and keep recommendations; retained unknowns do not block completed safe cleanup.",
   "manifestSupplement": "Immutable initial manifest keep rows for 32 Mypy files/files2 SQLite shards are superseded by additional-cache-removal.json after read-only schema identification and fresh hash checks.",

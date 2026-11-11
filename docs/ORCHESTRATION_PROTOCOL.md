@@ -304,7 +304,10 @@ original evidence, credentials, `.env` files and user assets. Keep unknowns and
 report path, size and recommendation. Historical evidence now resolves through
 `build/data-review-20261110/historical-evidence-manifest.jsonl.gz` in the primary
 checkout. The [disposition](production/storage-cleanup-20261110/DATA_REVIEW.json)
-pins archive and manifest hashes. Original containers remain byte-exact inside
+pins archive and manifest hashes. Only `action=archive` rows map to archive
+members. `action=keep` rows remain at their original paths except the 32 cache
+files in the supplemental removal receipt; `action=delete` rows were intentionally
+discarded and are not recoverable from this archive. Original containers remain byte-exact inside
 one tar archive; duplicate members are hardlinks to canonical members. Consult
 `RESTORATION.txt`: the tested decoder permits 2 GiB for the zstd window before
 streaming to Windows tar. Native tar alone exceeds its default decoder limit.

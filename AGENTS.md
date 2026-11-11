@@ -65,7 +65,7 @@ Technical scope and release acceptance remain in the
   Claude/OpenCode temp folders or tool scratch. At session end review ignored
   and untracked paths of at least 50 MB against code and unattended consumers;
   preserve credentials, user data and required evidence. See the current
-  [archive crosswalk](docs/production/storage-cleanup-20261110/DATA_REVIEW.json)
+  [archive disposition and manifest location](docs/production/storage-cleanup-20261110/DATA_REVIEW.json)
   before looking up historical `build/` evidence.
 - Commit scoped integration records, push the integration branch and verify
   exact remote/local head equality before another execution wave. Follow the
