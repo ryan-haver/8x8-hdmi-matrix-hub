@@ -1,5 +1,25 @@
 # Agent allocation and execution ledger
 
+## Owner23 physical cleanup verified; deadline guards corrected — 2026-11-10
+
+Clean independent actual-M3 review accepted52656ab5 and its SHA-bound plan.
+All288 guarded actions completed with zero held:16 stale bytecode files
+(118,167 bytes) purged,272 original evidence files (21,399,548 bytes) pruned
+into one verified8,604,322-byte archive, a12,795,226-byte logical reduction
+before metadata overhead. Fresh consumer checks matched no live process,
+service, scheduled task or hook; exclusive-open/fresh hashes and absence
+readback passed. Source/history/credentials/user assets remain protected.
+
+The independent review's phase-bound discrepancy is corrected by checking
+newest original item/root mtime before using an accepted-phase bound. The
+original source/hash manifest and20GB aggregate stay unchanged. Recovery
+members now default not-drop-eligible until structured surviving-commit proof
+and source/user/open guards pass. Every future drop also rechecks surviving
+source refs and text/JSON credential payloads. The [rollout record](storage-cleanup-20261110/RETENTION_POLICY.json)
+pins the corrected manifest and completed v1 execution receipt. Remaining
+review and exact publication receipts follow outside their identified commit;
+no product/source qualification, release or owner gate is implied.
+
 ## Owner decision 23: bounded retention application — 2026-11-10
 
 Installed SPOKE5c supersedes indefinite evidence and recorded-path promises.

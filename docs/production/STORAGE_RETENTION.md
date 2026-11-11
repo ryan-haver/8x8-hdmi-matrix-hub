@@ -52,6 +52,13 @@ Git resources or interrupt shared services. If automatic approval review blocks
 a verified deletion, send exact paths/sizes/evidence to the hub and read back
 its result; do not retry through another shell.
 
+Before a monthly drop, gate phase bounds on the newest original item/root
+mtime, prove surviving commits/refs or a verified full bundle for every recovery
+member, and recheck due members against surviving source refs and unique user
+data/credential content. Scan text payloads as well as JSON. Require fresh
+unattended-consumer and exclusive-open checks. Missing proof keeps the member;
+a due timestamp alone authorizes no source or data loss.
+
 Current rollout pins and post-review application receipt location are in
 [RETENTION_POLICY.json](storage-cleanup-20261110/RETENTION_POLICY.json). Frozen
 older evidence paths resolve through the retained manifests, including the
