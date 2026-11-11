@@ -473,37 +473,40 @@ archive, publication, worktree removal, branch deletion and any held step as
 separate states. Never claim old cleanup retrospectively met new bundle or
 remote-publication requirements without evidence.
 
-## Bounded retention of closed work
+## Purge closed work; keep hashes
 
-Owner decision 23 and installed Orca SPOKE section 5c override indefinite
+Owner decisions 23 and 24 and installed Orca SPOKE section 5c override indefinite
 evidence retention, including earlier requirements to keep bytes at their
 recorded paths. Apply the [retention policy](production/STORAGE_RETENTION.md)
 when preserving or removing artifacts. Initial recovery/preservation checks
-above still apply; preserving a bundle today does not keep it forever. Keep
+above preserve needed history and data; decision 24 ends evidence archives now. Keep
 source/history/branches, committed records, credentials and user data. Retain
 only bytes actually needed by an open task, gate or unlanded branch while open.
 
-Keep original closure dates and SHA-256/path manifests through pruning and
-purge. Recovery archives expire 30 days after related work lands or is
-abandoned if commits survive on a branch or bundle. Closed-work evidence is
-compressed after 14 days and its archive expires at 90 days; logs and pinned
-build bytes expire at 14 days, except shipped release binaries at one year.
+Keep original closure dates and SHA256/path manifests through purge. Recovery
+archives go once every commit survives on an actual local or remote branch.
+Closed evidence, transcripts, logs and pinned build bytes go now, after member
+manifests and receipts. No archive or 14/30/90-day wait remains. A shipped release
+binary named in a release record keeps one year.
 Rebuildable output and owned scratch expire at task end, subject to real
 unattended consumers and the usual source/data/active-use guards. Longer keeps
 require reason/until metadata, at most one year; only the owner renews them.
 
-For the existing aggregate archive the hub explicitly requires a dated
-per-member manifest and at most one rebuild each month, on the original
-first-due monthly schedule. Do not rewrite its 20 GB container now or reset
-member deadlines. A rebuild removes all due eligible members; when all expire,
-purge the container while keeping manifests/receipts. Expired log/build members
-may ride until that next batch. Under bulletin 2026-11-10s, when no task/gate/
+Decision 24 cancels the prior instruction to hold or monthly-rebuild the 20 GB
+aggregate. Inventory members, verify source/data custody and surviving branch
+commits, then purge the closed container now. Keep its original path/hash
+manifest and receipts. When no task/gate/
 receipt/commit gives a close date and no open task/gate/unlanded branch references
 the item, use the newest original file modification time inside it. Do not hold
 missing-date cases for owner review or invent keep entries. Actual source, user
-data and genuine dated keeps remain protected.
-The [rollout record](production/storage-cleanup-20261110/RETENTION_POLICY.json)
-pins the member manifest and the proposed guarded application plan.
+data and owner-set dated keeps remain protected. Coordinator-created closed
+evidence keeps end now. Finished agent-storage payloads close as disposable
+through the tool's seven-day quarantine; no raw purge or global sweep.
+Use one consolidated plan, one cross-family read-only review and one guarded
+execution pass. Never touch owner-protected `C:/scripts/#OLD`.
+The [current rollout record](production/storage-cleanup-20261110/PURGE_NOW.json)
+identifies manifests and actual application receipts. Older policy records
+remain historical, with their retention dates superseded.
 
 ## Protected evidence and honest readiness
 

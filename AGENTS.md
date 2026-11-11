@@ -67,13 +67,17 @@ Technical scope and release acceptance remain in the
   preserve credentials, user data and required evidence. See the current
   [archive disposition and manifest location](docs/production/storage-cleanup-20261110/DATA_REVIEW.json)
   before looking up historical `build/` evidence.
-- **Retention (owner decision 23):** apply installed Orca SPOKE section 5c and
-  [this repo retention policy](docs/production/STORAGE_RETENTION.md). Its bounded
-  deadlines override indefinite evidence retention and recorded-path promises.
+- **Retention (owner decisions 23 and 24):** apply installed Orca SPOKE section 5c and
+  [this repo retention policy](docs/production/STORAGE_RETENTION.md). Purge closed
+  evidence now; keep original-path/SHA256 manifests and receipts. No evidence
+  archive or 14/30/90-day retention remains. These rules override older
+  indefinite evidence retention and recorded-path promises.
   Preserve actual source/history/branches, credentials and user data; preserve
   bytes an open task/gate/unlanded branch actually needs. Keep permanent manifests
-  and receipts when eligible closed-work bytes expire. Never reset a deadline
-  when copying, compressing or reviewing an artifact.
+  and receipts after deleting eligible closed-work bytes. Recovery archives may
+  go only when every commit survives on a local or remote branch. Close finished
+  agent-storage payloads as disposable through the tool's seven-day quarantine;
+  never purge those payloads directly. Only owner-set longer keeps survive.
 - Commit scoped integration records, push the integration branch and verify
   exact remote/local head equality before another execution wave. Follow the
   [publication and verification rules](docs/ORCHESTRATION_PROTOCOL.md#verification-and-publication).

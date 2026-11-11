@@ -1,5 +1,24 @@
 # Agent allocation and execution ledger
 
+## Owner decision24 purge-now plan — 2026-11-11
+
+Owner24 supersedes all earlier retention dates and monthly rebuild instructions.
+One consolidated plan proposes removal of16,681 closed files (20,722,382,670
+logical bytes), retaining original-path/member SHA256 manifests and receipts.
+The 20GB archive is included after source/data and branch-custody guards.
+Three archive/tag-only histories now survive on local recovery branches;
+2,203 retained LFS objects were independently hashed. Source/history, actual
+user assets, installed hook dependencies and protected external resources stay.
+
+Twelve finished tool payloads total307,679,502 bytes. Close them only through
+supported disposable completion into seven-day quarantine; one contains914
+unfollowed links, so honor any tool safety stop. Quarantine reclaims no bytes
+immediately. A Google Argon-high read-only cross-family plan review is next,
+then one guarded pass; no removal or review acceptance is claimed yet.
+The current [rollout record](storage-cleanup-20261110/PURGE_NOW.json) pins the proposed list and receipt paths.
+Older records below remain historical; no product phase or release is started.
+
+
 ## Owner23 physical cleanup verified; deadline guards corrected — 2026-11-10
 
 Clean independent actual-M3 review accepted52656ab5 and its SHA-bound plan.

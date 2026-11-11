@@ -38,14 +38,14 @@
     "launch_support": "worker-start advertises model/effort. OpenCode requires an existing worktree and verified execution-host CLI; effort unsupported. Help support is not a new successful launch."
   },
   "temporary_storage": {
-    "owner_direction": "decisions 21, 22 and 23, 2026-11-10",
-    "retention_authority": "Installed Orca SPOKE section 5c / owner23 overrides indefinite evidence and recorded-path retention; docs/production/STORAGE_RETENTION.md",
-    "retention_clocks": "Original work closure, never copy/archive/review date; when no close record/open reference exists use newest original item mtime per bulletin5s; scratch/rebuildables task end; pinned builds/logs14d; shipped binary1y; closed evidence loose14d/archive90d; landed/abandoned recovery archives30d with surviving commits",
-    "longer_keep": "Explicit keep.reason and keep.until, at most1year; owner alone renews. Source/credentials/user assets and genuinely open dependencies remain protected.",
-    "aggregate_retention_manifest": "Primary build/retention-20261110/historical-member-retention.jsonl.gz; original source/hash manifest unchanged; monthly rebuild anchored to original deadlines per hub msg_d2a88a442999",
+    "owner_direction": "decisions21/22/23/24; current purge-now decision2026-11-11",
+    "retention_authority": "Installed Orca SPOKE5c / owner24 overrides prior indefinite and14/30/90-day retention; docs/production/STORAGE_RETENTION.md",
+    "retention_clocks": "Closed evidence/log/pinned build bytes purge now after manifests/receipts; no archives. Recovery bundles go once every commit survives on actual local or remote branch; shipped release binary named in release record1year. Scratch/rebuildables task end, real in-use dependencies protected.",
+    "longer_keep": "Only owner-set reason/until at most1year; owner alone renews. Coordinator-created closed-evidence keeps end now. Source/credentials/user assets and actual named open dependencies protected.",
+    "aggregate_retention_manifest": "Original source/hash manifest remains; current member inventories and application receipts primary build/purge-now-20261111/; no monthly rebuild or new evidence archive",
     "build_outputs": "Only worktree output or tagged C:/tmp task folder; never %TEMP%, Claude/OpenCode temp or tool scratch",
     "session_end_data_review": "Ignored/untracked paths >=50 MB against code and unattended consumers; preserve required evidence, credentials/user data/assets; list unknowns with path/bytes/recommendation",
-    "historical_build_crosswalk": "Primary build/data-review-20261110/historical-evidence-manifest.jsonl.gz; hashes in docs/production/storage-cleanup-20261110/DATA_REVIEW.json; RESTORATION.txt documents decoder and safe extraction",
+    "historical_build_crosswalk": "Primary build/data-review-20261110/historical-evidence-manifest.jsonl.gz remains permanent; byte disposition follows PURGE_NOW.json and current application receipt",
     "ordinary_output": "Owned registered agent-storage payload or %TEMP%",
     "short_path_pattern": "C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/",
     "forbidden_new_location": "C:/t or any other new drive-root folder",
@@ -58,7 +58,8 @@
     "worker_closeout": "Delete owned short-path output before worker_done; close disposable registered payloads and report removed/kept bytes.",
     "coordinator_cleanup": "Task done or worker released, no process user, and keep null or expired; untagged folders require age over two days and no process user. Follow installed SPOKE section 5a for locks.",
     "historical_packets": "Dated/frozen paths remain immutable provenance. This policy overrides their temp-root directions for all future invocations.",
-    "environment_values": "Never print or serialize environment values, secrets or credentials."
+    "environment_values": "Never print or serialize environment values, secrets or credentials.",
+    "agent_storage_disposition": "Finished payloads close disposable with supported tool7-day quarantine; compliant, no raw purge/global sweep"
   },
   "planning": {
     "debate_minimum_distinct_families": 3,

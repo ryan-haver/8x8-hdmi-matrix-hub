@@ -1,67 +1,55 @@
 # Repository storage retention
 
-Owner decision 23 (2026-11-10), installed Orca governance `SPOKE.md` section
-5c, supersedes indefinite evidence retention and promises to keep bytes at
-recorded paths. This applies to the primary checkout, repo workspaces, owned
-shared storage and Git-internal artifact folders. Git objects, refs, reflogs,
-branches, committed docs and actual source remain protected; this policy does
-not authorize Git history pruning. Credentials, `.env`, user data/media/assets
-are never purged by agents. Do not infer artifact ownership from size or age.
+Owner decision 24 (2026-11-11), "Purge now, keep hashes," and installed Orca
+`SPOKE.md` section 5c supersede decision 23's 14/30/90-day waits, monthly archive
+rebuild and older indefinite evidence or recorded-path promises. Closed work
+keeps manifests, receipts and checksums. It keeps no evidence archive. This
+applies to the primary checkout, owned repo workspaces, owned storage and
+Git-internal artifact folders. It authorizes no product phase or release.
 
 | Class | Disposition |
 | --- | --- |
-| Source, history, branches, committed records | Keep always |
-| Credentials and user data/assets | Keep; owner decides |
-| Actual dependency of an open task/gate/unlanded branch | Keep while needed and open |
-| Rebuildable output, caches, venvs, tool scratch | Purge at task end; retain a real in-use unattended dependency |
-| Pinned build bytes | Keep original SHA-256 in manifest; purge bytes 14 days after close |
-| Shipped release binary | Keep one year |
-| Closed-work evidence | Loose 14 days, then one compressed archive with original-path/hash manifest; purge archive at 90 days, retain manifest/receipts |
-| Recovery/worktree archive | Purge 30 days after landing/abandonment if commits survive on a branch or bundle |
-| Logs | Purge after 14 days |
+| Source, Git history, branches, committed docs and records | Keep always; no history pruning |
+| Credentials, `.env`, user data, media and assets | Keep; owner decides |
+| Actual named dependency of an open task, gate or unlanded branch | Keep while open and needed |
+| Rebuildable outputs, caches, venvs and scratch | Purge at task end; keep a verified in-use unattended dependency |
+| Pinned build bytes | Keep original SHA256 in manifest; purge closed bytes now |
+| Shipped release binary named in a release record | Keep one year |
+| Closed test output, transcripts, QA packets, loose evidence and logs | Keep original-path/size/SHA256 manifest and receipts; purge bytes now |
+| Existing closed evidence zip/tar/zst | Keep member manifests and receipts; purge archive now |
+| Recovery/worktree archives and Git bundles | Purge once every commit survives on an actual local or remote branch |
+| Agent-storage tool payloads | Close finished payloads as disposable through the tool; seven-day quarantine is compliant. Never raw-purge or globally sweep |
 
-Closed means done, cancelled, superseded or an accepted/abandoned containing
-phase. Use original task/phase closure, never a new copy/archive/review date.
-Record native completion timestamps where available; label conservative phase
-closure bounds explicitly. Bulletin 2026-11-10s supplies the fallback: if no task, gate, receipt or commit
-gives a close date and no open task/gate/unlanded branch references the item,
-use the newest original file modification time inside it. Missing close dates
-do not create owner-review holds or keep entries. Actual unique source and user
-data remain protected; a file extension alone does not prove safe disposal.
+Closed means done, cancelled, superseded, or an accepted or abandoned containing
+phase. If no task, gate, receipt or commit gives a close date and no open task,
+gate or unlanded branch references the item, use its newest internal file mtime.
+Missing dates create no hold. Copying or reviewing bytes creates no new keep.
 
-Longer keeps require `{"keep":{"reason":"...","until":"YYYY-MM-DD"}}`,
-at most one year. Only the owner renews them. Keep existing promises as dated
-history; prospective artifact custody follows this policy. Expired keep metadata
-does not authorize deleting unresolved source, credentials or user assets.
+Only owner-set longer keeps survive decision 24. Record an actual reason and
+an `until` date, at most one year; only the owner renews it. Coordinator-created
+retention dates for closed evidence end now. Source/data protection and actual
+open dependencies remain guards; a generic historic reference creates no
+indefinite dependency. `C:/scripts/#OLD` is owner-protected: never touch it.
 
-The hub's clarification (`msg_d2a88a442999`) leaves the verified 20 GB aggregate
-unchanged now. Its new per-member manifest carries original path, SHA-256,
-class, closure basis and due date. Rebuild at most monthly on its original
-first-due schedule, removing due eligible members together. Expired log/pinned
-build members may ride until that batch. Purge the entire container when all
-members are due; preserve its manifests and receipts. Source/open/data guards
-still apply. This does not start an automation or a product phase.
+Before removal verify ownership, untracked/ignored status, closure, branch
+custody, source/data protection and absence of live or unattended consumers.
+Inventory archive members before purging their container. Preserve actual
+uncommitted source or user assets separately if discovered; keep the affected
+container until preservation succeeds. A Git LFS pointer alone is insufficient
+proof of asset bytes: verify the retained LFS object or actual source file.
 
-Before any purge, verify ownership, untracked/ignored status, no protected
-source/data, no unattended consumer and no live writer. Use Restart Manager or
-a fresh exclusive-open check, compare current size/SHA-256 and verify lossless
-compression before deleting a loose original. Stop on changed/locked/unknown
-state. Read back every result. Managed workspaces use Orca lifecycle commands;
-keep branches under the current owner direction. Never force, broadly prune
-Git resources or interrupt shared services. If automatic approval review blocks
-a verified deletion, send exact paths/sizes/evidence to the hub and read back
-its result; do not retry through another shell.
+Use one consolidated repo plan, one cross-family read-only plan review and one
+guarded execution pass. Immediately recheck exact paths, parent reparse points,
+tracked-file exclusions, size, SHA256 and exclusive-open access; stop on changed,
+locked or unknown state. Read back every result. Managed workspaces use Orca's
+lifecycle command and retain branches under current owner direction. Never
+force, broadly prune Git resources or interrupt shared services. Do not touch
+another agent's active output or the storage tool's quarantine.
 
-Before a monthly drop, gate phase bounds on the newest original item/root
-mtime, prove surviving commits/refs or a verified full bundle for every recovery
-member, and recheck due members against surviving source refs and unique user
-data/credential content. Scan text payloads as well as JSON. Require fresh
-unattended-consumer and exclusive-open checks. Missing proof keeps the member;
-a due timestamp alone authorizes no source or data loss.
-
-Current rollout pins and post-review application receipt location are in
-[RETENTION_POLICY.json](storage-cleanup-20261110/RETENTION_POLICY.json). Frozen
-older evidence paths resolve through the retained manifests, including the
-original owner-22 manifest and the new physical-prune crosswalk. A manifest
-records intentional purge as well as retained members; it never promises that
-all recorded paths still have bytes.
+If automatic approval review blocks a verified deletion, do not retry or route
+through another shell. Send the hub exact paths, bytes and proof; read back its
+result. Current plan, member manifests and application receipts are under the
+primary checkout's `build/purge-now-20261111/`. The committed rollout record is
+[PURGE_NOW.json](storage-cleanup-20261110/PURGE_NOW.json). Frozen earlier records
+retain their historical facts; current manifests record intentional deletion
+and never promise that every recorded path still has bytes.
