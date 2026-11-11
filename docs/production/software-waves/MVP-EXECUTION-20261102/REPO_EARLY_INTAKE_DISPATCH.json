@@ -1,0 +1,86 @@
+{
+  "observed_utc": "2026-11-03T05:34:30.597520+00:00",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "status": "one genuine Orca early repository metadata author launched",
+  "actor": {
+    "task_id": "task_5486db7aed82",
+    "dispatch_id": "ctx_e47c86a8e4ee",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "exact_entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "scope": "SEC14/15/DEP05 accepted-source metadata delta only; no new history/secret/CI audit",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "native MiniMax-M3 attested at exact Task/Dispatch/directory",
+      "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "CLI_effort_override": "unsupported; exact project routing inherited",
+      "bytes": 34865,
+      "sha256": "5ac53244d0b8f2b7f62c43cba16352eccc4ffa7094fe30e9f8dc4de48bc5f9a7"
+    },
+    "status": "launched; no delivery/review/acceptance inferred",
+    "observed_dispatch_status": "dispatched",
+    "observed_worker_state": "ready"
+  },
+  "publication_before_wave": "a60d9c626ea25b9e557c8cf51a93ed8382fcbbd4",
+  "provisioning": {
+    "observed_utc": "2026-11-03T05:33:41.011991+00:00",
+    "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-sw-repo-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "exact_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "agent_free_provisioning_only": true,
+    "project_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "configuration_only_not_native_model_proof": true,
+    "publication_before_creation": "a60d9c626ea25b9e557c8cf51a93ed8382fcbbd4",
+    "no_existing_writer_or_tree": true
+  },
+  "fleet": {
+    "total": 118,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 118,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MDo1MSIsImRpc3BhdGNoSWQiOiJjdHhfY2MzMzVjNTAyYjZjIiwiZGF0YWJhc2VJZCI6NjUzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 118,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 111
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 1,
+    "accounting": "keep-open active resource is also retained; not seven active workers"
+  },
+  "concurrency": "one new+coordinator+protected external=3<=4, no nesting",
+  "independent_review": "OpenAI/Astra/high at exact resulting commit after delivery; reserved precise correction/re-review, no self-review",
+  "package_completion": false,
+  "source_security_license_qualification": false,
+  "core_qualification": "attempt1formalFAIL/no domain, explicit owner manual-retake choice pending; no answer inferred"
+}

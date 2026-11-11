@@ -1,0 +1,95 @@
+{
+  "observed_utc": "2026-11-03T03:58:23.325065+00:00",
+  "status": "prepared, no review workers launched yet",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32; supported live host/status/repo receipts retained",
+  "capacity": {
+    "observed_utc": "2026-11-03T03:58:22.829854+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 41,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793678268340,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 44,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 16,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932897,
+        "resetDescription": null
+      },
+      "updatedAt": 1793678268301,
+      "error": null
+    }
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "fetched_at": "2026-11-03T03:56:48.584409500Z",
+    "supported": true
+  },
+  "fleet": {
+    "total": 107,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 107,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTkxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMjo0NDowNCIsImRpc3BhdGNoSWQiOiJjdHhfMTM0NmJiZmY3OTM1IiwiZGF0YWJhc2VJZCI6NjAwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 107,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 101,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "tasks": {
+    "audit03": {
+      "base": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "new_worktree": "wp-exec-sw-audit-01-rereview03",
+      "scope": "three scoped residual edits/full49insertions6deletions diff and new legacy-field provenance; no repeated268row/1507scenario global audit",
+      "budget": "five-minute bounded exact-diff re-review, honest hold if incomplete",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "findings": {
+      "base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "new_worktree": "wp-exec-sw-findings-01-review",
+      "scope": "current61ID delta/count/source-provenance claims only; original59triage remains historical,47inherited rows not requalified",
+      "budget": "twelve-minute bounded factual review of new claims, no runtime or broad historical audit",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "reviewer": "OpenAI/Astra high, different underlying family from MiniMax authors; actual recent metadata review evidence394/0ff and native route attestations",
+  "demand": "two independent exact-commit factual reviews, previously reserved author material-fix/re-review capacity retained for precise findings; no unbounded loops or automatic failed-qualification retries",
+  "alternatives": "Sol actual native capacity event retained; Astra verified recent availability and qualified metadata scope. M3 authors cannot self-review. Google unknown, DeepSeek exhausted; no silent substitution.",
+  "concurrency": "max2new+coordinator+protected old external reservation=4; no nesting",
+  "material_plan_change": false,
+  "protected": "root/private data, all originals/failed runs/artifacts/natives/evidence/baselines/retained workspaces and odd untracked hook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no authority inferred; source/physical/release gates unchanged"
+}

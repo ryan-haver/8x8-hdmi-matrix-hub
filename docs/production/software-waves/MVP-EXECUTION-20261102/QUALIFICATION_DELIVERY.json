@@ -1,0 +1,87 @@
+{
+  "status": "evaluation report delivered; independent judgement and qualification still pending",
+  "observed_utc": "2026-11-03T01:27:35.694006+00:00",
+  "task_id": "task_e0fda51b39e2",
+  "dispatch_id": "ctx_cd0f4f2bae5c",
+  "report_commit": "97c47be3670df297b2a7ac2696350615b88846c1",
+  "report_parent": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "report_sha256": "cb7ccfc32d784cfe89455ac1fb101a058ae9cfb9573dd51cd975880e551dea15",
+  "report_only_and_tracked_clean": true,
+  "worker_state": "released through Orca after accepted worker_done; native final captured",
+  "delivery_semantics": "Orca1.4.246 consuming check marks delivery handled automatically; no explicit ACK sent; immediate settlement/release followed receipt validation",
+  "task_ref": "refs/heads/execution/wp-exec-qual-anthropic-core-01",
+  "task_ref_remote_exact": "97c47be3670df297b2a7ac2696350615b88846c1",
+  "native": {
+    "task_id": "task_e0fda51b39e2",
+    "dispatch_id": "ctx_cd0f4f2bae5c",
+    "native_session": "603a75fa-28c8-4888-81c7-9f4c0d40db95",
+    "models": [
+      "claude-opus-4-7"
+    ],
+    "effort": "high selected by launch receipt; model independently native-attested",
+    "bytes": 1331454,
+    "sha256": "136362b62a7da5b05f0b949ddb8b1e3c1c27ed45ae55364c9a10eb0485616992",
+    "captured_after_release": true,
+    "not_qualification_acceptance": true
+  },
+  "artifacts": [
+    {
+      "file": "c1c2.junit.xml",
+      "bytes": 8433,
+      "sha256": "6b8403c5f06911b6dadafd550f65f3426c3d1e2715b741abc4f76bd69b64749b"
+    },
+    {
+      "file": "c1c2.log",
+      "bytes": 564,
+      "sha256": "39615aefb0908b5215202735b22acbd0c1651931a2b05b09539af62ccaa13c84"
+    },
+    {
+      "file": "docs.junit.xml",
+      "bytes": 63691,
+      "sha256": "85506813689d9f6e9f74f4c0d6e0dafe493e4dcfc3d188a87fbe69d28d0bc7b7"
+    },
+    {
+      "file": "docs.log",
+      "bytes": 704,
+      "sha256": "39926ee371dd556ae73eb9deb09d97740722b3b7ae808a7c1c4aad880cd55a26"
+    }
+  ],
+  "preserved_archives": [
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-qual-anthropic-core-01",
+      "head": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation\\wp-exec-qual-anthropic-core-01\\workspace.tar.gz",
+      "archive_sha256": "cb4590afe940f8e6ac31a521d715675f711d17811c72b18315ed0e3eeefb9be1",
+      "archive_bytes": 205999999,
+      "regular_files": 4502,
+      "regular_bytes": 295449612,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\t\\exec-qual-anthropic-core-01\\nov02-attempt01",
+      "head": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation\\external-qual-nov02\\workspace.tar.gz",
+      "archive_sha256": "4283afffa469c552311963a8b1fd1c2697319b49182a04ccc4aba8e06befb044",
+      "archive_bytes": 738,
+      "regular_files": 0,
+      "regular_bytes": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "reported_results": {
+    "focused": 54,
+    "sampled_regressions": 40,
+    "docs": 489,
+    "scope": "reported execution; independent verification still pending"
+  },
+  "known_evidence_limits": [
+    "Report admits initial partial route-coverage.json deleted and repeated focused run with route plugin disabled; missing original bytes not reconstructed",
+    "Report sampled40-regression output has no separate retained stdout/JUnit",
+    "Expected original temp root archive contains0regular files; retained logs/JUnit do not alone prove temp/process preservation. Native tool commands show no explicit --basetemp; judge must assess actual provenance rather than infer compliance.",
+    "Historical FSEC007 global gate failure establishes evidence-level failure, not its onset or definitive absence of a code defect; judge independently assesses calibration."
+  ],
+  "qualification_granted": false,
+  "source_accepted": false,
+  "judge_expected_route": "OpenAI gpt-6.1-sol/high exact report; scoped evaluator judgement only",
+  "review_base_and_candidate": "938ae303 through386872/ee3 to caaa; old author entry060769 not review base"
+}

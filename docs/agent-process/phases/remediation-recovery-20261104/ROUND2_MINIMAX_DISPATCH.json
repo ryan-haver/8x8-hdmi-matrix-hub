@@ -1,0 +1,126 @@
+{
+  "observed_utc": "2026-11-04T09:34:14.227051+00:00",
+  "phase": "remediation-recovery-20261104",
+  "round": 2,
+  "status": "MiniMax R2 ACTIVE; OpenAI and Anthropic R2 delivered, released, preserved and task refs verified",
+  "actor": {
+    "task_id": "task_24b952fffacf",
+    "dispatch_id": "ctx_67cb65bc4f6e",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "exact_base": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+    "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/minimax.md",
+    "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+      "session": "ses_e5a182897ffeIQ74TxSBobK55y",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "CLI_effort_override": "unsupported, configured route inherited",
+      "bytes": 235968,
+      "sha256": "746125638e30d6e935b74572ec54bffcd15788c1427911dfcbfbdc88a9e9369b",
+      "unassigned_helpers_observed": [],
+      "scope": "entry capture only, not source qualification/completion/descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "status": "MiniMax genuine R2 all-peer challenge ACTIVE, no final report or consensus"
+  },
+  "prewave_publication": "5b8fcb17838714cbaf2974378e47cffe68c5079e",
+  "capacity": {
+    "observed_utc": "2026-11-04T09:33:13.729208+00:00",
+    "scope": "two bounded R2prose contributions now, third R2/R3/source/qualification/review/corrections separately freshly gated; absolute allowance/otherhost demand unknown",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 11,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793784527577,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 2,
+        "windowMinutes": 300,
+        "resetsAt": 1793796600020,
+        "resetDescription": "5:50 AM"
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400020,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793784525988,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 18,
+        "windowMinutes": 300,
+        "resetsAt": 1793794421794,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932856,
+        "resetDescription": null
+      },
+      "updatedAt": 1793784526080,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 146,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 146,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzUxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNjozOTo1NiIsImRpc3BhdGNoSWQiOiJjdHhfMDdiY2EyMjA5NDllIiwiZGF0YWJhc2VJZCI6ODgzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 146,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 139
+    },
+    "historical_retained": 6,
+    "current_resources": 1
+  },
+  "concurrency": "one current + coordinator + protected external = 3 of 4; no nesting",
+  "worktree": "Existing isolated MiniMax R1 tree reused at exact 9ed4b0c2, previous writer positively released; no new tree, reset, source import or config mutation",
+  "peer_inputs": "Same unchanged R2 packet and all three original R1 reports; other completed R2 reports/recommendations not shared",
+  "future": "Preserve/release genuine MiniMax result and exact task ref, then assess all three R2 reports and freeze one complete hashed final plan/allocation for explicit genuine all-three-family R3 decisions",
+  "qualification_and_source": "Planning only; no automatic failed-assessment retake, extra judge, component/author/reviewer grant, wiring lease, source integration or release acceptance",
+  "settings": "Reviewed M3-only main/small/internal routes and helper/other-provider/plugin/MCP denials unchanged; native actual family/variant independently recorded, unsupported turn-start stays unsupported",
+  "publication": "Publish scoped dispatch record with docs checks and exact integration remote/local verification, then end turn for Orca wake; no completion polling"
+}

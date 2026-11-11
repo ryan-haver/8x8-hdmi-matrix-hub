@@ -1,0 +1,62 @@
+{
+  "observed_utc": "2026-11-03T05:51:45.178612+00:00",
+  "review": {
+    "observed_utc": "2026-11-03T05:50:01.316313+00:00",
+    "review_commit": "218744b088a505461f33065e672559c9edbccae3",
+    "review_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/REVIEW.md",
+    "bytes": 7896,
+    "sha256": "36123e12a86dfea7fb686029ef5d9639de2d74f5d4f974577fac3a9532b66518",
+    "task_id": "task_dd9f6e3c9c49",
+    "dispatch_id": "ctx_d29018e7a4a3",
+    "worktree": "wp-exec-sw-repo-01-review",
+    "branch": "ryan-haver/wp-exec-sw-repo-01-review",
+    "verdict": "require_changes R1 LICENSE row and JSON; SEC15/DEP05 accepted metadata only",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a19ff1-aa64-7a00-9ab2-438ae9b6fdc8",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 703380,
+      "sha256": "18c5452dee545300c98ab017771a907a7c809d942c8cd5b0d3c098561c1b658b"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "preservation": {
+      "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+      "archive_bytes": 206908437,
+      "regular_files": 4634,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "d3718fc211c23c4019446892087c6cd2b11ee7b8"
+  },
+  "fleet": {
+    "total": 119,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MTowMSIsImRpc3BhdGNoSWQiOiJjdHhfNDNhMDA5MmQ3ODQ5IiwiZGF0YWJhc2VJZCI6NjU0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 113,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "verdict": "require_changes R1 LICENSE row/JSON only; SEC15/DEP05 accepted bounded declarations",
+  "current_intake_acceptance": false,
+  "next_stage": "HELD for suitable verified author/fix capacity; no launch"
+}

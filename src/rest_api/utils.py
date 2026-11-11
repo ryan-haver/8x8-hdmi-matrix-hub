@@ -121,6 +121,42 @@ _profile_manager: ProfileManager | None = None  # Profile manager
 _macro_manager: MacroManager | None = None  # Macro manager
 _system_shortcut_manager: SystemShortcutManager | None = None  # System shortcuts
 _dashboard_layout_manager: DashboardLayoutManager | None = None  # Dashboard layout
+_runtime = None
+
+
+def bind_runtime(runtime) -> None:
+    """Inject prepared managers; never reconstruct a persistence reader here."""
+    global _runtime, _matrix_device, _profile_manager, _scene_manager, _macro_manager
+    global _system_shortcut_manager, _dashboard_layout_manager, _config_file
+    global _input_names, _output_names
+    _runtime = runtime
+    _matrix_device = runtime.matrix
+    _profile_manager = runtime.managers.profiles
+    # Legacy scene routes alias the profile surface.
+    _scene_manager = runtime.managers.profiles
+    _macro_manager = runtime.managers.macros
+    _system_shortcut_manager = runtime.managers.shortcuts
+    _dashboard_layout_manager = runtime.managers.dashboard
+    _config_file = runtime.prepared.paths.config_dir / "config_state.json"
+    _input_names = runtime.service.names.overrides()["inputs"]
+    _output_names = runtime.service.names.overrides()["outputs"]
+    from . import control
+    control._cycle_locks = runtime.commands.cycle_locks
+
+
+def get_runtime():
+    return _runtime
+
+
+def get_action_runner():
+    if _runtime is not None:
+        return _runtime.action_runner
+    from hub.domain.action_runner import ActionRunner
+    return ActionRunner.from_runtime()
+
+
+def get_hub_client():
+    return _runtime.local if _runtime is not None else None
 
 # WebSocket client connections
 _ws_clients: set[web.WebSocketResponse] = set()
@@ -388,6 +424,8 @@ def set_matrix_device(
     global _matrix_device, _input_names, _output_names, _config_file
     global _scene_manager, _profile_manager, _macro_manager
     global _system_shortcut_manager, _dashboard_layout_manager
+    global _runtime
+    _runtime = None
     _matrix_device = device
     if input_names:
         _input_names = input_names.copy()
@@ -456,6 +494,13 @@ def _save_names_to_config():
         from _file_io import atomic_write_json
         atomic_write_json(_config_file, config)
 
+        if _runtime is not None:
+            for port, name in _input_names.items():
+                _runtime.service.names.set_input_name(port, name)
+            for port, name in _output_names.items():
+                _runtime.service.names.set_output_name(port, name)
+            _runtime.notify_catalog_changed()
+
         _LOG.info(f"Saved port names to {_config_file}")
         return True
     except Exception as e:
@@ -495,11 +540,15 @@ def get_matrix_device() -> OreiMatrix | None:
 
 def get_input_names() -> dict[int, str]:
     """Get input names mapping."""
+    if _runtime is not None:
+        return _runtime.service.inputs
     return _input_names.copy()
 
 
 def get_output_names() -> dict[int, str]:
     """Get output names mapping."""
+    if _runtime is not None:
+        return _runtime.service.outputs
     return _output_names.copy()
 
 

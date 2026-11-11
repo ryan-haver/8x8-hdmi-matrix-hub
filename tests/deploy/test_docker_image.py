@@ -1,6 +1,6 @@
 """The shipped image, started the two ways a user runs it (V3 deployment, WP-D2).
 
-``core``: integrations off (the default). ``uc``: the Remote 3 integration on, in
+``core``: UC off (the default; Flic retains its enabled default). ``uc``: Remote 3 on, in
 bridge networking (mDNS off, UC_DRIVER_URL set), with ``config_state.json`` in the
 data volume the way a completed Remote setup leaves it. Both point at the
 simulator container. Tests run in file order for each mode; the last one stops
@@ -173,6 +173,43 @@ async def test_remote_reaches_the_integration_at_the_driver_url(hub: Hub) -> Non
     assert meta["driver_url"] == hub.uc_url  # UC_DRIVER_URL (UC-03), not ws://<container id>:9095
     assert hub.container.name not in json.dumps(meta)
     assert len(entities) > 0
+
+
+async def test_remote_source_selection_reaches_the_simulator(hub: Hub, simulator: Simulator) -> None:
+    """Real image SDK source selection changes only its output and reports the resulting state."""
+    if hub.mode != "uc":
+        pytest.skip("integration disabled")
+    _wait_connected(hub)
+    status, state = http_json(f"{simulator.control_url}/_sim/state")
+    assert status == 200
+    before = _sim_routing(simulator)
+    target = 6 if before["1"] != 6 else 7
+    source_name = state["inputs"][target - 1]["name"]
+    original_name = state["inputs"][before["1"] - 1]["name"]
+    async with UcRemoteSim(hub.uc_url) as remote:
+        entities = await remote.attach(["media_player.output_1"])
+        assert len(entities) == 74
+        since = remote.mark()
+        try:
+            result = await remote.select_source("media_player.output_1", source_name)
+            assert result["code"] == 200, result
+            actual = _sim_routing(simulator)
+            assert actual == {**before, "1": target}
+            await remote.wait_event(
+                "entity_change",
+                lambda data: data["entity_id"] == "media_player.output_1"
+                and data["attributes"].get("source") == source_name,
+                since=since, timeout=5,
+            )
+            RECORDER.get("deploy.image_uc").notes.append(json.dumps({
+                "proof": "SDK select_source and authoritative entity_change",
+                "entity_id": "media_player.output_1", "input": target,
+                "response_code": result["code"], "simulator_routing": actual,
+            }, sort_keys=True))
+        finally:
+            restored = await remote.select_source("media_player.output_1", original_name)
+            assert restored["code"] == 200, restored
+            assert _sim_routing(simulator) == before
 
 
 def test_ucapi_imported_only_with_uc(hub: Hub) -> None:

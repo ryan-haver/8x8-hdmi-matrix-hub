@@ -1,0 +1,108 @@
+{
+  "observed_utc": "2026-11-03T03:28:37.094171+00:00",
+  "actors": {
+    "audit": {
+      "observed_utc": "2026-11-03T03:25:25.736421+00:00",
+      "task_id": "task_4c7cf7c289ff",
+      "dispatch_id": "ctx_14d9b1569d7e",
+      "head": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "parent": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md",
+      "git_blob_bytes": 223560,
+      "git_blob_sha256": "f64b616548d1250331d2567963db2e1bc2dfbc327824a6b44c835814b0681758",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "scope": "only author report; clean submitted tree; exact-commit different-family re-review pending",
+      "terminal": "released",
+      "native_final": {
+        "session": "ses_e60a60154ffe3ynfNFDflaLE6d",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 948936,
+        "sha256": "045e753f17b89aeb14aa7df603bafd6794a3c6f6a3fc3d83d0643c32ca16e624"
+      },
+      "publication": "exact task ref remote/local equality verified",
+      "cleanup": "read-only retention; no removal",
+      "budget": "ten-minute bound exceeded; dispatch03:00:35/delivery03:24:04 UTC, worker reported about19minutes from first artifact. Actual history retained; no time-budget pass. Coordinator finish-bounded-result guidance sent03:23:03.",
+      "unresolved_dispute": "Author rejects d44/coordinator instruction that F-API-029 is SW-API-READ-03 with live declaration; actual committed mapping CLIENT-02 and no registry scenario; record erratum before re-review, no forced incorrect mapping",
+      "expansion": "report195324->223560bytes; inspect complete diff and added correction appendix, no self-check acceptance",
+      "archives": [
+        {
+          "archive_sha256": "8911fdbc0d293d599813e805710f73d4d2ffef64b7383ea8cdbfd9ec4668a8c4",
+          "regular_files": 4578,
+          "regular_bytes": 303768393,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "d07282e921ee2eb4eaf2935f9386a08e9192eb4d6f9ba4edbcd6fff91d78da05",
+          "regular_files": 107,
+          "regular_bytes": 166297,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "original_integrity": {
+        "old_head": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+        "new_head": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+        "preexisting_regular_files": 4566,
+        "changed_existing_files": [
+          "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md"
+        ],
+        "old_private_author_and_correction01_artifacts_unchanged": true
+      },
+      "integration": "corrected report integrated as record only, not accepted report or source/feature proof"
+    },
+    "preservation": {
+      "observed_utc": "2026-11-03T03:23:09.909347+00:00",
+      "task_id": "task_e1d5c3589200",
+      "dispatch_id": "ctx_f56a5a99bfee",
+      "head": "816755055028d37aa62c0ff62caace473288654d",
+      "parent": "ed78321e51156f229507e654f0cf3faae100b935",
+      "report": "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md",
+      "git_blob_bytes": 56040,
+      "git_blob_sha256": "ebaa6fb49c0f052c8ae9e5ec61e8855a77c1b49584cce5930972dd81a8095b78",
+      "working_identical": true,
+      "cr_bytes": 0,
+      "scope": "only author report; clean submitted tree, independent exact-commit re-review pending",
+      "terminal": "released",
+      "native_final": {
+        "session": "ses_e609f4c5cffeALUy1NHYhE5Vup",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 607473,
+        "sha256": "fc25919dbf8b80691ea7e405427e3205524a515eb31bed9709c5e8e98cf2410c"
+      },
+      "publication": "exact task ref remote/local equality verified",
+      "cleanup": "read-only retention; no removal",
+      "budget": "assigned seven-minute bound exceeded; dispatch around03:08, delivery03:22 UTC. Actual history preserved, no deadline-pass claim.",
+      "expansion": "report grew36331->56040bytes; independent reviewer must inspect full diff including added correction appendix for unsupported claims/scope, not accept self-checks",
+      "archives": [
+        {
+          "archive_sha256": "aa77178167033a771662cc5e0e3d3727aac61d4e8cef6b875463eab6a9751a8f",
+          "regular_files": 4597,
+          "regular_bytes": 300355772,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "9a9d58183f2549f7f4ef1c9c838f983b0a39388c6f463b172752a92c291cfae0",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "original_integrity": {
+        "old_head": "ed78321e51156f229507e654f0cf3faae100b935",
+        "new_head": "816755055028d37aa62c0ff62caace473288654d",
+        "preexisting_regular_files": 4587,
+        "changed_existing_files": [
+          "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md"
+        ],
+        "old_private_author_artifacts_unchanged": true
+      },
+      "integration": "corrected report integrated as record only, not accepted report or source/feature proof"
+    }
+  },
+  "acceptance": "both corrections delivered/preserved/published/released; independent exact-commit re-reviews pending, no source/original-preservation pass",
+  "budgets": "both author bounds exceeded; actual histories kept, no deadline pass claimed"
+}

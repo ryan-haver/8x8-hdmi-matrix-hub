@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "phase": "functional-completion-20261104",
+  "observed_utc": "2026-11-04T18:57:44.618593+00:00",
+  "status": "ADOPTED",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "packet_path": "docs/agent-process/phases/functional-completion-20261104/FINAL_PACKET.json",
+  "plan_text_sha256": "90f8459b050577acb4fd6b55e195288380a1586780dd3eba05accf2159da00bb",
+  "participants": {
+    "openai": {
+      "task_id": "task_908b71effe7d",
+      "dispatch_id": "ctx_02b138df77b6",
+      "head": "470c87dc87e373b5b1ff2618fb7410064b08f4ff",
+      "parent": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round3/openai.md",
+      "report_sha256": "2d13022f04e9e7692a652bf12fbd3ace3f06f5d46be3398d1d9e2d22b9f2547e",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "470c87dc87e373b5b1ff2618fb7410064b08f4ff",
+      "family": "OpenAI",
+      "actual_verdict": "ACCEPT",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "native": {
+        "session": "01a1a7ce-90ee-7312-bd80-c7e09d471d07",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 2421892,
+        "sha256": "a013ca82e2b096c53dae752f5d3545be64f6b0a9f57f48d25aac2f18e2867202",
+        "unassigned_helper_calls_observed": false
+      },
+      "checks": "489docs once/direct0/zeroerrorsskips; historicalcheckout only, no source/newMarkdownqualification",
+      "preservation": {
+        "external-openai-r3": {
+          "archive_sha256": "656293e522418cb0f4dbbd5216dfc094d12db23e28517783c4473559b507fd77",
+          "archive_bytes": 82140,
+          "regular_files": 111,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-openai": {
+          "archive_sha256": "d63427a8e4ca015355a5ebd523b76293090eabd4d73ce7f73de10723e4d66b27",
+          "archive_bytes": 212700964,
+          "regular_files": 5181,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      }
+    },
+    "anthropic": {
+      "task_id": "task_ae9877d75a18",
+      "dispatch_id": "ctx_37e0d2f0e439",
+      "head": "27185b5b7047a999b1a007b5ce046ccea5fdd431",
+      "parent": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round3/anthropic.md",
+      "report_sha256": "2f4d6099e540a31a153ae684528afb1989916d03e8872bd6148a2046b7df3fe8",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "27185b5b7047a999b1a007b5ce046ccea5fdd431",
+      "family": "Anthropic",
+      "actual_verdict": "ACCEPT",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "native": {
+        "session": "47cd76fe-4642-4b86-800f-019dc71efb4d",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high launch/config; native per-turn effort unexposed",
+        "bytes": 2232506,
+        "sha256": "253d5050e194f38c866be4af59a7775c88dfe83a79ece815dc485fd193d802fe",
+        "unassigned_helper_calls_observed": false
+      },
+      "checks": "489docs once/direct0/zeroerrorsskips; historicalcheckout only, no source/newMarkdownqualification",
+      "preservation": {
+        "external-anthropic-r3": {
+          "archive_sha256": "7ac969bb4c34243c49ef1a0e6c7fe697fed9be2681488d72d2f6a5050a8841a8",
+          "archive_bytes": 76820,
+          "regular_files": 109,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-anthropic": {
+          "archive_sha256": "81300e8a6b8e05b3bdd36c38ce803fcc8424d00bb8716c4cbfcc1e29d6144ca9",
+          "archive_bytes": 208894393,
+          "regular_files": 4849,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      }
+    },
+    "minimax": {
+      "task_id": "task_e486754b791b",
+      "dispatch_id": "ctx_1cd734915060",
+      "head": "c464d56d32bd089629d866fc3fc30a9d6a081069",
+      "parent": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round3/minimax.md",
+      "report_sha256": "2e9c01f345bfa606fe7b850c1ac90132931005e35c002b8e1d5d08600250f602",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "c464d56d32bd089629d866fc3fc30a9d6a081069",
+      "family": "MiniMax",
+      "actual_verdict": "ACCEPT",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "native": {
+        "session": "ses_e5824fc0affekRFh8Qy4RQllkn",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 1212110,
+        "sha256": "22607ba6484c219aec00bab5d1be713df707afa905a7f00a0cb789516b744b99",
+        "helper_calls_observed": false,
+        "scope": "native actual Task/Dispatch/directory, no all-host census"
+      },
+      "checks": "489docs once/direct0/zeroerrorsskips; historicalcheckout only, no source/newMarkdownqualification",
+      "preservation": {
+        "external-minimax-r3": {
+          "archive_sha256": "1620cef0aa27e85b17b16879aa1184afe8f9edea12101ec4e2fa0e8ecab862f5",
+          "archive_bytes": 86969,
+          "regular_files": 115,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-minimax": {
+          "archive_sha256": "d6d35b37aeff09b3ca2f5ddba61da761713ae43e623225d59fcaf6533a8e7c76",
+          "archive_bytes": 210114857,
+          "regular_files": 5074,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "pre_amend_preservation": {
+        "pre_amend_commit": "4c2e802ed136fc7c2d953029a11e15dacddb945c",
+        "current_commit": "c464d56d32bd089629d866fc3fc30a9d6a081069",
+        "private_local_preservation_ref": "refs/orca-preservation/functional-r3-minimax-pre-amend-4c2e802e",
+        "complete_bundle_sha256": "68d0b4d1b590ea65642c88cc9214feb0e92b86bc023f567136410c3cf0084cfe",
+        "bundle_bytes": 13631332,
+        "verification": "git bundle verify exit0, exact current+superseded heads verified; no prerequisites omitted",
+        "pre_amend_report_sha256": "c8ce55051c232f30877b3f46906dfcaee4c2c822756d4cae0e92a98ed71e201a",
+        "history": "Priorunpublished4c2eoriginalretained; normalcurrenttaskbranchpush, noforce/historyrewrite/cleanup",
+        "check_limit": "Onceonlydocs run predates finalreport amendments of result paragraphs/count corrections. Both bytes preserved; scope/UTF8/whitespace checked at finalcommit, no assertion newMarkdown parsed."
+      },
+      "check_limit": "Finalprose amended after one docs run for observedresults/count corrections; prior4c2e commit+blob and currentc464 both in verifiedcomplete Gitbundle. Noforcepush/historyrewrite/extra docs run; finalUTF8/scope/whitespace separatelychecked."
+    }
+  },
+  "rounds": "Three genuine independent R1, all-three genuine all-peer R2, all-three actual R3ACCEPT exactlysamecomplete933166packet; all originals preserved/released/taskrefsverified before respective barriers opened",
+  "material_blockers_to_adoption": [],
+  "held_execution_gates": "Source-domain author/reviewer/judgefit/nativeprovenance/unusedattempt gates, D6/WSR03/privacyFAILs/fullchainadmission/candidateproof and ownerprivacybudget/hardwarevisual72hweekrelease remain; conditionalprogramadoption waivesnone",
+  "clarifications": "ADOPTION_NOTES.md applies existingglobalconstraints and nonblockingrefinements withoutchanging packetbytes, budget or sourcepolicy. Originalreports remainimmutable.",
+  "first_wave": "FC-TRUTH M3 inventory + FC-PROVENANCE Astra metadata audit; independentreviews stagedafterauthorsreleased, no source/qualificationworker yet"
+}

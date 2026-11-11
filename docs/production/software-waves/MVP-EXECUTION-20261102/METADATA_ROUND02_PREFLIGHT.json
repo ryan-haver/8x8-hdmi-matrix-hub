@@ -1,0 +1,96 @@
+{
+  "observed_utc": "2026-11-03T02:59:30.202947+00:00",
+  "status": "prepared; no new workers launched yet",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "execution_host": "local/Zelu/win32; live host list retained privately",
+  "integration_branch": "wp-runtime-completion",
+  "remote": "origin",
+  "fleet": {
+    "total": 100,
+    "released": 94,
+    "retained": 6,
+    "all_pages": true,
+    "active_new": 0
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T02:56:45.844847+00:00",
+    "codex": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 41,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793674132639,
+      "error": null,
+      "status": "ok"
+    },
+    "minimax": {
+      "session": {
+        "usedPercent": 23,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932933,
+        "resetDescription": null
+      },
+      "updatedAt": 1793674132546,
+      "error": null,
+      "status": "ok"
+    }
+  },
+  "demand": "two bounded10minute sessions: additional M3 targeted correction02 and Astra EV factual review; reserve subsequent Astra exact-correction re-review and one EV author-fix/re-review if needed. This explicitly extends the first inventory correction reserve because re-review still requires changes; no automatic core qualification retry.",
+  "concurrency": "max2new+coordinator+protectedoldexternalreservation=4; no nesting",
+  "catalogs": {
+    "codex": {
+      "fetched_at": "2026-11-03T02:58:13.917787200Z",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "supported": true
+    },
+    "minimax": {
+      "exact_model": "minimax-coding-plan/MiniMax-M3",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "model_override": "OpenCode2 override rejected by installed adapter; inherit exact config, attest native model",
+      "effort": "unsupported CLI override; native thinking per project route",
+      "helpers": "subagent:* denied, all main/small/internal routes pinned to M3, unassigned plugins/integrations denied"
+    }
+  },
+  "qualification_evidence": {
+    "M3": "bounded inventory/prose scope in accepted prior audit/freshness records; current require_changes prevents acceptance, narrower author correction allowed",
+    "Astra": "actual bounded metadata/counterexample review4c2 and d44; same OpenAI family as approved factual reviewer; source review qualification not claimed"
+  },
+  "alternatives": "Sol had actual native model-capacity failure despite shared pool headroom; Astra actual recent native availability and factual review evidence. Anthropic corequalificationFAIL is not a factual-review waiver. Google route/headroom unverified, DeepSeek exhausted; no silent substitutions.",
+  "material_plan_change": false,
+  "tasks": {
+    "inventory_correction02": {
+      "base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "worktree": "wp-exec-sw-audit-01 (existing settled clean author tree)",
+      "family": "MiniMax",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "independent_reviewer": "OpenAI/Astra at resulting exact commit",
+      "scope": "remaining R1/R4/R5/R6 only; preserve accepted R2/R3 and verified mappings",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "preservation_factual_review": {
+      "base": "ed78321e51156f229507e654f0cf3faae100b935",
+      "worktree": "wp-exec-ev-preservation-gaps-review (new dedicated)",
+      "family": "OpenAI",
+      "model": "gpt-6-astra/high",
+      "scope": "two negative preservation gaps, no original preservation/source/feature pass",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "protected": "root/private data, untracked oddhookartifact, old external reservation, retained historical workspaces, old failed originals/evidence/baselines; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain, explicit owner manual-retake decision pending; no answer or approval inferred"
+}

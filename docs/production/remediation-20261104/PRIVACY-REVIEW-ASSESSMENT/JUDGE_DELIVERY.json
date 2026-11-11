@@ -1,0 +1,106 @@
+{
+  "observed_utc": "2026-11-04T08:08:26.253454+00:00",
+  "boundary": {
+    "key": "privacy-judge-closeout",
+    "name": "wp-qual-privacy-review-20261104-judge",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "task": "task_8c32e92975a4",
+    "dispatch": "ctx_8009c76be684",
+    "head": "e8ce39660a37d277e735adce680b848210c8d9b4",
+    "base": "1a38e2851f0223627f5377fa5e32584c233e1223",
+    "paths": [
+      "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/REVIEW.md"
+    ],
+    "status": "?? .codex/config.toml",
+    "native": {
+      "session": "01a1a57b-e9d1-7cc3-94ca-2408e2dfac3a",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native",
+      "bytes": 2127602,
+      "sha256": "956d73d4dd58e1ced7e4762031fe101709fa3316ea055ea70eed251ed65736e0",
+      "unassigned_helper_calls_observed": []
+    },
+    "release": {
+      "dispatchId": "ctx_8009c76be684",
+      "state": "released",
+      "processAction": "closed_agent_terminal",
+      "archive": {
+        "source": "transcript",
+        "status": "captured"
+      },
+      "mutation": {
+        "requestId": "1edcf01d-5f49-425e-836b-9981985ca92c",
+        "replayed": false
+      }
+    },
+    "preservation": "Full workspace/temp and task-ref publication still required; no deletion authorized"
+  },
+  "publication": {
+    "head": "e8ce39660a37d277e735adce680b848210c8d9b4",
+    "branch": "qualification/privacy-review-20261104-judge",
+    "remote_head": "e8ce39660a37d277e735adce680b848210c8d9b4",
+    "exact": true,
+    "cleanup": "None; full verified Git bundle not created in this closeout, retain exact workspace and all branches"
+  },
+  "preservation": {
+    "wp-qual-privacy-review-20261104-judge": {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-qual-privacy-review-20261104-judge",
+      "head": "e8ce39660a37d277e735adce680b848210c8d9b4",
+      "branch": "qualification/privacy-review-20261104-judge",
+      "status": "?? .codex/config.toml",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\privacy-judge-closeout\\preservation\\wp-qual-privacy-review-20261104-judge\\workspace.tar.gz",
+      "archive_sha256": "a07d732f800307c5c75bb62f81d8ae715057c74616ba2c39894aea384fb9f0c7",
+      "archive_bytes": 206068185,
+      "regular_files": 4591,
+      "regular_bytes": 295918383,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    },
+    "external-privacy": {
+      "workspace": "C:\\t\\remediation-privacy-judge",
+      "head": null,
+      "branch": null,
+      "status": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\privacy-judge-closeout\\preservation\\external-privacy\\workspace.tar.gz",
+      "archive_sha256": "e5dead9f69156fd61062a2297564b1782504cd8eeb087e0d53cf4ac7615cce1a",
+      "archive_bytes": 76091,
+      "regular_files": 117,
+      "regular_bytes": 207792,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    }
+  },
+  "verdict": "FAIL; privacy review competence NOT_GRANTED",
+  "axes": {
+    "provenance": "PASS",
+    "dataflow_invariants": "FAIL",
+    "counterexamples": "PASS",
+    "behavior_and_tools": "FAIL",
+    "calibration": "FAIL",
+    "review_quality": "FAIL"
+  },
+  "judge_checks": {
+    "docs": {
+      "cases": 489,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "direct_exit": 0,
+    "diagnostic_current_pin_masked": false,
+    "synthetic_lifecycle_modes": [
+      "matched",
+      "mismatched"
+    ],
+    "candidate_original_integrity": "Judge verified646inventory entries/14direct receipts/4494workspace+745externalarchive members; structural integrity is not semantic acceptance."
+  },
+  "qualification": "One candidate/one judge exhausted. No automatic rewrite, qualification retry or additional judge. Existing API-refusal review qualification unchanged.",
+  "next": "Privacy source remains unaccepted. Preserve original defect evidence and plan source corrections for current_pin, supported shapes, summary and HA sibling plus public-value fidelity. Qualified non-OpenAI privacy source review still missing; alternative family/staffing material changes require actual prospective three-provider rounds. No new family allocation or retake launched.",
+  "source_integrated": false,
+  "cleanup": "Workers released, original workspaces/temp/native preserved and exact task refs published. No full Git bundle created or tree removal authorized in this closeout."
+}

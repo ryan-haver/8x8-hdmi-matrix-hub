@@ -1,0 +1,132 @@
+{
+  "observed_utc": "2026-11-03T18:46:49.803914+00:00",
+  "status": "OpenAI third R3 prepared, not launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local Zelu win32; fresh supported discovery privately retained",
+  "job": {
+    "participant": "openai",
+    "family": "OpenAI",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+    "worktree_name": "wp-qr-r1-openai",
+    "expected_branch": "ryan-haver/wp-qr-r1-openai",
+    "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND3_OPENAI.txt",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+    "title": "Qualification replacement R3 OpenAI final packet decision",
+    "dependencies": [
+      "task_06770011f5e7",
+      "task_8c044cfcdce5",
+      "task_d065f4c36365"
+    ],
+    "input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+    "gate_path": [
+      "replacement_qualification",
+      "round3",
+      "openai"
+    ],
+    "stage": "reserved, not launched",
+    "branch_reservation": "planning/qr-20261103-r1-openai",
+    "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+    "actual_branch": "ryan-haver/wp-qr-r1-openai",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "final_packet_published_ref": "f8d90f222c4f2c2e43047e2149f15276da101e48",
+  "capacity": {
+    "observed_utc": "2026-11-03T18:46:49.803914+00:00",
+    "other_host_demand": "unknown, not zero",
+    "scope": "one bounded remaining R3 final decision; future candidate and judge separately gated, no assurance of all-stage funding",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 64,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793730990934,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800498,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400498,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793730990532,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 26,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932889,
+        "resetDescription": null
+      },
+      "updatedAt": 1793730990570,
+      "error": null
+    }
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "cache_fetched_at": "2026-11-03T18:46:50.043550100Z",
+    "prior_native": "actual Astra/high, fresh session still required"
+  },
+  "fleet": {
+    "total": 131,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 131,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzozMzoxMSIsImRpc3BhdGNoSWQiOiJjdHhfNmI3ODA3Yzk2ZDAzIiwiZGF0YWJhc2VJZCI6NzI4fX0"
+      },
+      {
+        "limit": 100,
+        "total": 131,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 124
+    },
+    "historical_retained": 6,
+    "current_other_resource": {
+      "taskId": "task_06484235023d",
+      "dispatchId": "ctx_55dc79dcba80",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    },
+    "accounting": "six historical and one MiniMax R2 retained resource; status not inferred as active from retention"
+  },
+  "concurrency": "at most two current workers + coordinator + protected external reservation=4; no nesting",
+  "decision_rule": "ninth authorized panel contribution; exact same complete final packet, explicit accept/require_changes/blocked. No automatic new packet, second vote, candidate retry or replacement judge.",
+  "qualification_or_source_or_release_acceptance": false
+}

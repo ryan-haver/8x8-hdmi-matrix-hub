@@ -1,0 +1,298 @@
+{
+  "observed_utc": "2026-11-04T19:04:03.919708+00:00",
+  "phase": "functional-completion-20261104",
+  "status": "ADOPTED first executionwave ACTIVE: FC-TRUTH M3inventory + FC-PROVENANCE Astranativemetadataaudit",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "consensus": "docs/agent-process/phases/functional-completion-20261104/CONSENSUS.json",
+  "prewave_published_verified_head": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+  "actors": {
+    "truth": {
+      "package": "FC-TRUTH",
+      "task_id": "task_ae949bd12fff",
+      "dispatch_id": "ctx_2caca18359bf",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth",
+      "branch": "execution/wp-fc26-fc-truth",
+      "exact_base": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+      "exclusive_report": "docs/production/functional-completion-20261104/FC-TRUTH/INVENTORY.md",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/EXEC_FC-TRUTH.md",
+      "private_exactbase_spec_sha256": "8b34e179269265864d884c31061fa72db835ebfe9c6d093f18fe8ba055b1808c",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "actual native exactTask/Dispatch/directory",
+        "session": "ses_e580f5670ffeXvlKhB9xdDSOVX",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 245886,
+        "sha256": "4d75d152d8f2939cde6c8ac7c474d41496b4fdce5270c3e8aac6e7196c6f08b3",
+        "helper_calls_observed": false,
+        "scope": "entry only, no competence/completion/allhostcensus"
+      },
+      "reviewer_reservation": "OpenAI codex/gpt-6.1-sol/high; Astra samefamilyreviewer fallback only againstM3inventory aftertaskfit+quota",
+      "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance",
+      "dependencies": [
+        "task_908b71effe7d",
+        "task_ae9877d75a18",
+        "task_e486754b791b"
+      ],
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "provenance": {
+      "package": "FC-PROVENANCE",
+      "task_id": "task_a7ee911f3245",
+      "dispatch_id": "ctx_d6197cc497ff",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance",
+      "branch": "execution/wp-fc26-fc-provenance",
+      "exact_base": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+      "exclusive_report": "docs/production/functional-completion-20261104/FC-PROVENANCE/AUDIT.md",
+      "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/EXEC_FC-PROVENANCE.md",
+      "private_exactbase_spec_sha256": "40d48338d96699100016a6e5a3eab3f7c1ad32bda014177fe3bee6726a81e7d8",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native exactTask/Dispatch/cwd",
+        "session": "01a1a7f0-b71d-7af2-bd3b-d5ca0e123534",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 980798,
+        "sha256": "93047997a53c443f665f7f13311ebff2b343bbdda6febf54d8f2f162a9cd9633",
+        "helper_calls_observed": false,
+        "scope": "entry only, no competence/completion/allhostcensus"
+      },
+      "reviewer_reservation": "MiniMax-M3/thinking inventory-fidelity review only; coordinator/nonMiniMax independentlychecksM3specificfacts beforeeligibility, no source/competencegrant",
+      "status": "ACTIVE assigned bounded inventory/metadata authorship, no source/qualification/featureacceptance",
+      "dependencies": [
+        "task_908b71effe7d",
+        "task_ae9877d75a18",
+        "task_e486754b791b"
+      ],
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "capacity": {
+    "truth": {
+      "provision": {
+        "observed_utc": "2026-11-04T19:01:42.308453+00:00",
+        "scope": "two bounded prose inventories, Sol/M3 independentfactualreview staged, one factualcorrection/rereview reserve; no source/qualification/ownerbudget",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 24,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793818864267,
+          "error": null,
+          "age_seconds": 38
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 38,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932838,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 36,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793818863862,
+          "error": null,
+          "age_seconds": 38
+        }
+      },
+      "launch": {
+        "observed_utc": "2026-11-04T19:02:06.506478+00:00",
+        "scope": "two bounded prose inventories, Sol/M3 independentfactualreview staged, one factualcorrection/rereview reserve; no source/qualification/ownerbudget",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 24,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793818864267,
+          "error": null,
+          "age_seconds": 62
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 38,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932838,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 36,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793818863862,
+          "error": null,
+          "age_seconds": 63
+        }
+      }
+    },
+    "provenance": {
+      "provision": {
+        "observed_utc": "2026-11-04T19:01:59.047668+00:00",
+        "scope": "two bounded prose inventories, Sol/M3 independentfactualreview staged, one factualcorrection/rereview reserve; no source/qualification/ownerbudget",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 24,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793818864267,
+          "error": null,
+          "age_seconds": 55
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 38,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932838,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 36,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793818863862,
+          "error": null,
+          "age_seconds": 55
+        }
+      },
+      "launch": {
+        "observed_utc": "2026-11-04T19:02:11.264729+00:00",
+        "scope": "two bounded prose inventories, Sol/M3 independentfactualreview staged, one factualcorrection/rereview reserve; no source/qualification/ownerbudget",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 24,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793818864267,
+          "error": null,
+          "age_seconds": 67
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 38,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932838,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 36,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793818863862,
+          "error": null,
+          "age_seconds": 67
+        }
+      }
+    }
+  },
+  "quota_refresh": {
+    "issue": "SupportedCLI cachedusage exceeded900seconds, no freshverifiedfallback: creation/dispatchheld before anyeffect",
+    "resolution": "Opened nativeOrcaSettings navigation, clicked observed Refresh rate limits footer, verifiedCLIproviderupdatedAt ages11seconds; returnedtoapp. No accountselection/settings/credential/login/spend changes. UIactionitselfunasserted, actualcachetimestamp advancement verified separately.",
+    "old_receipt": "accounts-after-adoption-private.json",
+    "new_receipt": "accounts-after-ui-refresh-private.json",
+    "UI_window": 52172012,
+    "UI_refresh_action_id": "2be8b786-ffe6-48c6-aa88-b099ab85e23c",
+    "method": "computer-use skill, installedOrca1.4.248; no guessedCLIrefresh/API workaround",
+    "capacity_rule": "Freshbeforeeachprovision/start again; no staleheadroomexception or projectwidehold"
+  },
+  "fleet": {
+    "total": 168,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 168,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDQ0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMzoxMTo0OSIsImRpc3BhdGNoSWQiOiJjdHhfZTk3M2Q0YmUzYzYwIiwiZGF0YWJhc2VJZCI6MTM1NX19"
+      },
+      {
+        "limit": 100,
+        "total": 168,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 159,
+      "null": 1
+    },
+    "historical_retained": 6,
+    "current_owned": 2,
+    "historical_null_compatibility_no_resource": 1
+  },
+  "concurrency": "two authors+coordinator+protectedexternal=4/max2new/no nesting; reviewsstagedafterauthorsreleased",
+  "scope": "Only new exact assignedreports/ownedroots; no implementation/tests/tooling/registry/ledger/qualification throughinventory. Differentfamilyprose/fidelityreviewsreserved, coordinator independentlyverifiesM3facts beforeanyeligibility; no sourcegrant.",
+  "base_and_config": "Two NEW dedicated agentfreeOrcaworktrees at exacta07publishedbase; inheritedemptysetup hooks, scopedhelper-offconfigsinstalled/verifiedBEFOREgenuineworkerstart, configsneverstaged/globalsunchanged. Currentproductexacte542acceptedUNWIREDcomponent unchanged.",
+  "holds": "WSR03/firstauthorshipNOT_GRANTED/D6wholemixedtarget/privacyterminalFAILs/extraattemptownerbudget/fullsourceadmission/candidateevidence/HA/UI/compatibility/ownerphysicalvisual72hweekfinalrelease remain",
+  "next": "publish489docs/exactremoteequality then END TURN for Orca wake, no completionpolling"
+}

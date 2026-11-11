@@ -1,0 +1,77 @@
+{
+  "observed_utc": "2026-11-03T18:47:43.537419+00:00",
+  "phase": "qualification-replacement-20261103",
+  "round": 3,
+  "status": "OpenAI third R3 decision launched; Anthropic preserved, MiniMax retained",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actor": {
+    "task_id": "task_59ba5ac247bd",
+    "dispatch_id": "ctx_48e9a1a9c523",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+    "actual_branch": "ryan-haver/wp-qr-r1-openai",
+    "exact_base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+    "frozen_input_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "nativeOpenAI Astra/high attestedatexactTask/Dispatch/cwd",
+      "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "highnative",
+      "bytes": 475828,
+      "sha256": "3981d19a804d095ee27cd7d6c5692c7a8e2c6e43cc8354b0fe3a41cec9df7c69"
+    },
+    "status": "third R3 final packet decision launched; no verdict, consensus or qualification inferred",
+    "observed_dispatch_status": "dispatched",
+    "observed_worker_state": "ready"
+  },
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "final_packet_published_ref": "f8d90f222c4f2c2e43047e2149f15276da101e48",
+  "publication_before_wave": "85f48d23ecb13f40ad74b473fa29b1a334186a72",
+  "fleet": {
+    "total": 132,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 132,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzozMzoyOSIsImRpc3BhdGNoSWQiOiJjdHhfYjZiNzVkNzI5MDAyIiwiZGF0YWJhc2VJZCI6NzI5fX0"
+      },
+      {
+        "limit": 100,
+        "total": 132,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 124
+    },
+    "historical_retained": 6,
+    "current_worker_resources": 2,
+    "accounting": "six historical plus MiniMax/OpenAI current worker resources; retention does not prove active work"
+  },
+  "concurrency": "two current workers + coordinator + protected external reservation=4; no nesting",
+  "decision_rule": "all three actual explicit accepts on SAME complete frozen packet, no material blocker; ninth authorized planning contribution now launched, no automatic extra round/vote",
+  "source_or_qualification_or_release_acceptance": false
+}

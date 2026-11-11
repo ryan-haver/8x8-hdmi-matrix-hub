@@ -7,9 +7,12 @@ envelope, and reject unavailable/invalid data without changing the matrix.
 from __future__ import annotations
 
 import json
+import logging
 import os
+import re
 import sys
 from pathlib import Path
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
@@ -36,6 +39,292 @@ async def _get(client, path, status=200):
 async def test_device_settings_returns_saved_customizations(data_hub, simulator):
     expected = json.loads((FIXTURE_DATA / "device_settings.json").read_text(encoding="utf-8"))
     assert (await _get(data_hub, "/api/device-settings"))["data"] == expected
+    assert sim_writes(simulator) == []
+
+
+async def test_shared_runtime_preset_catalog_after_explicit_ws_refresh(
+    matrix_with_telnet, simulator, tmp_path, monkeypatch, aiohttp_client,
+):
+    """A forced client read expires slots; ordinary reads retain their normal TTL."""
+    from types import SimpleNamespace
+
+    import orei_matrix
+    import persistence
+    import rest_api.utils as utils
+    import run
+    from hub.runtime.composition import build_runtime
+    from rest_api.app import create_rest_app
+    from tools.validate.runner import WsObserver
+
+    monkeypatch.setattr(utils, "_runtime", None)
+    monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [])
+    monkeypatch.setattr(orei_matrix, "time", SimpleNamespace(time=lambda: 1000.0))
+    monkeypatch.setattr(matrix_with_telnet, "_status_cache_ttl", 3.0)
+    env = {
+        "DATA_DIR": str(tmp_path / "data"), "UC_CONFIG_HOME": str(tmp_path / "config"),
+        "MATRIX_HOST": "127.0.0.1", "MATRIX_PORT": str(simulator.https_port),
+        "UC_ENABLED": "false", "FLIC_ENABLED": "false", "HA_DISCOVERY_ENABLED": "false",
+    }
+    runtime = build_runtime(run.load_settings(env), environ=env,
+                            matrix_factory=lambda *_args, **_kwargs: matrix_with_telnet)
+    client = await aiohttp_client(create_rest_app(runtime=runtime))
+    try:
+        assert await runtime.connect()
+        warm = (await _get(client, "/api/presets"))["data"]["presets"]
+        simulator.state.presets[0].routing = [8] * 8
+        simulator.state.presets[0].saved = True
+        simulator.state.presets[7].saved = False
+        # Keep the clock fixed: a slow test must never pass by expiring the TTL.
+        assert (await _get(client, "/api/presets"))["data"]["presets"] == warm
+        observer = WsObserver(str(client.make_url("/ws")), "127.0.0.1")
+        await observer.start()
+        try:
+            assert not observer.error
+            assert await observer.sync()
+        finally:
+            await observer.stop()
+        simulator.log.clear()
+        current = (await _get(client, "/api/presets"))["data"]["presets"]
+        assert current[0]["routing"] == {str(i): 8 for i in range(1, 9)}
+        assert current[0]["routing_source"] == "matrix"
+        assert current[7]["routing"] == {}
+        reads = [e["command"] for e in simulator.log if e["channel"] == "telnet"]
+        assert reads == [f"r preset {i}" for i in range(1, 9)]
+        assert (await _get(client, "/api/presets"))["data"]["presets"] == current
+        assert [e["command"] for e in simulator.log if e["channel"] == "telnet"] == reads
+        assert sim_writes(simulator) == []
+    finally:
+        await client.close()
+        await runtime.stop()
+
+
+@pytest.mark.parametrize("kind,port,field", [("input", 1, "inputs"), ("output", 8, "outputs")])
+async def test_shared_runtime_cec_status_after_explicit_ws_refresh(
+    matrix_with_telnet, simulator, tmp_path, monkeypatch, aiohttp_client, kind, port, field,
+):
+    """Registered status reflects a power command after an explicit WS synchronization."""
+    import persistence
+    import rest_api.utils as utils
+    import run
+    from hub.runtime.composition import build_runtime
+    from rest_api.app import create_rest_app
+    from tools.validate.runner import WsObserver
+
+    monkeypatch.setattr(utils, "_runtime", None)
+    monkeypatch.setattr(persistence, "get_legacy_data_paths", lambda: [])
+    monkeypatch.delenv("ADMIN_PIN", raising=False)
+    monkeypatch.delenv("CONTROL_PIN", raising=False)
+    env = {
+        "DATA_DIR": str(tmp_path / "data"), "UC_CONFIG_HOME": str(tmp_path / "config"),
+        "MATRIX_HOST": "127.0.0.1", "MATRIX_PORT": str(simulator.https_port),
+        "UC_ENABLED": "false", "FLIC_ENABLED": "false", "HA_DISCOVERY_ENABLED": "false",
+    }
+    runtime = build_runtime(run.load_settings(env), environ=env,
+                            matrix_factory=lambda *_args, **_kwargs: matrix_with_telnet)
+    client = await aiohttp_client(create_rest_app(runtime=runtime))
+    try:
+        assert await runtime.connect()
+        response = await client.post(f"/api/cec/{kind}/{port}/enable", json={"enabled": True})
+        assert response.status == 200, await response.text()
+        assert (await response.json())["success"] is True
+        warm = (await _get(client, "/api/status/cec"))["data"]["cec_config"]
+        assert warm[field][port - 1]["cec_enabled"] is True
+
+        # Model an external configuration change that does not send a Telnet push.
+        getattr(simulator.state, field)[port - 1].cec_enabled = 0
+        assert await matrix_with_telnet.is_cec_enabled(port, kind == "output") is True
+        observer = WsObserver(str(client.make_url("/ws")), "127.0.0.1")
+        await observer.start()
+        try:
+            assert not observer.error
+            assert await observer.sync()
+        finally:
+            await observer.stop()
+        simulator.log.clear()
+        response = await client.post(f"/api/cec/{kind}/{port}/power_on")
+        assert response.status == 200, await response.text()
+        assert (await response.json())["success"] is True
+        assert getattr(simulator.state, field)[port - 1].cec_enabled == 1
+        current = (await _get(client, "/api/status/cec"))["data"]["cec_config"]
+        assert current[field][port - 1]["cec_enabled"] is True
+        simulator.log.clear()
+        assert (await _get(client, "/api/status/cec"))["data"]["cec_config"] == current
+        assert sim_writes(simulator) == []
+    finally:
+        await client.close()
+        await runtime.stop()
+
+
+@pytest.mark.parametrize("route,manager_method", [
+    ("/api/profiles", "list_profiles"),
+    ("/api/profile/movie_night", "get_profile"),
+])
+async def test_profile_read_exception_is_opaque_and_preserves_saved_data(
+    data_hub, simulator, monkeypatch, caplog, route, manager_method,
+):
+    from rest_api.utils import get_profile_manager
+
+    await _get(data_hub, "/api/profiles")
+    before = {path.name: path.read_bytes() for path in data_hub.data_dir.glob("*.json")}
+    private = r"synthetic-private-profile C:\private\catalog.json host 10.93.82.71"
+    failure = Mock(side_effect=OSError(private))
+    monkeypatch.setattr(get_profile_manager(), manager_method, failure)
+    with caplog.at_level(logging.ERROR):
+        result = await _get(data_hub, route, 500)
+    match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", result["error"])
+    assert match is not None
+    assert private not in json.dumps(result)
+    assert any(f"[{match[1]}]" in record.getMessage() and private in record.getMessage()
+               and record.exc_info for record in caplog.records)
+    failure.assert_called_once()
+    assert {path.name: path.read_bytes() for path in data_hub.data_dir.glob("*.json")} == before
+    assert sim_writes(simulator) == []
+
+
+async def test_registered_preset_exception_keeps_private_diagnostic_and_no_device_write(
+    data_hub, matrix, simulator, monkeypatch, caplog,
+):
+    before = (await _get(data_hub, "/api/status"))["data"]["routing"]
+    private = r"synthetic-private-preset C:\private\matrix.cfg host 10.93.82.71"
+    recall = AsyncMock(side_effect=RuntimeError(private))
+    monkeypatch.setattr(matrix, "recall_preset", recall)
+    with caplog.at_level(logging.ERROR):
+        response = await data_hub.post("/api/preset/1")
+    assert response.status == 500 and response.content_type == "application/json"
+    result = await response.json()
+    assert set(result) == {"success", "data", "error"}
+    assert result["success"] is False and result["data"] is None
+    match = re.fullmatch(r"Internal server error \(ref: ([0-9a-f]{8})\)", result["error"])
+    assert match is not None
+    assert private not in json.dumps(result)
+    assert any(f"[{match[1]}]" in record.getMessage() and private in record.getMessage()
+               and record.exc_info for record in caplog.records)
+    recall.assert_awaited_once_with(1)
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"] == before
+    assert sim_writes(simulator) == []
+
+
+async def test_device_settings_private_extensions_survive_edits_without_public_exposure(data_hub, simulator):
+    from rest_api import device_settings
+
+    path = data_hub.data_dir / "device_settings.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    private = {"password": "synthetic-private-extension"}
+    stored["credentials"] = private
+    for kind in ("inputs", "outputs", "presets"):
+        stored[kind]["1"]["credentials"] = private
+    path.write_text(json.dumps(stored), encoding="utf-8")
+    device_settings.init_device_settings(data_hub.data_dir)
+
+    for route in ("/api/device-settings", "/api/device-settings/input/1", "/api/device-settings/output/1"):
+        public = await _get(data_hub, route)
+        assert "synthetic-private-extension" not in json.dumps(public)
+        assert "credentials" not in json.dumps(public)
+        assert "schema_version" not in json.dumps(public)
+    response = await data_hub.post("/api/device-settings/input/1", json={"name": "Edited display name"})
+    assert response.status == 200, await response.text()
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    device_settings.init_device_settings(data_hub.data_dir)
+    assert (await _get(data_hub, "/api/device-settings/input/1"))["data"]["name"] == "Edited display name"
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["schema_version"] == 2 and saved["credentials"] == private
+    assert all(saved[kind]["1"]["credentials"] == private for kind in ("inputs", "outputs", "presets"))
+    assert sim_writes(simulator) == []
+
+
+async def test_scene_override_private_extensions_survive_public_edit_and_reload(data_hub, simulator):
+    from rest_api.scenes_v2 import set_phase8_scene_manager
+    from scene_manager import SceneManager
+
+    async def read_scene(route):
+        response = await data_hub.get(route)
+        assert response.status == 200 and response.content_type == "application/json"
+        envelope = await response.json()
+        assert set(envelope) == {"success", "data"} and envelope["success"] is True
+        return envelope
+
+    path = data_hub.data_dir / "scenes_v2.json"
+    stored = json.loads(path.read_text(encoding="utf-8"))
+    scene_id = "scene_movienight01"
+    scene = next(row for row in stored["scenes"] if row["id"] == scene_id)
+    private = {"password": "synthetic-private-scene-extension"}
+    scene["credentials"] = private
+    scene["overrides"]["movie_night"]["2"]["credentials"] = private
+    path.write_text(json.dumps(stored), encoding="utf-8")
+    set_phase8_scene_manager(SceneManager(data_dir=data_hub.data_dir))
+
+    for route in ("/api/v2/scenes", f"/api/v2/scenes/{scene_id}"):
+        public = await read_scene(route)
+        assert "synthetic-private-scene-extension" not in json.dumps(public)
+        assert "credentials" not in json.dumps(public)
+        assert "passcode_hash" not in json.dumps(public)
+    response = await data_hub.put(f"/api/v2/scenes/{scene_id}", json={"name": "Edited scene"})
+    assert response.status == 200, await response.text()
+    set_phase8_scene_manager(SceneManager(data_dir=data_hub.data_dir))
+    public = (await read_scene(f"/api/v2/scenes/{scene_id}"))["data"]["scene"]
+    assert public["name"] == "Edited scene"
+    assert public["overrides"] == {"movie_night": {"2": {"audio_mute": True}}}
+    saved = next(row for row in json.loads(path.read_text(encoding="utf-8"))["scenes"] if row["id"] == scene_id)
+    assert saved["credentials"] == private
+    assert saved["overrides"]["movie_night"]["2"]["credentials"] == private
+    assert sim_writes(simulator) == []
+
+
+@pytest.mark.parametrize("direction,boundary,wrapped", [("next", 8, 1), ("previous", 1, 8)])
+@pytest.mark.parametrize("explicit_true", [False, True])
+async def test_cycle_clamp_and_wrap_read_back_exact_operation(
+    data_hub, simulator, direction, boundary, wrapped, explicit_true,
+):
+    response = await data_hub.post("/api/switch", json={"input": boundary, "output": 1})
+    assert response.status == 200, await response.text()
+    response = await data_hub.post(f"/api/input/{direction}?output=1&cycle=false")
+    assert response.status == 200, await response.text()
+    result = (await response.json())["data"]
+    assert (result["previous_input"], result["current_input"], result["output"]) == (boundary, boundary, 1)
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"]["1"] == boundary
+    assert simulator.state.outputs[0].source == boundary
+    suffix = "&cycle=true" if explicit_true else ""
+    response = await data_hub.post(f"/api/input/{direction}?output=1{suffix}")
+    assert response.status == 200, await response.text()
+    result = (await response.json())["data"]
+    assert (result["previous_input"], result["current_input"], result["output"]) == (boundary, wrapped, 1)
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"]["1"] == wrapped
+    assert simulator.state.outputs[0].source == wrapped
+
+
+async def test_save_current_reads_fresh_device_state_before_registered_profile_readback(
+    data_hub, matrix, simulator,
+):
+    matrix._status_cache_ttl = 3600
+    cached = await matrix.get_output_status()
+    simulator.state.outputs[0].source = 8
+    simulator.state.outputs[0].stream = 0
+    simulator.state.outputs[0].audio_mute = 1
+    assert await matrix.get_output_status() == cached
+    simulator.log.clear()
+    response = await data_hub.post("/api/scene/save-current", json={"id": "fresh_sim_capture"})
+    assert response.status == 200, await response.text()
+    captured = (await response.json())["data"]
+    assert captured["outputs"]["1"]["input"] == 8
+    assert captured["outputs"]["1"]["enabled"] is False
+    assert captured["outputs"]["1"]["audio_mute"] is True
+    public = (await _get(data_hub, "/api/profile/fresh_sim_capture"))["data"]
+    assert public["outputs"] == captured["outputs"]
+    saved = json.loads((data_hub.data_dir / "profiles.json").read_text(encoding="utf-8"))
+    assert next(row for row in saved["profiles"] if row["id"] == "fresh_sim_capture")["outputs"] == public["outputs"]
+    commands = {entry["command"] for entry in simulator.log if entry["channel"] == "http"}
+    assert {"get output status", "get video status"} <= commands
+    assert sim_writes(simulator) == []
+
+
+@pytest.mark.parametrize("direction", ["next", "previous"])
+@pytest.mark.parametrize("spelling", ["yes", "TRUE", ""])
+async def test_invalid_cycle_option_is_refused_before_any_write(data_hub, simulator, direction, spelling):
+    before = (await _get(data_hub, "/api/status"))["data"]["routing"]
+    response = await data_hub.post(f"/api/input/{direction}?output=1&cycle={spelling}")
+    assert response.status == 400, await response.text()
+    assert (await response.json())["success"] is False
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"] == before
     assert sim_writes(simulator) == []
 
 
@@ -187,6 +476,24 @@ async def test_device_status_reads_after_disconnect_are_json_503(data_hub, matri
     assert sim_writes(simulator) == []
 
 
+async def test_offline_route_refusal_reads_back_unchanged_routing(data_hub, matrix, simulator):
+    """A refused route while disconnected leaves routing/status unchanged (SW-API-CLIENT-02-C1)."""
+    before = (await _get(data_hub, "/api/status"))["data"]["routing"]
+    await matrix.disconnect()
+    response = await data_hub.post("/api/switch", json={"input": 3, "output": 1})
+    assert response.status == 503
+    # /api/status answers 503 with the link in ``data`` (VAL-04), unlike the plain 503 reads above.
+    offline = await data_hub.get("/api/status")
+    assert offline.status == 503
+    envelope = await offline.json()
+    assert envelope["success"] is False
+    assert envelope["error"] == "Matrix not connected"
+    assert envelope["data"]["connected"] is False
+    assert sim_writes(simulator) == []
+    await matrix.connect()
+    assert (await _get(data_hub, "/api/status"))["data"]["routing"] == before
+
+
 @pytest.mark.parametrize("path", ["/kiosk", "/kiosk/"])
 async def test_kiosk_aliases_serve_the_shipped_html(data_hub, path):
     response = await data_hub.get(path)
@@ -194,6 +501,57 @@ async def test_kiosk_aliases_serve_the_shipped_html(data_hub, path):
     assert response.content_type == "text/html"
     expected = Path(__file__).resolve().parents[2] / "web" / "kiosk.html"
     assert await response.read() == expected.read_bytes()
+
+
+async def test_health_includes_integration_lifecycle_mapping(data_hub, simulator, monkeypatch):
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"] == {}
+    states = {"flic": {"running": True, "button_count": 2}}
+    monkeypatch.setitem(data_hub.server.app, "integration_health_provider", lambda: states)
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"] == states
+    states["flic"]["running"] = False
+    assert (await _get(data_hub, "/api/health"))["data"]["integrations"]["flic"]["running"] is False
+    assert sim_writes(simulator) == []
+
+
+async def test_flic_registered_routes_preserve_private_storage_without_phantom_buttons(data_hub, simulator):
+    from hub.persistence import CURRENT_SCHEMA_VERSION
+
+    address = "80:e4:da:70:00:01"
+    private = {"bdaddr": "metadata-only", "password": "synthetic-private-extension"}
+    path = data_hub.data_dir / "flic_buttons.json"
+    path.write_text(json.dumps({
+        "schema_version": CURRENT_SCHEMA_VERSION, "extension_object": private,
+        address: {"bdaddr": address, "name": "Before", "serial": "sim", "credentials": private},
+    }), encoding="utf-8")
+    public = (await _get(data_hub, "/api/integrations/flic/buttons"))["data"]
+    assert public == {"buttons": [{"bdaddr": address, "name": "Before", "serial": "sim"}]}
+    response = await data_hub.post("/api/integrations/flic/register", json={"buttons": [
+        {"bdaddr": address, "name": "After", "serial": "updated"},
+    ]})
+    assert response.status == 200, await response.text()
+    envelope = await response.json()
+    assert envelope == {"success": True, "data": {"count": 1}, "error": None}
+    assert (await _get(data_hub, "/api/integrations/flic/buttons"))["data"] == {
+        "buttons": [{"bdaddr": address, "name": "After", "serial": "updated"}],
+    }
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    assert saved["extension_object"] == private and saved[address]["credentials"] == private
+    assert saved["schema_version"] == CURRENT_SCHEMA_VERSION
+    assert sim_writes(simulator) == []
+
+
+async def test_disabled_flic_routes_leave_core_reads_available(
+    data_hub, simulator, monkeypatch, aiohttp_client,
+):
+    from rest_api.app import create_rest_app
+
+    monkeypatch.setenv("FLIC_ENABLED", "false")
+    client = await aiohttp_client(create_rest_app(data_dir=data_hub.data_dir))
+    assert (await client.get("/api/integrations/flic/buttons")).status == 404
+    assert (await client.post("/api/integrations/flic/register", json={"buttons": []})).status == 404
+    assert (await _get(client, "/api/health"))["data"]["status"] == "healthy"
+    assert (await _get(client, "/api/status"))["data"]["connected"] is True
+    assert sim_writes(simulator) == []
 
 
 async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
@@ -207,6 +565,11 @@ async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
     assert validate_openapi_spec(spec) == []
     assert "/api/openapi.json" in spec["paths"]
     assert "/api/docs" in spec["paths"]
+    assert spec["components"]["schemas"]["SceneV2ResponseEnvelope"]["required"] == ["success"]
+    for direction in ("next", "previous"):
+        parameters = spec["paths"][f"/api/input/{direction}"]["post"]["parameters"]
+        cycle = next(parameter for parameter in parameters if parameter["name"] == "cycle")
+        assert cycle["in"] == "query" and cycle["schema"] == {"type": "boolean", "default": True}
 
     docs_resp = await data_hub.get("/api/docs")
     assert docs_resp.status == 200

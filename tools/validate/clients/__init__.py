@@ -10,15 +10,9 @@ from __future__ import annotations
 from .api import ApiClient
 from .base import ActionResult, Client, HubInfo, NotSupportedError, UnimplementedClient
 from .browser import BrowserClient
+from .flic import FlicClient
 from .ha import HomeAssistantClient
 from .uc import RemoteClient
-
-
-class FlicClient(UnimplementedClient):
-    name = "flic"
-    work_package = "WP-D1 (Flic replay)"
-    plan = "exact replay of the HTTP requests a Flic Hub sends, as documented in docs/FLIC_SETUP.md"
-
 
 CLIENTS: dict[str, type[Client]] = {
     "api": ApiClient,
@@ -42,9 +36,11 @@ __all__ = [
     "ApiClient",
     "BrowserClient",
     "Client",
+    "FlicClient",
     "HomeAssistantClient",
     "HubInfo",
     "NotSupportedError",
     "RemoteClient",
+    "UnimplementedClient",
     "make_client",
 ]

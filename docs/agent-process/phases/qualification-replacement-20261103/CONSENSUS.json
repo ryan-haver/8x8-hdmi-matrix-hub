@@ -1,0 +1,172 @@
+{
+  "observed_utc": "2026-11-03T18:56:48.436776+00:00",
+  "status": "ACCEPTED final plan and staffing allocation, not model qualification",
+  "phase": "qualification-replacement-20261103",
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "final_packet_bytes": 79378,
+  "final_packet_published_ref": "f8d90f222c4f2c2e43047e2149f15276da101e48",
+  "three_actual_decisions": {
+    "anthropic": {
+      "report_commit": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+      "report_path": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+      "report_bytes": 3960,
+      "report_sha256": "d4df5baf81b8410286a6561fbea9d9a73dfb68d2443a647b61826bc13100e711",
+      "task_id": "task_9dff86280e44",
+      "dispatch_id": "ctx_516e9f13d9fa",
+      "native_identity": {
+        "session": "41aa3a76-4b99-48a6-bc3d-e6c63f4384d6",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "bytes": 980357,
+        "sha256": "24fe44a7aa7d0d68465837450a310835983ceb24f27931140a1327948d1e4465"
+      },
+      "decision": {
+        "round": 3,
+        "participant_family": "Anthropic",
+        "actual_model": "claude-opus-5-5",
+        "effort_or_native_limit": "high as dispatched; native per-turn effort not observable in-session",
+        "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "verdict": "accept",
+        "allocation_accepted": true,
+        "unresolved_material_blockers": [],
+        "candidate_conflict_disclosed": true,
+        "source_or_qualification_acceptance": false
+      },
+      "preservation": {
+        "wp-qr-r1-anthropic": {
+          "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+          "archive_bytes": 207200028,
+          "regular_files": 4682,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-anthropic": {
+          "archive_sha256": "2fcc9f7712f6e141c823d21bb6144986a056a8c3560a5f721f5dea20888e8563",
+          "archive_bytes": 61367,
+          "regular_files": 104,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "task_ref_publication": "exact remote/local verified",
+      "worker": "released",
+      "integration_commit": "22a696cb9a1e613dc88d88e6fb346ca9ba39979a"
+    },
+    "minimax": {
+      "report_commit": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+      "report_path": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+      "report_bytes": 14091,
+      "report_sha256": "379eb88de9cc5d9a530375343cd86f8df3bec9ee4be408820d4cbdc5916a51ba",
+      "task_id": "task_06484235023d",
+      "dispatch_id": "ctx_55dc79dcba80",
+      "native_identity": {
+        "session": "ses_e5d4720acffe2srGP4Nnd05N39",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 432414,
+        "sha256": "17b5bc42525355d8d36b270636a5a83c246d8c95fb3ca39fe2a7fdf7608bcedc"
+      },
+      "decision": {
+        "round": 3,
+        "participant_family": "MiniMax",
+        "actual_model": "minimax-coding-plan/MiniMax-M3",
+        "effort_or_native_limit": "thinking inherited; CLI effort override unsupported; no fallback used",
+        "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "verdict": "accept",
+        "allocation_accepted": true,
+        "unresolved_material_blockers": [],
+        "candidate_conflict_disclosed": true,
+        "source_or_qualification_acceptance": false,
+        "final_packet_bytes": 79378,
+        "peer_reports_read": false,
+        "execution_prerequisites_unchanged": [
+          "joint Claude and OpenAI headroom >=30% freshly verified before candidate dispatch and again before judge",
+          "fresh native identity attestation and fresh stage discovery",
+          "one candidate, one fresh judge, no automatic retry or replacement judge",
+          "exact remote/local task-ref publication equality before the next wave"
+        ],
+        "disagreements_preserved": [
+          "D5: my round-2 static 43 count rejected; source arithmetic at caaa4faa gives 13 C1 + 41 C2 = 54 expected cases, static expectation only",
+          "D6: in-window C1 follow-up is OpenAI gpt-6.1-sol/high at task_c0d26e9e563e/ctx_0f27082dc4eb; historical DeepSeek product authorship preserved separately"
+        ]
+      },
+      "preservation": {
+        "wp-qr-r1-minimax": {
+          "archive_sha256": "8e345a2b8d2232ff8f1bd6ee3783434eea7cfec990a36e2139170bdefde93acf",
+          "archive_bytes": 207016611,
+          "regular_files": 4683,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-minimax": {
+          "archive_sha256": "e2550017598e4797ea905a551fa60381afaa2b1b92a6c757d90893458bc6e4cd",
+          "archive_bytes": 127211,
+          "regular_files": 122,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "task_ref_publication": "exact remote/local verified",
+      "worker": "released",
+      "integration_commit": "18e92bd62eddcd37eb2916c14970895bc097f4ae"
+    },
+    "openai": {
+      "report_commit": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+      "report_path": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+      "report_bytes": 4655,
+      "report_sha256": "306affeebeb63f69e469440c81f593602128f7fc76bf160b72004bec743a43fd",
+      "task_id": "task_59ba5ac247bd",
+      "dispatch_id": "ctx_48e9a1a9c523",
+      "native_identity": {
+        "session": "01a1a2bc-a7b8-7232-9516-741e76e45825",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 894191,
+        "sha256": "ca447e06e8c63b56605d1119ab98efc0ab4238adba3510dac080b5258f1c5fe6"
+      },
+      "decision": {
+        "round": 3,
+        "participant_family": "OpenAI",
+        "actual_model": "gpt-6-astra",
+        "effort_or_native_limit": "high; own native turn_context verified",
+        "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+        "verdict": "accept",
+        "allocation_accepted": true,
+        "unresolved_material_blockers": [],
+        "candidate_conflict_disclosed": true,
+        "source_or_qualification_acceptance": false
+      },
+      "preservation": {
+        "wp-qr-r1-openai": {
+          "archive_sha256": "a4fa332ecbe9fb8a387cbcf138e0cb5a5365d7557caee9b66e2505e32ba581c6",
+          "archive_bytes": 207041835,
+          "regular_files": 4684,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "external-r3-openai": {
+          "archive_sha256": "d3412e6e8a14ab408cc5fae9ea0f661f26b071b2912d8436c5c2fb473bdd5812",
+          "archive_bytes": 57303,
+          "regular_files": 102,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "task_ref_publication": "exact remote/local verified",
+      "worker": "released",
+      "integration_commit": "0a12644216c184999edc75440e03d6c26275943c"
+    }
+  },
+  "distinct_families": [
+    "Anthropic",
+    "MiniMax",
+    "OpenAI"
+  ],
+  "coordinator_is_contributor": false,
+  "all_three_explicit_accept": true,
+  "unresolved_material_blockers": [],
+  "actual_panel_contributions": 9,
+  "max_panel_contributions": 9,
+  "additional_vote_authorized": false,
+  "capacity_note": "Final packet remaining-six-planning reserve wording is dated conservative bookkeeping; explicit max9 and exactly3R3 after6 earlier contributions governs. No additional authority or packet rewrite.",
+  "execution_authority": "ONE Opus5.5 evaluation then ONE fresh OpenAI judge, unchanged source/rubric/domain and all fresh gates. Any hold/fail means no domain, no automatic retry/rewrite/new judge.",
+  "qualification_or_source_or_release_acceptance": false
+}

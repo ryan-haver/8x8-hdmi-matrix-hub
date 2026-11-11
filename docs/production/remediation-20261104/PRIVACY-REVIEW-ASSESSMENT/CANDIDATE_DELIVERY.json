@@ -1,0 +1,301 @@
+{
+  "observed_utc": "2026-11-04T07:28:44.786813+00:00",
+  "status": "CANDIDATE REPORT DELIVERED; NOT_QUALIFIED / UNJUDGED",
+  "task_id": "task_8b5496cdc9b2",
+  "dispatch_id": "ctx_408fa818297a",
+  "report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/AUTHOR.md",
+  "report_commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+  "report_parent": "2d02004d3108953a302e1a49aab9a5f24e944136",
+  "canonical_bytes": 24208,
+  "canonical_sha256": "7b469ade0388e0de5a46051528992bfb675ba43addd871c48fdaeaf48aa01f2c",
+  "native": {
+    "session": "0c330b18-dc20-4251-96a1-82858470f91e",
+    "model": "claude-opus-5-5",
+    "effort": "high explicit launch/local config; native per-turn effort not exposed",
+    "bytes": 2455367,
+    "sha256": "f0e087d01dc4e9e44b1a3da29a8fedd8821aaf17d6248d14e7aece80cb7cbdb3",
+    "no_helpers_observed": true
+  },
+  "invocations": [
+    {
+      "label": "inv01-probe",
+      "direct_exit": 0,
+      "receipt_sha256": "6a5373518a1f1fb77dcf966a00f814e3f9b5f9aec63d3ca5d0ed2c866d5eba64",
+      "stdout_sha256": "da01b53e5c4465a7308e029ed82f9eb3527e85dd9e36a4af7d10dfdf289ee2ba",
+      "stderr_sha256": "ca49fc0b6e6cb8a24c3095cdf96d00019018872c4949aff12d16132a7f0f185a",
+      "start_utc": "2026-11-04T07:12:23.844753+00:00",
+      "end_utc": "2026-11-04T07:12:24.500136+00:00"
+    },
+    {
+      "label": "inv02-collect",
+      "direct_exit": 0,
+      "receipt_sha256": "df136321c0b0037aefa4831991739c8f5e9a7061247ff97e8f70874ee1ebf612",
+      "stdout_sha256": "ec505229ef7499e6f5fb3bba1b502eafbbe4f246a078fc3ffed6b172d869b908",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:12:30.867987+00:00",
+      "end_utc": "2026-11-04T07:12:31.706651+00:00"
+    },
+    {
+      "label": "inv03-focused",
+      "direct_exit": 0,
+      "receipt_sha256": "9522bab078318f6a06b04b2f305e261b98b4a55c69f8a07fc621fb7033096fe0",
+      "stdout_sha256": "bcc1263f4ec61ce3d233f9af62b7a13b63c1b6794b11085b3df3cd4c11343a58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:12:38.140956+00:00",
+      "end_utc": "2026-11-04T07:12:40.463691+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv04-mutant-none",
+      "direct_exit": 0,
+      "receipt_sha256": "c4a702e124c08c09d31211c8f4d4e8040fd272de8ea2f463f8a6988de66a84fe",
+      "stdout_sha256": "2cd291b852fad9fc929c5e5af313cd7621f98aae5b9cfef6daf9a0107760d7ae",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:05.671137+00:00",
+      "end_utc": "2026-11-04T07:13:07.834235+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv05-mutant-M1_write_record",
+      "direct_exit": 1,
+      "receipt_sha256": "6f439b94cb8ead9520a77a471910c7ac840332732033c75fae7bf656bfe2768b",
+      "stdout_sha256": "4c81f619f3a7c38d2ac604c0d028cdcc9b143509c9889944a43fe2513fdc277e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:08.126918+00:00",
+      "end_utc": "2026-11-04T07:13:10.255183+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv06-mutant-M2_regex",
+      "direct_exit": 1,
+      "receipt_sha256": "6a187ce8a05d48f9a01a37efb91b9cd8561d09566d10fc99ece47bd1ea8414cb",
+      "stdout_sha256": "ad40cc44e367753c27418a0b0e41f93594f1b720c89c3ca7d21d8b914d46fd58",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:10.544710+00:00",
+      "end_utc": "2026-11-04T07:13:12.649606+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 15,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv07-mutant-M3_api_steps",
+      "direct_exit": 1,
+      "receipt_sha256": "192d97fc6a122cfd919b9f36f72e47be5426b0e7373a597f953b219ca4614cd3",
+      "stdout_sha256": "ae483d9b54d1f786fd2531603d5c4b14d52f4aae56d902231c17480df3f9b9b4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:12.981876+00:00",
+      "end_utc": "2026-11-04T07:13:15.093424+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 9,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv08-mutant-M4_runner_check",
+      "direct_exit": 1,
+      "receipt_sha256": "42765de02f237da621a8a4b7919f33a8eba2ce6d8be655b8f26518f282c166ed",
+      "stdout_sha256": "139f5bfe8123e49a27bf754ab68270b68bc6dc7bde9a6f11ae50bc9a9502f038",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:15.396175+00:00",
+      "end_utc": "2026-11-04T07:13:17.502083+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 9,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv09-mutant-M5_describe",
+      "direct_exit": 1,
+      "receipt_sha256": "7cd61e5a52ca6e638e55570d1a6fdf01722fb0d60137e72b17faa68d7c390e29",
+      "stdout_sha256": "81d80710bca074b4f265e28690b261b83aaee4068c2deb202302d89c6eeb75a1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:13:17.794671+00:00",
+      "end_utc": "2026-11-04T07:13:19.980625+00:00",
+      "junit": {
+        "tests": 18,
+        "failures": 5,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inv10-counterexamples",
+      "direct_exit": 0,
+      "receipt_sha256": "595e7fb8c666d20c3d687be9665b40a54eb079e1cbe0406732a9056e56c0fb71",
+      "stdout_sha256": "993d06966a17c88c1a92c7e0b1ee447edc32cf1749cb630e3b8a95bfb75fc248",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:14:48.018492+00:00",
+      "end_utc": "2026-11-04T07:14:48.659089+00:00"
+    },
+    {
+      "label": "inv11-schema-keys",
+      "direct_exit": 0,
+      "receipt_sha256": "9432e5bfeebdf4fa6d1a457e8732cf150057fc8679d9ffbc8040c09e079095da",
+      "stdout_sha256": "7b2ac80607052531aaf8cb5d6b9f06fe52985a3901a92e987a74627f2051867d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:15:17.659084+00:00",
+      "end_utc": "2026-11-04T07:15:17.803371+00:00"
+    },
+    {
+      "label": "inv12-compat",
+      "direct_exit": 0,
+      "receipt_sha256": "772511d2995b17424509df0add6ad4c930c5ed4a75f06461847583fc1e0b4b11",
+      "stdout_sha256": "b202a8e051678dde0fae2db3a36f5e128c5584f9d643f783ef059f00efb64e8e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:15:39.602086+00:00",
+      "end_utc": "2026-11-04T07:16:45.704443+00:00",
+      "junit": {
+        "tests": 78,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "label": "inv13-catalogue-shapes",
+      "direct_exit": 0,
+      "receipt_sha256": "48d18a3fe559f9bdf010be44e94201d7ca193be0d212aba843b5e945ba848434",
+      "stdout_sha256": "fef81059b2e8186b53d402bbb94c7beb60cd3cb6a42b651289ed2be0b4daa3f5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:18:24.038849+00:00",
+      "end_utc": "2026-11-04T07:18:24.268099+00:00"
+    },
+    {
+      "label": "inv14-docs",
+      "direct_exit": 0,
+      "receipt_sha256": "c2b21dca68451a1e69de4e1e9c0143ec2ed11b549bceb4af90ec0fbe397b0202",
+      "stdout_sha256": "d82c15df1349ef14efc5bbfad5c84d09d05f973d3ea41db78d47e3f7f414ed81",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "start_utc": "2026-11-04T07:22:12.983274+00:00",
+      "end_utc": "2026-11-04T07:22:16.843226+00:00",
+      "junit": {
+        "tests": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "supplied_manifest_entries_verified": 646,
+  "packet_representation": {
+    "scope": "Representation erratum only: previous94b28 digest binds working CRLF; canonical Git LF173270 digest differs only by CRLF normalization. Original task/packet/rubric/source content unchanged.",
+    "working_CRLF": {
+      "bytes": 8460,
+      "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4"
+    },
+    "canonical_Git_LF": {
+      "bytes": 8308,
+      "sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+    },
+    "normalization_exact_equal": true,
+    "parsed_content_exact_equal": true
+  },
+  "archives": [
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-qual-privacy-review-20261104",
+      "head": "1a38e2851f0223627f5377fa5e32584c233e1223",
+      "branch": "qualification/privacy-review-20261104",
+      "status": "",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\privacy-assessment\\candidate-closeout\\preservation\\wp-qual-privacy-review-20261104\\workspace.tar.gz",
+      "archive_sha256": "a8f2da511bb6dfc65d471498ee078fe29564b6893a68e62a483b81a42cd897d3",
+      "archive_bytes": 205898625,
+      "regular_files": 4494,
+      "regular_bytes": 295165572,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    },
+    {
+      "workspace": "C:\\t\\remediation-privacy-assessment",
+      "head": null,
+      "branch": null,
+      "status": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\privacy-assessment\\candidate-closeout\\preservation\\external-privacy-assessment\\workspace.tar.gz",
+      "archive_sha256": "c7c1cefeb874101dea70461837c28cca4c1b77a0141e7dc0fa0715023b69ab82",
+      "archive_bytes": 532340,
+      "regular_files": 745,
+      "regular_bytes": 2810323,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    }
+  ],
+  "task_ref_remote_equal": true,
+  "source_qualification_or_acceptance": false,
+  "scope": "Structural identity/original receipt/JUnit/byte-preservation/ref publication only, semantic/privacy/competence judgement reserved to ONE fresh independent judge",
+  "candidate_claims": "No High/Medium in five changed hunks; N-1..N-5 Low tuple/header/string/summary/overmasking limitations and N-6/N-7 Info receipt/sibling observations, all unjudged. Candidate historical source-artifact claims explicitly UNKNOWN; no source acceptance.",
+  "coordinator_source_authorship": {
+    "matched": {
+      "task_242c1cc61b92": {
+        "dispatch": "ctx_793d3e4da3c3",
+        "cwd": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-sec-data-02-c3",
+        "session": "01a1859e-84ec-7800-8a93-bcb6b40918f9",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "efforts": [
+          "high"
+        ],
+        "bytes": 2004652,
+        "sha256": "cc5fa61c2d96a112fe5baedc470b3884efb62ecc03570766bef970c742d3a81e",
+        "scope": "Historical actual-model attribution only; no old test/evidence/privacy acceptance"
+      },
+      "task_cf272c0e3b6c": {
+        "dispatch": "ctx_a52a1d96ad08",
+        "cwd": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-sec-data-02-c1",
+        "session": "01a184b2-fc3e-7d60-a462-e29adf1e26a3",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "efforts": [
+          "high"
+        ],
+        "bytes": 2310133,
+        "sha256": "7adba7a3baae3b7369bf8d52c661b74be67e4f5d9f8f745cac62399f3a026f10",
+        "scope": "Historical actual-model attribution only; no old test/evidence/privacy acceptance"
+      },
+      "task_4e33d0624489": {
+        "dispatch": "ctx_a35145bc2f5d",
+        "cwd": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-sec-data-02-c2",
+        "session": "01a1856e-d431-7221-896e-76233290217e",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "efforts": [
+          "high"
+        ],
+        "bytes": 1502412,
+        "sha256": "8fe7981661981e22615ba398ab249bbdf33f2021de22a7e41d834e33bcec2e6a",
+        "scope": "Historical actual-model attribution only; no old test/evidence/privacy acceptance"
+      }
+    },
+    "unmatched": [],
+    "scope": "Narrow coordinator actual authorship corroboration; not repairing candidate unknown historical artifact claims or granting source acceptance"
+  },
+  "source_authorship_scope": "Exact three original Task/Dispatch/cwd natives independently corroborate gpt-6.1-sol/high, originals privately preserved. Attribution only, does not repair candidate unknown old test/raw/artifact admission claims.",
+  "worker": "positively released, task-ref remote/local exactverified, full workspace4494files/temp745files/native preserved; no cleanup or new fullbundle claim",
+  "qualification_or_source_acceptance": false,
+  "next": "ONE independent Astra/high judge on exact1a38e285 report, original source/native/receipts and unchanged six axes. No automatic rewrite/retry/new judge."
+}

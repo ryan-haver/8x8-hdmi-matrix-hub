@@ -9,6 +9,8 @@ This directory implements [`VALIDATION_PLAN.md`](VALIDATION_PLAN.md). The short 
 | [`evidence.schema.json`](evidence.schema.json) | JSON schema of an evidence record. |
 | [`evidence/`](evidence/README.md) | Committed evidence records (milestones, hardware sessions). CI evidence is an artifact. |
 | [`findings_pending.yaml`](findings_pending.yaml) | Bugs found by validation that still need a row in the register (`REMEDIATION_PLAN.md` §4). They count as open findings. |
+| [`RELEASE_EVIDENCE_GAPS.md`](RELEASE_EVIDENCE_GAPS.md) | Dated read-only inventory of below-target features, missing/freshness/cap overlays and proposed follow-up scopes; no evidence promotion. |
+| [`RELEASE_VALIDATION_CHECKLIST.md`](RELEASE_VALIDATION_CHECKLIST.md) | Software, visual, hardware, soak, field and publication gates with required closure evidence. |
 | `../../tools/validate/` | The runner, clients, ledger generator and CI gate. |
 | `../../tests/validation/scenarios/` | The scenarios. |
 

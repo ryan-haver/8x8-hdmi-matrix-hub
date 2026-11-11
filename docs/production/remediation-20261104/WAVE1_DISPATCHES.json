@@ -1,0 +1,209 @@
+{
+  "observed_utc": "2026-11-04T06:48:27.330797+00:00",
+  "status": "ACTIVE two bounded remediation tasks; no deliverables accepted",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "prewave_published_head": "522ffdbb34cc0e41db0e9411eb0072c95b18d0fb",
+  "actors": [
+    {
+      "key": "ws-component",
+      "task_id": "task_38756b76bd12",
+      "dispatch_id": "ctx_14a660b697ab",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01",
+      "actual_branch": "remediation/ws-work-01",
+      "exact_base": "460a190575e905f8350c454e63c4d570c8b560fa",
+      "exclusive_report": "docs/production/remediation-20261104/WS-WORK-01/AUTHOR.md",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model attested at exact Task/Dispatch/cwd",
+        "session": "2a593a53-f899-407f-a59d-862cd4c8e524",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit supported launch/local config; native per-turn effort not exposed",
+        "bytes": 724167,
+        "sha256": "8e7a1de0e4ef8ca5c4c828fc17c57d0673394b1a2ae98eb80c24a9163cc26f4e",
+        "unassigned_helper_calls_observed": [],
+        "scope": "point-in-time native entry, not completed competence/descendant census"
+      },
+      "routing": {
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01",
+        "base": "460a190575e905f8350c454e63c4d570c8b560fa",
+        "branch": "remediation/ws-work-01",
+        "config": ".claude/settings.local.json",
+        "config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "expected_initial_status": "",
+        "coordinator_owned_untracked_config_never_stage": false,
+        "publication_before_creation": "522ffdbb34cc0e41db0e9411eb0072c95b18d0fb",
+        "settings_documentation": "https://learn.chatgpt.com/docs/config-file/config-reference",
+        "nested_helpers_disabled": true
+      },
+      "status": "active, no outcome accepted",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    {
+      "key": "api-evaluation",
+      "task_id": "task_dca414868333",
+      "dispatch_id": "ctx_8017ffe0975e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review-evaluation",
+      "actual_branch": "execution/wp-exec-rv-api034-review-evaluation",
+      "exact_base": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+      "exclusive_report": "docs/production/software-waves/RV-API034/execution-20261101/EVALUATION.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model attested at exact Task/Dispatch/cwd",
+        "session": "01a1a54f-4474-7943-aa42-05d86ce034ef",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 923799,
+        "sha256": "fa72f3c80c1d3daa3f7f6095a3e34904667433946a9df54dcee0441e9d235efb",
+        "unassigned_helper_calls_observed": [],
+        "scope": "point-in-time native entry, not completed competence/descendant census"
+      },
+      "routing": {
+        "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review-evaluation",
+        "base": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+        "branch": "execution/wp-exec-rv-api034-review-evaluation",
+        "config": ".codex/config.toml",
+        "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+        "expected_initial_status": "?? .codex/config.toml",
+        "coordinator_owned_untracked_config_never_stage": true,
+        "publication_before_creation": "522ffdbb34cc0e41db0e9411eb0072c95b18d0fb",
+        "settings_documentation": "https://learn.chatgpt.com/docs/config-file/config-reference",
+        "nested_helpers_disabled": true
+      },
+      "status": "active, no outcome accepted",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  ],
+  "fleet": {
+    "total": 137,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 137,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzAxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODo1NTozMSIsImRpc3BhdGNoSWQiOiJjdHhfODIzYmQyNDAzNTRiIiwiZGF0YWJhc2VJZCI6NzM1fX0"
+      },
+      {
+        "limit": 100,
+        "total": 137,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 129
+    },
+    "historical_retained": 6,
+    "new_current": 2
+  },
+  "concurrency": "two current+coordinator+protectedexternal=4; no nesting",
+  "capacity": {
+    "ws-component": {
+      "observed_utc": "2026-11-04T06:46:26.935993+00:00",
+      "reserve": "two bounded tasks plus future independent WS component judgement/author correction/re-review; every future stage freshly gated",
+      "unknown": "absolute allowance/other-host demand not exposed",
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 24,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400143,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793778600143,
+          "resetDescription": "Wed 12:50 AM"
+        },
+        "updatedAt": 1793774626132,
+        "error": null
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 1,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793774626516,
+        "error": null
+      }
+    },
+    "api-evaluation": {
+      "observed_utc": "2026-11-04T06:46:35.453453+00:00",
+      "reserve": "two bounded tasks plus future independent WS component judgement/author correction/re-review; every future stage freshly gated",
+      "unknown": "absolute allowance/other-host demand not exposed",
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 24,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400143,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793778600143,
+          "resetDescription": "Wed 12:50 AM"
+        },
+        "updatedAt": 1793774626132,
+        "error": null
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 1,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793774626516,
+        "error": null
+      }
+    }
+  },
+  "component_gate": "Anthropic first bounded authorship NOT_GRANTED at launch. NEW-file controller/tests candidate only; no existing API edits/wiring or source acceptance. Qualified future Astra exact-component judgement required, then earned authorship, fresh existing-source lease and independent exact-wiring review before CR-01 can close.",
+  "evaluation_gate": "Existing exact12ee secondary report evaluation only; cannot self-accept original OpenAI code, integrate it or clear M-1/security/privacy.",
+  "settings": "Codex project multi_agent=false verified by execution-host features list under exact managed profile/cwd, config deliberately untracked and coordinator-owned; never stage it. Claude teams/helpers/MCP/plugins denied in ignored local config. Global account profiles unchanged. See https://learn.chatgpt.com/docs/config-file/config-reference .",
+  "followup": "Preserve native/original/workspace/temp and task-ref publication, then promptly release exact workers on delivery; review/correction stages freshly gated, no automatic qualification retry. Root source unchanged, other14finding groups remain open.",
+  "publication": "Scoped launch records checked/pushed/exactverified, then end turn for Orca wake; do not completion-poll"
+}

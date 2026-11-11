@@ -1,0 +1,22 @@
+{
+  "source_commit": "e2161484459da65aee14433136a14963507b499c",
+  "canonical_features": 268,
+  "canonical_below_target": 210,
+  "canonical_stale": 96,
+  "software_targets": 147,
+  "hardware_targets": 120,
+  "field_targets": 1,
+  "current_round_workers": "all settled/released; historical6retained protected",
+  "current_review_candidates": {
+    "privacy_c3": "2d02004d3108953a302e1a49aab9a5f24e944136",
+    "api_c2": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "ws_browser_report": "1fbfee112cc503ffa273c19dc565092d01fe2d6b"
+  },
+  "source_integration": "latest candidate source unreviewed/unintegrated; exact retained original task refs published; raw privacy admission held",
+  "owner_direction": "allow Anthropic/Gemini/Codex/MiniMax; DeepSeek out of credit; no new spend",
+  "historical_source_hashes": {
+    "docs/planning/software-waves/manifest.json": "15e5069855601bc0c8af59d74faa06f4a4a311dac062b00225e089b4ab880ad5",
+    "docs/agent-process/state/HANDOFF.md": "b415ea6f7173313aef9657b1ab29bf049be7d7b0e038392f979705cdac324851",
+    "docs/validation/LEDGER.md": "b8078e4d45be717c88f7f138c34a60d45a3ad118e1051e30f5da8a8c88c25cf7"
+  }
+}

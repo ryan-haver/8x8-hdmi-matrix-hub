@@ -1,0 +1,119 @@
+{
+  "observed_utc": "2026-11-03T05:01:05.512701+00:00",
+  "status": "prepared, no new authors launched",
+  "accepted_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, live supported discovery privately retained",
+  "capacity": {
+    "observed_utc": "2026-11-03T04:54:52.172178+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 45,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793681519898,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 55,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 18,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932939,
+        "resetDescription": null
+      },
+      "updatedAt": 1793681519622,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 113,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 113,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDEyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDowMDoyMiIsImRpc3BhdGNoSWQiOiJjdHhfNzJjZmY3ODY1NWQ4IiwiZGF0YWJhc2VJZCI6NjMwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 113,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 107,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "MiniMax": "minimax-coding-plan/MiniMax-M3",
+    "project_config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "CLI_overrides": "OpenCode2 model/effort override unsupported; main/small/internal exactM3 and denied unassigned providers/helpers/plugins, native response attestation required",
+    "OpenAI_reviewer": "gpt-6-astra/high",
+    "OpenAI_catalog_fetched_at": "2026-11-03T05:00:58.940960Z"
+  },
+  "jobs": {
+    "findings_fix02": {
+      "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "worktree_name": "wp-exec-sw-findings-01",
+      "expected_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "spec": "FINDINGS_CORRECTION02_TASK.txt",
+      "dependency": "task_f76d52b72a2e",
+      "title": "SW-FINDINGS two exact terminology corrections02",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "gate_path": [
+        "independent_findings_delta",
+        "correction02"
+      ],
+      "scope": "R3 _SECRET_KEYS versus _SECRET_QUERY, R5 six separate Ruff tokens only; no new audit/selfcheck harness",
+      "budget": "3min target,<=150new explanatory words",
+      "author_family": "MiniMax",
+      "independent_reviewer": "OpenAI/Astra exact resulting commit",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "ci_fix01": {
+      "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "worktree_name": "wp-exec-ev-ci-attribution",
+      "expected_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "spec": "CI_ATTRIBUTION_CORRECTION01_TASK.txt",
+      "dependency": "task_e8646aacd637",
+      "title": "EV-CI-ATTRIBUTION seven bounded reporting corrections01",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+      "gate_path": [
+        "CI_attribution",
+        "correction01"
+      ],
+      "scope": "R1-R7 arithmetic/future-path/Flic-API context/gates/qualification/method wording only;56core mappings untouched",
+      "budget": "8min target,<=400new explanatory words",
+      "author_family": "MiniMax",
+      "independent_reviewer": "OpenAI/Astra exact resulting commit",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "qualification": "Existing bounded M3 metadata authorship and accepted CI metadata review, SW-AUDIT/EV negative-gap documentation; OpenAI actual recent qualified metadata reviews433/81ac. No source/security/privacy correctness domain inferred.",
+  "demand": "explicitly extend findings reserve by one very small author fix/exact re-review for residualR3/R5; CI uses already reserved firstauthor-fix/exact re-review. No new global audit, classification, selfcheck harness or unbounded correction loop; no automatic failed-qualification retry.",
+  "alternatives": "Sol actual model-capacity event preserved; Astra relevant recent native availability. Google unknown, DeepSeek exhausted, no silent fallback/self-review.",
+  "material_plan_change": false,
+  "concurrency": "max2new+coordinator+protected old external reservation=4; no nesting",
+  "protected": "root/private data/old reports/failed probes/evidence/natives/ignoredartifacts/baselines/retainedworkspaces/odduntrackedhook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1formalFAIL/no domain, explicit owner manual-retake decision pending, no answer/approval inferred; source/owner gates unchanged"
+}

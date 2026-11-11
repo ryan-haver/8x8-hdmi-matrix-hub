@@ -1,0 +1,162 @@
+{
+  "observed_utc": "2026-11-04T06:44:59.365910+00:00",
+  "status": "PREPARED two genuine worker tasks, not launched",
+  "owner_authority": "now enact the plan and remediate all findings",
+  "plan": "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
+  "covered_scope": "CR-08 current metadata correction; pending already-planned RV-API034 evaluation; new useful bounded NEW-file WS component/candidate authorship assessment under accepted prospective Anthropic/OpenAI family fallback, before any existing-API lease. Not normal source-unit acceptance. No broad grant or retake of old4.7/5.5review qualification.",
+  "planning_disposition": "Existing accepted P0-P5/OWNER program and within-family model rematch retained. New internal component is provisional/useful candidate work; public contracts/existing handlers stay unchanged. A later materially changed protocol/CI strategy/family allocation must pass actual three-provider decisions before dependent implementation. No invented new consensus.",
+  "candidate_author_qualification": "NOT_GRANTED at launch. NEW experimental component/tests only in isolated tree; no existing API lease, no normal unit completion or source integration. Qualified independent OpenAI judgement at exact submitted commit must establish the narrow author competence and actual component correctness before later wiring/source acceptance.",
+  "reviewer_qualification": "OpenAI Astra/high historical accepted async cleanup/restoration source+image audit docs/validation/RUNTIME_REVIEW_RESTORATION.md and fresh Opus5.5 independent judgement dda63d66. This is specific review/evaluation competence; new Anthropic component authorship is not relabelled old OpenAI source.",
+  "prospective_candidate_axes": [
+    "actual route/provenance/exclusive boundaries",
+    "bounded tasks/factory/admission invariants",
+    "owner/application lifecycle/race/failure controls",
+    "isolated compatibility and original-source preservation",
+    "meaningful actual tests/tool/raw receipt fidelity",
+    "calibration:component-only, no false wiring/qualification/release claim"
+  ],
+  "jobs": [
+    {
+      "key": "ws-component",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "name": "wp-remediation-ws-work-01",
+      "branch": "remediation/ws-work-01",
+      "base": "460a190575e905f8350c454e63c4d570c8b560fa",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/AUTHOR.md",
+      "spec": "docs/production/remediation-20261104/WS_WORK_TASK.md",
+      "title": "CR-01 bounded WS work component and authorship assessment",
+      "deps": []
+    },
+    {
+      "key": "api-evaluation",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "name": "wp-exec-rv-api034-review-evaluation",
+      "branch": "execution/wp-exec-rv-api034-review-evaluation",
+      "base": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+      "report": "docs/production/software-waves/RV-API034/execution-20261101/EVALUATION.md",
+      "spec": "docs/production/remediation-20261104/API_REVIEW_EVALUATION_TASK.md",
+      "title": "RV-API034 independent exact-report evaluation",
+      "deps": [
+        "task_43fbf6bb49a2"
+      ]
+    }
+  ],
+  "future_reviewer": {
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "base": "exact future settled/preserved/published WS component commit",
+    "state": "reserved, no Task/Dispatch/worktree",
+    "write": "new WS-WORK-01/REVIEW.md and owned ignored/temp only",
+    "acceptance": "All candidate axes and exact-component correctness pass or held; no automatic retry or broad authorship. Later existing wiring requires earned qualification, explicit source lease and new exact-commit review."
+  },
+  "capacity": {
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 24,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400143,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 6,
+        "windowMinutes": 300,
+        "resetsAt": 1793778600143,
+        "resetDescription": "Wed 12:50 AM"
+      },
+      "updatedAt": 1793774626132,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 1,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793774626516,
+      "error": null
+    }
+  },
+  "capacity_demand": "Fresh codex weekly reset verified, not timer inferred. Two bounded tasks now plus reserved one qualified component review, potential bounded author correction and re-review; exact absolute allowance/otherhost demand unknown, re-gate future tasks. Anthropic76%weekly and OpenAI100%weekly at observation, no new spend/accounts.",
+  "runtime": {
+    "observed_utc": "2026-11-04T06:34:51.111878+00:00",
+    "app_version": "1.4.247",
+    "runtime": {
+      "runtimeId": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5
+    },
+    "fleet": {
+      "count": 135,
+      "pages": 2,
+      "counts": {
+        "released": 129,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 24,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400026,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793778600026,
+          "resetDescription": "Wed 12:50 AM"
+        },
+        "updatedAt": 1793773906502,
+        "error": null,
+        "age_seconds": 185
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 85,
+          "windowMinutes": 10080,
+          "resetsAt": 1793774164000,
+          "resetDescription": "11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793773726520,
+        "error": null,
+        "age_seconds": 365
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 31,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932860,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 24,
+          "windowMinutes": 300,
+          "resetsAt": 1793776414060,
+          "resetDescription": null
+        },
+        "updatedAt": 1793773725949,
+        "error": null,
+        "age_seconds": 365
+      }
+    }
+  },
+  "concurrency": "two newworkers+coordinator+protectedexternal=4, no nesting",
+  "protection": "All pending/uncertain workspaces, raw/native originals, failed histories, root/private runtime/encodedhookartifact and baselines protected. No cleanup or physical/release authority."
+}

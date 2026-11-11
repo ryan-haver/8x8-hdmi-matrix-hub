@@ -1,0 +1,47 @@
+{
+  "source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+  "build_started_from_clean_tracked_checkout": true,
+  "scope": "Arm64/QEMU offline startup, normal CMD, health, canonical metadata and graceful shutdown; no hardware/device action proof",
+  "started_at": "2026-10-19T09:54:09.715973+00:00",
+  "image": "hdmi-matrix-hub:runtime-r8b-final-arm64",
+  "image_id": "sha256:c7d017fbcbf61e47b64aeab12cab0d153fe92b9ca74ecf0823b32cb551e14c93",
+  "architecture": "arm64",
+  "health": {
+    "status": "healthy",
+    "service": "orei-hdmi-matrix",
+    "api_version": "2.10.0",
+    "version": "2.10.0",
+    "matrix": {
+      "configured": true,
+      "connected": false,
+      "host": "192.0.2.1",
+      "last_successful_poll": null,
+      "telnet_connected": false
+    },
+    "runtime": {
+      "uptime_s": 0.4,
+      "loop_lag_ms": null,
+      "loop_lag_max_ms": null,
+      "task_count": 8
+    },
+    "integrations": {}
+  },
+  "info": {
+    "success": true,
+    "data": {
+      "version": "1.0.0rc1",
+      "api_version": "2.10.0",
+      "service": "orei-hdmi-matrix",
+      "input_count": 8,
+      "output_count": 8,
+      "driver_id": "hdmi_matrix",
+      "driver_name": "HDMI Matrix",
+      "matrix_host": "192.0.2.1",
+      "matrix_port": 443,
+      "connected": false
+    },
+    "error": null
+  },
+  "result": "pass",
+  "finished_at": "2026-10-19T09:54:21.221896+00:00"
+}

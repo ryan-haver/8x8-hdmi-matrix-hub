@@ -1,0 +1,9 @@
+{
+  "source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "tracked_checkout_clean": true,
+  "image": "hdmi-matrix-hub:runtime-r1f-final-arm64",
+  "image_id": "sha256:a8ebd6f1a017322ff514e2051f1153f35d1ed0762034797ba4dbb2b6826668c6",
+  "architecture": "arm64",
+  "version": "1.0.0rc1",
+  "scope": "Software candidate; no published tag or physical claim"
+}

@@ -1,0 +1,97 @@
+{
+  "observed_utc": "2026-11-04T12:19:45.472143+00:00",
+  "phase": "remediation-recovery-20261104",
+  "wave": "C",
+  "status": "PRIV-JUDGE LAUNCHED / observed start, exactly ONE judge; no verdict or qualification",
+  "actor": {
+    "task_id": "task_32b607a54b40",
+    "dispatch_id": "ctx_aaa1ff6c95b5",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-judge",
+    "branch": "qualification/recovery-privacy-m3-judge",
+    "exact_base": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+    "exclusive_report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/REVIEW.md",
+    "spec": "docs/production/remediation-20261104/recovery-execution/PRIV_JUDGE_TASK.md",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native model at exact Task/Dispatch/cwd",
+      "session": "01a1a67f-592d-7202-b8dc-3e9ffce10f86",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native",
+      "bytes": 567977,
+      "sha256": "ed2eb186a479efa85020abc7ef1dfe93663f06796e119b38c6ba4a73efad70d6",
+      "unassigned_helpers_observed": [],
+      "scope": "entry only; no competence/completion/descendant census"
+    },
+    "status": "ONE independent exact MiniMax privacy-review candidate competence JUDGE active; no verdict/qualification/source acceptance",
+    "dispatch_status": "dispatched",
+    "worker_state": "ready"
+  },
+  "adopted_plan_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "exact_judge_packet_sha256": "75b563b74156a478e84bfa945d2ab2a3c0355c7c027a685dd84e7e02627a10d9",
+  "candidate_report_commit": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+  "candidate_report_sha256": "a06c1334b0e65d942078ece13a20979f56a4f2cb5e58b00a54f1c42acdfcfd0d",
+  "candidate_source_commit": "5385325722a39e6dd766352489f828f5e54b56d5",
+  "prewave_published_verified_head": "cd078a37734700df29802c7a7bb237cacf993f86",
+  "capacity": {
+    "observed_utc": "2026-11-04T12:18:44.645755+00:00",
+    "scope": "ONE exact first M3candidate competence judge; later separate qualified source review/evaluation/material-fix reserve conditional and freshly gated; absolute allowances/otherhost commitments unknown",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793794426489,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 155,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 155,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzY3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAyMjoyNTozOCIsImRpc3BhdGNoSWQiOiJjdHhfYWE3Y2YxZWQ1YWFiIiwiZGF0YWJhc2VJZCI6MTA2MH19"
+      },
+      {
+        "limit": 100,
+        "total": 155,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 147
+    },
+    "retained_metadata": 7,
+    "current_owned": 1
+  },
+  "concurrency": "one judge + coordinator + protected external =3of4; no nesting",
+  "settings": "Ignored/untracked coordinator Codex local config effective multi_agentfalse under exact profile/cwd, exact hash92207a5a; global unchanged. Explicit requested/effective Astra/high, actual native separately captured.",
+  "role": "All6unchanged frozen axes; judge actual exact MiniMax report/native/reads/probes/assertions/output/limits, not OpenAI-authored source acceptance. No forcedPASS/novelbugquota/report rewrite/secondjudge/automaticretake.",
+  "after": "Only actual all6PASS may earn demonstrated diagnostic-review scope. Separate qualified full-chain source review, independent report-quality evaluation and any qualified finding-driven source correction remain later gates with fresh capacity. FAIL/HOLD terminal for this assessment attempt; old Opus assessment and original author qualification unchanged.",
+  "WS": "Exact corrected component review PASS with nonblocking C01-R01 wording followup OPEN and bounded C01-R02 audit limitation; no handler wiring/intake/firstauthorship grant.",
+  "remaining": "D6sourceindependence/wiring, privacy qualified sourceacceptance, API034M1/freshness/WS040/combined, owner visual/HIL/72h/week/finalartifact/version/release held.",
+  "settlement": "On actual delivery preserve full native/config/ignored/temp/errors, positively release owned worker promptly, verify task-ref publication. FullGitbundle before destructive Orca cleanup, none now.",
+  "next": "Publish scoped launch records, docs489 and exact integration remote/local verification, then END TURN for Orca wake, no completion polling."
+}

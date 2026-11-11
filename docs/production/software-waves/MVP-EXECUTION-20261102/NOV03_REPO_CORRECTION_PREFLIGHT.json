@@ -1,0 +1,102 @@
+{
+  "observed_utc": "2026-11-03T16:54:02.494640+00:00",
+  "status": "prepared, capacity hold cleared for this bounded author correction only; no worker launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32; status/hosts/Run/currentRun/list/repo/inbox/allworkerpages/worktrees rediscovered privately",
+  "capacity": {
+    "observed_utc": "2026-11-03T16:54:02.494640+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 55,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793724226436,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 2,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932889,
+        "resetDescription": null
+      },
+      "updatedAt": 1793724226653,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 119,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MTowMSIsImRpc3BhdGNoSWQiOiJjdHhfNDNhMDA5MmQ3ODQ5IiwiZGF0YWJhc2VJZCI6NjU0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 119,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 113,
+      "retained": 6
+    }
+  },
+  "job": {
+    "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "worktree_name": "wp-exec-sw-repo-01",
+    "expected_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "spec": "REPO_CORRECTION01_REBOUND_TASK.txt",
+    "dependency": "task_dd9f6e3c9c49",
+    "title": "SW-REPO exact two-passage LICENSE metadata correction01",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "gate_path": [
+      "repo_early_intake",
+      "correction01"
+    ],
+    "scope": "R1 only SEC14 LICENSE table/JSON:373physical/293nonempty and literal title; allotherlines preserved, no harness",
+    "budget": "3min target <=100newwords, exactly2in-place passages",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "source_base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+  "settlement": "Prior M3 task5486/ctx_e47 and Astra taskdd9/ctx_d290 definitivelyreleased; full natives/workspace/temp archives and exact taskrefs verified in priorrecords, current fleet retains release; author tree clean/exactbe7e, no duplicatewriter",
+  "qualification": "M3 accepted historical b473 inventory/currenta2dab/b1ca/f2ee bounded prose; OpenAI actual qualified bounded factualreviews2187/ac9/79b08. No core/source/privacy/license/security qualification inferred",
+  "catalog": {
+    "M3": "minimax-coding-plan/MiniMax-M3",
+    "variant": "thinking inherited, native response must attest",
+    "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "nested_routing": "main/small/internal exactM3, unassigned providers/plugins/MCP/subagents denied",
+    "CLI_overrides": "OpenCode2 model/effort overrides unsupported; audited project route inherited",
+    "OpenAI_reviewer": "gpt-6-astra/high",
+    "OpenAI_fetched_at": "2026-11-03T16:54:01.922150100Z",
+    "supported": true
+  },
+  "model_reassessment": "same approved M3/OpenAI families and already reserved first precise fix/re-review; Astra actual recent bounded competence/availability vs historical Sol capacity event. Google primary unavailable, DeepSeek exhausted, Anthropic formalcoreFAIL/no domain and manualretake awaiting explicitownerchoice. No silent substitute",
+  "demand": "one3min-target two-passage correction <=100newwords; one independent exact-commit Astra R1/fullsmall-diff re-review reserved. No new global audit/harness/sourcecorrector/materialphasechange, no unboundedloop",
+  "test_session_preparation": "existing fieldrunbook gains Flic/HA pending-candidate checklist, software-versus-owner receipts, exactminimum-floor limit and customHACS-install distinction; no campaign/physical result or gate closure",
+  "core_qualification": "original attempt1FAIL/no domain; explicit one-retake question pending; no approval or retry inferred",
+  "concurrency": "max2new+coordinator+protectedexternal4, no nesting; launch only1author now",
+  "protected": "root/private runtime, originals/failed evidence/natives/ignored artifacts/baselines/retainedworkspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
+  "material_plan_change": false,
+  "finding_or_source_or_release_acceptance": false
+}

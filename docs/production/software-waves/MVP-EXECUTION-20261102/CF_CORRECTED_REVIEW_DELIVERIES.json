@@ -1,0 +1,97 @@
+{
+  "observed_utc": "2026-11-03T05:30:57.896706+00:00",
+  "status": "both independent reviews ACCEPT bounded documentation; coordinator dispositions recorded",
+  "actors": {
+    "findings": {
+      "observed_utc": "2026-11-03T05:28:35.644748+00:00",
+      "review_commit": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+      "review_base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+      "bytes": 7045,
+      "sha256": "499590ef49fffe198fe67bbc4cb885af9a5884ccbab54a7a81a97afa299cb542",
+      "task_id": "task_5016bec03442",
+      "dispatch_id": "ctx_b4174280ec27",
+      "worktree": "wp-exec-sw-findings-01-rereview02",
+      "branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+      "verdict": "accept R3/R5 bounded correction delta only",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a19fde-fbe9-78a3-8565-555b8692359a",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 557281,
+        "sha256": "168aafff9d0bc87e04cc197283bee99908f311552548e198b1d9e0b0373ae18b"
+      },
+      "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+      "cleanup": "retain exact review tree read-only; no removal",
+      "preservation": {
+        "archive_sha256": "8de7ea656768dc6b9cbcbd53f89287c601fde64a4917ff5037393948f11072cc",
+        "archive_bytes": 206797289,
+        "regular_files": 4598,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "integration_commit": "22fd6d10fa03bbbe7901d8c2bdca1756a1a4dbc8"
+    },
+    "CI": {
+      "observed_utc": "2026-11-03T05:29:37.474326+00:00",
+      "review_commit": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+      "review_base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+      "bytes": 9199,
+      "sha256": "18d3598b176d0173945187521eda6e2d5aac5a0ddf479581822638c8e0375fd9",
+      "task_id": "task_3916f3c5ba32",
+      "dispatch_id": "ctx_67980920fabd",
+      "worktree": "wp-exec-ev-ci-attribution-rereview01",
+      "branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+      "verdict": "accept R1-R7 bounded attribution prose only",
+      "terminal": "released",
+      "task_ref_publication": "exact remote/local verified",
+      "native_final": {
+        "session": "01a19fdf-372c-7de2-9bd8-d04d13266db1",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 844428,
+        "sha256": "42e80513dbcb835349c5a4a5538e5e2a08855ac998932ab7e37a3082eb79f6fc"
+      },
+      "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+      "cleanup": "retain exact review tree read-only; no removal",
+      "preservation": {
+        "archive_sha256": "5e081ad9e5e16b691938ec12c392f971d39c838acf08ac9c5023bd6f1c86a9d5",
+        "archive_bytes": 206867853,
+        "regular_files": 4620,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "integration_commit": "4d88b4c6d145bbe18811cc1345f6d725815189ea"
+    }
+  },
+  "fleet": {
+    "total": 117,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 117,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MDo0MCIsImRpc3BhdGNoSWQiOiJjdHhfM2NkNzU5NjVhN2RlIiwiZGF0YWJhc2VJZCI6NjUyfX0"
+      },
+      {
+        "limit": 100,
+        "total": 117,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 111,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "qualification_and_source_gates_unchanged": true,
+  "publication": "post-push private cf-accepted-publication.json receipt outside referenced commit"
+}

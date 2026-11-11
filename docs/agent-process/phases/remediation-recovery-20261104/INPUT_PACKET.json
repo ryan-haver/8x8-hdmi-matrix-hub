@@ -1,0 +1,190 @@
+{
+  "created_utc": "2026-11-04T08:35:29.572457+00:00",
+  "phase_id": "remediation-recovery-20261104",
+  "status": "PROSPECTIVE planning input only, no consensus or source execution",
+  "authority": "Owner: now enact the plan and remediate all findings. Planning of necessary recovery is within authorized work; no new accounts/spend/credentials/hardware/release.",
+  "source_baseline": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+  "source_unchanged_since": "e2161484459da65aee14433136a14963507b499c",
+  "accepted_program_packet": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "scope": "Resolve A0/A1/A2 task-qualified staffing and technical correction strategy after failed privacy-review assessment and failed WS-component first-authorship assessment. Keep unrelated technically ready work moving. Do not reopen accepted program scope or all65units.",
+  "immutable_inputs": [
+    {
+      "commit": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+      "path": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+      "sha256": "6ee8bbec66ebdb7e650aa8b08e8f75026ec8580c40ed89b1a2f06e6104d85adb"
+    },
+    {
+      "commit": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py",
+        "docs/production/remediation-20261104/WS-WORK-01/AUTHOR.md"
+      ],
+      "parent": "460a190575e905f8350c454e63c4d570c8b560fa"
+    },
+    {
+      "commit": "e8ce39660a37d277e735adce680b848210c8d9b4",
+      "path": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/REVIEW.md",
+      "sha256": "e9efab38d4eb81c2d352195d33952559f2fee0139a989f43a3e4dd1524920582"
+    },
+    {
+      "commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+      "path": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/AUTHOR.md"
+    },
+    {
+      "commit": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "base": "d6e78e0b6ab1dab5216443584d810a7a24af32b2",
+      "scope": "retained six-commit privacy chain, OpenAI source authorship unchanged"
+    }
+  ],
+  "documents": [
+    "docs/ORCHESTRATION_PROTOCOL.md",
+    "docs/agent-process/PROTOCOL.md",
+    "docs/agent-process/REPO_CONFIG.json",
+    "docs/planning/COMPREHENSIVE_REMEDIATION_20261104.md",
+    "docs/planning/software-waves/EXECUTION_PINS.json",
+    "docs/production/remediation-20261104/WS_WORK_TASK.md",
+    "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/ASSESSMENT_PACKET.json",
+    "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json"
+  ],
+  "facts": [
+    "WS44focused/full4126tests pass but four deterministic eager reentrant drain controls fail; candidate correctnessFAIL and first-authorshipHOLD; no existing handler wired.",
+    "Privacy six axes twoPASS/fourFAIL; supported current_pin persisted leak and HA options api_key missed, other supported shape/summary residuals underclassified. No owner-secret incident claimed.",
+    "Both assessments and all previous failures remain immutable. API-refusal runner/model review scope earned by Opus5.5 remains valid; broad privacy/async source-author competence not granted.",
+    "OpenAI Sol/Astra/Luna one family. Source author corrections and qualified different-family exact-commit review remain mandatory; catalogue/headroom/prose planning are not source qualification.",
+    "Three genuine providers across R1 independent assessments, R2 all-peer challenge, R3 same hashed final packet explicit verdict. Coordinator cannot count as participant."
+  ],
+  "decision_requests": [
+    "Propose concrete source correction invariants and tests for WSR01..04 and privacy residuals; preserve raw requests/verdict/public diagnostics and bound/measure resistant reservations. No postfailure softening or cosmetic contract changes used to pass old rubric.",
+    "Determine lawful, useful next execution routes: original-author correction versus first-authorship/domain hold, new independently qualified family choices and genuinely new scope, or owner-dependent retake decision. Identify exact standing rule, not an invented approval ritual; existing broad remediation authority persists. No automatic failed-qualification retry, new Task/Run to evade state, relabelled authorship, extra judge or retrospective PASS.",
+    "Reassess exact allowed models/families for author, independent reviewer, backup, supported effort, demonstrated competence and qualification gaps. Opus5.5 failures are scoped, not family-wide incapacity. MiniMax-M3 accepted planning/inventory competence is not code-review competence. Gemini current route/quota qualification unknown; no DeepSeek.",
+    "Map each proposed useful task to exact base-selection rule, exclusive files/worktree, coordinator shared-API/manifest/registry ownership, evidence/acceptance and correction/re-review reserve. Distinguish launchable work, provisional contributions, held source acceptance and explicit owner decisions.",
+    "Keep existing API034 M-1 security freshness hold, retained WS040/privacy chains and combined-source proof dependencies. Do not regenerate canonical security evidence before source freeze or reinterpret physical/HIL/soak/week/final-release gates.",
+    "Choose minimal recovery wave order and exit conditions, preserving prior negative results/raw failures and genuine authorship. Name alternatives and tradeoffs; no fabricated timelines/token budgets."
+  ],
+  "planning_participants": [
+    {
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "basis": "accepted source/assertion/lifecycle analysis and genuine previous planning; cannot independently review own-family source"
+    },
+    {
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "basis": "accepted genuine planning/prose and narrow API-refusal review; privacy and WS new-domain failures preserved, no source-role grant"
+    },
+    {
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI effort override unsupported",
+      "basis": "accepted actual prior planning/prose/inventory contributions; not qualified as privacy/concurrency author/reviewer",
+      "routing_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096"
+    }
+  ],
+  "alternatives": {
+    "Google": "Allowed but current exact route/access/headroom/domain qualification not verified; no available fallback assumed.",
+    "DeepSeek": "Owner reports exhausted credit, excluded from dispatch, no purchase.",
+    "Other variants": "Catalogue names may be assessed but no silent substitution/new spend; current exact selection and actual native route must match."
+  },
+  "capacity_and_placement": {
+    "observed_utc": "2026-11-04T08:32:18.583377+00:00",
+    "integration_head": "b13ddc4de461b7e1072fead0d39361bcb079282f",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 140,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 140,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzIzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAwMzo0MTo1MiIsImRpc3BhdGNoSWQiOiJjdHhfZjEyY2IyMzIxYjc5IiwiZGF0YWJhc2VJZCI6Nzk2fX0"
+        },
+        {
+          "limit": 100,
+          "total": 140,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 134,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 8,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793780926591,
+        "error": null,
+        "age_seconds": 212
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400179,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600179,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793780926217,
+        "error": null,
+        "age_seconds": 212
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 33,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932854,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 15,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793780926263,
+        "error": null,
+        "age_seconds": 212
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "7ecd5dfff1bb3ff5a17eeafc55e1b87fe5cc584f0e41d613610de8120286de46",
+      "catalog_modified_utc": "2026-11-04T08:32:17.876682+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 2 planned R1 contributors + coordinator + protected external = 4 of 4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "round_order": "At most2currentworkers+coordinator+protectedexternal=4, no nesting. Start OpenAI+MiniMaxR1; after settled preserved/released contributors, launch AnthropicR1 with same immutable input, without peer R1 reports. Preserve all three before R2 sharing. R3 only on one final hashed complete plan/allocation.",
+  "no_execution_from_planning": "No implementation, source edits, qualification reattempt, extra judge, evidence promotion, owner gate waiver, deployment or release authorized by a planning report. Any necessary future owner-specific decision must be clearly named with exact policy and prepared concrete proposal."
+}

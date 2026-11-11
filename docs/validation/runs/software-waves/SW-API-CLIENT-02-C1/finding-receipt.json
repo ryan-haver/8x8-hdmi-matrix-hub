@@ -1,0 +1,12 @@
+{
+  "unit": "SW-API-CLIENT-02-C1",
+  "state": "finding documented, correction not dispatched",
+  "provisional_finding": "VAL-14; not yet registered",
+  "source_sha": "a7818f2054a57e4e5ee9176f2539e3155dff41d8",
+  "head_sha": "1a4f9f9457f85bdcc2eafb9c43e8e7cd4eecd109",
+  "original_record_path": "docs/validation/runs/software-waves/SW-API-CLIENT-02-C1/failed-ci/2026-10-20-V2-a7818f20-failures.unreachable_switch-api.json",
+  "original_record_sha256": "a3ff5c68c366334e6b0c647396745ffa5e9021fa00219be1c6bdf358eb490a04",
+  "artifact_id": 12301981393,
+  "qualification": "Historical failing CI record retained outside accepted feature evidence; no promotion",
+  "private_full_archive": "build/software-wave-02-20261020/ci-39500840835/complete-original-archive/"
+}

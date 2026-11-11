@@ -28,11 +28,21 @@ from .migrations import (
     SchemaVersionError,
     backup_path_for,
     build_default_registry,
+    flat_map_records,
     load_versioned_json,
     migrate_all_data_files,
     migrate_data_file,
     save_versioned_json,
     write_backup,
+)
+from .startup import (
+    PersistencePaths,
+    PreparedPersistence,
+    block_reason,
+    is_write_blocked,
+    prepare_runtime_storage,
+    prepared_persistence,
+    reset_preparation,
 )
 
 __all__ = [
@@ -45,12 +55,20 @@ __all__ = [
     "MigrationError",
     "MigrationRegistry",
     "MigrationResult",
+    "PersistencePaths",
+    "PreparedPersistence",
     "SchemaVersionError",
     "backup_path_for",
+    "block_reason",
     "build_default_registry",
+    "is_write_blocked",
+    "flat_map_records",
     "load_versioned_json",
     "migrate_all_data_files",
     "migrate_data_file",
+    "prepared_persistence",
+    "prepare_runtime_storage",
+    "reset_preparation",
     "save_versioned_json",
     "write_backup",
 ]

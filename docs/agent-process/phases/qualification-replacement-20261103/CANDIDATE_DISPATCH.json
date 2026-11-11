@@ -1,0 +1,115 @@
+{
+  "observed_utc": "2026-11-03T18:59:59.881363+00:00",
+  "status": "ONE authorized Opus5.5 fixed-sample assessment launched; judge reserved/not launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actor": {
+    "task_id": "task_5b5162506677",
+    "dispatch_id": "ctx_5e62800cd2dc",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103",
+    "actual_branch": "execution/qual-opus55-20261103",
+    "exact_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md",
+    "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+    "consensus_sha256": "d599b857a014e7d1fbb731893b527b93ea2ccb99bc3ef08dfbf03b08f6808306",
+    "launch": {
+      "requested": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "native Anthropic Opus5.5 attested at exact Task/Dispatch/cwd",
+      "session": "f2d52957-9554-4636-917b-b83780388faa",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high explicit supported launch/local config; native per-turn effort unavailable",
+      "bytes": 850790,
+      "sha256": "366e3554e60a59b514e62455f452c4bf71e62a7c8e0fb3a79693a494082215c6",
+      "unassigned_helper_tools_observed": [],
+      "scope": "point-in-time native attestation, not descendant census or task competence"
+    },
+    "status": "ONE authorized candidate assessment launched; not qualification or source acceptance",
+    "observed_dispatch_status": "dispatched",
+    "observed_worker_state": "ready"
+  },
+  "publication_before_wave": "d3d7acc9a2cf28715d2a5af1de043ccc3db6be58",
+  "joint_capacity": {
+    "observed_utc": "2026-11-03T18:59:07.518002+00:00",
+    "other_host_demand": "unknown, not zero",
+    "decision": "joint candidate and fixed OpenAI judge fresh quota gate; bounded one candidate + one judge reserve, no absolute allowance exposed",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800068,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400068,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793732326108,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 65,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793732326463,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 133,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 133,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzo0NTowMiIsImRpc3BhdGNoSWQiOiJjdHhfNWVmNDhiYzExZGYzIiwiZGF0YWJhc2VJZCI6NzMwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 133,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 126
+    },
+    "historical_retained": 6,
+    "new_current_resources": 1
+  },
+  "concurrency": "one current candidate + coordinator + protected external reservation=3<=4; no nesting",
+  "judge": {
+    "status": "planned fresh OpenAI Astra/high exact evaluator report commit, no Task/Dispatch yet",
+    "base_binding": "candidate report parent caaa and sole new AUTHOR.md after settlement/preservation/ref publication/audit",
+    "fresh_gate": "OpenAI headroom >=30%, sufficient bounded reserve, actual identity/source/evidence before judge"
+  },
+  "attempt_budget": "ONE candidate plus ONE fresh judge, no automatic rewrite/retake/replacement judge; nine planning contributions spent",
+  "qualified_domains": [],
+  "qualification_or_source_or_release_acceptance": false
+}

@@ -1,0 +1,62 @@
+{
+  "ownerDecision": 24,
+  "observedUtc": "2026-11-11T07:22:16.107603+00:00",
+  "status": "planned; independent review and guarded execution pending",
+  "run": "run_37205f6095b3",
+  "integrationRef": "refs/heads/wp-runtime-completion",
+  "base": "4c98a84298fe061add63db586c65ad0b3eaa4be3",
+  "authorFamily": "OpenAI",
+  "onePlanOneReviewOneExecutionPass": true,
+  "plan": {
+    "path": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\purge-now-20261111\\physical-plan.jsonl.gz",
+    "sha256": "31ace5e8e0b4c16ef9c3e3d8e64b45b851c5e2d1434babeb6edbfba4a3390df4",
+    "counts": {
+      "keep": 894,
+      "purge": 16681
+    },
+    "logicalBytes": {
+      "keep": 58114761,
+      "purge": 20722382670
+    },
+    "boundaries": [
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-rv-api034-review-evaluation\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-fc26-fc-provenance\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-qual-privacy-review-20261104-judge\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-recovery-privacy-m3-judge\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-openai\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-wording-review\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-01-review\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-c01-review\\build",
+      "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-sec-data-02-c4\\build",
+      "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.git",
+      "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build"
+    ],
+    "storageQuarantineBytes": 307679502,
+    "storageTasks": 12
+  },
+  "originalMemberManifest": {
+    "path": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\data-review-20261110\\historical-evidence-manifest.jsonl.gz",
+    "sha256": "d1efc8df102c89580b0c2c61e0d29d683d329479949fd597564081ec4a23e034",
+    "unchanged": true
+  },
+  "memberInventories": [
+    "nested-path-hash-manifests.jsonl.gz",
+    "physical-archive-member-manifest.jsonl.gz",
+    "additional-trace-member-manifest.jsonl.gz",
+    "finished-storage-payload-manifest.jsonl.gz"
+  ],
+  "sourceCustody": "Exact/CRLF Git blob hashes; all2203 referenced LFS objects physically hashed; no unmatched product src/tests/custom_components files in recovered workspace inventories. Unmatched closed report drafts/helpers/admin snapshots are evidence, not new product source. Independent review must validate this classification before purge.",
+  "branchCustody": "Bundle commit tips on actual local/remote branches. Three original archive/tag-only histories now have recovery/purge-now-20261111-* local branches; checkpoint tree refs/tags/objects unchanged. No remote ref created.",
+  "protected": [
+    "All source/history/branches/committed records/credentials/user data and assets",
+    "Primary archive/ user assets",
+    "Primary and coordinator checkouts; uncommitted/untracked work; all protected external resources",
+    "In-use hook Python/Node dependencies;393 reparse entries excluded",
+    "C:/scripts/#OLD; other repositories; shared services; tool quarantine"
+  ],
+  "toolDisposition": "12finished payloads307679502B: only supported tool completion into7-day quarantine;914 links in one payload may trigger safety stop, which must be honored and reported. No raw payload purge.",
+  "applicationReceipt": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\purge-now-20261111\\application-summary.json",
+  "reviewReceipt": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\purge-now-20261111\\plan-review.md",
+  "publicationReceipt": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\purge-now-20261111\\publication-receipt.json",
+  "claims": "No bytes removed by this candidate; receipts added after review/application. Logical bytes are not allocated-disk reclamation. No product qualification or release."
+}

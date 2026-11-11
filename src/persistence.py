@@ -29,9 +29,10 @@ directly). All persistent files will then live under that mount.
 Backward Compatibility
 ======================
 
-Upgrading from a version that hardcoded ``<project_root>/data/`` is safe:
-on first access, if the resolved new path is empty but the legacy path
-contains files, the relevant legacy file is copied to the new location.
+Runtime preparation imports config catalogs from the installation's resolved
+data directory, with backups. Importing a different old volume requires an
+explicit source; a fresh installation never inherits another checkout's catalogs.
+Non-catalog preferences retain their project-local legacy copy behavior.
 """
 
 import logging
@@ -159,7 +160,7 @@ def get_legacy_data_paths() -> list[Path]:
     return [get_project_root() / "data"]
 
 
-def migrate_legacy_file(target_file: Path, filename: str) -> bool:
+def migrate_legacy_file(target_file: Path, filename: str, *, legacy_dirs: tuple[Path, ...] | None = None) -> bool:
     """
     Copy a legacy file to the new data directory if it exists in a legacy
     location but not at the target path.
@@ -168,42 +169,72 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
     ``data/themes.json``, ``data/ui_preferences.json``, etc. will see their
     settings preserved at the new location on first access.
 
+    Managed catalogs import only from explicitly supplied ``legacy_dirs``.
+    An explicit destination does not authorize reading another installation's
+    project-local data. Runtime preparation supplies its own old data volume;
+    direct callers may supply a deliberate old-volume source. Non-catalog
+    preferences retain their existing legacy-location lookup and recovery.
+
     Migration is atomic, corruption-aware and never destructive (PER-03):
     - If the target exists and is valid JSON, skip migration (idempotent).
-    - If the target exists but cannot be *read* (permissions, sharing
+    - If a non-catalog target cannot be *read* (permissions, sharing
       violation, I/O error), leave it untouched and skip migration — an
       unreadable file is not a corrupt one.
-    - If the target exists but is corrupt (not valid JSON/UTF-8), it is only
+    - Unsafe existing managed targets fail closed, with their bytes untouched.
+    - If a non-catalog target is corrupt (not valid JSON/UTF-8), it is only
       replaced once a readable, valid legacy file is in hand; the corrupt
-      content is first copied to ``<name>.corrupt`` (best effort).
+      content is first copied to ``<name>.corrupt``; backup failure prevents replacement.
     - The target is never deleted. Writes go through ``atomic_write_json`` so
       a crash mid-migration cannot leave a partial file.
 
     :param target_file: Where the file should live (new location).
     :param filename: Name of the file to migrate.
+    :param legacy_dirs: Explicit old-volume sources; required for managed catalogs.
     :returns: True if a legacy file was migrated, False otherwise.
     """
     import json as _json
 
+    from hub.persistence.migrations import (
+        _WRITE_FAILURES,
+        DEFAULT_REGISTRY,
+        MigrationError,
+        block_path,
+        validate_payload,
+        write_backup,
+    )
+
+    target_file = Path(target_file).resolve()
+    managed = DEFAULT_REGISTRY.has(filename) or filename == "scenes.json"
+    if managed and target_file in _WRITE_FAILURES:
+        raise MigrationError(f"{target_file}: {_WRITE_FAILURES[target_file]}")
     target_corrupt = False
     if target_file.exists():
         try:
             with open(target_file, encoding="utf-8") as _f:
-                _json.load(_f)
+                current = _json.load(_f)
+            if managed:
+                if filename == "scenes.json":
+                    from hub.persistence.startup import scene_shape
+
+                    scene_shape(current)
+                else:
+                    validate_payload(filename, current)
             return False  # Valid target already exists
-        except ValueError:  # JSONDecodeError / UnicodeDecodeError
+        except ValueError as exc:
+            if managed:
+                block_path(target_file, "unsafe existing migration target")
+                raise MigrationError(f"{target_file}: unsafe existing migration target") from exc
             target_corrupt = True
             _LOG.warning("Migration target %s is corrupt; will replace it only from a valid legacy file", target_file)
         except OSError as exc:
+            if managed:
+                block_path(target_file, "unreadable existing migration target")
+                raise MigrationError(f"{target_file}: unreadable existing migration target") from exc
             _LOG.warning("Cannot read migration target %s (%s); leaving it untouched", target_file, exc)
             return False
 
-    with _persistence_lock:
-        if filename in _legacy_migrations:
-            # Already migrated in this process.
-            return False
-
-    for legacy_dir in get_legacy_data_paths():
+    sources = legacy_dirs if legacy_dirs is not None else (() if managed else tuple(get_legacy_data_paths()))
+    for legacy_dir in sources:
         legacy_file = legacy_dir / filename
         if legacy_file.exists() and legacy_file.resolve() != target_file.resolve():
             try:
@@ -212,19 +243,35 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
                     _legacy_data = _json.load(_f)
             except (ValueError, OSError) as exc:
                 _LOG.warning("Could not migrate legacy file %s: %s", legacy_file, exc)
+                if managed:
+                    raise MigrationError(f"{legacy_file}: unreadable legacy source") from exc
                 return False
+            if managed:
+                if filename == "scenes.json":
+                    from hub.persistence.startup import scene_shape
+
+                    scene_shape(_legacy_data)
+                else:
+                    validate_payload(filename, _legacy_data)
+                if write_backup(legacy_file, DEFAULT_REGISTRY.detect_version(_legacy_data)) is None:
+                    raise MigrationError(f"{legacy_file}: backup failed before legacy-location import")
+                if DEFAULT_REGISTRY.has(filename):
+                    _legacy_data = DEFAULT_REGISTRY.apply(filename, _legacy_data)[0]
             try:
                 target_file.parent.mkdir(parents=True, exist_ok=True)
                 if target_corrupt:
                     _preserve_corrupt_file(target_file)
                 # Use atomic write for migration target — prevents partial writes
                 from _file_io import atomic_write_json
+
                 atomic_write_json(target_file, _legacy_data)
             except OSError as exc:
                 _LOG.warning("Could not write migrated file %s: %s", target_file, exc)
+                if managed:
+                    raise MigrationError(f"{target_file}: legacy-location import failed") from exc
                 return False
             with _persistence_lock:
-                _legacy_migrations.add(filename)
+                _legacy_migrations.add(str(target_file.resolve()))
             _LOG.info("Migrated legacy file %s -> %s", legacy_file, target_file)
             return True
 
@@ -232,15 +279,16 @@ def migrate_legacy_file(target_file: Path, filename: str) -> bool:
 
 
 def _preserve_corrupt_file(path: Path) -> None:
-    """Best-effort copy of a corrupt file to ``<name>.corrupt`` before it is replaced."""
+    """Preserve corrupt original bytes, refusing a conflicting existing backup."""
     import shutil
 
     backup = path.with_name(f"{path.name}.corrupt")
-    try:
-        shutil.copy2(path, backup)
-        _LOG.warning("Saved corrupt %s as %s", path, backup)
-    except OSError as exc:
-        _LOG.warning("Could not back up corrupt %s: %s", path, exc)
+    if backup.exists():
+        if backup.read_bytes() != path.read_bytes():
+            raise OSError(f"Corrupt backup already contains different bytes: {backup}")
+        return
+    shutil.copy2(path, backup)
+    _LOG.warning("Saved corrupt %s as %s", path, backup)
 
 
 def reset_data_dir_cache() -> None:

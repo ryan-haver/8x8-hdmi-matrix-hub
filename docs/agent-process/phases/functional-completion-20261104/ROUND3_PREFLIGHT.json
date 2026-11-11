@@ -1,0 +1,207 @@
+{
+  "observed_utc": "2026-11-04T18:23:24.841525+00:00",
+  "status": "All3R2barrierOPEN; completefinalv1prepared, notadopted; no R3Task/Dispatchyet",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "packet_bytes": 616751,
+  "plan_text_sha256": "90f8459b050577acb4fd6b55e195288380a1586780dd3eba05accf2159da00bb",
+  "jobs": {
+    "openai": {
+      "name": "wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "base": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "title": "OpenAI R3 same-packet functional execution decision",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round3/openai.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_openai.md",
+      "deps": [],
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "binding": {
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "head": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+        "config": ".codex/config.toml",
+        "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+        "expected_initial_status": "?? .codex/config.toml",
+        "remote": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228"
+      },
+      "previous_dispatch": "ctx_75a90276c4f0"
+    },
+    "anthropic": {
+      "name": "wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "base": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "title": "Anthropic R3 same-packet functional execution decision",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round3/anthropic.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_anthropic.md",
+      "deps": [],
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "binding": {
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "head": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+        "config": ".claude/settings.local.json",
+        "config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+        "expected_initial_status": "",
+        "remote": "5ab8653dc1d0f7bf3807e500945b76b888061779"
+      },
+      "previous_dispatch": "ctx_0736448ea192"
+    },
+    "minimax": {
+      "name": "wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "base": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "unsupported; thinking inherited",
+      "title": "MiniMax R3 same-packet functional execution decision",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round3/minimax.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_minimax.md",
+      "deps": [],
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "binding": {
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+        "branch": "planning/remediation-recovery-r1-minimax",
+        "head": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+        "config": "opencode.json",
+        "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+        "expected_initial_status": "",
+        "remote": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c"
+      },
+      "previous_dispatch": "ctx_02b4c54eb1fa"
+    }
+  },
+  "first_wave": [
+    "openai",
+    "anthropic"
+  ],
+  "third_reserved": "minimax samepacket at freedsettled/releasedslot",
+  "discovery": {
+    "observed_utc": "2026-11-04T18:18:38.539116+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "ae11cf4aeced3b2fcd808f5796489bf8cdddc558",
+    "remote_equal": true,
+    "fleet": {
+      "total": 163,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 163,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDA5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMDoyNTozMCIsImRpc3BhdGNoSWQiOiJjdHhfYjUyYzI5NTU1ZjgwIiwiZGF0YWJhc2VJZCI6MTI3NX19"
+        },
+        {
+          "limit": 100,
+          "total": 163,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 156,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_02b4c54eb1fa",
+          "taskId": "task_c512bb417e83",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_0736448ea192",
+          "taskId": "task_a78ba6ed9dc1",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_75a90276c4f0",
+          "taskId": "task_482a558b4a3c",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 22,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793816164277,
+        "error": null,
+        "age_seconds": 154
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 26,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400019,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 2,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600019,
+          "resetDescription": "3:50 PM"
+        },
+        "updatedAt": 1793816163980,
+        "error": null,
+        "age_seconds": 155
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 37,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932844,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 25,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793816163959,
+        "error": null,
+        "age_seconds": 155
+      }
+    },
+    "scope": "R3 preparation after all genuine peer challenges; no source or qualification attempt",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "All3R2 delivered/released; three genuine same-packet final plan decisions proposed. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  }
+}

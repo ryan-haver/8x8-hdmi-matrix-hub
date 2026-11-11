@@ -1,0 +1,17 @@
+{
+  "base": "http://127.0.0.1:8080",
+  "results": [
+    {
+      "mode": "online",
+      "documentedRoutes": 175,
+      "pageErrors": [],
+      "savedPin": false
+    },
+    {
+      "mode": "offline",
+      "documentedRoutes": 175,
+      "pageErrors": [],
+      "savedPin": false
+    }
+  ]
+}

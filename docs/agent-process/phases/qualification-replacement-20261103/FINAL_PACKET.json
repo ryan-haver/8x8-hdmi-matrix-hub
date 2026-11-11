@@ -1,0 +1,646 @@
+{
+  "version": 1,
+  "phase": "qualification-replacement-20261103",
+  "status": "frozen complete final plan/allocation submitted for actual three R3 decisions; NOT consensus or qualification",
+  "created_utc": "2026-11-03T18:42:16.918976+00:00",
+  "planning_source_ref": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+  "self_reference_rule": "Final-packet exact published commit/ref and SHA supplied externally in each R3/candidate/judge spec after publication; no circular self-hash. All R3 read identical complete bytes. Never edit this packet after first decision.",
+  "authority": {
+    "ref": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+    "path": "docs/agent-process/phases/qualification-replacement-20261103/AUTHORIZATION.json",
+    "bytes": 1325,
+    "sha256": "025b09a3a4c6a89c16c28c5966bb269a9b051430084b6e73cb4d96cff331ac6d",
+    "utf8_content": "{\n  \"observed_utc\": \"2026-11-03T17:47:23.285520+00:00\",\n  \"owner_message\": \"prepare and deploy\",\n  \"context\": \"reply to prepared replacement-model assessment proposal and explicit approval request\",\n  \"authorized_target\": \"deploy genuine supervised workers for prospective replacement-model planning and one candidate qualification; release deployment not inferred\",\n  \"proposal_sha256\": \"7a0e87ccb7eb5c30503fff2a536c0d23fd80ac93b6edadd56e911f18d5ab3046\",\n  \"planning\": {\n    \"families\": [\n      \"Anthropic\",\n      \"OpenAI\",\n      \"MiniMax\"\n    ],\n    \"rounds\": 3,\n    \"max_contributions\": 9,\n    \"coordinator_not_counted_as_contributor\": true\n  },\n  \"candidate\": \"claude-opus-5-5/high\",\n  \"max_new_evaluator_attempts\": 1,\n  \"max_new_independent_judges\": 1,\n  \"execution_prerequisites\": \"actual all3provider planning contributions and same-hash finalpacket decisions, fresh suitable capacity/identity/leases, source/rubric exact unchanged\",\n  \"source\": \"caaa4faabe9ede1e3aed37d2269efd4a4d691e04\",\n  \"review_base\": \"938ae30339790c361abdda6fdd01b11a4e498518\",\n  \"rubric_sha256\": \"66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672\",\n  \"both_failed_Opus4_7_attempts_retained\": true,\n  \"further_automatic_retry\": false,\n  \"source_changes_or_release_approval\": false,\n  \"new_credit_accounts_or_credentials\": false\n}\n"
+  },
+  "R1_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+  "R2_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "all_six_full_contributions": [
+    {
+      "ref": "9108174ed78056ca1732228b33b8379ae7fca6b8",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round1/anthropic.md",
+      "bytes": 4458,
+      "sha256": "813366cf7626fa00d62ce76eac23d90ce0ee203401d6b9d86e8676d7e6a4b4c6",
+      "utf8_content": "# Round 1 independent assessment: Anthropic\n\nNative `claude-opus-5-5`, planning only. I read no peer reports. **Conflict:**\nthis contributor is the same model as the proposed candidate, so weight my\nstaffing view below the OpenAI and MiniMax views.\n\n## Verified inputs\n\n- `INPUT_PACKET.json` SHA256 `fc658cfb\u20269bbbc9` matches. Base `d00bf26b` is exact.\n- Rubric Git blob = `66f37090\u2026` (pinned). The CRLF working copy hashes to\n  `1628200e\u2026`. Hash canonical blobs only.\n- The `938ae303..caaa4faa` diff covers the nine required paths across four\n  commits: 386872 (4 paths), 060769 (C1 AUTHOR), ee3f2e (6), caaa (C2 AUTHOR).\n- The rubric `source_commits` lists only 386872 and ee3f2e. This omission\n  probably fed attempt-2 finding J1.\n\n## Assessment\n\nEvaluating Opus 5.5 is worthwhile: two different-family FAILs left RV-API034,\nRV-WS040 and RV-PRIVACY-CHAIN without an eligible route. Both FAILs were\nevidence or calibration failures, not technical-analysis failures, and the\npacket lists the lessons. Passing those listed points shows the model can\nfollow instructions; it does not show general competence. The judge must look\nfor new errors as well.\n\n**Goal:** one bounded competence disposition for the rubric domain. **Non-goals:**\nsource or RV acceptance, a wider domain, changes to rubric, source or evidence.\n\n**Entry (all required):**\n\n- three R3 accepts on one hashed final packet;\n- fresh native identity attestation;\n- canonical rubric/source/base hashes unchanged;\n- fresh Claude and Codex pool headroom of at least 30%, with judge reserve held.\n\n**Required controls (final packet):**\n\n1. State that full-diff scope (four commits, nine paths) governs over the\n   rubric's `source_commits` shorthand. Record this as an interpretation; the\n   rubric bytes stay frozen. Require a per-commit/per-path coverage table that\n   cites actual reads.\n2. Derive every count and population from a recorded command, blocked records\n   included.\n3. Label each artifact as tracked-at-commit, task-ref-published or\n   ignored/private. Never write \"published\" without ref verification.\n4. For every invocation keep: return code, full stdout/stderr, JUnit, argv,\n   sanitized env and timing. Write \"unknown\" for termination cause or\n   descendant census when not proven. Make no `-I` or env claims without\n   measuring the effective configuration.\n5. Treat FSEC007 as a historical gate failure, not a product defect. Do not\n   rerun it.\n\n**Exit:** the judge records pass, hold or fail on all six axes at the exact\nevaluator commit. Any hold or fail means no domain. FAIL is final: no author\nrewrite and no second judge.\n\n**Staffing:**\n\n- OpenAI must judge: the rubric fixes the judge family, and MiniMax has no\n  qualification record here.\n- A \"fresh\" `gpt-6-astra` judge has prior exposure: Astra judged attempt 2 and\n  continued attempt 1. Use a new session, and require the judge to cite\n  original bytes rather than the earlier J1\u2013J3 findings.\n- Codex weekly usage was 60% (40% headroom) at 17:47Z. Three OpenAI planning\n  turns plus the judge plus correction reserve could take it below 30%.\n  Re-check before dispatching the judge. If low, hold; no substitution.\n\n**Worktree:** the candidate gets a dedicated worktree at the final integration\nbase. The source is read via `git show caaa4faa` or a detached read-only tree.\nWrites are limited to the report and its own ignored build/temp directories.\n\n**Hold if:** identity mismatch, hash drift, missing R3 consensus, a peer leak\nbefore the barrier, quota below 30% or unknown, or an unverifiable execution\nreceipt.\n\n```json\n{\n  \"round\": 1,\n  \"participant_family\": \"Anthropic\",\n  \"actual_model\": \"claude-opus-5-5\",\n  \"effort_or_native_limit\": \"high as dispatched; native effort not observable in-session\",\n  \"frozen_input_sha256\": \"fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9\",\n  \"recommendation\": \"require_changes\",\n  \"material_conditions\": [\n    \"full-diff four-commit nine-path scope overrides rubric source_commits shorthand, with coverage table\",\n    \"canonical Git-blob hashing\",\n    \"command-derived counts including blocked records\",\n    \"tracked/published/private artifact labels\",\n    \"per-invocation direct receipts; unknowns explicit\",\n    \"fresh Codex >=30% with judge reserve before judge dispatch\",\n    \"fresh judge session citing original bytes\",\n    \"single attempt; FAIL final\"\n  ],\n  \"peer_reports_read\": false,\n  \"source_or_qualification_acceptance\": false\n}\n```\n",
+      "round": 1,
+      "participant": "anthropic",
+      "task_id": "task_b2647dfbc03e",
+      "dispatch_id": "ctx_cf269c96096f",
+      "native_identity": {
+        "session": "b4f339f3-b571-43e2-b310-90b7c14299c2",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "bytes": 687386,
+        "sha256": "f54b29792b82137e59abcdabaacdb102b763d73cc13742cce13b29dcf547fa57"
+      }
+    },
+    {
+      "ref": "6307afb565a8b564536185079d9e16118512dab9",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round1/minimax.md",
+      "bytes": 4931,
+      "sha256": "887dd64f72fec1489e9772dc04c4e9e58445fde328d0089bf7b911675354f3c2",
+      "utf8_content": "# Qualification replacement 20261103 \u2014 Round 1 independent assessment (MiniMax)\n\nParticipant MiniMax, native `minimax-coding-plan/MiniMax-M3`; effort thinking inherited, CLI effort override unsupported. Frozen input `INPUT_PACKET.json` SHA256 `fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9` verified; `AUTHORIZATION.json` read beside it. Base `d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1`, branch `planning/qr-20261103-r1-minimax`. No peer R1/R2/R3 report, native trace or peer synthesis read; no candidate execution, source review, test rerun or campaign; no source or qualification acceptance claimed.\n\n## Verified scope facts (Git metadata only)\n\n- The nine-path population is complete only at `caaa4fa`. At base `d00bf26` five paths are absent (C2 AUTHOR/INTAKE, `sw_api_client_02_c1.py`, the c1/c2 tests). An evaluator worktree based on `d00bf26` or the integration branch under-covers.\n- Window deltas: `3868723` adds C1 AUTHOR, a features.yaml line, c1 scenario+test; `060769b7` edits **only** C1 AUTHOR (+111, \"route-all partial acceptance\") \u2014 the commit attempt-02's evaluator denied reading; `ee3f2e7` adds C2 AUTHOR/INTAKE, edits the c1 scenario, adds the c2 test, edits `tools/validate/model.py` and `runner.py` (the only in-window code changes); `caaa4fa` edits **only** C2 AUTHOR (+103) claiming \"managed proof and failed global gate\".\n- Both Opus 4.7 FAILs stand: attempt-01 (behavior_and_tools/calibration/review_quality), attempt-02 (provenance/calibration/review_quality; J1 un-reviewed `060769`, J2 ignored/private proof called published, J3 mis-stated population).\n\n## Assessment \u2014 proceed, with binding conditions\n\nThe candidate/judge split matches demonstrated competence: OpenAI authored this C1/C2 window and judged both 4.7 attempts; Anthropic 5.5 has no evidence here, so its run is a competence test, not a formality; MiniMax is planning/inventory only and must not judge or candidate-qualify. The final hashed packet must carry these controls or R3 is require_changes.\n\n**Goals / non-goals.** Goal: one bounded qualification decision for Opus 5.5 under the unchanged six-axis rubric at `caaa4fa`, with one fresh OpenAI judgement. Non-goals: source acceptance, any privacy/HA/hardware/release change, retry of either 4.7 attempt, new accounts or credit.\n\n**Entry.** Native `claude-opus-5-5/high` attested at dispatch (catalog presence is not availability); verified judge route with headroom \u226530% plus correction reserve; evaluator worktree pinned at `caaa4fa` with diff review from `938ae3`; all four lineage commits reachable.\n\n**Exit/acceptance.** Six explicit axis verdicts (unknown = hold) at the exact evaluator report commit; no lost or relabelled bytes; one fresh OpenAI report; coordinator records a bounded domain only.\n\n**Controls.** (a) Coverage: full four-commit window diff including `060769b7`; all nine paths read at `caaa4fa`; populations derived from actual records including blocked controls. (b) Proof: ignored or private artifacts labelled ignored; a published claim needs tracked bytes. (c) Calibration: the FSEC007 global freshness/level failure stays historical \u2014 no unchanged retry, no waiver; no termination cause asserted without direct exit evidence.\n\n**Risks and boundaries.** Recurrence of provenance/calibration/review_quality failure is the modal outcome; a second FAIL ends this route pending owner direction, with no automatic retry. Exclusive paths: evaluator = own new report path plus ignored scratch; judge = own new review path at the evaluator commit; source, tests, tools, features.yaml, registry, ledger and root manifests immutable.\n\n**require_changes / hold.** Hold if the final packet omits the evaluator base `caaa4fa` with a nine-path manifest, omits the four-commit/`060769` coverage obligation, treats ignored artifacts as published proof, leaves F-API-034-style populations unverified, or lacks natively attested routes with checked headroom.\n\n```json\n{\n  \"round\": 1,\n  \"participant_family\": \"MiniMax\",\n  \"actual_model\": \"minimax-coding-plan/MiniMax-M3\",\n  \"effort_or_native_limit\": \"thinking inherited; CLI effort override unsupported\",\n  \"frozen_input_sha256\": \"fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9\",\n  \"recommendation\": \"proceed\",\n  \"material_conditions\": [\n    \"evaluator base caaa4fa + nine-path manifest; d00bf26 lacks 5 paths\",\n    \"full four-commit window diff incl. 060769b7 must be read, not excluded\",\n    \"ignored/private artifacts labelled ignored; published claims need tracked bytes\",\n    \"populations derived from actual records incl. blocked controls\",\n    \"FSEC007 failure historical; no retry/waiver; no unproved termination cause\",\n    \"one attested native candidate, one fresh OpenAI judge, no auto-retry\",\n    \"no source, domain, privacy, HA, hardware or release acceptance from this stage\"\n  ],\n  \"peer_reports_read\": false,\n  \"source_or_qualification_acceptance\": false\n}\n```\n",
+      "round": 1,
+      "participant": "minimax",
+      "task_id": "task_8fda5920c385",
+      "dispatch_id": "ctx_11e7bd819fd5",
+      "native_identity": {
+        "session": "ses_e5d7845e8ffe7Y93J2oaPGju3F",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 279453,
+        "sha256": "1af48051759ccc13567ea48c24ca9c0cceb4ac8afb52ac3ebcaa59ed18da8de2"
+      }
+    },
+    {
+      "ref": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+      "bytes": 5138,
+      "sha256": "5f257fc06c67b1eaa421e6ae73b0087a2ef33a66bd1592ef427a428e6de4228f",
+      "utf8_content": "# OpenAI independent round 1\n\nRecommendation: **require_changes** before qualification execution; continue planning. Opus 5.5 is a reasonable candidate hypothesis, not demonstrated replacement competence. Both Opus 4.7 FAIL dispositions remain intact: technical strengths did not compensate for mandatory evidence, provenance and calibration failures.\n\nGoal: establish only bounded Python validation-runner/model offline simulator API-refusal preparation and compatibility review competence. Exclude implementation, source acceptance, privacy/authentication, HA, hardware, release and qualification-by-planning. All 61 findings and existing release gates retain their dispositions.\n\nEntry requires three genuine providers completing three rounds, preserved independent R1 reports before sharing, and three explicit acceptances of one hashed final plan/allocation. Reconfirm unchanged caaa4faabe9ede1e3aed37d2269efd4a4d691e04 source, full 938ae30339790c361abdda6fdd01b11a4e498518 boundary and frozen six-axis rubric. The rubric's abbreviated source-commit list must not exclude actual 938\u2192386\u2192060769\u2192ee3\u2192caaa lineage. Allocate separate candidate and fresh judge worktrees, exclusive report/scratch paths, exact bases and Task/Dispatch leases; coordinator retains shared contracts, registry, ledger and integration.\n\nRequire a nine-path coverage table covering all three changed reports and six registry/scenario/test/model/runner paths from INPUT_PACKET. For each, record actual inspected revisions, relevant invariants/assertions and proof references. Derive populations from the exact scope, retaining blocked records and denominators. A judge filling missing coverage cannot repair evaluator omissions.\n\nUse existing focused controls to challenge malformed/missing/connected/unconfigured responses, transport/default/delegation compatibility, external/hardware exclusion, writes and setup/cleanup/fault behavior. Preserve direct subprocess exits, full stdout/stderr, JUnit, argv, effective isolation settings, timestamps and original temporary artifacts before another invocation. Hash artifacts and distinguish tracked commit/ref publication from ignored private files. Numeric exits do not establish termination causes; observed processes do not establish a complete descendant census. Avoid unsupported -I/environment or absolute no-side-effect claims. Historical global freshness failure is not automatically a product defect; no unchanged global retry.\n\nExit requires the independent judge to explicitly pass/hold/fail provenance, invariants, counterexamples, behavior_and_tools, calibration and review_quality at the exact evaluator report commit, citing immutable originals. Every axis must pass for coordinator consideration of the bounded domain; unknown means hold. Findings require severity, source location and reproducible support; reasoned no-finding is allowed. Preserve failure without automatic rewrite, rerun or replacement judge. Reserve correction capacity without treating that reserve as retry authority.\n\nStaffing: native Anthropic Opus 5.5/high must demonstrate tool/evidence discipline; its profile preference proves neither availability nor competence. Fresh OpenAI Astra/high fits evaluation judging given preserved substantive prior judgements, but cannot thereby accept OpenAI-authored source. Sol/Astra/Luna share one family/pool. MiniMax M3 fits bounded inventories, not established core review; Gemini remains unverified, DeepSeek unavailable. No alternate qualification pair is currently verified; require explicit revalidation rather than silent substitution.\n\nFrozen capacity reports imply Anthropic 79%, OpenAI 40%, MiniMax 76% weekly remaining, not future reservations. Refresh intended pools/reset windows and other-host demand before each stage; reserve one 15-minute candidate and one 15-minute judge plus authorized corrections. Unknown/below-30% capacity without qualified verified fallback holds the affected dispatch. Keep two-new-worker ceiling plus coordinator/protected reservation; no helpers. Missing native identity, proof preservation, coverage or unanimous final decisions blocks execution.\n\nThis report uses native turn-context gpt-6-astra/high at the dispatched checkout; actual branch is ryan-haver/wp-qr-r1-openai, base d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1. No peer report or candidate source review performed.\n\nValidation: one required five-module documentation invocation passed 489 tests, direct exit 0; full logs/JUnit/argv/environment/timing retained in assigned ignored storage. These checks establish no semantic qualification or source acceptance.\n\n```json\n{\"round\":1,\"participant_family\":\"OpenAI\",\"actual_model\":\"gpt-6-astra\",\"effort_or_native_limit\":\"high; native turn_context\",\"frozen_input_sha256\":\"fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9\",\"recommendation\":\"require_changes\",\"material_conditions\":[\"explicit coverage/proof matrix\",\"fresh identity/capacity/reserves\",\"three-provider same-hash final acceptance\",\"one candidate/one judge; no automatic retry\"],\"peer_reports_read\":false,\"source_or_qualification_acceptance\":false}\n```\n",
+      "round": 1,
+      "participant": "openai",
+      "task_id": "task_62000ea30205",
+      "dispatch_id": "ctx_f2421e534169",
+      "native_identity": {
+        "session": "01a1a293-aef8-7693-bc71-ba1ddae999fc",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 606346,
+        "sha256": "397693a165a1daa5193ae02033c6984884d31bea7cb5d5e748004666b5bc1f6c"
+      }
+    },
+    {
+      "ref": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round2/anthropic.md",
+      "bytes": 5047,
+      "sha256": "77cb03883ace830324cda67658f8e89c6996b8ac0bfa55c518b26f533eecc29b",
+      "utf8_content": "# Round 2 peer challenge: Anthropic\n\nThis is native `claude-opus-5-5`, planning only. It is contribution 2 of 3 for this family. I am the same model as the candidate. I disclose that conflict, and I make no request for weighting.\n\nI verified `ROUND2_INPUT_PACKET.json` (SHA256 `a1d5beb2\u2026d84c`). I read all three R1 reports through `git show <head>:<path>`, and each canonical SHA matches the packet. I read no R2 or R3 peer material.\n\n## Facts checked\n\n- Diffs: 386872 adds C1 AUTHOR, scenario (+35), test (+220) and one `features.yaml` line; 060769 and caaa change only C1/C2 AUTHOR; ee3f2e changes six paths, including `model.py` and `runner.py`.\n- The rubric blob is `66f37090\u2026`. Its `source_commits` field lists only 386872 and ee3f2e, and its `independent_judge_family` is OpenAI.\n- Both prior judges were OpenAI: Sol, then Astra, then Astra again.\n- **New gap:** the rubric does not exist at `caaa4faa`, and caaa is not an ancestor of planning snapshot `a2f85019`. A checkout at caaa therefore contains neither the rubric, the dispositions nor the final packet.\n\n## Dispositions\n\n- **C1: accept.** My R1 proposal to use the integration base was wrong because five sample paths are missing there. I withdraw it. **Amendment:** the candidate and judge read the rubric, the final packet and the prior dispositions read-only through `git show <pinned planning commit>:<path>`. They check SHA256 on the canonical bytes. Nothing is copied into the source tree.\n- **C2: accept.** The full four-commit, nine-path scope governs, and the rubric bytes stay frozen. I withdraw my R1 claim that the shorthand \"probably fed J1\", because I cannot support it.\n- **C3: accept.** \"386\" also adds scenario and test code, which the diff above shows. MiniMax's original wording should be kept and corrected only going forward.\n- **C4: accept.** MiniMax's \"modal outcome\" and my request for \"lower weighting\" are both unsupported. My phrase \"two different-family FAILs\" meant judges from a family other than the evaluator's. It does not mean two judge families. The decision needs unanimity among the three R3 decisions.\n- **C5: accept, with an amendment.** \"Existing 54 focused controls\" must be stated as an expectation only. The evaluator records the collection command and the population it actually derives. If the count differs from 54, the evaluator reports the difference and does not force the number. Each receipt also records the Python and pytest versions, because the shared-root `.venv` was not built for caaa.\n- **C6: accept.** I record my R1 deviations: 604 words, and the `%SystemDrive%` cache side effect. The 15-minute candidate target and the 15-minute judge target are not cutoffs. An overrun is recorded, and it is not by itself grounds for an axis failure.\n- **C7: accept, with an amendment.** Codex weekly usage was 62% (38% left) at 18:14Z. Two OpenAI planning contributions are still to come before the judge. The rubric fixes the judge family, so no fallback judge exists. Check Codex headroom and the judge reserve **before the candidate is dispatched**, not only before the judge. If headroom would drop below 30%, hold the candidate. That avoids an unjudgeable evaluator report.\n\n## Final packet changes\n\n1. The method for reading the rubric, packet and dispositions from a pinned ref, with hash checks.\n2. The 54 controls as an expectation, with the population derived by command. Receipts record tool versions.\n3. A joint gate on Claude and Codex capacity before the candidate is dispatched.\n4. A named candidate input set: the final packet, the source, the rubric and the dispositions. No planning native transcripts. The judge tests for new errors as well as the known lessons.\n5. Staffing unchanged: Opus 5.5/high candidate; fresh Astra/high judge; MiniMax planning only.\n\n```json\n{\n  \"round\": 2,\n  \"participant_family\": \"Anthropic\",\n  \"actual_model\": \"claude-opus-5-5\",\n  \"effort_or_native_limit\": \"high as dispatched; native per-turn effort not observable\",\n  \"frozen_input_sha256\": \"a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c\",\n  \"peer_reports_read\": [\n    \"9108174ed78056ca1732228b33b8379ae7fca6b8\",\n    \"6307afb565a8b564536185079d9e16118512dab9\",\n    \"914103e8ba5707ac203959ebf5e5c59d57a3a1c5\"\n  ],\n  \"recommendation\": \"require_changes\",\n  \"challenge_dispositions\": {\n    \"C1\": \"accept; amend: rubric/packet/dispositions via pinned-ref git show with SHA check\",\n    \"C2\": \"accept; own unsupported J1 causal claim withdrawn\",\n    \"C3\": \"accept\",\n    \"C4\": \"accept; own weighting request withdrawn\",\n    \"C5\": \"accept; amend: 54 is expectation, command-derived population, tool versions\",\n    \"C6\": \"accept; time targets not cutoffs\",\n    \"C7\": \"accept; amend: judge headroom gate before candidate dispatch\"\n  },\n  \"unresolved_material_conditions\": [\n    \"rubric absent at caaa; read method unspecified\",\n    \"fixed 54 versus derived population\",\n    \"judge capacity unchecked at candidate dispatch\",\n    \"three same-hash R3 accepts pending\"\n  ],\n  \"source_or_qualification_acceptance\": false\n}\n```\n",
+      "round": 2,
+      "participant": "anthropic",
+      "task_id": "task_06770011f5e7",
+      "dispatch_id": "ctx_8cbcabfc43d2",
+      "native_identity": {
+        "session": "5027f511-2dcd-4f9e-84b4-5fc77dcb5aa8",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "bytes": 768680,
+        "sha256": "ff37d80d21f5e1cca267f110440fd479589ef225214b3d7733857a662e0731ad"
+      }
+    },
+    {
+      "ref": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round2/minimax.md",
+      "bytes": 5221,
+      "sha256": "8b019d0950998f2576ca66f5f9ce740d8be28531e3893aa624f4b4a5e8d1c9b8",
+      "utf8_content": "# Qualification replacement 20261103 \u2014 Round 2 peer challenge (MiniMax)\n\nParticipant MiniMax, native `minimax-coding-plan/MiniMax-M3`; effort thinking inherited, CLI effort override unsupported. Frozen input `ROUND2_INPUT_PACKET.json` SHA256 `a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c` verified first; `AUTHORIZATION.json` and `ROUND1_BARRIER.json` read beside it. All three R1 reports read in full via `git show <head>:<path>`, canonical SHA256 and bytes matching (4458/4931/5138). No R2/R3 peer report read; no candidate execution or acceptance claim.\n\n## Dispositions C1\u2013C7\n\n- **C1 accept+strengthen.** The `caaa` checkout is right; Anthropic's integration-base worktree is rejectable \u2014 `merge-base(caaa4faa,a2f85019)`=`938ae303` (review base), so no window commit is on that line and only four of nine paths exist there. Bind the window to the rubric's frozen `review_base_sha`\u2192`candidate_sha`; evaluator pinned at `caaa4faa`; judge at its report commit whose parent is `caaa4faa`. Rubric and dispositions are absent there: supply coordinator-pinned bytes.\n- **C2 accept.** Frozen rubric bytes unchanged; four-commit/nine-path window governs; per-path/per-commit coverage with real tool reads. Rubric `source_commits`=[`38687231`,`ee3f2e7f`], but its frozen base/candidate SHAs span all four commits. Drop the implication the shorthand caused J1: attempt-02 J1 says the evaluator claimed `060769b7` outside scope; cause not established.\n- **C3 accept.** `38687231` adds the 220-line C1 test and 35-line scenario, so my R1 parenthetical (\"only `ee3f2e7f` has code changes\") was wrong; correct prospectively, keep R1 bytes.\n- **C4 accept+correct.** No probability or weighted majority; \"two different-family FAILs\" is wrong \u2014 both judges OpenAI family. Attempt-01 failed behavior_and_tools/calibration/review_quality, attempt-02 failed provenance/calibration/review_quality; recurrence is calibration+review_quality only, and n=2 supports no rate. Disclose candidate-family conflict; three explicit R3 acceptances required.\n- **C5 accept+additions.** Derive populations from commands; never hard-code \"54\" or \"489\". Static, unexecuted, parametrize counting of the two committed modules at `caaa4faa`/`ee3f2e7f` gives 13+30=43 cases against the historical 54 passed \u2014 record the gap, don't reconcile silently. Keep blocked counts, tracked-at-commit vs task-ref-published vs ignored/private labels (`build/` tracked=0), unknown termination cause/descendant census, no absolute no-side-effect claims.\n- **C6 accept.** One documentation invocation after prose is final; `os.environ.copy()` with SystemDrive/SystemRoot/USERPROFILE intact, sanitize receipts not OS variables, no `-I`; keep both 4.7 FAILs; reserve is not retry authority.\n- **C7 accept+additions.** Refresh pool and reset before R3 and the judge: at 18:14Z codex weekly was 62% used (38% remaining), other-host demand unknown, and R3 planning, judge and corrections share it. Require \u226530% remaining before judge dispatch; unknown/below holds only the affected dispatch; no family substitution; one attempt, one judge.\n\nOpenAI's require_changes, coverage matrix, unanimity and refresh-before-stage accepted; its headroom (79/40/76%) predates the packet's 79/38/75%. My R1 errors stay visible: the `ee3f2e7f` parenthetical (C3), the recurring-axes set (C4), \"OpenAI authored this window\" (C1 was DeepSeek-authored).\n\n## Recommendation\n\n**require_changes** on the coordinator's draft, not blocked: fold the C1/C4/C5/C7 amendments into the single hashed final packet, then all three R3 accept it. No source or qualification acceptance.\n\n```json\n{\n  \"round\": 2,\n  \"participant_family\": \"MiniMax\",\n  \"actual_model\": \"minimax-coding-plan/MiniMax-M3\",\n  \"effort_or_native_limit\": \"thinking inherited; CLI effort override unsupported\",\n  \"frozen_input_sha256\": \"a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c\",\n  \"peer_reports_read\": [\n    \"9108174ed78056ca1732228b33b8379ae7fca6b8\",\n    \"6307afb565a8b564536185079d9e16118512dab9\",\n    \"914103e8ba5707ac203959ebf5e5c59d57a3a1c5\"\n  ],\n  \"recommendation\": \"require_changes\",\n  \"challenge_dispositions\": {\n    \"C1\": \"accept+strengthen: evaluator at caaa4faa; rubric/dispositions pinned as bytes\",\n    \"C2\": \"accept: frozen rubric; four-commit nine-path window; no J1 causal claim\",\n    \"C3\": \"accept: 38687231 also adds scenario and test code\",\n    \"C4\": \"accept+correct: no weighted majority; one judge family; recurrence calibration+review_quality\",\n    \"C5\": \"accept+add: no fixed 54/489 populations; 43 static cases; labels kept\",\n    \"C6\": \"accept: one docs invocation; env.copy with Windows vars; no -I; no retry\",\n    \"C7\": \"accept+add: refresh pool before R3/judge; 30% codex headroom; one attempt one judge\"\n  },\n  \"unresolved_material_conditions\": [\n    \"rubric and prior dispositions absent from caaa4faa; pinned bytes needed\",\n    \"54 focused passes versus 43 static cases must be derived\",\n    \"codex headroom and other-host demand refresh before R3/judge\",\n    \"candidate-family conflict disclosure; three R3 acceptances\",\n    \"no verified alternate qualification pair; no second attempt/judge\"\n  ],\n  \"source_or_qualification_acceptance\": false\n}\n```\n",
+      "round": 2,
+      "participant": "minimax",
+      "task_id": "task_8c044cfcdce5",
+      "dispatch_id": "ctx_e407d807e727",
+      "native_identity": {
+        "session": "ses_e5d5ff869ffeJam18NX7cmNIPm",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "bytes": 1245073,
+        "sha256": "98c7b11da4b482a1e4587f18b12c23356061c8f9916bfb633b07f943e4d26427"
+      }
+    },
+    {
+      "ref": "1ac7d96d7000f85e072a97512f35095906d7934c",
+      "path": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+      "bytes": 4481,
+      "sha256": "1c68b2e8d8c10e94743f4b7e76cb8e003897b7084d01996489cbe332f587849a",
+      "utf8_content": "# OpenAI round 2 peer challenge\n\nRecommendation: **require_changes** in the final packet before execution. All three complete R1 Git blobs and common input hashes verified; native turn_context attests gpt-6-astra/high. This is contribution 2/3, not qualification, source acceptance or consensus.\n\n**C1 \u2014 accept.** MiniMax correctly requires the candidate checkout and existing tests at caaa4faabe9ede1e3aed37d2269efd4a4d691e04. Reject Anthropic's final-integration-base proposal: reading detached source cannot establish that executed controls match it. My R1 lacked an explicit candidate checkout allocation; correct that omission. Judge base must be the exact new evaluator report commit, parent caaa.\n\n**C2/C3 \u2014 accept.** Frozen rubric provenance requires the full diff and declared reports; its two implementation commits are shorthand, not an exclusion. Preserve rubric bytes and require actual read references for all four commits and nine paths, including report-only 060769 and caaa. Reject Anthropic's unsupported causal attribution to shorthand. MiniMax's ee3 parenthetical is false: git show --stat 386872316cb60130b06dd704557ae6ca1a92b5c8 shows scenario and test additions. Correct prospectively without editing R1.\n\n**C4 \u2014 accept.** MiniMax supplies no probability model supporting a modal recurrence claim. Anthropic's conflict disclosure is useful; lower vote weighting is not. Both prior judges are OpenAI, independent of Anthropic but not distinct judge families. Require three explicit R3 acceptances of the same complete packet/hash; failures remain failures.\n\n**C5 \u2014 accept with explicit tightening.** MiniMax's tracked-bytes publication condition is necessary but insufficient: require verified remote task-ref equality. Direct return codes cannot prove termination causes. Preserve command-derived denominators, blocked records, full streams/JUnit/argv/sanitized environment/timing and original artifacts; separately label tracked, published and private. Unknown descendant census stays unknown. Existing reset side effects prohibit absolute no-side-effect claims. Judge repairs cannot substitute for evaluator coverage.\n\n**C6 \u2014 accept.** Keep standard Windows variables through os.environ.copy(); override only assigned isolation paths/flags, sanitize receipts, avoid -I. Finalize prose before one documentation invocation. Preserve Anthropic's R1 cache side effect and MiniMax's three invocations as deviations. My R1 correction reserve grants no evaluator rewrite, qualification retry or replacement judge. FSEC007 remains historical, unretried.\n\n**C7 \u2014 accept conditionally.** Allocate one native Opus5.5/high candidate and one fresh Astra/high evaluation judge, separate exact-base trees and report/scratch leases. The judge must examine original source/assertions/native tool evidence against all six axes, seeking new defects rather than copying historical verdicts; any hold/fail means no domain. OpenAI cannot accept its own source through this exercise. MiniMax remains bounded planning; no qualified alternate pair exists. Frozen Codex 38% weekly remaining is neither a reservation nor proof of adequate absolute capacity; refresh pools/resets/commitments before each stage, retaining unknown other-host demand. Unknown/below-30% capacity requires verified suitable fallback or affected-dispatch hold.\n\nCoordinator must embed these controls, exact leases and acceptance commands in one final packet for all three R3 decisions before the single candidate/judge sequence. No extra contributions or retries follow from this recommendation. Local documentation results are retained separately; they establish no behavioral competence.\n\n```json\n{\"round\":2,\"participant_family\":\"OpenAI\",\"actual_model\":\"gpt-6-astra\",\"effort_or_native_limit\":\"high; native turn_context\",\"frozen_input_sha256\":\"a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c\",\"peer_reports_read\":[\"9108174ed78056ca1732228b33b8379ae7fca6b8\",\"6307afb565a8b564536185079d9e16118512dab9\",\"914103e8ba5707ac203959ebf5e5c59d57a3a1c5\"],\"recommendation\":\"require_changes\",\"challenge_dispositions\":{\"C1\":\"accept\",\"C2\":\"accept\",\"C3\":\"accept\",\"C4\":\"accept\",\"C5\":\"accept with publication tightening\",\"C6\":\"accept\",\"C7\":\"accept conditionally\"},\"unresolved_material_conditions\":[\"complete final packet and three same-hash R3 acceptances\",\"fresh stage identity/capacity and exact leases\",\"future six-axis independent judgement\"],\"source_or_qualification_acceptance\":false}\n```\n",
+      "round": 2,
+      "participant": "openai",
+      "task_id": "task_d065f4c36365",
+      "dispatch_id": "ctx_c9e525312e2e",
+      "native_identity": {
+        "session": "01a1a2a4-fd0e-7d03-91dc-be9d4c41c553",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 763522,
+        "sha256": "8843e98b695114c1e0d4d8de0bbf00b6a32e0bf6381941f4ebeeaaae179bab74"
+      }
+    }
+  ],
+  "coordinator_dispositions": [
+    {
+      "id": "D1",
+      "addresses": [
+        "all R1/R2 C1",
+        "Anthropic R2 pinned-ref amendment",
+        "MiniMax R2 pinned-bytes amendment"
+      ],
+      "decision": "ACCEPT with exact pinning",
+      "resolution": "Candidate checkout and all focused controls execute at exact caaa, judge checkout at exact evaluator report commit parent caaa. Planning snapshot is metadata, not sample. Frozen rubric/final packet/prior dispositions absent from caaa are read-only canonical Git blobs from exact published planning refs with SHA checks, never copied over sample source. Final-packet publication ref supplied in dispatch; static planning-source ref in this packet.",
+      "evidence": "Four of nine sample paths at integration is expected divergence; candidate not ancestor of planning snapshot, merge-base938. No original source-path defect inferred."
+    },
+    {
+      "id": "D2",
+      "addresses": [
+        "all C2",
+        "all C3"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Full938-to-caaa four-commit/nine-path window includes386,060769,ee3,caaa; frozen rubric source_commits is implementation shorthand. Per-path/per-commit actual inspection proof required, all three changed reports included. 386 also adds scenario/test code. Rubric bytes unchanged; causal speculation about J1 withdrawn, original R1/R2 reports preserved."
+    },
+    {
+      "id": "D3",
+      "addresses": [
+        "all C4",
+        "MiniMax R2 recurring axes"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Both prior judges OpenAI, independent of Anthropic but not two judge families. Shared failed axes are calibration and review_quality; n=2 yields no modal-probability inference. Candidate-model planning conflict disclosed without weighted votes. All three explicit same-hash R3 accepts/no material blocker required."
+    },
+    {
+      "id": "D4",
+      "addresses": [
+        "all C5",
+        "Anthropic R2 count/tool versions",
+        "OpenAI R2 publication tightening"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Command-derived actual collection/execution/JUnit populations, precise scope and blocked statuses. Historical54 focused and489 docs are expectations, not required fixed counts. Record Python/pytest versions, actual imported source/cwd/effective safe isolation flags. Label tracked-at-commit, verified task-ref-published and ignored/private separately; remote equality needed for publication. Direct exits/full streams/JUnit/argv/time/all original temp and native tool evidence retained; process cause and descendant census unknown unless directly proved. No absolute no-side-effect claims, judge cannot repair missing evaluator inspection."
+    },
+    {
+      "id": "D5",
+      "addresses": [
+        "MiniMax R2 static13+30=43 claim"
+      ],
+      "decision": "REJECT unsupported static count; ACCEPT need to derive actual population",
+      "resolution": "Read-only source arithmetic at caaa: C1=4 valid+6 invalid+1 connected+1 external+1 discovery=13. C2=11 declaration+3 runtime+21 health+1 transport+2 default/external+1 mixed+2 wrong-managed=41, total54 expected. Health list contains7 literals+4 success-comprehension values+9 matrix-comprehension values+1 HTTP503=21. No tests executed for this coordinator check. Future evaluator must collect/run actual source and report discrepancies, not force54. Preserve MiniMax43 claim and rejected disposition.",
+      "evidence": {
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "paths": [
+          "tests/validation/test_sw_api_client_02_c1.py",
+          "tests/validation/test_sw_api_client_02_c2.py"
+        ],
+        "method": "git show exact blobs, read decorators and list/comprehension populations; static arithmetic only, not current execution evidence"
+      }
+    },
+    {
+      "id": "D6",
+      "addresses": [
+        "MiniMax R2 C1 was DeepSeek-authored claim"
+      ],
+      "decision": "REJECT as attribution for in-window C1 follow-up; preserve historical DeepSeek product authorship",
+      "resolution": "C1 AUTHOR contains historical DeepSeek product-handler record, followed by 2026-10-29 declarative follow-up explicitly OpenAI gpt-6.1-sol/high Taskc0d26/ctx0f27 at base938. Window386 adds that new scenario/test with coordinator registry contribution;060769 report-only follow-up; C2ee3/caaa OpenAI. Original DeepSeek product commits predate938. Do not flatten composite report history into authorship of new validation code. OpenAI judge evaluates Anthropic competence, not acceptance of OpenAI code.",
+      "evidence": {
+        "revision": "386872316cb60130b06dd704557ae6ca1a92b5c8",
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+        "section": "2026-10-29 declarative assertion follow-up",
+        "task": "task_c0d26e9e563e",
+        "dispatch": "ctx_0f27082dc4eb"
+      }
+    },
+    {
+      "id": "D7",
+      "addresses": [
+        "all C6",
+        "Anthropic R2 targets not cutoffs",
+        "MiniMax R2 execution receipt"
+      ],
+      "decision": "ACCEPT with preserved deviations",
+      "resolution": "env.copy retains standard Windows OS variables; validate keys case-insensitively/using uppercase, sanitize receipts, no-I. MiniMax receipt false SystemDrive/SystemRoot flags used case-sensitive dict membership and are not proof actual variables absent. One final docs invocation after prose finalized; no cosmetic reruns. R1 Anthropic cache side effect604words, MiniMax three docs invocations, R2 Anthropic715words, OpenAI initial errors/target overrun, MiniMax target overrun remain original history. Targets not hard cutoffs or automatic axis failure. Corrections/reserve do not authorize evaluator rewrite, retake, replacement judge or extra planning contribution."
+    },
+    {
+      "id": "D8",
+      "addresses": [
+        "all C7",
+        "Anthropic R2 joint candidate/judge capacity gate"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Fresh verified Claude and OpenAI pools/reset/commitments and bounded judge reserve BEFORE candidate launch, again before judge. OpenAI fixed by frozen rubric; no verified alternate qualification pair. Unknown/below30 or insufficient headroom holds affected dispatch absent suitable verified authorized fallback; no silent substitution. R3 quota fresh at each launch, later stages re-gated. Other-host demand unknown, not zero; percentages not absolute capacity/reservations."
+    },
+    {
+      "id": "D9",
+      "addresses": [
+        "all recommendations",
+        "all remaining three R3 decisions"
+      ],
+      "decision": "ACCEPT as proposed final plan, pending actual unanimous R3 decisions",
+      "resolution": "Freeze one complete final packet with full six reports/dispositions/plan/allocation and one hash. Each real participant explicitly accept/require_changes/blocked; same final packet, no majority weighting/coordinator vote. Exactly six contributions done, three reserved; max9. Any dissent or new material blocker prevents candidate execution; no automatic additional debate round, evaluator retry or judge."
+    }
+  ],
+  "fixed_sample": {
+    "candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "full_lineage": [
+      "938ae30339790c361abdda6fdd01b11a4e498518",
+      "386872316cb60130b06dd704557ae6ca1a92b5c8",
+      "060769b724e7a546b8df22eac82f3b288d9bbbe8",
+      "ee3f2e7f034a9ace64553e942f328dff921a1e04",
+      "caaa4faabe9ede1e3aed37d2269efd4a4d691e04"
+    ],
+    "nine_path_manifest": [
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "c72db0cc7361fe37f5b29169e86d70045ce6868d",
+        "bytes": 26557,
+        "sha256": "ce8dc212540fcbc8f175dcd9558f2cfe6f4e1b75d6660f7c4bc0fd03e450e0bf"
+      },
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "5f3f408c8cf8c0c435b22d4449149cd9dfb76ccb",
+        "bytes": 13306,
+        "sha256": "721ffb34faf10d663c90f3fac3f5f02982d3b6879d22025eeee8e01305a688a5"
+      },
+      {
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C2/INTAKE.md",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "1286fca5431b73e726745bb357a7fbb9de30bcaa",
+        "bytes": 6397,
+        "sha256": "0228392f8bccd6d59d5267ecac325ae84a242cbec557786fbecceb4ea44e47a7"
+      },
+      {
+        "path": "docs/validation/features.yaml",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "ff61632fa00527a63b7215cdcf2014e9aa14a327",
+        "bytes": 529489,
+        "sha256": "bd5f8f015a7ac0e1cd8f6eaaec0ae9b071ff0643109cd531ee5266c7a8b31bfa"
+      },
+      {
+        "path": "tests/validation/scenarios/sw_api_client_02_c1.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "ea3fe0008fb36062ccaff73267df4b2193dac2c2",
+        "bytes": 2069,
+        "sha256": "4259fcd0a87ced4b6e6c25149ada17cbd455cc80f3282757685489d1c8ef855c"
+      },
+      {
+        "path": "tests/validation/test_sw_api_client_02_c1.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "a7bddfcda29c0826d6b4fb7e57e849186aec96de",
+        "bytes": 11583,
+        "sha256": "c5cf8fb897ee84fdbd9708e2ac8c4936142f6d2aafe7d78841762e4f9ce7a9e0"
+      },
+      {
+        "path": "tests/validation/test_sw_api_client_02_c2.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "c654a1897450ac4336046b468c7a0bb3124bd461",
+        "bytes": 10358,
+        "sha256": "3d02092758dd5023acd70fa044e2e3db6754ec08fea7af48d796d44cc1711b90"
+      },
+      {
+        "path": "tools/validate/model.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "30f9c0adc8967489bc5eeb0f6c7eb24b74874b73",
+        "bytes": 21046,
+        "sha256": "9e5553c931d5199fb127628f2f90f8477fe75868698d8d7bbccbad84ea1571be"
+      },
+      {
+        "path": "tools/validate/runner.py",
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "git_blob": "95df14bb5017487b61a075608a9ff10e2a9f0344",
+        "bytes": 53822,
+        "sha256": "d15667f9b948af23ed1ccc001ae620f2acda0f8202187d3377e036b4c140cee6"
+      }
+    ],
+    "manifest_limit": "Read-only coordinator metadata, never a substitute for evaluator actual reads or substantive review"
+  },
+  "frozen_rubric": {
+    "ref": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+    "path": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_RUBRIC.json",
+    "bytes": 3384,
+    "sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+    "utf8_content": "{\n  \"id\": \"QUAL-ANTHROPIC-CORE-01\",\n  \"status\": \"frozen before candidate evaluation; operational acceptance rubric within accepted plan\",\n  \"packet_sha256\": \"52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e\",\n  \"review_base_sha\": \"938ae30339790c361abdda6fdd01b11a4e498518\",\n  \"candidate_sha\": \"caaa4faabe9ede1e3aed37d2269efd4a4d691e04\",\n  \"source_commits\": [\n    \"386872316cb60130b06dd704557ae6ca1a92b5c8\",\n    \"ee3f2e7f034a9ace64553e942f328dff921a1e04\"\n  ],\n  \"candidate_family\": \"Anthropic\",\n  \"independent_judge_family\": \"OpenAI\",\n  \"mandatory_axes\": [\n    {\n      \"id\": \"provenance\",\n      \"pass\": \"Exact full diff and declared source/report changes inspected, original DeepSeek history distinguished, actual native route and fixed reviewed SHA attested; no different candidate or short review boundary substituted.\"\n    },\n    {\n      \"id\": \"invariants\",\n      \"pass\": \"Explain appended Scenario field/default compatibility, declaration and direct runtime guards, strict boolean/HTTP/health envelope validation, supported simulator-only API failure scope, existing Telnet/external/hardware behavior, no side effects or evidence/schema weakening; identify any actual violations with source lines.\"\n    },\n    {\n      \"id\": \"counterexamples\",\n      \"pass\": \"Use existing targeted controls to challenge malformed/missing/connected/unconfigured/transport/default/delegation/external/hardware/write/setup/cleanup/fault cases. Run actual focused current-candidate tests and inspect actual assertions; distinguish observed execution from static before/after analysis and historical diagnostic evidence.\"\n    },\n    {\n      \"id\": \"behavior_and_tools\",\n      \"pass\": \"Exercise meaningful existing managed controls on disposable local simulator/hub only with isolated data/config/temp; actual command/exit/log/JUnit hashes and process disposition retained. No real hardware/network/external deployment or new source/test/tool deliverable.\"\n    },\n    {\n      \"id\": \"calibration\",\n      \"pass\": \"Retain actual failures and limitations. Distinguish historical FSEC007 global freshness/level gate failure from demonstrated product defect; no unchanged failed global gate retry, waived acceptance, lost-original reconstruction or V3/source integration claim.\"\n    },\n    {\n      \"id\": \"review_quality\",\n      \"pass\": \"Report actionable source-linked findings/severity/reproduction or reasoned no-finding within inspected boundaries. Independent judge checks factual correctness, invariant/counterexample coverage and claimed execution against immutable originals; summary or model label alone is insufficient.\"\n    }\n  ],\n  \"decision_rule\": \"Independent judge must explicitly pass/hold/fail every mandatory axis with concrete evidence at exact evaluator report commit; unknown axis holds. Coordinator records final bounded competence disposition. No automatic failed-qualification retry, no source acceptance or blanket authentication/privacy/UI/HA/image/physical qualification.\",\n  \"eligible_domain_if_accepted\": \"bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards; additional source domains require separate actual qualification\",\n  \"source_acceptance_after_evaluation\": \"still pending separate qualified exact-commit source review and full acceptance; qualification output alone is not RV-API034 acceptance\"\n}\n"
+  },
+  "prior_failed_attempts": [
+    {
+      "attempt": 1,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "judge": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+      "disposition_canonical": {
+        "ref": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+        "bytes": 2691,
+        "sha256": "4a9f1da611d201cce70d17c2149a1e52441338da1a97241c2f3567929200d0fd",
+        "utf8_content": "{\n  \"status\": \"FAIL\",\n  \"observed_utc\": \"2026-11-03T02:02:41.705982+00:00\",\n  \"pin\": \"QUAL-ANTHROPIC-CORE-01\",\n  \"attempt\": 1,\n  \"candidate_model\": \"claude-opus-4-7/high\",\n  \"candidate_family\": \"Anthropic\",\n  \"evaluator_report_commit\": \"97c47be3670df297b2a7ac2696350615b88846c1\",\n  \"independent_judgement_commit\": \"5b70c91604c427d0d0398e6c5b3fce815b35efb3\",\n  \"independent_judge_family\": \"OpenAI\",\n  \"actual_judgement_authorship\": [\n    \"gpt-6.1-sol/high original substantive analysis and FAIL draft\",\n    \"gpt-6-astra/high verified continuation and committed final judgement after proven Sol stop/release\"\n  ],\n  \"rubric_sha256\": \"66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672\",\n  \"review_base\": \"938ae30339790c361abdda6fdd01b11a4e498518\",\n  \"candidate_source\": \"caaa4faabe9ede1e3aed37d2269efd4a4d691e04\",\n  \"per_axis_verdicts\": {\n    \"provenance\": \"pass\",\n    \"invariants\": \"pass\",\n    \"counterexamples\": \"pass\",\n    \"behavior_and_tools\": \"fail\",\n    \"calibration\": \"fail\",\n    \"review_quality\": \"fail\"\n  },\n  \"qualified_domains\": [],\n  \"reason\": \"Technical invariant and counterexample analysis passed; original evidence preservation, exact execution/process claims and causal calibration failed mandatory rubric axes. No qualification granted.\",\n  \"failed_qualification_retry_authorized\": false,\n  \"future_attempt_rule\": \"No automatic failed-qualification retry. A separately controlled new attempt requires explicit owner direction, keeps original FAIL and all failed bytes/history, and still needs full unchanged rubric plus independent different-family judgement.\",\n  \"source_acceptance_granted\": false,\n  \"review_admission\": \"RV-API034, RV-WS040, RV-PRIVACY-CHAIN and dependent source acceptance remain held until a task-qualified eligible different-family route is actually established\",\n  \"independent_work\": \"Continue dependency-ready bounded metadata/prose tasks on eligible M3/OpenAI routes; this failure is not a project-wide stop\",\n  \"evidence_preservation_limits\": [\n    \"Deleted original partial route report is not reconstructed or relabeled\",\n    \"Original evaluator pytest pipeline return codes and original process receipt/PID/descendant details remain unverified beyond documented indirect passing assertions\",\n    \"New judge doc checks are not repairs to evaluator original evidence\"\n  ],\n  \"original_eval_task\": \"task_e0fda51b39e2/ctx_cd0f4f2bae5c\",\n  \"judge_task\": \"task_3a3a04200302\",\n  \"interrupted_judge_dispatch\": \"ctx_f7db39e6c800\",\n  \"completed_judge_dispatch\": \"ctx_5db4e4b62a69\",\n  \"judge_worker_state\": \"released after accepted report-only delivery; final native captured\",\n  \"canonical_registry_ledger_and_owner_gates_unchanged\": true\n}\n"
+      },
+      "evaluator_report": {
+        "ref": "97c47be3670df297b2a7ac2696350615b88846c1",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/AUTHOR.md",
+        "bytes": 25102,
+        "sha256": "cb7ccfc32d784cfe89455ac1fb101a058ae9cfb9573dd51cd975880e551dea15"
+      },
+      "judge_report": {
+        "ref": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/REVIEW.md",
+        "bytes": 17488,
+        "sha256": "edf0cc17c657251a13d97dfe337b1932e16fc46a3c770dd05547a81623b744e7"
+      }
+    },
+    {
+      "attempt": 2,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "judge": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json",
+      "disposition_canonical": {
+        "ref": "3acbbfd07471979c51e1a257ff02149a9b549fa4",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json",
+        "bytes": 5663,
+        "sha256": "5c98306b131e08a5e2c8ce68fb411ac05e206f769bd0f00c939320e7e16c40db",
+        "utf8_content": "{\n  \"observed_utc\": \"2026-11-03T17:36:51.308169+00:00\",\n  \"status\": \"FAIL\",\n  \"pin\": \"QUAL-ANTHROPIC-CORE-01\",\n  \"attempt\": 2,\n  \"candidate_model\": \"claude-opus-4-7/high\",\n  \"candidate_family\": \"Anthropic\",\n  \"evaluator_report_commit\": \"78eea1519cd4b6c8ac626b28ee45281f43623198\",\n  \"independent_judgement_commit\": \"7548b5b7cd39a714e6e626c6226d8e49a39a14be\",\n  \"independent_judge_family\": \"OpenAI\",\n  \"independent_judge_model\": \"gpt-6-astra/high\",\n  \"rubric_sha256\": \"66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672\",\n  \"candidate_source\": \"caaa4faabe9ede1e3aed37d2269efd4a4d691e04\",\n  \"review_base\": \"938ae30339790c361abdda6fdd01b11a4e498518\",\n  \"per_axis_verdicts\": {\n    \"provenance\": \"fail\",\n    \"invariants\": \"pass\",\n    \"counterexamples\": \"pass\",\n    \"behavior_and_tools\": \"pass\",\n    \"calibration\": \"fail\",\n    \"review_quality\": \"fail\"\n  },\n  \"qualified_domains\": [],\n  \"mandatory_rule\": \"everyaxis must pass; provenance/calibration/review_quality fail, no bounded domain granted\",\n  \"material_findings\": {\n    \"J1\": \"060769 is in required four-commit window; evaluator claimed outside/notreviewed and actual tooltrace lacks allthree changed source reports/fullnine-path diff. Independentjudge inspection cannot retroactively repair missing evaluator coverage\",\n    \"J2\": \"Claimedpublished/shipped sidecar is ignored/private, exactreportcommit tracks onlyAUTHOR; no publishedproof or privacyclearance\",\n    \"J3\": \"Docs parent has106files, notone; actualF-API-034population fourrecords includingtwo blockedcontrols, notsix; evidence scope materially misstated\"\n  },\n  \"verified_strengths\": \"54focused/489docs originaldirectexits/JUnit/logidentities and all283externalfilebytes corroborated, zero mismatch; invariants/counterexamples/behavior_and_tools pass. Improvednewcapture does not repair originalattempt1lostbytes or grantqualification\",\n  \"other_limits\": \"Minor11vs12declaration/fivevsfourcounterfactual countslips, -I effectivePythonsettings explanation, numericexit1 versus unprovedterminationcause and absolute sideeffect claim calibrated byjudge; no new product-source defect established\",\n  \"first_attempt\": {\n    \"status\": \"FAIL\",\n    \"evaluator\": \"97c47be3670df297b2a7ac2696350615b88846c1\",\n    \"judge\": \"5b70c91604c427d0d0398e6c5b3fce815b35efb3\",\n    \"disposition_sha256_unchanged\": \"4a9f1da611d201cce70d17c2149a1e52441338da1a97241c2f3567929200d0fd\"\n  },\n  \"owner_approved_attempt_and_judge_consumed\": true,\n  \"further_retry_authorized\": false,\n  \"automatic_author_rewrite_or_new_judgement_authorized\": false,\n  \"source_acceptance_granted\": false,\n  \"review_admission\": \"No qualified domain; RV-API034/RV-WS040/RV-PRIVACY-CHAIN and dependentsourceacceptance remainheld until a suitable actual eligible qualified different-family route is established\",\n  \"source_rejection\": \"This is evaluation-quality FAIL, not rejection/acceptance of candidateproductsource and not a newlyestablishedproductdefect\",\n  \"judge_settlement\": {\n    \"observed_utc\": \"2026-11-03T17:34:10.902069+00:00\",\n    \"review_commit\": \"7548b5b7cd39a714e6e626c6226d8e49a39a14be\",\n    \"review_base\": \"78eea1519cd4b6c8ac626b28ee45281f43623198\",\n    \"report\": \"docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md\",\n    \"bytes\": 18514,\n    \"sha256\": \"23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2\",\n    \"task_id\": \"task_c8b55f48fcff\",\n    \"dispatch_id\": \"ctx_6f1b83d8f673\",\n    \"worktree\": \"wp-exec-qual-anthropic-core-01-manual02-review\",\n    \"branch\": \"ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review\",\n    \"verdict\": \"FAIL mandatoryprovenance/calibration/review_quality; invariants/counterexamples/behavior_and_tools PASS, no qualified domain\",\n    \"terminal\": \"released\",\n    \"task_ref_publication\": \"exact remote/local verified\",\n    \"native_final\": {\n      \"session\": \"01a1a26f-1348-71e3-94e0-e1a0c5e66e0e\",\n      \"models\": [\n        \"gpt-6-astra\"\n      ],\n      \"effort\": \"high\",\n      \"bytes\": 1088133,\n      \"sha256\": \"b7e23d43d24c1ce22f14275fee2454711629629c12973e7634f2f992b9ea8754\"\n    },\n    \"checks\": \"489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof\",\n    \"cleanup\": \"retain exact review tree read-only; no removal\",\n    \"integration_commit\": \"a87df0927d857ae1bf40687b0e9180bb8ab7de3f\",\n    \"archives\": [\n      {\n        \"archive_sha256\": \"5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b\",\n        \"archive_bytes\": 206071336,\n        \"regular_files\": 4608,\n        \"regular_bytes\": 295604926,\n        \"verification\": \"all members/types/bytes/links and final source/head/status verified; no link traversal\"\n      },\n      {\n        \"archive_sha256\": \"628223a8a01683b3f12eaafd09d8f31b11e357ffa863cdf3d31367b716e6c5f7\",\n        \"archive_bytes\": 67537,\n        \"regular_files\": 106,\n        \"regular_bytes\": 167143,\n        \"verification\": \"all members/types/bytes/links and final source/head/status verified; no link traversal\"\n      }\n    ]\n  },\n  \"evaluator_settlement\": \"released; fullnative/workspace/temp verifiedpreserved and exacttaskrefpublished, currentretainedreadonly\",\n  \"cleanup\": \"all relevant exactworktrees explicitly retainedreadonly, no destructivecleanup\",\n  \"independent_preparation\": \"boundedinventory/findings/CIattribution/preservation-gap/repositoryearlyintake documentation accepted only; Flic/HA checklist prepared without execution/signoff\",\n  \"owner_gates\": \"original3Tronclosed; privacy/source/physical/HIL/72h/week/finalversion/artifactrelease held/open; all61findings unchanged\",\n  \"publication\": \"scopeddisposition committed/pushed with exactremote/local equality receiptoutside referencedcommit\"\n}\n"
+      },
+      "evaluator_report": {
+        "ref": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+        "bytes": 16677,
+        "sha256": "4dfbfc8a77c6ad910dc34eac55b62611195fe601ee6996dc2818ded7de988942"
+      },
+      "judge_report": {
+        "ref": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+        "path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+        "bytes": 18514,
+        "sha256": "23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2"
+      }
+    }
+  ],
+  "eligible_domain": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+  "goal": "one bounded Opus5.5 competence disposition on unchanged sample/rubric, one fresh OpenAI judge; test evidence fidelity and substantive review against all six axes, seek new defects as well as known lessons",
+  "non_goals": [
+    "no implementation/test/tool/schema/registry/evidence/baseline changes",
+    "no qualifieddomain from planning",
+    "no new credit/accounts/credentials/spendpurchase",
+    "no Docker/HA/hardware/CI/runtimecampaign or release deployment",
+    "no source acceptance, no automatic unlock of78 review reservations, no broadened auth/privacy/UI/HA/image/physical domain",
+    "no automatic further candidate/judge/planning attempts; max9 contributions total",
+    "original3Tron approvals closed; all61 findings/privacy/HIL/72h/week/finalmetadata/artifactrelease gates unchanged"
+  ],
+  "entry_criteria": [
+    "all six original R1/R2 contributions preserved before sharing/synthesis",
+    "all three actual R3 acceptances on THIS complete hash, no unresolved material blocker; coordinator not a voter",
+    "fresh existing Run/binding/host/repo/catalog/helpers/all fleet pages/inbox/protected resources/concurrency and fresh exact native route before every stage",
+    "joint candidate Anthropic and fixed OpenAI judge headroom >=30% and judged sufficient for bounded task/reserve BEFORE candidate, recheck before judge; unknown other-host demand stays unknown, no absolute budget invented",
+    "canonical unchanged caaa/938 full four commits/nine paths, rubric66f370... and original failures; final packet/rubric/dispositions accessible by pinned Git show plus SHA",
+    "exclusive isolated exact bases/paths/newTask/newDispatch; positive prior writer settlement, routing deny helpers, no nesting; publication exact remote/local before next wave"
+  ],
+  "exit_criteria": [
+    "exact evaluator report plus retained actual direct original execution/native evidence and full coverage matrix; no missing tool inspection filled by judge",
+    "one fresh OpenAI exact-report judgement gives pass/hold/fail with concrete evidence on EVERY mandatory axis",
+    "all six PASS required for coordinator consideration of ONLY eligible bounded domain; any hold/fail means no domain, no softened rubric/automatic retry",
+    "qualified domain does not accept OpenAI source, close findings or release/privacy/hardware gates; later packages still require separate qualified different-family exact-commit review",
+    "coordinator audit, sequential prose integration, scoped docs, settled worker release, full originals preservation/task-ref publication, integration push and independent remote equality before another wave"
+  ],
+  "staffing_allocation": {
+    "candidate": {
+      "status": "planned, NOT launched or qualified",
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high supported explicit launch/local config; native per-turn effort unavailable",
+      "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "worktree": "wp-exec-qual-opus55-20261103",
+      "branch": "execution/qual-opus55-20261103",
+      "tracked_exclusive_path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/AUTHOR.md",
+      "ignored_exclusive_path": "build/qualification-route-20261103/candidate-opus55/**",
+      "temp_exclusive_path": "C:/t/qr-route-20261103/candidate-opus55/**",
+      "task_id": null,
+      "dispatch_id": null,
+      "limit": "ONE new candidate evaluation, target15min not cutoff; no automatic rewrite or retry",
+      "why": "replacement candidate hypothesis after two preserved Opus4.7 failures; no competence inferred from R1/R2/R3 prose",
+      "alternatives": "Opus4.7 failed mandatory qualifications; M3 bounded inventories only, Google unavailable/unverified; no verified alternate pair"
+    },
+    "judge": {
+      "status": "planned contingent, NOT launched",
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high supported, native turn_context required",
+      "base_binding": "EXACT future candidate report commit, parent must equal caaa and sole new tracked path AUTHOR.md; bind after author settlement/preservation/task-ref publication and coordinator audit",
+      "worktree": "wp-exec-qual-opus55-20261103-review",
+      "branch": "execution/qual-opus55-20261103-review",
+      "tracked_exclusive_path": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+      "ignored_exclusive_path": "build/qualification-route-20261103/judge-opus55/**",
+      "temp_exclusive_path": "C:/t/qr-route-20261103/judge-opus55/**",
+      "task_id": null,
+      "dispatch_id": null,
+      "limit": "ONE fresh exact-report judge session, target15min not cutoff, no replacement judge or retake",
+      "why": "bounded evaluation-quality judging demonstrated in prior genuine judgements; source OpenAI authorship not changed or accepted",
+      "alternatives": "Sol/Astra/Luna same OpenAI family/pool; no extra independence/capacity. Frozen rubric specifies OpenAI; no currently qualified alternative pair"
+    },
+    "coordinator": {
+      "owns": "shared APIs/contracts/root manifests/locks/registry/ledger/canonical gates/integration and publication; no implementation in this qualification",
+      "review_independence": "candidate Anthropic, evaluation judge OpenAI; planning participation is not source-review qualification"
+    }
+  },
+  "R3_panel_allocation": {
+    "anthropic": {
+      "family": "Anthropic",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base": "fbfb38ebcb026a2c3713d8bbbb7684d126a50af9",
+      "worktree_name": "wp-qr-r1-anthropic",
+      "expected_branch": "planning/qr-20261103-r1-anthropic",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/anthropic.md",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ]
+    },
+    "minimax": {
+      "family": "MiniMax",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base": "6b5e1ca0bbb11c2fcc15ed00ec709cd54cb09fbe",
+      "worktree_name": "wp-qr-r1-minimax",
+      "expected_branch": "planning/qr-20261103-r1-minimax",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/minimax.md",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ]
+    },
+    "openai": {
+      "family": "OpenAI",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base": "1ac7d96d7000f85e072a97512f35095906d7934c",
+      "worktree_name": "wp-qr-r1-openai",
+      "expected_branch": "ryan-haver/wp-qr-r1-openai",
+      "report": "docs/agent-process/phases/qualification-replacement-20261103/round3/openai.md",
+      "dependencies": [
+        "task_06770011f5e7",
+        "task_8c044cfcdce5",
+        "task_d065f4c36365"
+      ]
+    }
+  },
+  "R3_decision_rule": "exactly three remaining genuine contributions, total9 including prior6. Explicit accept/require_changes/blocked against identical complete packet/hash. All accept/no material blocker required, no weighted majority. Preserve dissent and end affected execution if no consensus, no automatic second vote/new packet cycle under this budget.",
+  "execution_order": [
+    "R3 Anthropic+MiniMax, OpenAI next free slot, preserve all decisions before interpreting consensus",
+    "if and only if all required accepts and fresh gates: provision isolated exact-caaa candidate tree with approved Opus5.5 routing then genuine worker-start ONE evaluator",
+    "settle/release, preserve native/fullworkspace/temp, audit exact scope/coverage/test receipts; publish exact author task ref; integrate submission as unqualified record only",
+    "fresh joint/current capacity and candidate readiness: new isolated exact evaluator-head tree and fresh Astra/high ONE judge",
+    "settle/preserve/audit exact-report judge, coordinator six-axis bounded disposition, sequential integration and applicable docs/push verification; no source/release work launched by this assessment"
+  ],
+  "acceptance_commands_and_capture": {
+    "working_directory": "exact candidate caaa checkout; judge exact evaluator-report checkout",
+    "preflight": [
+      "verify source HEAD/base diff/all nine canonical blobs",
+      "verify input/rubric/disposition Git blob SHA at exact published refs",
+      "record Python version and pytest version, sys.executable and resolved source imports/cwd; no private values"
+    ],
+    "collection_argv": [
+      "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/validation/test_sw_api_client_02_c1.py",
+      "tests/validation/test_sw_api_client_02_c2.py",
+      "--collect-only",
+      "-q",
+      "-p",
+      "no:tests.route_inventory",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=<own NEW collect/pytest-temp>"
+    ],
+    "focused_argv": [
+      "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/validation/test_sw_api_client_02_c1.py",
+      "tests/validation/test_sw_api_client_02_c2.py",
+      "-q",
+      "-p",
+      "no:tests.route_inventory",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=<own NEW focused/pytest-temp>",
+      "--junitxml=<own focused.junit.xml>"
+    ],
+    "documentation_argv": [
+      "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/test_core_documentation.py",
+      "tests/test_client_guides_docs.py",
+      "tests/test_openapi_and_config_docs.py",
+      "tests/test_security_docs.py",
+      "tests/test_license_and_protocol_docs.py",
+      "-q",
+      "-p",
+      "no:tests.route_inventory",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp=<own NEW docs/pytest-temp>",
+      "--junitxml=<own docs.junit.xml>"
+    ],
+    "population_rule": "historical54 focused/489 docs expectations only; actual collect/execute counts/statuses derived from full outputs/JUnit, report differences without force-fitting. All invocation receipts retained before any later action.",
+    "candidate_required": "one actual existing collection, one actual existing focused run exercising managed controls, one final existing doc run. No fixture/test/parser/harness/product edits, mutation files or global campaign. Existing static before/after/source/assertion analysis and original diagnostics labelled distinctly.",
+    "judge_required": "inspect all mandatory axes and actual source/assertions/native tool calls/immutable raw receipt bytes at exact evaluator head. One final docs invocation for report. Rerun at most one existing focused/collection set ONLY for a concrete evidence gap or contradiction, separate own isolated paths and original receipts; cannot repair evaluator missing reads or fabricate original proof.",
+    "execution_capture": "direct subprocess returncode/full stdout/full stderr/JUnit/argv/sanitized effective safe environment/tool versions/time and all temp kept before another invocation; failed originals never overwritten. Native full transcript private with canonical hashes/Task/Dispatch/cwd/model attestation. Unknown process termination cause and descendant census stay unknown.",
+    "isolation": "inherit os.environ.copy(), retain actual SYSTEMDRIVE/SYSTEMROOT/USERPROFILE and Windows OS vars, verify case-insensitively; override only own MATRIX_DATA_DIR/UC_CONFIG_HOME/MATRIX_CONFIG_DIR/TEMP/TMP/PYTHONPATH(root+src)/UTF8/bytecode flags as needed; -B not-I; no root/private data. All collect/focused/docs use distinct new owned paths.",
+    "finding_rule": "severity/source revision+lines/repro/support or reasoned no finding; scope strict booleans/envelope/HTTP/disconnected/default/delegation/Telnet/external/hardware/write/setup/cleanup/fault/transport compatibility, actual assertion strength, reset side effects explained. No absolute no-effect assertion beyond observed scope.",
+    "commit_rule": "only own NEW prose report; source untouched. UTF8/fenced JSON/local paths/CR-aware scope checks. Empty core.hooksPath invocation-only after scoped docs is prose exception, not source hook/full CI pass. Coordinator publishes/verifies refs; workers no push/merge/selfrelease."
+  },
+  "coverage_matrix_fields": [
+    "path",
+    "all relevant inspected revisions/commits",
+    "actual tool-read proof references",
+    "invariant/assertion/compatibility reasoning",
+    "finding severity/location/reproduction or reasoned no finding"
+  ],
+  "capacity": {
+    "observed_utc": "2026-11-03T18:42:16.918976+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "remaining six bounded planning contributions plus one candidate and one fresh judge, each stage separately gated; no automatic qualification correction/retry authority",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800498,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400498,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793730990532,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 64,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793730990934,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 26,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932889,
+        "resetDescription": null
+      },
+      "updatedAt": 1793730990570,
+      "error": null
+    }
+  },
+  "catalog_and_alternatives": {
+    "observed_utc": "2026-11-03T18:42:16.918976+00:00",
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "supported_effort": "high",
+      "cache_fetched_at": "2026-11-03T18:42:14.801972900Z",
+      "native_prior_R1": "exact Astra/high attested; fresh new session still required"
+    },
+    "Anthropic": {
+      "model": "claude-opus-5-5",
+      "effort": "high supported launch/local config, native per-turn effort not exposed",
+      "native_prior_R1": "actual Opus 5.5 attested; this establishes availability, not source competence"
+    },
+    "MiniMax": {
+      "catalog_model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited, CLI override unsupported",
+      "native_prior_R1": "actual MiniMax M3 attested; routing exact config rehashed"
+    },
+    "Google": "primary unavailable; alternate alias identity/qualification/headroom not verified, not fallback",
+    "DeepSeek": "owner exhausted; forbidden dispatch or credit purchase",
+    "alternatives": "Opus 4.7 both failures retained. Sol/Astra/Luna same family/pool; MiniMax bounded prose only. No verified alternate source qualification pair."
+  },
+  "concurrency": "max two new workers + coordinator + protected old external reservation=4, no nesting; six historical retained rows not6active agents",
+  "fallback": "no verified alternative qualification pair; low/unknown pool affects stage, no silent model/family/account substitution or credit purchase. Independent authorized ready work may continue with qualified verified routes.",
+  "recovery_and_preservation": "Use installed Orca recovery for failed/uncertain starts; never blind duplicate writer or reset/replace Run. Settle released resources promptly; native transcripts/full original workspace/temp hashes/private archives and exact remote task refs preserved. No destructive cleanup now; full verified Git bundle and recovery proof required before later exact Orca removal. Preserve failed runs/baselines/rootprivate/unrelated encodedhook directory.",
+  "technical_state": "source unchanged versus e2161484459da65aee14433136a14963507b499c; both4.7 FAILs immutable; qualified domains empty until actual eligible disposition; no software release deployment"
+}

@@ -1,0 +1,57 @@
+{
+  "commit": {
+    "sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+    "branch": "ryan-haver/wp-sw-auth-lockout",
+    "dirty_files": [],
+    "short": "2ae46e6c",
+    "dirty": false
+  },
+  "target": "sim",
+  "clients": [
+    "api"
+  ],
+  "operator": "automation",
+  "finished": "2026-10-20T22:06:56.486Z",
+  "aborted": null,
+  "outcomes": [
+    {
+      "scenario": "contracts.api_info",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json"
+    },
+    {
+      "scenario": "contracts.api_root",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root-api.json"
+    },
+    {
+      "scenario": "contracts.api_root_alias",
+      "client": "api",
+      "status": "pass",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "failed_checks": [],
+      "gate": "ok",
+      "reason": "",
+      "record": "evidence/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root_alias-api.json"
+    }
+  ]
+}

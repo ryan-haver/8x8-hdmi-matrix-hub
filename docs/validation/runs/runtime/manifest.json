@@ -1,0 +1,337 @@
+{
+  "archive_at_commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "image_source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+  "images": {
+    "amd64": {
+      "source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+      "tracked_checkout_clean": true,
+      "image": "hdmi-matrix-hub:runtime-r1f-final-amd64",
+      "image_id": "sha256:1a5de3b5b58a3e1c56d3269bd5c1c6e3e12be2d6fea1abceea36067d733df69e",
+      "architecture": "amd64",
+      "version": "1.0.0rc1",
+      "scope": "Software candidate; no published tag or physical claim"
+    },
+    "arm64": {
+      "source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+      "tracked_checkout_clean": true,
+      "image": "hdmi-matrix-hub:runtime-r1f-final-arm64",
+      "image_id": "sha256:a8ebd6f1a017322ff514e2051f1153f35d1ed0762034797ba4dbb2b6826668c6",
+      "architecture": "arm64",
+      "version": "1.0.0rc1",
+      "scope": "Software candidate; no published tag or physical claim"
+    }
+  },
+  "checks": [
+    {
+      "name": "Complete core (includes actual installed package entry checks)",
+      "xml": "build/runtime-completion/after-r1f/final-source-rerun.xml",
+      "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+      "scope": "Windows local core; excludes HA component and dedicated UC suites; expected platform skips retained",
+      "tests": 3970,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 4,
+      "passed": 3966
+    },
+    {
+      "name": "Dedicated scripted Remote",
+      "xml": "build/runtime-completion/after-r1f/final-uc.xml",
+      "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+      "scope": "100 actual SDK/simulator tests; no physical Remote claim",
+      "tests": 100,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 100
+    },
+    {
+      "name": "Actual amd64 deployment",
+      "xml": "build/runtime-completion/after-r1f/final-amd64-deploy.xml",
+      "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+      "scope": "Normal built-image command, health, actual SDK/discovery/volume/context checks; explicit configuration skips",
+      "tests": 29,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 3,
+      "passed": 26
+    }
+  ],
+  "flows": {
+    "startTime": "2026-10-19T06:42:21.035Z",
+    "duration": 234878.474,
+    "expected": 59,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "source_plan": {
+    "archive": "docs/validation/runs/runtime",
+    "output": "build/runtime-completion/after-r1f",
+    "runs": {
+      "source-campaigns": {
+        "root": "build/runtime-completion/after-r1f/source-campaigns",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Normal source run.py: all declared simulator API/browser/scripted-Remote/Flic outcomes"
+      },
+      "source-ha-current": {
+        "root": "build/runtime-completion/after-r1f/source-ha-current",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Normal source runtime through actual HA 2026.9.3 container"
+      },
+      "source-ha-minimum-line": {
+        "root": "build/runtime-completion/after-r1f/source-ha-minimum-line",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Normal source runtime through actual HA 2025.1.4 container; supported line, not exact 2025.1.0 floor"
+      },
+      "image-campaigns-cached": {
+        "root": "build/runtime-completion/after-r1f/image-campaigns-cached",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Normal amd64 image: representative API plus full browser/Flic cached-setting scenarios"
+      },
+      "image-campaigns-fresh": {
+        "root": "build/runtime-completion/after-r1f/image-campaigns-fresh",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Same amd64 image: declared fresh-cache fault/recovery API/browser/Flic scenarios"
+      },
+      "image-ha-campaigns-cached": {
+        "root": "build/runtime-completion/after-r1f/image-ha-campaigns-cached",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Same amd64 image through actual current HA container, declared cached settings"
+      },
+      "image-ha-campaigns-fresh": {
+        "root": "build/runtime-completion/after-r1f/image-ha-campaigns-fresh",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Same amd64 image through actual current HA container, declared fresh settings"
+      },
+      "image-uc-campaigns": {
+        "root": "build/runtime-completion/after-r1f/image-uc-campaigns",
+        "harness_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Same amd64 image, real SDK socket and unchanged 18 scripted-Remote scenario oracles"
+      }
+    },
+    "images": {
+      "amd64": "build/runtime-completion/after-r1f/final-amd64-image.json",
+      "arm64": "build/runtime-completion/after-r1f/final-arm64-image.json"
+    },
+    "image_source_sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+    "image_parity": "build/runtime-completion/after-r1f/final-image-input-parity.json",
+    "checks": [
+      {
+        "name": "Complete core (includes actual installed package entry checks)",
+        "xml": "build/runtime-completion/after-r1f/final-source-rerun.xml",
+        "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Windows local core; excludes HA component and dedicated UC suites; expected platform skips retained"
+      },
+      {
+        "name": "Dedicated scripted Remote",
+        "xml": "build/runtime-completion/after-r1f/final-uc.xml",
+        "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "100 actual SDK/simulator tests; no physical Remote claim"
+      },
+      {
+        "name": "Actual amd64 deployment",
+        "xml": "build/runtime-completion/after-r1f/final-amd64-deploy.xml",
+        "commit": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "scope": "Normal built-image command, health, actual SDK/discovery/volume/context checks; explicit configuration skips"
+      }
+    ],
+    "flows_results": "build/runtime-completion/after-r1f/source-flows-results/results.json",
+    "swagger": "build/runtime-completion/after-r1f/final-swagger-image.json",
+    "route_coverage_log": "build/runtime-completion/after-r1f/final-source-rerun.log",
+    "supplemental_copies": {
+      "final-source-rerun.xml": "build/runtime-completion/after-r1f/final-source-rerun.xml",
+      "final-uc.xml": "build/runtime-completion/after-r1f/final-uc.xml",
+      "final-amd64-deploy.xml": "build/runtime-completion/after-r1f/final-amd64-deploy.xml",
+      "final-amd64-image.json": "build/runtime-completion/after-r1f/final-amd64-image.json",
+      "final-arm64-image.json": "build/runtime-completion/after-r1f/final-arm64-image.json",
+      "final-arm64-smoke.json": "build/runtime-completion/after-r1f/final-arm64-smoke.json",
+      "final-image-input-parity.json": "build/runtime-completion/after-r1f/final-image-input-parity.json",
+      "final-swagger-image.json": "build/runtime-completion/after-r1f/final-swagger-image.json",
+      "integrated-procedure.json": "build/runtime-completion/after-r1f/integrated-procedure.json",
+      "source-flows-results.json": "build/runtime-completion/after-r1f/source-flows-results/results.json",
+      "swagger-flic-true.json": "build/runtime-completion/after-r1f/swagger-flic-true/results.json",
+      "swagger-flic-false.json": "build/runtime-completion/after-r1f/swagger-flic-false/results.json"
+    }
+  },
+  "copied_sha256": {
+    "image-campaigns-cached.json": "952b641869ac50cb753d4f40d67c2573bb8598dd46b8d1495ddcab1d1134a4e1",
+    "image-campaigns-fresh.json": "1f9bbfc19c89669f604efcd30810d3fbf4bbb113b8d45d719ef8566f395c5310",
+    "image-ha-campaigns-cached.json": "515a0773cd22e4fc46d4412120282e16611e05d73032fed7286ed49fee0a281e",
+    "image-ha-campaigns-fresh.json": "3f0fa17c4d08432deb24628f705cbc4aa55a568bc8f12e2090b87d5bd39d3a59",
+    "image-uc-campaigns.json": "0bc2cd0b5bf2a9a6a0c17372a012e2755192ec3d15eee53bbacbe8356307f239",
+    "source-campaigns.json": "fe8058c672e523b1034077c5d4e2e9ecceb9b3155994c016e789b0d3ee9429c7",
+    "source-ha-current.json": "c9c9d8c14dc4ba16ac602fa764ae0fef7deb4b5d02d7002c53a90225a6752e4b",
+    "source-ha-minimum-line.json": "c9b63912135f02c96e6d1c6485b4d298b829a032b46fa27651b347887652beec",
+    "final-source-rerun.xml": "7e6d8fe25e4142418262a91d4500f9565d368c8efeec02aa5780c50576f64fce",
+    "final-uc.xml": "b8a372953800d3ade49624615a4990d46fe6feb8534fb63a9ec93f7c967ddb92",
+    "final-amd64-deploy.xml": "ec68694b2bc7ffca17b0789336dcb5719734fd06de327ef13cc36e4005e79a07",
+    "final-amd64-image.json": "229131f3b55f94befd99d6c0ee902d914686f5c8756f92b6278daa9f722db71b",
+    "final-arm64-image.json": "1f33abc53ff9cef0e0fb687fc4c19603b996463a35c596e70a220436f879c6c0",
+    "final-arm64-smoke.json": "2678631468c927c984545747d6a0aed0b6bbf7c43d43bc026090715065216b66",
+    "final-image-input-parity.json": "921794845e19eb11ab87e56f7cdb2811f498360b79cda98f24fe6bcc24ad4286",
+    "final-swagger-image.json": "b928f4c2bf4a11afededafeb3b505095a20c21e01bf42720fd8bbdba4bac9e9e",
+    "integrated-procedure.json": "79f17037ac2cfeaad5299c7b5737c1ecba9052abf11837d77134774136c84823",
+    "source-flows-results.json": "dfd771656b5b0d499b7ecc96114d7618f210212510aa8ffd584c808c0187d36d",
+    "swagger-flic-true.json": "af491f98f4bb72f9b7548a7dd2f3f32a2b09cc6bca547cb71f145cad25b6e3f1",
+    "swagger-flic-false.json": "aae67035618aba35dcff2ecc4cbeb80680a097b25a31835802503c7f2f634aaf"
+  },
+  "runs": {
+    "source-campaigns": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/source-campaigns",
+      "finished": "2026-10-19T06:28:08.029Z",
+      "scope": "Normal source run.py: all declared simulator API/browser/scripted-Remote/Flic outcomes",
+      "counts": {
+        "api": {
+          "pass": 1411
+        },
+        "browser": {
+          "pass": 54
+        },
+        "uc": {
+          "pass": 18
+        },
+        "flic": {
+          "pass": 23
+        }
+      }
+    },
+    "source-ha-current": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/source-ha-current",
+      "finished": "2026-10-19T06:30:12.788Z",
+      "scope": "Normal source runtime through actual HA 2026.9.3 container",
+      "counts": {
+        "ha": {
+          "pass": 19
+        }
+      }
+    },
+    "source-ha-minimum-line": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/source-ha-minimum-line",
+      "finished": "2026-10-19T06:32:09.064Z",
+      "scope": "Normal source runtime through actual HA 2025.1.4 container; supported line, not exact 2025.1.0 floor",
+      "counts": {
+        "ha": {
+          "pass": 19
+        }
+      }
+    },
+    "image-campaigns-cached": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/image-campaigns-cached",
+      "finished": "2026-10-19T06:37:56.619Z",
+      "scope": "Normal amd64 image: representative API plus full browser/Flic cached-setting scenarios",
+      "counts": {
+        "api": {
+          "pass": 70
+        },
+        "browser": {
+          "pass": 47
+        },
+        "flic": {
+          "pass": 22
+        }
+      }
+    },
+    "image-campaigns-fresh": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/image-campaigns-fresh",
+      "finished": "2026-10-19T06:40:58.915Z",
+      "scope": "Same amd64 image: declared fresh-cache fault/recovery API/browser/Flic scenarios",
+      "counts": {
+        "api": {
+          "pass": 9
+        },
+        "browser": {
+          "pass": 7
+        },
+        "flic": {
+          "pass": 1
+        }
+      }
+    },
+    "image-ha-campaigns-cached": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/image-ha-campaigns-cached",
+      "finished": "2026-10-19T06:39:37.601Z",
+      "scope": "Same amd64 image through actual current HA container, declared cached settings",
+      "counts": {
+        "ha": {
+          "pass": 18
+        }
+      }
+    },
+    "image-ha-campaigns-fresh": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/image-ha-campaigns-fresh",
+      "finished": "2026-10-19T06:41:13.086Z",
+      "scope": "Same amd64 image through actual current HA container, declared fresh settings",
+      "counts": {
+        "ha": {
+          "pass": 1
+        }
+      }
+    },
+    "image-uc-campaigns": {
+      "commit": {
+        "sha": "4adbc136a4c1fb6be4b20b58530a47dd521efac8",
+        "branch": "wp-runtime-completion",
+        "dirty_files": [],
+        "short": "4adbc136",
+        "dirty": false
+      },
+      "original_artifact_root": "build/runtime-completion/after-r1f/image-uc-campaigns",
+      "finished": "2026-10-19T06:41:23.569Z",
+      "scope": "Same amd64 image, real SDK socket and unchanged 18 scripted-Remote scenario oracles",
+      "counts": {
+        "uc": {
+          "pass": 18
+        }
+      }
+    }
+  }
+}
