@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T19:24:03.518061+00:00",
+  "observedUtc": "2026-11-13T19:36:05.555009+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -99,7 +99,7 @@
       "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "all_three_reports_captured; directions/unaffected_D3_D8_agreed; full_hash_not_unanimous; G1_G3_hub_closeout",
+      "status": "CLOSED_BY_ACTUAL_PEER_DIRECTIONS_AND_HUB_LITERAL_GRANT_RECONCILIATION_NO_THIRD_ROUND",
       "dispatches": [
         {
           "task": "task_8b5953875986",
@@ -160,7 +160,11 @@
       "preflightRule": "Each actual readiness check then native ask/end turn; no peer/plan assessment before coordinator readiness GO; no manual steering or automatic menu approval",
       "plannedMaxActive": 2,
       "fullPlanUnanimouslyAccepted": false,
-      "precisionAuthority": "msg_4bc469e25fbb permits pure old/new precision in existing R2 closeout; no third peer round"
+      "precisionAuthority": "msg_4bc469e25fbb permits pure old/new precision in existing R2 closeout; no third peer round",
+      "finalLease": "FINAL_LEASES.json",
+      "finalLeaseSha256": "38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9",
+      "closeoutAuthority": "msg_f2f43accc580",
+      "unanimousPeerAmendedHash": false
     },
     "fableRemediation": {
       "status": "QUEUED_NOT_ADMITTED_REPO_FALLBACK_UNSATISFIED_WHILE_LOW_AND_LATER_WAVE",
@@ -170,7 +174,7 @@
       "task": null,
       "implementationHead": null,
       "admissionGO": false,
-      "preparedSpecSha256": "f9d605f43044c212b45fe5c5b628c77b1fcf5ec4226062ef4981669711938669"
+      "preparedSpecSha256": "5c87b6e1438d6c394373066ded91add1e94ff7b3f6a145e98fd9a6dad16ed65c"
     },
     "acceptance": {
       "status": "queued_after_exact_corrected_SHA",
@@ -200,7 +204,7 @@
   ],
   "temporaryPayload": "60822c6d687749bcb8a211bd3f427590",
   "sourceMutatedByCoordinator": false,
-  "consensus": "PARTIAL_DIRECTION_AND_UNAFFECTED_GRANTS; full original hash not unanimously accepted; concrete G1-G3 closure pending hub",
+  "consensus": "TWO_ROUND_RECONCILED_CONDITIONAL_LEASES; actual original peer votes preserved, no new-hash peer unanimity or source acceptance",
   "candidateTrialAuthority": "Opus5.5/high read-only planning trial only; candidate status unchanged, no Anthropic independent acceptance of Fable source",
   "prelaunchValidation": {
     "docs": "489passed4.09s",
@@ -235,7 +239,7 @@
     "packet": "R2_CLOSEOUT.md",
     "request": "msg_87e07189ad30",
     "authority": "msg_4bc469e25fbb",
-    "status": "returned concrete old/new clauses; hub disposition pending; no third peer round"
+    "status": "accepted narrowly by hub msg_f2f43accc580 at e85a1c0e; no implementation/source/landing GO"
   },
   "storageCloseout": "Current coordination receipts/failed-check metadata will be compactly preserved outside the identified commit; disposable payload closes through supported seven-day quarantine after actual source/spec preservation. Future author-wave diagnostics use new owned output; no author Task is created by this note."
 }

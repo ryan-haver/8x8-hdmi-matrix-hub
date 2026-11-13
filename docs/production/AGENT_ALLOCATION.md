@@ -1,5 +1,31 @@
 # Agent allocation and execution ledger
 
+## R2 closeout accepted; exact conditional leases frozen — 2026-11-13
+
+Hub msg_f2f43accc580 accepted the concrete G1–G3 clauses at e85a1c0e as narrow
+coordinator/hub reconciliation within the two-round workflow. Original peer votes
+remain Sol/Argon accept, Opus require_changes on f19a1d68; no amended-hash peer
+unanimity or third round is claimed. Final [conditional lease](../planning/fable-consensus-20261113/FINAL_LEASES.json)
+SHA38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9
+names the exact source/test/doc paths, owner-review artifact directory and receipt,
+all exclusions, actual author attribution and every entry/acceptance condition.
+
+No Fable implementation Task, dispatch, corrected head or GO exists. Prepared
+source/spec queue remains held by the independently confirmed repo fallback
+condition while sole Fable is LOW and by the later author-wave schedule. This is
+not the superseded global>=30 bar. No extra preflight or quota poll was performed
+for the correction. CR01/WSR03/provenance/qualification, H5/privacy, visual review,
+every-author-family-qualified exact-SHA acceptance, normal publication/landing
+and physical/release gates remain. Source remains f2a122f9, unpublished/unmerged;
+only coordinator records were normally pushed and exact origin heads verified.
+
+Final scoped record checks:489documentation tests passed7.05s, all original
+report/input hashes, JSON/links and whitespace verified; redacted Gitleaks0findings
+across10record commits plus1queue commit. Source execution tests were not run.
+The prepared spec is a project deliverable; compact receipts/failed-check metadata
+are preserved outside identified commits. Actual supported payload quarantine
+and remaining worktree/resource custody are read back in the final native status.
+
 ## Two rounds delivered; exact grant reconciliation and real queue limits — 2026-11-13
 
 All three R2 reports were captured and source/R1 hashes reverified before exchange.

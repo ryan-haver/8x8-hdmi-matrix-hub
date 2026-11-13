@@ -1,0 +1,146 @@
+{
+  "kind": "TWO_ROUND_RECONCILED_CONDITIONAL_LEASE_BOUNDS_NOT_IMPLEMENTATION_GO",
+  "sourceCommit": "f2a122f955def578960303bc15242fed00d01be3",
+  "sourceTree": "3384886fc4e624175046536bfd13e998923d5933",
+  "baseCommit": "680e93b88b711369e452cdbe415415ef23ab99ed",
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "originalPeerPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
+  "actualPeerDecisions": {
+    "Sol": "accept",
+    "Opus": "require_changes G1-G3, D1-D8 agree",
+    "Argon": "accept"
+  },
+  "unanimousPeerAcceptanceOfAmendedHash": false,
+  "precisionAuthority": {
+    "nativeMessage": "msg_f2f43accc580",
+    "closeoutCommit": "e85a1c0e1dd761ee7b9b9cf2d781ec2ae75c0e6b",
+    "closeoutPath": "docs/planning/fable-consensus-20261113/R2_CLOSEOUT.md",
+    "closeoutBlobSha256": "42e18bbd11c3a04aef7dcf1e0cb9b2cde571b715b9422c680fd83ad184fbe857",
+    "scope": "Accept G1-G3 as pure literal path/wording reconciliation within existing D1-D8 behavior agreement; not new round/source acceptance/landing permission"
+  },
+  "allImplementationEntryConditions": [
+    "Actual author-wave admission, no implicit GO",
+    "Exclusive coordinator-issued serial lease bound to native Task/Dispatch",
+    "Verified actual model, selected account consistency, configured high/full-access and custody",
+    "Fresh known usable pools; independently required repo verified fallback while LOW or genuine owner exception; no blanket global>=30 bar",
+    "Qualified independent review and correction capacity reserved before affected implementation",
+    "Every-author-family independent exact-corrected-SHA acceptance and normal landing/publication gates"
+  ],
+  "packages": [
+    {
+      "id": "D3",
+      "owner": "Fable/Anthropic",
+      "paths": [
+        "src/rest_api/settings.py",
+        "src/orei_matrix.py",
+        "src/telnet_client.py",
+        "SECURITY.md",
+        "tests/test_settings_matrix_host.py",
+        "tests/test_security_ssrf_tls.py"
+      ],
+      "behavior": "Preserve configured/saved/displayed hostname/URL/SNI; validate actual HTTP/Telnet destination at each connect/reconnect incl literals/mixed answers/same-host port; no unchecked re-resolution or backend/TLS/credential relaxation",
+      "validation": "Synthetic name/IP/CA/verify-true/fingerprint/address/rebinding/reconnect controls and applicable combined exact-source tests"
+    },
+    {
+      "id": "D5-G1",
+      "owner": "Fable/Anthropic",
+      "paths": [
+        "custom_components/hdmi_matrix/api.py",
+        "custom_components/hdmi_matrix/config_flow.py",
+        "custom_components/hdmi_matrix/__init__.py",
+        "tests/ha/test_api.py",
+        "tests/ha/test_config_flow.py",
+        "tests/ha/test_init.py",
+        "docs/HOME_ASSISTANT.md",
+        "custom_components/hdmi_matrix/strings.json",
+        "custom_components/hdmi_matrix/translations/en.json"
+      ],
+      "behavior": "Already-agreed fail-closed missing/malformed auth capability, migration/key clearing/exactly-one reload; G1 ONLY truthful localization; no auth/compatibility/form/floor expansion",
+      "validation": "Missing/wrong/revoked key and404/malformed200, migration/key clearing/one reload, actual HA2025.1.0 and2026.2.3 isolated suites"
+    },
+    {
+      "id": "D6-G2",
+      "owner": "Fable/Anthropic",
+      "paths": [
+        "web/index.html",
+        "web/js/components/settings-panel.js",
+        "web/js/components/general-drawer.js",
+        "tests/test_ui_classic_api_and_shortcuts.py",
+        "tests/e2e/flows.spec.ts",
+        "tests/e2e/visual/catalog.ts"
+      ],
+      "ownedNonCommittedReviewOutput": "build/fable-consensus-20261113/ui-review/ inside assigned Fable tree, bound to actual Task ownership before writing",
+      "outputOnly": [
+        "before/after/diff captures",
+        "source/renderer/hash manifests",
+        "review HTML"
+      ],
+      "outputRetention": "Established project owner-review deliverables, explicit bytes/ownership/retention receipt; keep while actual owner-review gate needs them, dispose closed bytes under current retention policy; disposable scratch/logs in registered payload",
+      "behavior": "Already-agreed masked fields in both existing surfaces, secret-state lifecycle and applied:false handling, no backend relaxation/unloaded-drawer/new-form redesign",
+      "visualConditions": [
+        "Pinned Linux Playwright renderer",
+        "Capture before code and after changes, including existing two text changes",
+        "New renders of old source labeled reference reproduction, not original historical capture",
+        "Concrete owner sign-off before PR/landing; baseline approval owner-only"
+      ],
+      "excludedPaths": [
+        "tests/e2e/visual/__snapshots__/",
+        "all CSS",
+        "web/css/tokens.css",
+        "docs/ui/LOOK_AND_FEEL.md"
+      ]
+    },
+    {
+      "id": "D4-G3",
+      "owner": "Coordinator; disclose actual implementation family",
+      "paths": [
+        "src/hub/openapi.py",
+        "docs/validation/features.yaml",
+        "tests/sim/test_sim_rest_reads.py",
+        "tests/validation/scenarios/contracts.py",
+        "tests/validation/scenarios/scenes.py",
+        "docs/validation/LEDGER.md",
+        "docs/API_REFERENCE.md"
+      ],
+      "behavior": "ONLY records of existing matrix-host applied:boolean versus unchanged scene/profile applied:string-list, scene404 and HTTP443; no new response behavior or field retype/rename",
+      "validation": "Actual registered-route100%, supported-generator-only ledger serial with registry/full hooks, no evidence promotion; qualified independent source/code/test/doc review"
+    },
+    {
+      "id": "D8",
+      "owner": "Coordinator; disclose actual implementation family",
+      "paths": [
+        "pyproject.toml",
+        "CONTRIBUTING.md",
+        "docs/agent-process/REPO_CONFIG.json",
+        ".github/workflows/ci.yml",
+        "tests/test_packaging_version_sync.py"
+      ],
+      "behavior": "Already-agreed honest>=3.12 support metadata and separately owned blocking lints; no locks/suppressions/device-limit changes",
+      "validation": "3.12 install/core and deliberate failing-lint proof, separate qualified review; mixed-family full head requires qualified third-family acceptance"
+    }
+  ],
+  "heldPackages": [
+    {
+      "id": "D1-D2/CR01",
+      "paths": [],
+      "reason": "Binding no-wiring/D6/WSR03 provenance/qualification/owner disposition; preserve candidate/history; no retake/target narrowing/relabel/intake/accept/land"
+    },
+    {
+      "id": "D7/H5",
+      "paths": [],
+      "reason": "Privacy chain/provenance/all-six-axis qualification and owner-only extra-attempt budget held; no copy/cherry-pick/retry"
+    }
+  ],
+  "currentExecution": {
+    "implementationTask": null,
+    "implementationDispatch": null,
+    "implementationGO": false,
+    "preparedD3Spec": "FABLE_D3_QUEUED_SPEC.txt",
+    "authorQueue": "HDMI outside first author wave; real repo verified-fallback prerequisite confirmed with no owner exception while sole Fable LOW",
+    "sourceAccepted": false,
+    "sourcePublished": false,
+    "sourceMerged": false
+  },
+  "immutableHistory": "All original R1/R2 source/model/hash/votes and failed Carbon diagnostic retained; authority reconciliation is not peer-vote relabeling"
+}

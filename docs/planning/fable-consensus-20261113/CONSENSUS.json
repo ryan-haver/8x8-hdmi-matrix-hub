@@ -8,7 +8,7 @@
     "R1": "three real independent provider opinions before exchange",
     "R2": "three real reconciliations on same hash, all originals preserved; no third assessment"
   },
-  "status": "PARTIAL_DIRECTION_AND_UNAFFECTED_GRANT_AGREEMENT; FULL_HASH_NOT_UNANIMOUS",
+  "status": "TWO_ROUND_BEHAVIOR_AGREEMENT_AND_HUB_RECONCILED_EXACT_GRANTS; NOT_AMENDED_HASH_PEER_UNANIMITY",
   "votes": {
     "Sol": "accept",
     "Opus": "require_changes G1-G3; D1-D8 agree, D3/D8 exact grants confirmed",
@@ -40,11 +40,7 @@
     ".github/workflows/ci.yml",
     "tests/test_packaging_version_sync.py"
   ],
-  "unresolvedGrantPrecisions": {
-    "G1": "HA strings.json + translations/en.json",
-    "G2": "exact owned UI review-artifact subtree; no baseline/CSS/token writes",
-    "G3": "API_REFERENCE.md and route-specific applied bool vs scene list typing"
-  },
+  "unresolvedGrantPrecisions": "Resolved narrowly by actual hub reply msg_f2f43accc580; any behavior/target/qualification/CSS/visual-authority expansion remains held",
   "precisionProposal": "GRANT_PRECISIONS_PROPOSED.md",
   "admissionAuthorityCorrection": "ADMISSION_CORRECTION.md / msg_0ea24f47ec5d supersedes hub-derived blanket>=30 barrier. Independent AGENTS.md verified-fallback prerequisite confirmed by hub msg_4bc469e25fbb; no owner exception. HDMI remains later-wave queued.",
   "currentAuthorQueue": "Prepared D3 specification at docs/planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt; no native remediation Task/dispatch/head/GO; later-wave queue and independently confirmed repo fallback prerequisite remain",
@@ -57,6 +53,12 @@
   ],
   "reports": "ROUND2_REPORTS.json exact original hashes",
   "modelHistory": "failed Carbon diagnostic remains failed/excluded, no retrial or relabel; original Argon opinions valid with exact provenance",
-  "precisionCloseout": "R2_CLOSEOUT.md; concrete old/new clauses for coordinator/hub reconciliation per msg_4bc469e25fbb, not third round or fabricated amended-hash unanimity",
-  "precisionClosureRequest": "msg_87e07189ad30 concrete old/new clauses; pending hub reconciliation, no invented new-hash unanimity"
+  "precisionCloseout": {
+    "authority": "msg_f2f43accc580",
+    "closeoutCommit": "e85a1c0e1dd761ee7b9b9cf2d781ec2ae75c0e6b",
+    "lease": "FINAL_LEASES.json",
+    "leaseSha256": "38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9",
+    "scope": "G1-G3 literal clarifications accepted by coordinator/hub inside same R2; no new round/vote/source or landing acceptance"
+  },
+  "precisionClosureRequest": "msg_87e07189ad30 resolved by msg_f2f43accc580"
 }

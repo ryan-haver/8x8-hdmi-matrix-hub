@@ -1,5 +1,30 @@
 # Current coordinator handoff
 
+## Exact R2 lease accepted; wait for actual author admission — 2026-11-13
+
+Existing Runrun_37205f6095b3 / workflowtask_c94bdfc187f6. Hub msg_f2f43accc580
+accepted G1–G3 literal closeout at e85a1c0e, without new peer votes or a third
+round. [FINAL_LEASES.json](../../planning/fable-consensus-20261113/FINAL_LEASES.json)
+SHA38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9
+is the immutable conditional file/behavior/test/exclusion boundary. Actual original
+R2 votes remain accept/require_changes/accept; source acceptance is not established.
+
+No remediation Task/dispatch/GO/corrected source head exists. The prepared
+[D3 specification](../../planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt)
+is a queue item only. HDMI waits the applicable later author wave and fresh actual
+route/custody/reviewer admission. LOW is not a global ban, but the independent
+AGENTS.md verified-fallback condition still applies with no owner exception;
+sole Fable has no suitable authorized fallback while LOW. Do not substitute,
+change accounts/credits/threshold, poll or infer reset recovery. Future author
+output must use a new owned temporary lifecycle after actual admission.
+
+Preserve original source candidate f2a122f955def578960303bc15242fed00d01be3,
+Fable native conversation, original reports/failure attribution and all held
+CR01/WSR03/qualification/privacy/visual/landing/release boundaries. No third
+peer/source audit or failed Carbon diagnostic retry. The compact storage/publication
+receipt outside the identified commit records actual payload closeout and any
+remaining worktree/external-resource holds. Native wakes only while queued.
+
 ## R2 delivered; D3 queue prepared, no author admission — 2026-11-13
 
 Runrun_37205f6095b3 / workflowtask_c94bdfc187f6 persists. Source f2a122f955def578960303bc15242fed00d01be3

@@ -1,5 +1,13 @@
 # R2 closeout: exact old/new grant precision
 
+Current disposition: hub `msg_f2f43accc580` accepted the literal G1–G3 clauses
+at commit `e85a1c0e1dd761ee7b9b9cf2d781ec2ae75c0e6b`. The resulting exact
+conditional [lease artifact](FINAL_LEASES.json) has SHA256
+`38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9`.
+This is actual coordinator/hub reconciliation, not new unanimous peer votes,
+implementation admission, source acceptance or landing permission. Original
+proposed clauses and peer decisions below remain their actual provenance.
+
 **Concrete coordinator reconciliation for hub closeout; not a fabricated
 unanimous vote on a new plan hash.** Authority: `msg_4bc469e25fbb`. This is within
 the existing two-round closeout, not a third peer/source audit. No peer round or
