@@ -1,5 +1,30 @@
 # Agent allocation and execution ledger
 
+## Targeted primary hook-artifact provenance: preserve pending owner disposition — 2026-11-13
+
+For hub msg_575dc3457e0c, classified only the4loose encoded-path primary hook
+files1384bytes. They exactly have the legacy Git LFS template shape and contain
+no credentials/private values, created2026-10-19T03:22:57Z. Configured native Git
+hooks resolve to actual Windows absolute .githooks paths, with different current
+hook hashes. The malformed relative PUA directory is distinct; actual installed
+hooks/config were read, never modified. No literal encoded-directory reference
+was found in tracked text under2MB or current Windows process command lines;
+these bounded observations do not prove all external/other-host consumer absence.
+
+Existing own Task/spec and committed source/protection records establish no
+originating actor. The standing protocol specifically protects the artifact,
+introduced in621288b11580f348d24481a2973622a4f1f1855a. Therefore ownership is
+UNKNOWN and no movement is authorized by the bulletin's agent-owned-copy branch.
+The [concrete record](../planning/fable-consensus-20261113/ENCODED_HOOK_PROVENANCE.json)
+contains exact source/destination paths, sizes/hashes, preservation guards and
+minimal owner disposition: authorize just4literal-file moves into registered
+retained payload15b20fdd2689438496d87ef426829b8b, explicitly overriding specific
+artifact protection for that preservation move, or keep original paths.
+No source bytes copied/moved/deleted, no catch-all product commit, directory-tree
+action, actual hook/config change or new source/test/build/worker. Current Fable
+task source remains clean; existing remediation/global-slot/native/local gates
+are unchanged. Publication and pending-action storage receipts are separate.
+
 ## Fable priority ledger concrete; source dirt settled — 2026-11-13
 
 Hub msg_21e6b8d4824e prioritizes finishing Fable and dirty-task work. Current

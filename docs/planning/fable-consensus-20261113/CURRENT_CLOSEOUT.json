@@ -1,5 +1,5 @@
 {
-  "observedUtc": "2026-11-13T23:01:36.316202+00:00",
+  "observedUtc": "2026-11-13T16:01:36.316202-07:00",
   "authority": "msg_21e6b8d4824e",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
@@ -33,32 +33,32 @@
       "stagedChanges": [],
       "untrackedFiles": [
         {
-          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
+          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
           "link": false,
           "bytes": 351,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "791471b4ff472aab844a4fceaa48bbb0a12193616f971e8e940625498b4938a6"
         },
         {
-          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
+          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
           "link": false,
           "bytes": 347,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "21e961572bb3f43a5f2fbafc1cc764d86046cc2e5f0bbecebfe9684a0b73b664"
         },
         {
-          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
+          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
           "link": false,
           "bytes": 345,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "75da0da66a803b4b030ad50801ba57062c6196105eb1d2251590d100edb9390b"
         },
         {
-          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
+          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
           "link": false,
           "bytes": 341,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
@@ -378,5 +378,17 @@
     "nextAction": "On actual author-slot release request HDMI next-ready; fresh exact Fable/new selected system account/high/full-access/custody/route/quota/reviewer checks and native Task/Dispatch-bound D3 lease precede any GO; no fourth author or automatic model substitution"
   },
   "custodyActionPacket": "EXTERNAL_OPUS_CUSTODY_PACKET.md",
-  "notCompletion": "No uncommitted Fable product source remains, but outstanding candidate remediation, qualified review, source publication/landing and formal release holds remain. Primary4untracked admin-hook files are unrelated preserved owner/custody ambiguity, not committed to manufacture green status."
+  "notCompletion": "No uncommitted Fable product source remains, but outstanding candidate remediation, qualified review, source publication/landing and formal release holds remain. Primary4untracked admin-hook files are unrelated preserved owner/custody ambiguity, not committed to manufacture green status.",
+  "targetedHookProvenance": {
+    "authority": "msg_575dc3457e0c",
+    "record": "ENCODED_HOOK_PROVENANCE.json",
+    "classification": "Four credential-free legacy Git LFS templates created2026-10-19T03:22:57Z in malformed relative PUA path, distinct from active Windows absolute installed-hook directory; no originating actor/Task proof",
+    "standingProtection": "Specific artifact remains protected by docs/ORCHESTRATION_PROTOCOL.md; introduced621288b1",
+    "consumerLimits": "No matching tracked literal reference under2MB or current Windows process command line; no global/other-host absence inference",
+    "decision": "Keep original files unchanged pending explicit owner preservation disposition",
+    "plannedPayload": "15b20fdd2689438496d87ef426829b8b",
+    "sourceBytesMovedOrCopied": 0,
+    "minimalOwnerChoice": "Authorize exact4file/1384B preservation move to named registered retained destinations, superseding only specific artifact protection for this move, or keep original paths",
+    "sourceWorkImpact": "None; ordinary Fable queue and all source/global-slot gates unchanged"
+  }
 }

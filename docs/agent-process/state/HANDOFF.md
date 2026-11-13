@@ -1,5 +1,26 @@
 # Current coordinator handoff
 
+## Four loose hook files: targeted provenance, no move — 2026-11-13
+
+Hub msg_575dc3457e0c requested concrete classification of the4primary files.
+[ENCODED_HOOK_PROVENANCE.json](../../planning/fable-consensus-20261113/ENCODED_HOOK_PROVENANCE.json)
+records their literal paths/bytes/SHA256, timestamps, distinct installed hook
+paths/hashes, bounded consumer evidence and exact proposed retained destinations.
+All4are credential-free legacy Git LFS templates created2026-10-19T03:22:57Z;
+they are not the actual installed hooks. Generation/template/time is not proof
+of the invoking actor. No existing own Task or committed record proves the creator.
+The protocol's protected-evidence section specifically protects this unrelated
+artifact (introduced621288b1), and broader consumer absence is not established.
+
+Keep all4files1384bytes at their original paths. No product commit, copy, move,
+directory removal, hook/config change or new test/build/worker occurred. The
+minimal pending owner disposition is whether to authorize only the exact4file
+preservation move into named registered retained payload15b20fdd2689438496d87ef426829b8b,
+superseding that specific protection for this move, or keep the original paths.
+The prepared destinations are empty; source bytes remain solely in place.
+This is unrelated owner/config dirt, not remaining uncommitted Fable source,
+and it does not block an otherwise admitted ordinary Fable package.
+
 ## Priority closeout: task source clean; remediation is outstanding — 2026-11-13
 
 Applied hub msg_21e6b8d4824e. [CURRENT_CLOSEOUT.json](../../planning/fable-consensus-20261113/CURRENT_CLOSEOUT.json)

@@ -1,0 +1,96 @@
+{
+  "authority": "msg_575dc3457e0c",
+  "run": "run_37205f6095b3",
+  "observedUtc": "2026-11-13T16:37:38.740348-07:00",
+  "decision": "KEEP_ORIGINAL_FILES_PENDING_ACTUAL_OWNER_DISPOSITION",
+  "sourceRoot": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+  "files": [
+    {
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
+      "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
+      "bytes": 351,
+      "sha256": "791471b4ff472aab844a4fceaa48bbb0a12193616f971e8e940625498b4938a6",
+      "createdUtc": "2026-10-18T21:22:57.42762-06:00",
+      "modifiedUtc": "2026-10-18T21:22:57.428679-06:00",
+      "link": false,
+      "classification": "Legacy standard Git LFS hook template, credential-free content; invoking actor unknown; specifically protected unrelated artifact",
+      "installedHookPath": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/post-checkout",
+      "installedHookSha256": "8d606e58cce98604696a4abcf3ae1ebde6f9f31ac72bb0d44e2444cc39f26030",
+      "matchesInstalledBytes": false,
+      "plannedDestination": "C:/Users/ryanh/.local/state/agent-storage/artifacts/15b20fdd2689438496d87ef426829b8b/payload/encoded-hook-copies/post-checkout"
+    },
+    {
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
+      "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
+      "bytes": 347,
+      "sha256": "21e961572bb3f43a5f2fbafc1cc764d86046cc2e5f0bbecebfe9684a0b73b664",
+      "createdUtc": "2026-10-18T21:22:57.431701-06:00",
+      "modifiedUtc": "2026-10-18T21:22:57.432708-06:00",
+      "link": false,
+      "classification": "Legacy standard Git LFS hook template, credential-free content; invoking actor unknown; specifically protected unrelated artifact",
+      "installedHookPath": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/post-commit",
+      "installedHookSha256": "f3eb4d1f62924c09d481a0563a84b158c66eb2feb3431cfdb3e6760aab4d661d",
+      "matchesInstalledBytes": false,
+      "plannedDestination": "C:/Users/ryanh/.local/state/agent-storage/artifacts/15b20fdd2689438496d87ef426829b8b/payload/encoded-hook-copies/post-commit"
+    },
+    {
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
+      "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
+      "bytes": 345,
+      "sha256": "75da0da66a803b4b030ad50801ba57062c6196105eb1d2251590d100edb9390b",
+      "createdUtc": "2026-10-18T21:22:57.435767-06:00",
+      "modifiedUtc": "2026-10-18T21:22:57.436857-06:00",
+      "link": false,
+      "classification": "Legacy standard Git LFS hook template, credential-free content; invoking actor unknown; specifically protected unrelated artifact",
+      "installedHookPath": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/post-merge",
+      "installedHookSha256": "cecb594e8fa65831654fc95e96db9f1249e09c52810c6fbb2b428280aac22158",
+      "matchesInstalledBytes": false,
+      "plannedDestination": "C:/Users/ryanh/.local/state/agent-storage/artifacts/15b20fdd2689438496d87ef426829b8b/payload/encoded-hook-copies/post-merge"
+    },
+    {
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
+      "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
+      "bytes": 341,
+      "sha256": "df5417b2daa3aa144c19681d1e997df7ebfe144fb7e3e05138bd80ae998008e4",
+      "createdUtc": "2026-10-18T21:22:57.423523-06:00",
+      "modifiedUtc": "2026-10-18T21:22:57.425036-06:00",
+      "link": false,
+      "classification": "Legacy standard Git LFS hook template, credential-free content; invoking actor unknown; specifically protected unrelated artifact",
+      "installedHookPath": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/pre-push",
+      "installedHookSha256": "a52d0510d0f8c75e27852156ec6f7791f0d8ed65fc58fcc368dd1de0a60a1d74",
+      "matchesInstalledBytes": false,
+      "plannedDestination": "C:/Users/ryanh/.local/state/agent-storage/artifacts/15b20fdd2689438496d87ef426829b8b/payload/encoded-hook-copies/pre-push"
+    }
+  ],
+  "totalBytes": 1384,
+  "provenance": {
+    "originatingTaskOrActor": "NOT_ESTABLISHED; task timestamps/templates are not authorship",
+    "historicalProtection": "docs/ORCHESTRATION_PROTOCOL.md protected-evidence section, introduced621288b11580f348d24481a2973622a4f1f1855a, explicitly preserves this unrelated artifact",
+    "nativeTasks": "Existing own Run task/spec records returned preservation references but no creator proof; no other Run inbox consumed",
+    "content": "Four legacy Git LFS shell templates; no credential or private-value content, no content copied into this record"
+  },
+  "consumer": {
+    "activeCoreHooksPath": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.githooks",
+    "origin": "primary .git/config; git rev-parse --git-path hooks agrees",
+    "encodedDirectoryIsDifferentRelativePath": true,
+    "parentContainmentAndNoLinks": true,
+    "trackedTextSearch": "No literal encoded-directory reference in current tracked text files under2MB; not proof of all external consumers",
+    "currentWindowsProcessCommandReferences": 0,
+    "consumerOwnershipConclusion": "No positive ownership proof; all external/other-host consumer absence not established; do not move by inference"
+  },
+  "requestedOwnerDecision": "Authorize moving only these four exact literal credential-free template files into a new owned registered retained payload, preserving exact bytes/hash/original paths and leaving the encoded directory and all actual installed hooks/config untouched; explicitly supersede specific artifact protection for that preservation move. Otherwise keep original paths.",
+  "executionIfAuthorized": [
+    "Verify registered dedicated owned payload15b20fdd2689438496d87ef426829b8b and exact named destinations; record owner-authorized retained custody/review before moving. No source bytes were copied at preparation.",
+    "Freshly revalidate exact4original paths/hashes/sizes/containment and every parent non-reparse status; check current config/consumer/custody and exclusive file access",
+    "Move only the4literal files with native PowerShell within checked absolute targets; never move/delete a directory tree or modify actual hooks/config",
+    "Read back destination SHA256/bytes and original file absence; retain source original-path manifest and actual receipt; stop on changed/unknown/pinned/automatic rejection"
+  ],
+  "notGranted": "No product commit of these bytes; no source lease/build/test/worker/heavy/installed-hook/config changes; Fable/D3/wiring/global-slot holds unchanged",
+  "currentOutcome": {
+    "filesMoved": 0,
+    "filesDeleted": 0,
+    "bytesCopied": 0,
+    "sourceConfigChanged": false,
+    "fableSourceDirt": 0
+  }
+}
