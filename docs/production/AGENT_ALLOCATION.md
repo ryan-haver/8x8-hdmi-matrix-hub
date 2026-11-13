@@ -1,5 +1,30 @@
 # Agent allocation and execution ledger
 
+## Restart and owner worktree cleanup completed — 2026-11-13
+
+Rebound existing run_37205f6095b3 after the PowerShell interruption. Read both
+worker pages:180Dispatches,178Tasks (175completed/3historicalfailed), no open
+Orca gate or unsettled assignment. November12 publication/quarantine was already
+committed and verified; no work or worker session was repeated. Five checkouts
+remained on restart; eleven from the prior census were already absent.
+
+Owner bulletin msg_29967e21467a and explicit hub follow-up msg_24b6beff17b9
+authorized removal of the remaining three inactive task trees. Hub bulletin13b
+retired governance.py; its expected exit4 is not a live cleanup gate. Used three
+exact native Orca removals after clean-status, no-live-terminal, remote-head and
+SHA256 copy checks. Only primary and coordinator remain; all branches survive.
+No owner keep exception, process termination, force or raw checkout deletion.
+
+Gross1,005,856,436logical bytes removed, excluding tiny Git metadata and junction
+targets. Preserved22,577non-cache ignored files/88,559,180bytes plus full member
+hashes in retained storage84844a4ea96c41478b7da7dafad94274 per the bulletin.
+Copied bytes/metadata reduce net savings; allocated-space change was not measured.
+Primary large ignored data/dependencies were reviewed and kept. Full paths,
+branches, heads, custody and storage receipt:
+[WORKTREE_CLEANUP_20261113.json](WORKTREE_CLEANUP_20261113.json).
+Scoped checks/publication closeout lives outside its identified commit in that
+registered payload. No source/qualification/release gate changed. Native-wake standby.
+
 ## Bulletin scratch hold closed — 2026-11-12
 
 Hub msg_b16e299d82e7 authorized exact36synthetic backup fixtures. All paths,

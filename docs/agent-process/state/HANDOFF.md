@@ -1,5 +1,30 @@
 # Current coordinator handoff
 
+## Existing Run recovered; task checkouts removed — 2026-11-13
+
+Runrun_37205f6095b3 remains bound. Both worker pages and individual historical
+resource records were reconciled:178Tasks,175completed/3historicalfailed,
+180Dispatches, no open Orca gate or unsettled assignment. No dead worker reopened,
+no new worker or phase. November12 publication and scratch closeout already
+survive in committed records and exact origin heads; do not repeat them.
+
+Under owner bulletin2026-11-13 and explicit hub confirmation, removed the three
+remaining inactive task trees through exact Orca lifecycle calls. Only primary
+and this coordinator checkout remain; local and remote branches survive.
+All non-cache ignored regular files were copied with SHA256 verification to
+retained payload84844a4ea96c41478b7da7dafad94274 before removal. Gross removal
+1,005,856,436logical bytes; preserved88,559,180bytes plus manifests/receipts.
+No process was ended. Existing primary user data and hook dependencies stay.
+The [receipt](../../production/WORKTREE_CLEANUP_20261113.json) lists exact paths,
+branches, heads and storage disposition; payload/session-closeout.json records
+final validation/publication outside the commit it identifies.
+
+Hub bulletin2026-11-13b retires scripts/governance.py (exit4 is expected).
+Use installed orca_gov.py and native SPOKE cleanup; do not repair/reset central
+state or resurrect the old gate. No remaining active assignment: stand by on
+native wake, with no background check subscription. Historical owner visual,
+physical, privacy, qualification and release gates retain their actual status.
+
 ## Owner decision24 purge-now plan — 2026-11-11
 
 Owner24 supersedes all earlier retention dates and monthly rebuild instructions.

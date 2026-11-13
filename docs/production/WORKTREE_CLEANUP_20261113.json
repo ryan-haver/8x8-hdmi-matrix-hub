@@ -1,0 +1,99 @@
+{
+  "run": "run_37205f6095b3",
+  "authority": ["msg_29967e21467a", "msg_a13c3240ecfb", "msg_24b6beff17b9"],
+  "scope": "Restart existing coordinator; finish owner worktree-cleanup bulletin, without starting a development phase",
+  "recovery": {
+    "consumingStartupCheck": "No new messages; historical inbox recovered both owner bulletins",
+    "tasks": {"total": 178, "completed": 175, "historicalFailed": 3, "active": 0},
+    "openOrcaGates": 0,
+    "dispatches": 180,
+    "workerListPages": 2,
+    "unsettledAssignments": 0,
+    "historicalResourceRows": "173 released, six retained and one compatibility row without terminal state; all assignments settled. Seven worker-show records inspected. Missing historical status was not called proof of process exit.",
+    "newWorkers": 0,
+    "previousPublication": "PUBLICATION_20261112.json and f0c52bb2 already record completed commit/push and scratch-quarantine closeout; not repeated",
+    "integrationHead": "680e93b88b711369e452cdbe415415ef23ab99ed",
+    "coordinatorInitialHead": "f0c52bb2718000ba45823bdc72658c29f32e89ff",
+    "initialPublicationCheck": "Both exact local heads matched live origin refs",
+    "retiredTool": "governance.py returned exit4 central initialization incomplete. Hub bulletin2026-11-13b confirms expected retired CLI, no central cleanup gate; native removal explicitly authorized. Shared state unchanged."
+  },
+  "initialCheckoutCensus": {
+    "git": 5,
+    "orca": 5,
+    "repoWorkspaceDirectories": 4,
+    "priorSnapshot": "November12 receipt counted16 checkouts; eleven already absent on restart. This receipt claims only the three removals below."
+  },
+  "removed": [
+    {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-ev02-name-review",
+      "branch": "ryan-haver/wp-ev02-name-review",
+      "head": "700a7d7e3eadc89748f0718ba43a462c2e96afcc",
+      "regularFileBytes": 278506865,
+      "preservedIgnoredFiles": 301,
+      "preservedIgnoredBytes": 9830182
+    },
+    {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
+      "branch": "remediation/privacy-c4",
+      "head": "a8fdbaa3adddafe838c17047bb78c4fdfe684b3a",
+      "regularFileBytes": 308112825,
+      "preservedIgnoredFiles": 46,
+      "preservedIgnoredBytes": 13090597
+    },
+    {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sw-api-root",
+      "branch": "ryan-haver/wp-sw-api-root",
+      "head": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+      "regularFileBytes": 419236746,
+      "preservedIgnoredFiles": 22230,
+      "preservedIgnoredBytes": 65638401
+    }
+  ],
+  "checks": {
+    "trackedAndUntrackedStatus": "Clean before removal; git status --porcelain --ignored and no-follow inventory included ignored content",
+    "remoteCustody": "Fresh origin fetch; each rev-list HEAD --not --remotes count0; exact local and live origin branch heads equal before and after removal",
+    "processCustody": "All three targets: native worktree ps inactive, zero live/unverifiable terminals; terminal list empty; no matching process command line outside the diagnostic shell",
+    "ignoredCustody": "Every non-cache untracked/ignored regular file copied privately and source/destination SHA256 verified before removal; no file contents printed",
+    "links": "Two reparse directories inventoried without traversal: privacy-c4/node_modules and a synthetic linked-directory fixture in API build. Link targets were not removed or copied.",
+    "removal": "Three sequential exact orca worktree rm --worktree id:... --json calls succeeded; no force, branch deletion, raw worktree removal, lock recovery or process termination",
+    "readback": "All three paths absent; Git and Orca each list only primary and coordinator; all three local and remote branches remain"
+  },
+  "kept": [
+    {"path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration", "bulletinReason": 1, "reason": "Primary checkout"},
+    {"path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/p-coord-unfoldedcircle-orei-hdmi-matrix-integration", "bulletinReason": 2, "reason": "Existing coordinator checkout"}
+  ],
+  "ownerKeepDecisionsReliedOn": [],
+  "validation": {
+    "scope": "Instruction and custody records only",
+    "documentation": "Five existing documentation modules:489passed3.63s; tests.route_inventory and cacheprovider disabled; isolated worktree-local data/config/basetemp; bytecode disabled",
+    "recordChecks": "Receipt JSON, new local Markdown targets and CR-aware whitespace passed",
+    "hookException": "Invocation-only core.hooksPath= for scoped documentation maintenance per ORCHESTRATION_PROTOCOL; persistent settings unchanged; no broad source-suite acceptance claimed",
+    "scratchCleanup": "102files/100735bytes removed after no-link inventory; private SHA256 manifest retained"
+  },
+  "largeIgnoredReview": [
+    {"path": "primary/.venv", "bytes": 156643938, "disposition": "Existing unattended hook runtime; kept"},
+    {"path": "primary/node_modules", "bytes": 63812410, "disposition": "Existing unattended hook dependencies; kept"},
+    {"path": "primary/archive", "bytes": 89015949, "disposition": "User assets; kept"},
+    {"path": "primary/build", "bytes": 111358328, "disposition": "Permanent manifests/receipts and named open-campaign inputs;397reparse entries not followed; kept"}
+  ],
+  "storage": {
+    "task": "84844a4ea96c41478b7da7dafad94274",
+    "state": "retained",
+    "reason": "Owner bulletin explicitly requires preserved non-rebuildable ignored configuration/state/results/logs before removing checkouts; private copies retained under that direction",
+    "preservedFiles": 22577,
+    "preservedBytes": 88559180,
+    "manifest": "Registered payload/members.json.gz; lossless compression independently read back; SHA256 below is of decompressed original bytes",
+    "manifestSha256": "fcbd51c49d4c9a81d6f82cd92046bf92f5c7a3c7e1c69ce57c2a27efa84a3a61",
+    "grossRemovedLogicalBytes": 1005856436,
+    "retainedPayloadApproximateBytes": 90052827,
+    "netLogicalReductionApproximateBytes": 915803609,
+    "rebuildableBytesWithinRemovedTrees": 84898481,
+    "measurement": "Regular-file logical bytes excluding tiny .git links; junction targets excluded. Retained copies and metadata reduce net savings. Allocated disk reclamation not measured.",
+    "quarantinedBytesThisRestart": 0,
+    "retainedReviewDate": "2026-12-13; review protected local data under owner bulletin before disposal, no automatic deletion",
+    "processesEnded": [],
+    "outsideTool": "Permanent committed receipt, allocation and handoff; existing primary protected data unchanged. No C:/tmp folder. Final validation/publication and retained-byte totals are in payload/session-closeout.json outside its identified commit."
+  },
+  "acceptance": "Cleanup only. Historical failed tasks stay failed; product, qualification, visual, hardware, soak, field and release gates unchanged.",
+  "next": "Stand by on native wake; no background check subscription"
+}
