@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:56:21.768983+00:00",
+  "observedUtc": "2026-11-13T19:00:37.511892+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -99,7 +99,7 @@
       "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "Sol_Argon_readiness_verified_assessment_GO_Opus_queued",
+      "status": "Sol_report_captured_Argon_assessing_Opus_readiness_pending",
       "dispatches": [
         {
           "task": "task_8b5953875986",
@@ -108,10 +108,14 @@
           "model": "gpt-6.1-sol",
           "effort": "high",
           "worktree": "fc13-r1-sol",
-          "status": "assessment_GO",
+          "status": "completed_report_captured_privately",
           "report": "R2_SOL.md",
           "readiness": "actual OpenAI native model/high, selected provider/session-account match, danger-full-access/approval-never, no prompt, supported weekly88%; source/inputs/R1 preserved",
-          "goMessage": "msg_16b8c48ae7b3"
+          "goMessage": "msg_16b8c48ae7b3",
+          "reportSha256": "e528a116bb7610b26546ee87ce6b834c2d5e4fe36ca17eed8527830a64a5000f",
+          "bytes": 7749,
+          "scope": "source unchanged; only originalR1 plus assignedR2; originalR1hash preserved",
+          "release": "released/closed_agent_terminal/transcript captured"
         },
         {
           "task": "task_e0940bd58693",
@@ -134,7 +138,12 @@
         "model": "claude-opus-5-5",
         "effort": "high",
         "manualTrial": true,
-        "dispatch": null
+        "dispatch": "ctx_088e38262d6d",
+        "status": "fresh_explicit_pinned_native_readiness_only",
+        "worktree": "fc13-r1-opus",
+        "requestedEffectiveMatch": true,
+        "preAdmission": "selected system; generalClaude51%remaining, dedicatedFable23%held; Opus general-only",
+        "nativeHeader": "Opus5.5/high; full-access/no-prompt witness still readiness stage; no assessment GO yet"
       },
       "preflightRule": "Each actual readiness check then native ask/end turn; no peer/plan assessment before coordinator readiness GO; no manual steering or automatic menu approval",
       "plannedMaxActive": 2
