@@ -115,6 +115,7 @@ launch/admit/GO, substitute authors, infer reset recovery or poll for quota.
 Final exact-SHA acceptance still needs a qualified family independent of every
 actual implementation author family. Neither planning participation, a grant
 precision nor mechanical integration erases authorship or grants qualification.
-Source candidate, original owner conversation and required actual open inputs
-stay preserved. Return the concrete closure to the hub; do not mail completed
+The [prepared D3 specification](FABLE_D3_QUEUED_SPEC.txt) is a reviewable queue
+item only, not a native author Task or GO. Source candidate, original owner
+conversation and required actual open inputs stay preserved. Return the concrete closure to the hub; do not mail completed
 workers into default-model follow-ups or start another peer round.

@@ -166,10 +166,11 @@
       "status": "QUEUED_NOT_ADMITTED_REPO_FALLBACK_UNSATISFIED_WHILE_LOW_AND_LATER_WAVE",
       "dispatch": null,
       "authority": "msg_0ea24f47ec5d + msg_4bc469e25fbb; no universal>=30 ban; independent repo AGENTS.md24-27/110-113 applies with no owner exception",
-      "preparedSpec": "Active payload/FABLE_D3_PREPARED_NOT_ADMITTED.txt",
+      "preparedSpec": "docs/planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt",
       "task": null,
       "implementationHead": null,
-      "admissionGO": false
+      "admissionGO": false,
+      "preparedSpecSha256": "f9d605f43044c212b45fe5c5b628c77b1fcf5ec4226062ef4981669711938669"
     },
     "acceptance": {
       "status": "queued_after_exact_corrected_SHA",
@@ -223,5 +224,18 @@
     "msg_1cb08e28729c/Fable below30 hold",
     "msg_b6c9a69bbe85 and msg_6b6fe6c9d2e0/real default follow-up model switch remains failed; fresh explicit pins for R2",
     "msg_950ea1f660ca/CR01 hold binding, owner disposition pending"
-  ]
+  ],
+  "recordPublication": {
+    "head": "e85a1c0e1dd761ee7b9b9cf2d781ec2ae75c0e6b",
+    "scope": "coordinator records only, normal push/exact origin verified;0secrets across10newcommits",
+    "sourceCandidate": "not pushed;5unique candidate commits and no remote candidate ref, no source acceptance/merge",
+    "integration": "680e93b8 unchanged"
+  },
+  "precisionCloseout": {
+    "packet": "R2_CLOSEOUT.md",
+    "request": "msg_87e07189ad30",
+    "authority": "msg_4bc469e25fbb",
+    "status": "returned concrete old/new clauses; hub disposition pending; no third peer round"
+  },
+  "storageCloseout": "Current coordination receipts/failed-check metadata will be compactly preserved outside the identified commit; disposable payload closes through supported seven-day quarantine after actual source/spec preservation. Future author-wave diagnostics use new owned output; no author Task is created by this note."
 }

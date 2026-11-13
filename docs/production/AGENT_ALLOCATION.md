@@ -31,8 +31,10 @@ hub's first author wave. Current [admission correction](../planning/fable-consen
 and native parent Task result state the actual two blockers, without invented
 quota recovery or a new preflight merely for the correction.
 
-Prepared D3 author spec exists only in active payload60822c6d687749bcb8a211bd3f427590;
-no Fable remediation Task admission/dispatch/GO or substitute author. CR01 owner
+Prepared [D3 author spec](../planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt)
+is retained in the project; no Fable remediation Task admission/dispatch/GO or
+substitute author. The coordination payload's actual supported closeout and
+permanent compact receipts are recorded outside the commit they identify. CR01 owner
 disposition, H5/privacy, visual, qualified every-author-family exact-SHA review
 and normal publication/landing gates remain. Coordinator changes are records only;
 final record validation, storage disposition and publication receipts are separate

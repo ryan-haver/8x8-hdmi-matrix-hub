@@ -19,8 +19,11 @@ not automatically UNHEALTHY. Independently, this repo's old verified-fallback
 prerequisite survives and hub issued no owner exception; sole Fable has no
 suitable authorized alternative while LOW. HDMI also waits outside author wave1.
 No new quota preflight merely for the correction, no polling/reset inference,
-account/credits/pin change or author substitute. Prepared D3 spec is only a file
-in active payload60822c6d687749bcb8a211bd3f427590; no native author Task/dispatch/GO.
+account/credits/pin change or author substitute.
+Prepared [D3 spec](../../planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt)
+is a project queue file only; no native author Task/dispatch/GO. The coordination
+payload's actual disposable closeout is recorded in the permanent compact receipt
+outside its identified source commit; future author output needs its own lifecycle.
 
 CR01 no-wiring/provenance/NOT_GRANTED/WSR03 disposition remains with owner/hub;
 H5/privacy/attempt budgets, concrete visual review, every-author-family-qualified

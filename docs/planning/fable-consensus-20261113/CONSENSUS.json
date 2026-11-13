@@ -47,7 +47,7 @@
   },
   "precisionProposal": "GRANT_PRECISIONS_PROPOSED.md",
   "admissionAuthorityCorrection": "ADMISSION_CORRECTION.md / msg_0ea24f47ec5d supersedes hub-derived blanket>=30 barrier. Independent AGENTS.md verified-fallback prerequisite confirmed by hub msg_4bc469e25fbb; no owner exception. HDMI remains later-wave queued.",
-  "currentAuthorQueue": "Prepared D3 specification only, no native Fable remediation Task/dispatch/head/GO; HDMI waits next author wave; source remains unchanged.",
+  "currentAuthorQueue": "Prepared D3 specification at docs/planning/fable-consensus-20261113/FABLE_D3_QUEUED_SPEC.txt; no native remediation Task/dispatch/head/GO; later-wave queue and independently confirmed repo fallback prerequisite remain",
   "acceptance": "Not performed; source not accepted/published/merged; all real qualification, every-implementation-author-family and exact-SHA gates remain",
   "humanHolds": [
     "D6/WSR03 provenance/wiring disposition at owner/hub",
@@ -57,5 +57,6 @@
   ],
   "reports": "ROUND2_REPORTS.json exact original hashes",
   "modelHistory": "failed Carbon diagnostic remains failed/excluded, no retrial or relabel; original Argon opinions valid with exact provenance",
-  "precisionCloseout": "R2_CLOSEOUT.md; concrete old/new clauses for coordinator/hub reconciliation per msg_4bc469e25fbb, not third round or fabricated amended-hash unanimity"
+  "precisionCloseout": "R2_CLOSEOUT.md; concrete old/new clauses for coordinator/hub reconciliation per msg_4bc469e25fbb, not third round or fabricated amended-hash unanimity",
+  "precisionClosureRequest": "msg_87e07189ad30 concrete old/new clauses; pending hub reconciliation, no invented new-hash unanimity"
 }
