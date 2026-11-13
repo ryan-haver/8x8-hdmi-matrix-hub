@@ -1,5 +1,39 @@
 # Agent allocation and execution ledger
 
+## Owner Fable handoff and two-round consensus queued — 2026-11-13
+
+Owner message msg_b052a16e725b authorizes an original-author handoff, independent
+R1 and exchanged R2, then Fable remediation of agreed eligible work. This explicit
+two-round direction governs this bounded continuation; it does not grant visual,
+privacy, qualification or exact-SHA landing approval. Workflow task_c94bdfc187f6
+tracks the stages in the existing Run. No original audit wave is being repeated.
+
+Same native Fable conversation was adopted through documented worker-start
+terminal reuse: Tasktask_8221ac785b94/ctx_44dc5f1e0cc4. Completed report only,
+source f2a122f955def578960303bc15242fed00d01be3 unchanged; five original commits
+now contain the former730c0c28+27dirty-path work. Actual author report1376words,
+SHA256ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027,
+copied byte-for-byte into the [decision packet](../planning/fable-consensus-20261113/ROUND1_PACKET.md).
+Native menu was cancelled without selecting an option. Existing owner conversation
+is explicitly retained idle for agreed remediation; source is not accepted or landed.
+
+The author flags the CR01 no-wiring grant, IP-pinning/TLS-name risk, HA floor,
+uncaptured visible text and external contract deltas. Backend credentials stay
+required; H1 visual/H5 privacy/M5 coordinator-owned choices remain unresolved.
+Five hooks reportedly4255pass/6skip/35deselected each; HA117pass on2026.2.3;
+working-tree/intermediate-commit attribution gaps and unrun checks remain explicit.
+
+Installed launch-check incorrectly reports agent mismatch for null metadata in
+documented --terminal reuse. Hub msg_5287c57a95ce confirms this defect: preserve
+the failure honestly, no stop/relaunch solely for null fields and no shared-tool
+edit. Native actual Fable5.2/high/bypass/sameUUID/new-account witness is retained.
+Sol and Argon are eligible read-only technical assessors; Opus5.5 is a recorded
+candidate; hub msg_13f63a372426 permits a bounded manual planning trial only. At most two initial new active assessors,
+maxthreeworkers+coordinator/no nesting, fresh capacity before each launch.
+Actual stages and dispatches: [TRACKING.json](../planning/fable-consensus-20261113/TRACKING.json).
+Temporary payload60822c6d687749bcb8a211bd3f427590 holds bounded open-work receipts;
+no source mutation, candidate push, merge or new qualification is claimed.
+
 ## Restart and owner worktree cleanup completed — 2026-11-13
 
 Rebound existing run_37205f6095b3 after the PowerShell interruption. Read both

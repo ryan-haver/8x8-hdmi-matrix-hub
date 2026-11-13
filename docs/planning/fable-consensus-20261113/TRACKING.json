@@ -1,0 +1,70 @@
+{
+  "authority": "msg_b052a16e725b",
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "observedUtc": "2026-11-13T18:15:35.705490+00:00",
+  "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
+  "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
+  "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
+  "sourceBranch": "ryan-haver/audit-remediation-fable52",
+  "handoff": {
+    "task": "task_8221ac785b94",
+    "dispatch": "ctx_44dc5f1e0cc4",
+    "status": "completed_report_only",
+    "report": "FABLE_HANDOFF.md",
+    "sha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027",
+    "nativeConversation": "f47fc739-3bb5-4a71-abcb-d1896c8e1fab",
+    "model": "claude-fable-5-2",
+    "effort": "high",
+    "accountMatch": true,
+    "permission": "bypass",
+    "metadataMismatch": "launch-check returned agent mismatch on null --terminal reuse fields; native evidence verified; hub msg_5287c57a95ce confirms defect, not clean helper result; clarification msg_13f63a372426",
+    "custody": "owner-requested keep-open; idle pending agreed original remediation; no source acceptance or task cleanup implied"
+  },
+  "stages": {
+    "R1": {
+      "status": "preparing_independent_read_only",
+      "planned": [
+        "Sol/high",
+        "Argon-high",
+        "Opus5.5/high owner-authorized bounded manual trial msg_13f63a372426"
+      ],
+      "dispatches": []
+    },
+    "R2": {
+      "status": "queued_after_all_R1",
+      "dispatches": []
+    },
+    "fableRemediation": {
+      "status": "queued_after_actual_consensus_and_eligible_grants",
+      "dispatch": null
+    },
+    "acceptance": {
+      "status": "queued_after_exact_corrected_SHA",
+      "dispatch": null
+    },
+    "landing": {
+      "status": "held_exact_SHA_gate_required"
+    }
+  },
+  "capacity": {
+    "maxActiveWorkers": 3,
+    "maxInitialNewActive": 2,
+    "noNesting": true,
+    "observations": "Sol90%weekly remaining; Claude59%; Fable37%; Argon33%weekly96%session; MiniMax95%weekly99%session. Refresh before each dispatch; other-repo commitments unknown; no token/spend allocation inferred.",
+    "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived"
+  },
+  "guards": [
+    "backend credential requirement",
+    "human visual before/after approval including existing two text changes",
+    "privacy-c4 and original qualification holds",
+    "shared/root/registry/coordinator ownership",
+    "no push/merge before normal gates",
+    "no accounts/new spend/credentials/env output",
+    "no helper agents"
+  ],
+  "temporaryPayload": "60822c6d687749bcb8a211bd3f427590",
+  "sourceMutatedByCoordinator": false,
+  "consensus": "not_established",
+  "candidateTrialAuthority": "Opus5.5/high read-only planning trial only; candidate status unchanged, no Anthropic independent acceptance of Fable source"
+}

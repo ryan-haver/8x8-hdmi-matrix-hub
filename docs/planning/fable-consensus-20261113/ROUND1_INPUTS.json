@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "f2a122f955def578960303bc15242fed00d01be3",
+  "sourceTree": "3384886fc4e624175046536bfd13e998923d5933",
+  "files": [
+    {
+      "path": "FABLE_HANDOFF.md",
+      "bytes": 9614,
+      "sha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027"
+    },
+    {
+      "path": "ROUND1_PACKET.md",
+      "bytes": 7719,
+      "sha256": "5e299e5ccfae26746e9c9adba2c6ad5bbd4187634f1d56b45760fde8470b867b"
+    }
+  ],
+  "trackingNotFrozenInput": "TRACKING.json is mutable factual dispatch/status metadata; not part of the common design packet",
+  "originalAuthorReportUntouched": true
+}

@@ -1,5 +1,29 @@
 # Current coordinator handoff
 
+## Owner Fable consensus continuation active — 2026-11-13
+
+Owner authority msg_b052a16e725b starts a bounded two-round read-only debate of
+the original Fable author's outstanding items, followed by agreed eligible Fable
+remediation, fresh qualified different-family exact-SHA acceptance and normal
+landing gates. Workflow task_c94bdfc187f6 in run_37205f6095b3. Genuine Fable
+handoff task_8221ac785b94/ctx_44dc5f1e0cc4 completed report-only; same native
+conversation f47fc739-3bb5-4a71-abcb-d1896c8e1fab retained idle. The original
+five-commit candidate f2a122f955def578960303bc15242fed00d01be3 is frozen,
+unaccepted and unpublished. The former27dirty paths became those commits.
+
+Start with the [frozen packet](../../planning/fable-consensus-20261113/ROUND1_PACKET.md)
+and [actual tracking](../../planning/fable-consensus-20261113/TRACKING.json).
+Original author report is a verified byte-identical copy, not coordinator findings.
+Do not repeat completed audit waves or answer H1/H5/M5 native questions by proxy.
+Backend credentials, visual before/after approval, privacy-c4/qualification holds,
+coordinator-owned paths and source/no-push gates remain. CR01 wiring authority,
+TLS hostname compatibility, HA floor and uncaptured text changes require explicit
+disposition. Sol/Argon independent R1 are preparing; Opus candidate participation
+has explicit bounded manual trial authority from hub msg_13f63a372426. R2/remediation/acceptance are not yet launched or agreed.
+Hub msg_5287c57a95ce confirms the null-fields launch-check reuse defect; retain
+honest helper failure and exact native witness, not a manufactured clean result.
+Open coordination payload60822c6d687749bcb8a211bd3f427590 holds bounded receipts.
+
 ## Existing Run recovered; task checkouts removed — 2026-11-13
 
 Runrun_37205f6095b3 remains bound. Both worker pages and individual historical
