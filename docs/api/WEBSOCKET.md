@@ -25,6 +25,8 @@ Implementation: `src/rest_api/events.py` (event stream and status poller), `src/
 | 3 | server → client | change events, as they happen |
 | any | client → server | `{"command": "ping"}` → `pong`; `{"command": "get_status"}` → `status` after a fresh read of the matrix (status caches bypassed); changes that read finds are announced to every client first, as usual |
 
+**`get_status` limits:** each client has one read of its own at a time. A `get_status` sent while that read is in flight starts no second read; the `status` of the read in flight answers it (a change made in between still arrives as a change event). The hub runs at most 8 such reads at once across all clients; a `get_status` beyond that is answered with `error` (`Server busy; send get_status again`). A read ends when its client disconnects or the hub stops.
+
 **Heartbeat (API-10):** the server sends a WebSocket **protocol** ping every 30 s and closes a client that does not answer within 15 s. Browsers answer these pings by themselves. A client can also send `{"command": "ping"}` and gets `pong`. The form `{"type": "ping"}` that older web clients sent is accepted too. The web client pings every 25 s and reconnects if it has received nothing for 60 s.
 
 **Reconnect:** clients reconnect for as long as they run, with a delay of 1 s that doubles up to 30 s. Every reconnect starts with `connected` and `status`, so a reconnect is also a full resync.
@@ -85,7 +87,7 @@ These say what a command through the hub did. The state it changed also arrives 
 | Event | Payload | Sent |
 | --- | --- | --- |
 | `pong` | `{}` | reply to `ping` |
-| `error` | `message` | reply to invalid JSON, an unknown command, or `get_status` when the hub cannot read the matrix |
+| `error` | `message` | reply to invalid JSON, an unknown command, or `get_status` when the hub cannot read the matrix or already runs its limit of reads |
 
 ### Removed in protocol 1
 

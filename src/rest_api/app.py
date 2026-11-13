@@ -230,7 +230,7 @@ from .ui import (
     init_ui_preferences,
 )
 from .utils import API_VERSION, rate_limit_middleware
-from .websocket import handle_websocket
+from .websocket import WS_REQUEST_WORK, handle_websocket, install_ws_request_work
 
 _LOG = logging.getLogger("rest_api.app")
 
@@ -265,6 +265,8 @@ def create_rest_app(data_dir: Path | None = None, *, runtime=None, integration_r
 
     # The hub's live event stream (/ws) and its status poller (docs/api/WEBSOCKET.md)
     install_event_stream(app, runtime=runtime)
+    # Bounded /ws get_status reads (CR-01); installed after the stream so they are drained before it stops.
+    install_ws_request_work(app)
 
     def add_cors_headers(request: web.Request, response: web.StreamResponse) -> None:
         origin = request.headers.get("Origin")
@@ -625,6 +627,9 @@ class RestApiServer:
 
         try:
             try:
+                if self.app is not None and WS_REQUEST_WORK in self.app:
+                    # Before the stream: no get_status read may outlive the stream it answers on.
+                    await self.app[WS_REQUEST_WORK].shutdown()
                 if self.app is not None and "event_stream" in self.app:
                     await self.app["event_stream"].stop()
             finally:

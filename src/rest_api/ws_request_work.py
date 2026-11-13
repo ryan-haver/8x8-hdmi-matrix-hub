@@ -1,8 +1,8 @@
 """Bounded, owner-scoped admission for work started by /ws client frames (CR-01).
 
-Status: **internal component only**. Nothing imports it yet; ``websocket.py``
-still starts one ``ws_get_status`` task per frame. Wiring it in is a later,
-separately reviewed change, and this module does not close CR-01 by itself.
+Status: wired. ``websocket.py`` admits every ``get_status`` read through one
+:class:`WsRequestWork` per aiohttp app (see "Wiring" below). Closing CR-01 is a
+review and acceptance decision; neither this module nor that wiring records it.
 
 What it is for
     ``_handle_command`` in ``websocket.py`` is a plain function that runs in the
@@ -113,17 +113,22 @@ the task. A factory, or an eagerly started task (``asyncio.eager_task_factory``)
 that re-enters ``try_start`` therefore sees the reservation and cannot exceed
 either bound.
 
-Wiring (proposed, not done here)
-    ``create_rest_app`` creates one ``WsRequestWork(application_limit=N,
-    name="ws_get_status")``, stores it under an ``web.AppKey`` and appends a
-    ``cleanup_ctx`` whose exit awaits ``shutdown(timeout=...)``. ``handle_websocket``
-    opens one owner after ``ws.prepare`` and awaits ``owner.aclose(timeout=...)``
-    in its ``finally``. ``_handle_command`` replaces ``create_task`` with
-    ``owner.try_start(lambda: _reply_status(stream, ws))`` and answers a
-    rejection with the existing ``error`` event (``{"message": <str>}``), which
-    keeps the public schema unchanged. Whether an ``OWNER_BUSY`` rejection should
-    instead be coalesced with the in-flight read is a wiring decision with a
-    freshness consequence, recorded in the author report.
+Wiring (in ``websocket.py`` and ``app.py``)
+    ``install_ws_request_work`` gives each app one ``WsRequestWork(
+    application_limit=MAX_STATUS_READS, name="ws_get_status")`` under the
+    ``WS_REQUEST_WORK`` ``web.AppKey``, in a ``cleanup_ctx`` whose exit awaits
+    ``shutdown()``; ``RestApiServer.stop`` awaits it before it stops the event
+    stream. ``handle_websocket`` opens one owner after ``ws.prepare`` and awaits
+    ``owner.aclose()`` in its ``finally``. ``_handle_command`` calls
+    ``owner.try_start(lambda: _reply_status(stream, ws))``.
+
+    Rejections keep the public schema unchanged. ``APPLICATION_BUSY`` is
+    answered with the existing ``error`` event (``{"message": <str>}``).
+    ``OWNER_BUSY`` is coalesced: the client's read in flight answers the new
+    frame too. That ``status`` comes from a read that began before the frame,
+    so it can miss a change made in between; such a change still reaches the
+    client as a change event from the next read. ``OWNER_CLOSED`` and
+    ``SHUTTING_DOWN`` are not answered: the socket is going away.
 
 Import side effects: none. The module imports only the standard library, keeps
 no module-level mutable state and looks up its logger only when it logs.

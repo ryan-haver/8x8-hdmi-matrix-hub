@@ -7,17 +7,18 @@ The events come from the hub's event stream (rest_api/events.py): its status
 poller and the matrix's own change notifications, whatever made the change.
 """
 
-import asyncio
 import json
 import logging
 import os
+from collections.abc import AsyncIterator
 from typing import Any
 
 from aiohttp import WSMsgType, web
 
-from .events import get_event_stream
+from .events import EventStream, get_event_stream
 from .security import allowed_origin, manager
 from .utils import _ws_clients_lock, get_ws_clients
+from .ws_request_work import RejectReason, WorkOwner, WsRequestWork
 
 _LOG = logging.getLogger("rest_api.websocket")
 
@@ -25,8 +26,35 @@ _LOG = logging.getLogger("rest_api.websocket")
 #: Browsers answer ping frames by themselves.
 HEARTBEAT_SECONDS = 30.0
 
-#: get_status replies in flight (a reference keeps each task alive until it has answered).
-_replies: set[asyncio.Task[None]] = set()
+#: ``get_status`` reads in flight across all /ws clients (CR-01). Each client has at most one of
+#: its own, so a client that floods ``get_status`` frames cannot start one task per frame.
+MAX_STATUS_READS = 8
+
+#: The app's bounded ``get_status`` work. It belongs to the app, never to the module, so every
+#: app drains its own tasks when it stops.
+WS_REQUEST_WORK = web.AppKey("ws_request_work", WsRequestWork)
+
+
+def install_ws_request_work(app: web.Application) -> None:
+    """Give ``app`` its bounded ``get_status`` work and drain it when the app stops.
+
+    Install it after the event stream: cleanup contexts exit in reverse order,
+    so the reads are cancelled and awaited before the stream they answer on stops.
+    """
+
+    async def _ctx(app: web.Application) -> AsyncIterator[None]:
+        work = WsRequestWork(application_limit=MAX_STATUS_READS, name="ws_get_status")
+        app[WS_REQUEST_WORK] = work
+        yield
+        await work.shutdown()
+
+    app.cleanup_ctx.append(_ctx)
+
+
+def _event_stream(app: web.Application) -> EventStream:
+    """The app's own stream; the process-wide one only for an app built without it."""
+    stream = app.get("event_stream")
+    return stream if stream is not None else get_event_stream()
 
 
 async def broadcast_status_update(event_type: str, data: dict[str, Any]) -> None:
@@ -62,7 +90,8 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
     origin = request.headers.get("Origin")
     if origin and not allowed_origin(request, origin):
         raise web.HTTPForbidden(text="WebSocket Origin denied")
-    stream = get_event_stream()
+    stream = _event_stream(request.app)
+    work = request.app[WS_REQUEST_WORK]
     ws_clients = get_ws_clients()
     ws = web.WebSocketResponse(heartbeat=HEARTBEAT_SECONDS)
     ws["access_level"] = manager(request).access_level(request)
@@ -73,25 +102,31 @@ async def handle_websocket(request: web.Request) -> web.WebSocketResponse:
         ws_clients.add(ws)
     stream.add_client(ws)
     _LOG.info(f"WebSocket client connected (total: {stream.client_count})")
+    # One owner per connection: its get_status read ends with the socket.
+    owner = work.open_owner()
 
     try:
         async for msg in ws:
             if msg.type == WSMsgType.TEXT:
-                _handle_command(stream, ws, msg.data)
+                _handle_command(stream, owner, ws, msg.data)
             elif msg.type == WSMsgType.ERROR:
                 _LOG.warning(f"WebSocket error: {ws.exception()}")
     except Exception as e:
         _LOG.debug(f"WebSocket connection error: {e}")
     finally:
-        async with _ws_clients_lock:
-            ws_clients.discard(ws)
-        await stream.remove_client(ws)
+        try:
+            # Cancel and await this socket's read before its client entry goes.
+            await owner.aclose()
+        finally:
+            async with _ws_clients_lock:
+                ws_clients.discard(ws)
+            await stream.remove_client(ws)
         _LOG.info(f"WebSocket client disconnected (remaining: {stream.client_count})")
 
     return ws
 
 
-def _handle_command(stream: Any, ws: web.WebSocketResponse, text: str) -> None:
+def _handle_command(stream: Any, owner: WorkOwner, ws: web.WebSocketResponse, text: str) -> None:
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
@@ -104,9 +139,12 @@ def _handle_command(stream: Any, ws: web.WebSocketResponse, text: str) -> None:
     if command == "ping":
         stream.send(ws, "pong", {})
     elif command == "get_status":
-        task = asyncio.get_running_loop().create_task(_reply_status(stream, ws), name="ws_get_status")
-        _replies.add(task)
-        task.add_done_callback(_replies.discard)
+        started = owner.try_start(lambda: _reply_status(stream, ws))
+        if started is RejectReason.APPLICATION_BUSY:
+            stream.send(ws, "error", {"message": "Server busy; send get_status again"})
+        # OWNER_BUSY: this client's read is in flight, and its ``status`` answers this frame too
+        # (a change after that read still arrives as a change event). OWNER_CLOSED and
+        # SHUTTING_DOWN: the socket is going away, so there is nobody to answer.
     else:
         stream.send(ws, "error", {"message": f"Unknown command: {command}"})
 

@@ -1,9 +1,10 @@
-"""Tests for rest_api.ws_request_work (CR-01 candidate component, not yet wired).
+"""Tests for rest_api.ws_request_work (the CR-01 admission component).
 
-These tests exercise the component on its own. Where they model the future
-call site they drive the *existing, unmodified* ``websocket._reply_status``
-with a fake event stream; they do not open an HTTP/WebSocket connection and do
-not show that ``/ws`` is fixed. ``websocket.py`` still has no admission bound.
+These tests exercise the component on its own. Where they model the call site
+they drive the real ``websocket._reply_status`` with a fake event stream; they
+do not open an HTTP/WebSocket connection and do not show that ``/ws`` is
+bounded. The wiring in ``websocket.py`` is tested over real connections in
+``tests/test_ws_get_status_bounds.py``.
 
 Evidence is taken from real asyncio effects (tasks that exist in
 ``asyncio.all_tasks()``, factory calls, refresh calls, messages sent, task
@@ -868,12 +869,16 @@ def test_imports_resolve_to_this_checkout():
     assert Path(websocket.__file__).resolve() == MODULE_PATH.parent / "websocket.py"
 
 
-def test_the_existing_websocket_module_does_not_use_the_component_yet():
-    """Calibration: this candidate is not wired in; /ws still has its original unbounded path."""
+def test_the_websocket_module_admits_get_status_through_the_component():
+    """Calibration: /ws is wired to the component and its unbounded module-global path is gone.
+
+    This only shows what the module refers to. That /ws is bounded and drained
+    is shown over real connections in tests/test_ws_get_status_bounds.py.
+    """
     source = (MODULE_PATH.parent / "websocket.py").read_text(encoding="utf-8")
-    assert "ws_request_work" not in source
-    assert "_replies.add(task)" in source
-    assert isinstance(websocket._replies, set)
+    assert "owner.try_start(lambda: _reply_status(stream, ws))" in source
+    assert "create_task" not in source
+    assert not hasattr(websocket, "_replies")
 
 
 async def test_repr_and_diagnostics_carry_no_client_data(make_work):
