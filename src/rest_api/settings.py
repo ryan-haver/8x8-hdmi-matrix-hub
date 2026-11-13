@@ -18,6 +18,7 @@ from .utils import (
     get_matrix_device,
     safe_error_message,
 )
+from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.settings")
 
@@ -42,23 +43,50 @@ def _is_allowed_address(addr: ipaddress.IPv4Address | ipaddress.IPv6Address) -> 
     return os.environ.get("ALLOW_PUBLIC_MATRIX_HOST", "").lower() == "true" and addr.is_global
 
 
-async def _is_safe_host(host: str, port: int) -> bool:
-    """Resolve first, then reject the host if any returned address is unsafe."""
+_Address = ipaddress.IPv4Address | ipaddress.IPv6Address
+
+
+async def _safe_addresses(host: str, port: int) -> list[_Address]:
+    """Resolve first; the addresses of ``host`` if every one of them is allowed, else an empty list."""
     if not host or "://" in host or "/" in host:
-        return False
+        return []
+    addresses: list[_Address]
     try:
         addresses = [ipaddress.ip_address(host)]
     except ValueError:
         if not _HOSTNAME_RE.fullmatch(host) or _LEGACY_IP_RE.fullmatch(host):
-            return False
+            return []
         try:
             answers = await asyncio.get_running_loop().getaddrinfo(
                 host, port, type=socket.SOCK_STREAM,
             )
             addresses = [ipaddress.ip_address(answer[4][0]) for answer in answers]
         except (OSError, ValueError):
-            return False
-    return bool(addresses) and all(_is_allowed_address(addr) for addr in addresses)
+            return []
+    return addresses if all(_is_allowed_address(addr) for addr in addresses) else []
+
+
+async def _is_safe_host(host: str, port: int) -> bool:
+    """Resolve first, then reject the host if any returned address is unsafe."""
+    return bool(await _safe_addresses(host, port))
+
+
+def _connect_host(host: str, addresses: list[_Address]) -> str:
+    """The host the hub connects to: an address that passed the check, never a name to resolve again.
+
+    A name is resolved again for every connect and reconnect. Whoever controls
+    its DNS record could answer the check with a LAN address and a later connect
+    with loopback or link-local (DNS rebinding), and the hub would send the
+    matrix login there. Connecting to the validated address closes that gap.
+    IPv4 is preferred: it is what the matrix speaks.
+    """
+    try:
+        ipaddress.ip_address(host)
+        return host
+    except ValueError:
+        pass
+    ipv4 = [addr for addr in addresses if isinstance(addr, ipaddress.IPv4Address)]
+    return str((ipv4 or addresses)[0])
 
 
 async def handle_get_settings(request: web.Request) -> web.Response:
@@ -67,7 +95,8 @@ async def handle_get_settings(request: web.Request) -> web.Response:
 
     settings = {
         "matrix_host": matrix_device.host if matrix_device else None,
-        "matrix_port": matrix_device.port if matrix_device else 23,
+        # 443 is the HTTPS control port of the matrix, the default everywhere else (23 is Telnet).
+        "matrix_port": matrix_device.port if matrix_device else 443,
         "connected": matrix_device.connected if matrix_device else False,
     }
 
@@ -82,7 +111,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         return _json_response(False, error="Matrix device not configured", status=503)
 
     try:
-        body = await request.json()
+        body = await parse_json_object(request)
         host_value = body.get("host", "")
         host = host_value.strip() if isinstance(host_value, str) else ""
         port = body.get("port", 443)
@@ -100,32 +129,56 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
             return _json_response(False, error="telnet_port must be a port number (1-65535)", status=400)
 
         # Validate host to prevent SSRF attacks
-        if not await _is_safe_host(host, port):
+        addresses = await _safe_addresses(host, port)
+        if not addresses:
             return _json_response(False, error="Invalid host address", status=400)
 
         # Update the matrix device host
         old_host = matrix_device.host
         old_port = matrix_device.port
         password = body.get("password")
-        if host != old_host and isinstance(getattr(matrix_device, "password", None), str) and matrix_device.password:
-            if not isinstance(password, str) or not password:
-                return _json_response(False, error="Password is required when changing the matrix host", status=400)
-
-        _LOG.info(f"Updating matrix host from {old_host}:{old_port} to {host}:{port}")
+        has_password = isinstance(password, str) and bool(password)
 
         from .utils import get_runtime
         runtime = get_runtime()
         if runtime is not None:
+            # The runtime never sends stored or environment credentials to a new target
+            # (host or port), a first target included. Refuse here with the reason: the
+            # runtime would refuse the change, and the answer would read "updated".
+            current = runtime.address
+            new_target = current is None or (host, port) != (current.host, current.port)
+        else:
+            new_target = (
+                host != old_host
+                and isinstance(getattr(matrix_device, "password", None), str)
+                and bool(matrix_device.password)
+            )
+        if new_target and not has_password:
+            return _json_response(False, error="Password is required when changing the matrix host", status=400)
+
+        # A new name is connected to by its validated address (DNS rebinding, see _connect_host).
+        # The name the hub already uses came from its own configuration and is kept.
+        if host != old_host:
+            host = _connect_host(host, addresses)
+
+        _LOG.info(f"Updating matrix host from {old_host}:{old_port} to {host}:{port}")
+
+        if runtime is not None:
             from hub.runtime.config import MatrixAddress
             result = await runtime.reconfigure(MatrixAddress(
-                host, port, telnet_port, body.get("user"), password if isinstance(password, str) else None))
+                host, port, telnet_port, body.get("user"), password if has_password else None))
             connected = result.success and result.connected
+            if result.success:
+                message = f"Matrix host updated to {host}:{port}" + (" - Connected!" if connected else " - Connection failed")
+            else:
+                # The runtime went back to the matrix it had: never report a change that did not happen.
+                message = f"Matrix host not changed: could not connect to {host}:{port} - Connection failed"
             return _json_response(True, {
                 "host": host, "port": port,
                 "telnet_port": telnet_port if telnet_port is not None else default_telnet_port(),
                 "connected": connected,
-                "message": f"Matrix host updated to {host}:{port}"
-                + (" - Connected!" if connected else " - Connection failed"),
+                "applied": result.success,
+                "message": message,
             })
 
         # Disconnect from old host
@@ -137,7 +190,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         # Update host configuration
         matrix_device.host = host
         matrix_device.port = port
-        if host != old_host and isinstance(password, str) and password:
+        if host != old_host and has_password:
             matrix_device.password = password
         matrix_device.telnet_port = telnet_port if telnet_port is not None else default_telnet_port()
 
@@ -159,11 +212,14 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
                 "port": port,
                 "telnet_port": matrix_device.telnet_port,
                 "connected": connected,
+                "applied": True,
                 "message": f"Matrix host updated to {host}:{port}"
                 + (" - Connected!" if connected else " - Connection failed"),
             },
         )
 
+    except BadRequestError as exc:
+        return exc.response()
     except Exception as e:
         return _json_response(False, error=safe_error_message(e, "Error setting matrix host"), status=500)
 

@@ -217,6 +217,10 @@ ALLOWED_HOSTS=matrix.example.lan,hub.home.example
   IPv4-mapped IPv6) must be inside a private unicast range — `10.0.0.0/8`,
   `172.16.0.0/12`, `192.168.0.0/16`, `fc00::/7` (plus the documentation ranges
   `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`).
+* A new **host name is connected to by the address that passed this check** (IPv4
+  first), and that address is what the hub stores and shows. The hub does not resolve
+  the name again, so a DNS record that changes afterwards cannot point the hub, or the
+  matrix login it sends, somewhere else. If the matrix gets a new address, save it again.
 * **Loopback, link-local (`169.254.0.0/16`, which is where cloud metadata endpoints
   live), unspecified and multicast addresses are always refused**, whatever the
   hostname resolves to. Ports must be an integer in `1–65535`. Only if you really
