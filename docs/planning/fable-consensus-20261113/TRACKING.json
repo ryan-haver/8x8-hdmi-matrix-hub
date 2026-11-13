@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:40:53.192316+00:00",
+  "observedUtc": "2026-11-13T18:53:44.106789+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -99,14 +99,44 @@
       "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "frozen_proposed_plan_preparing_fresh_explicit_pinned_Tasks",
-      "dispatches": [],
+      "status": "fresh_pinned_Sol_Argon_readiness_before_GO_Opus_queued",
+      "dispatches": [
+        {
+          "task": "task_8b5953875986",
+          "dispatch": "ctx_03a17d856f5b",
+          "family": "OpenAI",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "worktree": "fc13-r1-sol",
+          "status": "ready_readiness_only",
+          "report": "R2_SOL.md"
+        },
+        {
+          "task": "task_e0940bd58693",
+          "dispatch": "ctx_5f541ff56343",
+          "family": "Google",
+          "model": "gemini-4-argon-high",
+          "effort": "high provider-id; CLI null",
+          "worktree": "fc13-r1-argon",
+          "status": "ready_readiness_only",
+          "report": "R2_ARGON.md"
+        }
+      ],
       "proposedPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
       "inputsSha256": "8a53d74d6bded32da7251edc05be0873079aecf9fdf6cdd9007a97282e6a3202",
-      "decisions": "not yet received; no consensus or implementation grants"
+      "decisions": "not yet received; no consensus or implementation grants",
+      "queuedTask": {
+        "task": "task_9e9983f0d6be",
+        "model": "claude-opus-5-5",
+        "effort": "high",
+        "manualTrial": true,
+        "dispatch": null
+      },
+      "preflightRule": "Each actual readiness check then native ask/end turn; no peer/plan assessment before coordinator readiness GO; no manual steering or automatic menu approval",
+      "plannedMaxActive": 2
     },
     "fableRemediation": {
-      "status": "HOLD_NEW_ADMISSION_dedicated_pool27percent_below30_owner_capacity_event",
+      "status": "HOLD_NEW_ADMISSION_dedicated_pool23percent_below30",
       "dispatch": null,
       "authority": "msg_1cb08e28729c; no new Fable launch/restart/Task admission/GO until fresh actual healthy telemetry; no polling/reset inference/substitute"
     },
@@ -122,7 +152,7 @@
     "maxActiveWorkers": 3,
     "maxInitialNewActive": 2,
     "noNesting": true,
-    "observations": "Pre-Opus check: selected system account; Claude general55%remaining, Fable30%, Argon33%, Codex89%. Only bounded Opus trial uses general pool. Fresh health required for any next dispatch/author stage.",
+    "observations": "Before R2 admission: codex88%remaining, generalClaude51%, Fable23%(held), Argon30%at threshold, MiniMax95%. Latest all185 prior Dispatch rows settled, no duplicate writer; integration exact origin/local680e93b8. Existing authorized debate assignments can finish; any further admission needs fresh sufficient pool and verified fallback/hold.",
     "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived"
   },
   "guards": [
@@ -154,5 +184,12 @@
     "actual": "reopened as Gemini4CarbonHigh instead of original ArgonHigh; initial R1_ARGON bytes untouched and hash matches",
     "disposition": "released exact follow-up via worker-release; closed_agent_terminal; captured terminal; no retry or report amendment; no extra opinion/source authorship counted",
     "hubIncident": "msg_60338559bdd0"
-  }
+  },
+  "hubUpdates": [
+    "msg_5287c57a95ce/null metadata defect",
+    "msg_13f63a372426/Opus manual trial",
+    "msg_1cb08e28729c/Fable below30 hold",
+    "msg_b6c9a69bbe85 and msg_6b6fe6c9d2e0/real default follow-up model switch remains failed; fresh explicit pins for R2",
+    "msg_950ea1f660ca/CR01 hold binding, owner disposition pending"
+  ]
 }
