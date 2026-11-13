@@ -666,16 +666,23 @@ field of:
 | Reconfigure | The entry's menu → **Reconfigure** (changing the hub address) |
 | Options | The entry's menu → **Configure** (alongside the polling interval) |
 
-The field is optional in all three, stored as `api_key` in the config entry (options
-override the entry value), and used like this:
+The field is optional in all three and stored in one place, `api_key` in the config
+entry's data, whichever of the three it was entered in. (Earlier versions kept a second
+copy in the options, which took precedence and which **Reconfigure** did not change; that
+copy is moved into the entry's data the next time the integration starts.) It is used
+like this:
 
 - **Sent as a header, not a login.** Every hub request carries `X-API-Key: <key>`;
   there is no cookie, session, or re-authentication step. Nothing about the flow
   changes once it is set.
-- **Used during setup too.** The config flow's connectivity check sends the key, so a
-  locked hub completes setup instead of failing with *cannot_connect*.
+- **Checked before it is stored.** All three places ask the hub (`GET /api/auth/status`,
+  which changes nothing on the hub) whether it accepts the key. On a locked hub a
+  missing, wrong or revoked key is refused with *invalid_auth*; setup no longer
+  succeeds with a key that every later command would answer `401` to. A hub without a
+  control lock needs no key and accepts any.
 - **Reconfigure keeps it.** Leaving the field as it is keeps the stored key; the flow
-  is also the place to add one to an entry created before the hub was locked.
+  is also the place to add one to an entry created before the hub was locked. Clearing
+  the field removes the key.
 - **Control level only.** That is all the integration uses. An API key cannot unlock
   admin routes, so the **Reboot** button (an admin route) needs an admin PIN session
   and will report an error if the hub has an admin PIN set. Everything else —
