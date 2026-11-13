@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:23:26.370629+00:00",
+  "observedUtc": "2026-11-13T18:32:36.886148+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -23,7 +23,7 @@
   },
   "stages": {
     "R1": {
-      "status": "two_independent_assessors_running_third_queued",
+      "status": "Sol_captured_Argon_active_Opus_native_working_start_unknown",
       "planned": [
         "Sol/high",
         "Argon-high",
@@ -40,7 +40,15 @@
           "base": "f2a122f955def578960303bc15242fed00d01be3",
           "requestedEffectiveMatch": true,
           "nativeIdentity": "GPT-6.1-Sol high, working; no prompt",
-          "report": "R1_SOL.md"
+          "report": "R1_SOL.md",
+          "status": "completed_planning_only",
+          "reportSha256": "7355c484bebf4cb7fc170c89a13b12bf27f1c6ced6f3870c1eb5c56ec558ace5",
+          "bytes": 12103,
+          "sourceUnchanged": true,
+          "scopeVerified": "only assigned report untracked; no ignored output",
+          "release": "released; closed_agent_terminal; transcript captured",
+          "worktreeDisposition": "needed for queued R2; branch/source/report preserved",
+          "capturedCopy": "Registered active payload/r1-captured/R1_SOL.md, hash verified"
         },
         {
           "family": "Google",
@@ -62,8 +70,19 @@
         "manualCandidateTrial": true,
         "why": "trial",
         "authority": "msg_13f63a372426 and msg_d13d091271af",
-        "dispatch": null
-      }
+        "dispatch": "ctx_7b442f74f42e",
+        "status": "native_read_only_assessment_observed; Orca outcome_unknown/start_unknown, no resend/retry/abandon",
+        "worktree": "fc13-r1-opus",
+        "nativeSession": "961630b7-1f3b-4075-b327-86b31e5fe744",
+        "nativeModel": "claude-opus-5-5",
+        "nativeEffort": "high",
+        "accountMatch": true,
+        "permissions": "bypass",
+        "preflight": "fresh native preflight only, no assessment before account/model/access check; selected system matches /status identity locally; general Claude55%remaining",
+        "adoption": "Documented --terminal after positive preflight; requested/effective fields null, helper metadata UNKNOWN under confirmed defect; no wrong-model claim",
+        "nativeTurn": "input hashes/HEAD match; reading CR01 records and source, no interactive prompt"
+      },
+      "peerBarrier": "Captured Sol report moved into registered private r1-captured directory; not exchanged; all R1 reports only available to R2 after actual complete coverage"
     },
     "R2": {
       "status": "queued_after_all_R1",
@@ -85,7 +104,7 @@
     "maxActiveWorkers": 3,
     "maxInitialNewActive": 2,
     "noNesting": true,
-    "observations": "Immediately before wave: Sol89%weekly remaining, Claude57%, Fable31%, Argon33%weekly remaining, MiniMax95%. Argon footer credit warning is unresolved and not called healthy backend proof. Future Fable author stage rechecks threshold and qualification; no silent replacement.",
+    "observations": "Pre-Opus check: selected system account; Claude general55%remaining, Fable30%, Argon33%, Codex89%. Only bounded Opus trial uses general pool. Fresh health required for any next dispatch/author stage.",
     "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived"
   },
   "guards": [
