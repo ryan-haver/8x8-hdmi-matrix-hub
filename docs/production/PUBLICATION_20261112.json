@@ -200,5 +200,20 @@
     "finalDeliverables": "This compact permanent receipt and allocation ledger; Git objects required by commits/push retained",
     "outsideTool": "No remaining task C:/tmp folder; protected fixture scratch moved out of pytest TEMP and worktree into registered payload"
   },
-  "acceptance": "Publication only; no merge to integration/main, no release/baseline/hardware/qualification change"
+  "acceptance": "Publication only; no merge to integration/main, no release/baseline/hardware/qualification change",
+  "storageCloseout": {
+    "authorityMessage": "msg_b16e299d82e7",
+    "completedUtc": "2026-11-13T01:35:44.060071+00:00",
+    "removedFiles": 36,
+    "removedBytes": 70062,
+    "quarantinedFiles": 1426,
+    "quarantinedBytes": 14755056,
+    "quarantineExpiry": "2026-11-20T01:35:02.415129+00:00",
+    "quarantineFingerprint": "08ef2299b2de5bf35e6fe034dc258d74a3ab8ab01d76d523e2813331de73de70",
+    "quarantineReclaimedNow": 0,
+    "verification": "Exact36-file path/size set, no reparse ancestors, SHA256 manifest and fresh hash/absence checks; supported completion after self-referencing verification shell exited and fresh process scan returned zero holders",
+    "state": "quarantined",
+    "newScratchBytes": 0,
+    "permanentRecord": "Original fixture paths/sizes/SHA256 in central storage-receipts; no synthetic fixture bytes kept outside quarantine"
+  }
 }

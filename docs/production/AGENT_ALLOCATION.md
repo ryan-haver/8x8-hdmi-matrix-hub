@@ -1,5 +1,17 @@
 # Agent allocation and execution ledger
 
+## Bulletin scratch hold closed — 2026-11-12
+
+Hub msg_b16e299d82e7 authorized exact36synthetic backup fixtures. All paths,
+sizes and fresh SHA256 values matched;70,062bytes removed individually,
+with original-path/hash receipt retained centrally. After the verification
+shell exited and a fresh process check showed0holders, supported completion
+quarantined1,426files/14,755,056bytes until2026-11-20T01:35:02Z. Quarantine
+reclaimed0bytes immediately; no hold remains. The
+[publication receipt](PUBLICATION_20261112.json) records this closeout.
+No new scratch, source change, workers, checkout removal or release action.
+
+
 ## Owner bulletin: commit and publish unique work — 2026-11-12
 
 Resumed existing run_37205f6095b3 and consumed one foreground check. Reviewed
