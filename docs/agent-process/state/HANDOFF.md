@@ -1,5 +1,35 @@
 # Current coordinator handoff
 
+## R2 delivered; D3 queue prepared, no author admission — 2026-11-13
+
+Runrun_37205f6095b3 / workflowtask_c94bdfc187f6 persists. Source f2a122f955def578960303bc15242fed00d01be3
+is frozen, unaccepted, unpublished and unmerged. Both rounds have actual
+Sol/OpenAI, Opus/Anthropic and Argon/Google results. R2 votes: accept / require_changes
+G1–G3 / accept on original planf19a1d68; full-hash unanimity is false. D1–D8
+directions and unaffected D3/D8 exact grants are genuinely agreed. Use
+[CONSENSUS.json](../../planning/fable-consensus-20261113/CONSENSUS.json) and the
+[exact old/new closure](../../planning/fable-consensus-20261113/R2_CLOSEOUT.md).
+Hub permits pure grant/wording reconciliation in this existing closeout, not a
+third peer/source audit or invented amended-hash votes. Await actual closure
+disposition before affected D4/D5/D6 implementation leases.
+
+The [admission correction](../../planning/fable-consensus-20261113/ADMISSION_CORRECTION.md)
+supersedes our erroneous global>=30 rule. LOW remains LOW/usable when supported,
+not automatically UNHEALTHY. Independently, this repo's old verified-fallback
+prerequisite survives and hub issued no owner exception; sole Fable has no
+suitable authorized alternative while LOW. HDMI also waits outside author wave1.
+No new quota preflight merely for the correction, no polling/reset inference,
+account/credits/pin change or author substitute. Prepared D3 spec is only a file
+in active payload60822c6d687749bcb8a211bd3f427590; no native author Task/dispatch/GO.
+
+CR01 no-wiring/provenance/NOT_GRANTED/WSR03 disposition remains with owner/hub;
+H5/privacy/attempt budgets, concrete visual review, every-author-family-qualified
+exact-SHA acceptance and landing/release gates remain. Actual R2 workers released;
+R1 Opus external resource retained (not exit proof), original Fable owner
+conversation kept for the queued same-work continuation. No source changes or
+acceptance; no diagnostic Carbon retry/relabel; native wakes only. Final storage
+and record-publication receipts live outside the commits they identify.
+
 ## R2 decisions active; source and Fable admission held — 2026-11-13
 
 Workflow task_c94bdfc187f6 / run_37205f6095b3 continues. All three genuine R1

@@ -1,5 +1,43 @@
 # Agent allocation and execution ledger
 
+## Two rounds delivered; exact grant reconciliation and real queue limits — 2026-11-13
+
+All three R2 reports were captured and source/R1 hashes reverified before exchange.
+Sol and Argon accept planf19a1d68; Opus requires G1–G3 grant precision while agreeing
+D1–D8 and confirming exact D3/D8 rows. Full-hash unanimity is **false**. Directions
+and unaffected D3/D8 grants have actual three-family agreement; no vote approves
+an amended hash by implication. See [CONSENSUS.json](../planning/fable-consensus-20261113/CONSENSUS.json)
+and the byte-pinned [R2 reports](../planning/fable-consensus-20261113/ROUND2_REPORTS.json).
+All fresh R2 workers settled/released through Orca; original R1 Opus external
+terminal remains retained, not falsely called exited. No source implementation,
+acceptance, candidate publication or merge occurred.
+
+Hub msg_4bc469e25fbb permits pure old/new path/wording precision inside this R2
+closeout, with no new peer round or default-model follow-up. The concrete
+[closure](../planning/fable-consensus-20261113/R2_CLOSEOUT.md) adds only HA
+strings/en translations, names the non-committed UI review output and adds
+API_REFERENCE prose with per-route applied bool versus scene/profile-list types.
+No behavior, qualification target, CSS/baseline or visual authority expansion.
+Closure awaits actual hub reconciliation; affected grant rows are not silently
+made executable. No third assessment/qualification attempt was launched.
+
+Hub msg_0ea24f47ec5d corrects its global quota broadcast: LOW is ranked last,
+not automatically UNHEALTHY or banned. This supersedes our hub-derived universal
+>=30 admission clauses; original plans/reports remain immutable history. This
+repo's independently pre-existing AGENTS.md24–27/110–113 verified-fallback
+prerequisite survives, confirmed by hub with **no owner exception**. Sole Fable
+has no authorized suitable fallback while LOW. HDMI also remains outside the
+hub's first author wave. Current [admission correction](../planning/fable-consensus-20261113/ADMISSION_CORRECTION.md)
+and native parent Task result state the actual two blockers, without invented
+quota recovery or a new preflight merely for the correction.
+
+Prepared D3 author spec exists only in active payload60822c6d687749bcb8a211bd3f427590;
+no Fable remediation Task admission/dispatch/GO or substitute author. CR01 owner
+disposition, H5/privacy, visual, qualified every-author-family exact-SHA review
+and normal publication/landing gates remain. Coordinator changes are records only;
+final record validation, storage disposition and publication receipts are separate
+from the source candidate and the commit they identify.
+
 ## Three R1 opinions captured; R2 same-plan decisions running — 2026-11-13
 
 Original source remains f2a122f955def578960303bc15242fed00d01be3, unaccepted

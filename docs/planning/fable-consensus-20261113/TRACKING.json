@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T19:02:24.466711+00:00",
+  "observedUtc": "2026-11-13T19:24:03.518061+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -99,7 +99,7 @@
       "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "Sol_report_captured_Argon_Opus_assessment_GO",
+      "status": "all_three_reports_captured; directions/unaffected_D3_D8_agreed; full_hash_not_unanimous; G1_G3_hub_closeout",
       "dispatches": [
         {
           "task": "task_8b5953875986",
@@ -124,10 +124,14 @@
           "model": "gemini-4-argon-high",
           "effort": "high provider-id; CLI null",
           "worktree": "fc13-r1-argon",
-          "status": "assessment_GO",
+          "status": "completed_report_captured",
           "report": "R2_ARGON.md",
           "readiness": "actual Argon-high, selected account match, full-access/no-prompt, supported weekly30%/session79%; source/inputs/R1 preserved",
-          "goQuestion": "msg_c3a7e3b7edbd"
+          "goQuestion": "msg_c3a7e3b7edbd",
+          "reportSha256": "dcca56d249cafc75bf6f7e0e8a26e9b038e680972a3e90924a558776387f1029",
+          "bytes": 11184,
+          "sourceAndR1Unchanged": true,
+          "release": "already_released; terminal captured"
         }
       ],
       "proposedPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
@@ -139,22 +143,33 @@
         "effort": "high",
         "manualTrial": true,
         "dispatch": "ctx_088e38262d6d",
-        "status": "assessment_GO",
+        "status": "completed_report_captured_privately",
         "worktree": "fc13-r1-opus",
         "requestedEffectiveMatch": true,
         "preAdmission": "selected system; generalClaude51%remaining, dedicatedFable23%held; Opus general-only",
         "nativeHeader": "Opus5.5/high; full-access/no-prompt witness still readiness stage; no assessment GO yet",
         "readiness": "actual native Opus model, account and org comparisons true, loggedIn, bypass/no-prompt; native effort introspection UNKNOWN, configured requested/effective high verified; generalClaude51%remaining; no Fable pool use",
         "goQuestion": "msg_2ee8439e6061",
-        "nativeEffortIntrospection": "UNKNOWN; not called measured backend effort"
+        "nativeEffortIntrospection": "UNKNOWN; not called measured backend effort",
+        "report": "R2_OPUS.md",
+        "reportSha256": "6c52500ef097eec73508ab189bb39ef3e4a17afaa096c10d7ae7f3a36e5b8b1d",
+        "bytes": 8848,
+        "scope": "source unchanged, originalR1 hash preserved, only assignedR2 report added",
+        "release": "released/closed_agent_terminal/transcript captured"
       },
       "preflightRule": "Each actual readiness check then native ask/end turn; no peer/plan assessment before coordinator readiness GO; no manual steering or automatic menu approval",
-      "plannedMaxActive": 2
+      "plannedMaxActive": 2,
+      "fullPlanUnanimouslyAccepted": false,
+      "precisionAuthority": "msg_4bc469e25fbb permits pure old/new precision in existing R2 closeout; no third peer round"
     },
     "fableRemediation": {
-      "status": "HOLD_NEW_ADMISSION_dedicated_pool23percent_below30",
+      "status": "QUEUED_NOT_ADMITTED_REPO_FALLBACK_UNSATISFIED_WHILE_LOW_AND_LATER_WAVE",
       "dispatch": null,
-      "authority": "msg_1cb08e28729c; no new Fable launch/restart/Task admission/GO until fresh actual healthy telemetry; no polling/reset inference/substitute"
+      "authority": "msg_0ea24f47ec5d + msg_4bc469e25fbb; no universal>=30 ban; independent repo AGENTS.md24-27/110-113 applies with no owner exception",
+      "preparedSpec": "Active payload/FABLE_D3_PREPARED_NOT_ADMITTED.txt",
+      "task": null,
+      "implementationHead": null,
+      "admissionGO": false
     },
     "acceptance": {
       "status": "queued_after_exact_corrected_SHA",
@@ -169,7 +184,8 @@
     "maxInitialNewActive": 2,
     "noNesting": true,
     "observations": "Before R2 admission: codex88%remaining, generalClaude51%, Fable23%(held), Argon30%at threshold, MiniMax95%. Latest all185 prior Dispatch rows settled, no duplicate writer; integration exact origin/local680e93b8. Existing authorized debate assignments can finish; any further admission needs fresh sufficient pool and verified fallback/hold.",
-    "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived"
+    "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived",
+    "currentPolicy": "LOW usable shared routes may remain eligible/rank last, not healthy by relabel. Independent repo below30 verified-fallback condition survives; sole Fable has no authorized fallback; later operational wave also holds admission. No new telemetry probe solely for correction."
   },
   "guards": [
     "backend credential requirement",
@@ -183,7 +199,7 @@
   ],
   "temporaryPayload": "60822c6d687749bcb8a211bd3f427590",
   "sourceMutatedByCoordinator": false,
-  "consensus": "not_established",
+  "consensus": "PARTIAL_DIRECTION_AND_UNAFFECTED_GRANTS; full original hash not unanimously accepted; concrete G1-G3 closure pending hub",
   "candidateTrialAuthority": "Opus5.5/high read-only planning trial only; candidate status unchanged, no Anthropic independent acceptance of Fable source",
   "prelaunchValidation": {
     "docs": "489passed4.09s",

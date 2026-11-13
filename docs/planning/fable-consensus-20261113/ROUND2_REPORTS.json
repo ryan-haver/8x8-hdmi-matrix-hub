@@ -1,0 +1,34 @@
+{
+  "source": "f2a122f955def578960303bc15242fed00d01be3",
+  "reports": [
+    {
+      "path": "R2_SOL.md",
+      "task": "task_8b5953875986",
+      "dispatch": "ctx_03a17d856f5b",
+      "decision": "accept",
+      "bytes": 7749,
+      "sha256": "e528a116bb7610b26546ee87ce6b834c2d5e4fe36ca17eed8527830a64a5000f",
+      "planSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9"
+    },
+    {
+      "path": "R2_OPUS.md",
+      "task": "task_9e9983f0d6be",
+      "dispatch": "ctx_088e38262d6d",
+      "decision": "require_changes",
+      "bytes": 8848,
+      "sha256": "6c52500ef097eec73508ab189bb39ef3e4a17afaa096c10d7ae7f3a36e5b8b1d",
+      "planSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9"
+    },
+    {
+      "path": "R2_ARGON.md",
+      "task": "task_e0940bd58693",
+      "dispatch": "ctx_5f541ff56343",
+      "decision": "accept",
+      "bytes": 11184,
+      "sha256": "dcca56d249cafc75bf6f7e0e8a26e9b038e680972a3e90924a558776387f1029",
+      "planSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9"
+    }
+  ],
+  "allOriginalReportsCapturedBeforeExchange": true,
+  "fullPlanUnanimouslyAccepted": false
+}
