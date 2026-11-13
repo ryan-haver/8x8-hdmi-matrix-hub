@@ -9,8 +9,8 @@
     },
     {
       "path": "ROUND1_PACKET.md",
-      "bytes": 7719,
-      "sha256": "5e299e5ccfae26746e9c9adba2c6ad5bbd4187634f1d56b45760fde8470b867b"
+      "bytes": 7606,
+      "sha256": "1262b3c2c5da11d9349c04e556ce37dad3bc50861ede081ab16fb2a9d55573bf"
     }
   ],
   "trackingNotFrozenInput": "TRACKING.json is mutable factual dispatch/status metadata; not part of the common design packet",
