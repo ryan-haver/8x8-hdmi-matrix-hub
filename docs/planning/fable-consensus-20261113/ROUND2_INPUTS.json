@@ -1,0 +1,67 @@
+{
+  "sourceCommit": "f2a122f955def578960303bc15242fed00d01be3",
+  "sourceTree": "3384886fc4e624175046536bfd13e998923d5933",
+  "round": "R2 exchange and explicit same-proposed-plan-hash decisions",
+  "proposedPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
+  "files": [
+    {
+      "path": "ROUND1_INPUTS.json",
+      "bytes": 612,
+      "sha256": "43a42fd04d6ed2bbe89e55d9dbd8590c18a057b04fcd75bad04e43a6c785339b",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "43a42fd04d6ed2bbe89e55d9dbd8590c18a057b04fcd75bad04e43a6c785339b"
+    },
+    {
+      "path": "ROUND1_PACKET.md",
+      "bytes": 7606,
+      "sha256": "1262b3c2c5da11d9349c04e556ce37dad3bc50861ede081ab16fb2a9d55573bf",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "1262b3c2c5da11d9349c04e556ce37dad3bc50861ede081ab16fb2a9d55573bf"
+    },
+    {
+      "path": "FABLE_HANDOFF.md",
+      "bytes": 9614,
+      "sha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027"
+    },
+    {
+      "path": "ROUND1_REPORTS.json",
+      "bytes": 566,
+      "sha256": "12e47ee0bcec6621aa8e69cccd5cd404f3a030960ab3102a82db43f93fd5a7a9",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "12e47ee0bcec6621aa8e69cccd5cd404f3a030960ab3102a82db43f93fd5a7a9"
+    },
+    {
+      "path": "R1_SOL.md",
+      "bytes": 12103,
+      "sha256": "7355c484bebf4cb7fc170c89a13b12bf27f1c6ced6f3870c1eb5c56ec558ace5",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "7355c484bebf4cb7fc170c89a13b12bf27f1c6ced6f3870c1eb5c56ec558ace5"
+    },
+    {
+      "path": "R1_OPUS.md",
+      "bytes": 9455,
+      "sha256": "6862c130b59e285fc77287b9864d9e08f4d76248b5e5a502802cd753a3b53192",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "6862c130b59e285fc77287b9864d9e08f4d76248b5e5a502802cd753a3b53192"
+    },
+    {
+      "path": "R1_ARGON.md",
+      "bytes": 12504,
+      "sha256": "eea3daf25f8662c5f8a2a49fe82ddf604efa161feac839bfb2f26ed5ef6c07af",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "eea3daf25f8662c5f8a2a49fe82ddf604efa161feac839bfb2f26ed5ef6c07af"
+    },
+    {
+      "path": "ROUND2_PROPOSED_PLAN.md",
+      "bytes": 14863,
+      "sha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
+      "crlfLines": 0,
+      "gitCanonicalLfSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9"
+    }
+  ],
+  "rawAuthorReports": "Working-byte hashes preserve original report bytes; Git LF canonical hashes separate, no authorship rewrite",
+  "notInput": "TRACKING.json is dynamic factual custody/status only; no Carbon diagnostic opinion counted",
+  "decisionsRequired": "D1-D8 and staffing/admission/independence/gates; accept, require_changes or unresolved with exact evidence, no invented consensus"
+}

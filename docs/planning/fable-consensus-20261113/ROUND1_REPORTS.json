@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "f2a122f955def578960303bc15242fed00d01be3",
+  "round": "R1 independent before exchange",
+  "reports": [
+    {
+      "path": "R1_SOL.md",
+      "bytes": 12103,
+      "sha256": "7355c484bebf4cb7fc170c89a13b12bf27f1c6ced6f3870c1eb5c56ec558ace5"
+    },
+    {
+      "path": "R1_OPUS.md",
+      "bytes": 9455,
+      "sha256": "6862c130b59e285fc77287b9864d9e08f4d76248b5e5a502802cd753a3b53192"
+    },
+    {
+      "path": "R1_ARGON.md",
+      "bytes": 12504,
+      "sha256": "eea3daf25f8662c5f8a2a49fe82ddf604efa161feac839bfb2f26ed5ef6c07af"
+    }
+  ]
+}

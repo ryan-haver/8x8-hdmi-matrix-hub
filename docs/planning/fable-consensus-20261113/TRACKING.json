@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:32:36.886148+00:00",
+  "observedUtc": "2026-11-13T18:40:53.192316+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -23,7 +23,7 @@
   },
   "stages": {
     "R1": {
-      "status": "Sol_captured_Argon_active_Opus_native_working_start_unknown",
+      "status": "three_independent_reports_captured_before_exchange",
       "planned": [
         "Sol/high",
         "Argon-high",
@@ -60,7 +60,15 @@
           "base": "f2a122f955def578960303bc15242fed00d01be3",
           "requestedEffectiveMatch": true,
           "nativeIdentity": "Gemini4Argon/high, active read-only work; footer AI:Out of credits despite33%remaining pool, worker asked to report actual quota limitation without fallback",
-          "report": "R1_ARGON.md"
+          "report": "R1_ARGON.md",
+          "status": "completed_planning_only",
+          "reportSha256": "eea3daf25f8662c5f8a2a49fe82ddf604efa161feac839bfb2f26ed5ef6c07af",
+          "bytes": 12504,
+          "sourceUnchanged": true,
+          "scopeVerified": "only assigned report untracked; no ignored output",
+          "release": "original already_released after diagnostic follow-up release; terminal captured",
+          "quotaWarning": "Out-of-credits footer did not block original Argon backend; out-of-band attestation under failed follow-up, not report amendment",
+          "worktreeDisposition": "needed for R2"
         }
       ],
       "queuedTask": {
@@ -71,7 +79,7 @@
         "why": "trial",
         "authority": "msg_13f63a372426 and msg_d13d091271af",
         "dispatch": "ctx_7b442f74f42e",
-        "status": "native_read_only_assessment_observed; Orca outcome_unknown/start_unknown, no resend/retry/abandon",
+        "status": "completed_planning_only",
         "worktree": "fc13-r1-opus",
         "nativeSession": "961630b7-1f3b-4075-b327-86b31e5fe744",
         "nativeModel": "claude-opus-5-5",
@@ -80,17 +88,27 @@
         "permissions": "bypass",
         "preflight": "fresh native preflight only, no assessment before account/model/access check; selected system matches /status identity locally; general Claude55%remaining",
         "adoption": "Documented --terminal after positive preflight; requested/effective fields null, helper metadata UNKNOWN under confirmed defect; no wrong-model claim",
-        "nativeTurn": "input hashes/HEAD match; reading CR01 records and source, no interactive prompt"
+        "nativeTurn": "input hashes/HEAD match; reading CR01 records and source, no interactive prompt",
+        "report": "R1_OPUS.md",
+        "reportSha256": "6862c130b59e285fc77287b9864d9e08f4d76248b5e5a502802cd753a3b53192",
+        "bytes": 9455,
+        "sourceUnchanged": true,
+        "scopeVerified": "only assigned report untracked; no ignored output",
+        "release": "worker-release retained external_terminal/processAction none; needed R2, not called closed"
       },
-      "peerBarrier": "Captured Sol report moved into registered private r1-captured directory; not exchanged; all R1 reports only available to R2 after actual complete coverage"
+      "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "queued_after_all_R1",
-      "dispatches": []
+      "status": "frozen_proposed_plan_preparing_fresh_explicit_pinned_Tasks",
+      "dispatches": [],
+      "proposedPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
+      "inputsSha256": "8a53d74d6bded32da7251edc05be0873079aecf9fdf6cdd9007a97282e6a3202",
+      "decisions": "not yet received; no consensus or implementation grants"
     },
     "fableRemediation": {
-      "status": "queued_after_actual_consensus_and_eligible_grants",
-      "dispatch": null
+      "status": "HOLD_NEW_ADMISSION_dedicated_pool27percent_below30_owner_capacity_event",
+      "dispatch": null,
+      "authority": "msg_1cb08e28729c; no new Fable launch/restart/Task admission/GO until fresh actual healthy telemetry; no polling/reset inference/substitute"
     },
     "acceptance": {
       "status": "queued_after_exact_corrected_SHA",
@@ -114,7 +132,8 @@
     "shared/root/registry/coordinator ownership",
     "no push/merge before normal gates",
     "no accounts/new spend/credentials/env output",
-    "no helper agents"
+    "no helper agents",
+    "Hub msg_950ea1f660ca confirms binding D6/WSR03; owner disposition pending, no target narrowing/retake/wiring/intake/landing"
   ],
   "temporaryPayload": "60822c6d687749bcb8a211bd3f427590",
   "sourceMutatedByCoordinator": false,
@@ -126,5 +145,14 @@
     "frozenBytes": "e93b9cef9d9a01bb095b92f0894c0445b031874c working/Git exact; inputs43a42fd0 packet1262b3c2",
     "initialFailure": "40805644 packet CRLF-vs-LF check failed before launch; corrected manifest in e93b9cef, original Fable report untouched; failure receipt in active payload",
     "publication": "Coordinator planning records committed locally only; candidate/integration source not pushed or merged"
+  },
+  "diagnosticFollowup": {
+    "task": "task_c1120b2a8d9f",
+    "dispatch": "ctx_a87c81f69632",
+    "reason": "queued quota-footer observation became automatic follow-up",
+    "status": "failed_model_mismatch_HOLD",
+    "actual": "reopened as Gemini4CarbonHigh instead of original ArgonHigh; initial R1_ARGON bytes untouched and hash matches",
+    "disposition": "released exact follow-up via worker-release; closed_agent_terminal; captured terminal; no retry or report amendment; no extra opinion/source authorship counted",
+    "hubIncident": "msg_60338559bdd0"
   }
 }
