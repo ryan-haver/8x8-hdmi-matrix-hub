@@ -605,7 +605,12 @@ class SettingsPanel {
         if (!confirmed) return;
         
         try {
-            await api.powerCycle();
+            const result = await api.powerCycle();
+            if (result?.success === false) {
+                // The hub has no power-cycle command: never tell the operator one was sent.
+                toast.error(`Power cycle is not available: ${result.error || 'not supported'}. Use Reboot instead.`);
+                return;
+            }
             toast.warning('Power cycling matrix...');
         } catch (error) {
             toast.error(`Failed to power cycle: ${error.message}`);

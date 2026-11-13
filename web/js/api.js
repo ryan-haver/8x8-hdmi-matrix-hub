@@ -277,11 +277,19 @@ class MatrixAPI {
         }
     }
 
+    /**
+     * DELETE request.
+     * @param {string} path
+     * @param {Object} [options]
+     * @param {*} [options.body] - JSON body, for the few DELETE routes that take one
+     * @param {number} [options.timeout]
+     */
     async delete(path, options = {}) {
-        const { timeout } = options;
+        const { timeout, body } = options;
         try {
-            Logger.api('DELETE', path);
+            Logger.api('DELETE', path, body);
             const data = await this._request('DELETE', path, {
+                body,
                 timeout,
                 message: (response) => `HTTP ${response.status}: ${response.statusText}`,
             });
@@ -399,10 +407,6 @@ class MatrixAPI {
 
     async savePreset(preset, routing = null) {
         return this.post(`/api/preset/${preset}/save`, routing ? { routing } : {});
-    }
-
-    async renamePreset(preset, name) {
-        return this.post(`/api/device-settings/preset/${preset}/name`, { name });
     }
 
     // ===== Scenes/Profiles =====
@@ -806,7 +810,8 @@ class MatrixAPI {
     }
 
     async clearOverride(sceneId, { profile_id, output_num, setting_key }) {
-        return this.delete(`/api/v2/scenes/${sceneId}/override`, { profile_id, output_num, setting_key });
+        // The route reads the override to clear from the JSON body.
+        return this.delete(`/api/v2/scenes/${sceneId}/override`, { body: { profile_id, output_num, setting_key } });
     }
 
     async addStep(sceneId, step) {

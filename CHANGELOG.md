@@ -31,6 +31,27 @@ sees what was proved, not only what was merged.
   field and 72-hour soak evidence remain pending; see the
   [runtime validation index](docs/validation/RUNTIME_VALIDATION_INDEX.md).
 
+### Fixed (audit remediation, unreviewed branch)
+
+- `/api/auth/*` and `POST /api/settings/matrix-host` answer `400`, not `500`, to
+  a body that is not a JSON object.
+- PIN checks for one client address run one at a time, so parallel requests
+  cannot pass the five-attempt lockout. Sessions, failure records, remembered
+  devices (64) and API keys (64) have ceilings.
+- `/ws` `get_status`: one read per client and eight per hub at a time, cancelled
+  when the client disconnects or the hub stops.
+- CORS headers are present on `401`/`403`/`415`/`421`/`429` answers.
+- Matrix host change: a new host or port needs the matrix password on the shared
+  runtime too (was answered "updated" with nothing changed); a new host name is
+  connected to by its validated address; a rolled-back change says so
+  (`applied: false`). `/api/settings` reports `443` as the default matrix port.
+- Scene override and step routes report inherited PIN protection, answer `404`
+  for an unknown scene (was `400`) and `400` for a malformed body (was `500`).
+- Home Assistant: setup, Reconfigure and Options refuse an API key a locked hub
+  does not accept (`invalid_auth`); the key is stored once, in the entry data.
+- Web UI: `?`, `s` and `4` keyboard shortcuts; `clearOverride` sends its body;
+  Power Cycle no longer reports a command that was not sent.
+
 This section records unreleased work only. It does not change the canonical
 version or assert that the release gates have passed.
 
