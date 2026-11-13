@@ -1,5 +1,24 @@
 # Agent allocation and execution ledger
 
+## Owner bulletin: commit and publish unique work — 2026-11-12
+
+Resumed existing run_37205f6095b3 and consumed one foreground check. Reviewed
+all16checkouts and180Dispatches across2pages. Eleven instruction-only
+Codex helper-disable configs committed on their existing branches; one identical
+config and four malformed-path LFS wrappers withheld with custody reasons.
+Integration680e93b8 was already published; all15pending branches (11config,
+3recovery and1historical PWA branch) pushed and independently verified at GitHub.
+Redacted Gitleaks found0secrets. Scoped docs489passed; Ruff passed, broad hook
+pytest interrupted, invocation-only instruction-maintenance hook exception used.
+No implementation/release gates changed. Sweep kept16protected/non-task trees.
+Owned scratch14,825,118bytes retained after supported tool SafetyStop on a
+synthetic backup filename;36-file guard batch escalated to hub, no raw deletion.
+Scan reports removed. Full commit/custody/validation/storage receipt:
+[PUBLICATION_20261112.json](PUBLICATION_20261112.json). This coordinator record
+is published separately on the existing coordinator branch; integration stays
+680e93b8 and no main merge or product phase is authorized.
+
+
 ## Owner decision24 purge-now plan — 2026-11-11
 
 Owner24 supersedes all earlier retention dates and monthly rebuild instructions.

@@ -1,0 +1,204 @@
+{
+  "bulletin": "2026-11-12",
+  "observedUtc": "2026-11-13T01:25:21.798807+00:00",
+  "run": "run_37205f6095b3",
+  "hubRun": "run_7be6f8839bf0",
+  "authority": "Owner review-then-commit and publish ALL unique work; no workers",
+  "checkoutCount": 16,
+  "workerPages": 2,
+  "workerRows": 180,
+  "integration": {
+    "branch": "wp-runtime-completion",
+    "sha": "680e93b88b711369e452cdbe415415ef23ab99ed",
+    "push": "already up to date; first push; exact live GitHub head verified"
+  },
+  "commits": [
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-rv-api034-review-evaluation",
+      "branch": "execution/wp-exec-rv-api034-review-evaluation",
+      "sha": "c3e021aaabea45bf28f85da3597621e1d9625c3c",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance",
+      "branch": "execution/wp-fc26-fc-provenance",
+      "sha": "504a19741513933685eb5fa56e25849b480cca58",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-support-run",
+      "branch": "execution/wp-fc26-fc-support-run",
+      "sha": "9391d0266a4d2017f5e3d0dbc2bf8a9bcdd00a44",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104-judge",
+      "branch": "qualification/privacy-review-20261104-judge",
+      "sha": "b43841b593bd06378db12090e21e3ee4c4fd5893",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-recovery-privacy-m3-judge",
+      "branch": "qualification/recovery-privacy-m3-judge",
+      "sha": "ef5890b2bf1a59cf6fbcfd1ea155cc867c12b54e",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c4",
+      "branch": "remediation/privacy-c4",
+      "sha": "a8fdbaa3adddafe838c17047bb78c4fdfe684b3a",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-wording-review",
+      "branch": "remediation/ws-wording-review",
+      "sha": "f26cbadcb04502c273fc6abc8f9fc0933b576052",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-01-review",
+      "branch": "remediation/ws-work-01-review",
+      "sha": "324ef20bbb35223f300f7a54ac61f46ffc101408",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01-review",
+      "branch": "remediation/ws-work-c01-review",
+      "sha": "cb50f46250a6ba21f6808b01caae28ff534676c0",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-rereview",
+      "branch": "review/wp-fc26-fc-truth-rereview",
+      "sha": "bc04220c65ff82c9c209036d037893e6012ca9a4",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    },
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-review",
+      "branch": "review/wp-fc26-fc-truth-review",
+      "sha": "bb1b42571c011e41bd94f67eedb12f9757ddd50d",
+      "fileCount": 1,
+      "file": ".codex/config.toml"
+    }
+  ],
+  "configReview": "All12 untracked files identical31bytes, SHA25692207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4; TOML [features] multi_agent=false. Eleven committed; unverifiable prior writer checkout preserved. Instruction-only harness maintenance, no implementation or model qualification.",
+  "otherBranchesPublished": [
+    {
+      "branch": "recovery/purge-now-20261111-12866ff8",
+      "sha": "12866ff86ad2164df4ae6dfcea60c26b63255acb"
+    },
+    {
+      "branch": "recovery/purge-now-20261111-4c2e802e",
+      "sha": "4c2e802ed136fc7c2d953029a11e15dacddb945c"
+    },
+    {
+      "branch": "recovery/purge-now-20261111-bdcf06dc",
+      "sha": "bdcf06dc6723aad7da63ecfed3d3555ab0d02e55"
+    },
+    {
+      "branch": "ryan-haver/wp-e2-pwa-icons-shortcuts",
+      "sha": "50889a7746844f5769329f67655702f5450886ff"
+    }
+  ],
+  "publishedPendingBranches": 15,
+  "rejectedBranches": [],
+  "secretScan": {
+    "tool": "gitleaks8.30.1",
+    "scope": "Each branch --not --remotes after origin fetch; --redact always",
+    "findings": 0,
+    "falsePositives": 0,
+    "errors": 0,
+    "initialAndPrepushInvocations": 20,
+    "reports": "20 JSON reports deleted; final coordinator record independently scanned before its own push"
+  },
+  "withheld": [
+    {
+      "checkout": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "files": [
+        ".codex/config.toml"
+      ],
+      "reason": "Prior Dispatch ctx_6cb8482cdd03 liveness unverifiable; no replacement or mutation"
+    },
+    {
+      "checkout": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "files": [
+        "malformed drive-encoded .githooks/post-checkout",
+        "malformed drive-encoded .githooks/post-commit",
+        "malformed drive-encoded .githooks/post-merge",
+        "malformed drive-encoded .githooks/pre-push"
+      ],
+      "reason": "Generated Git LFS hook wrappers in the explicitly protected malformed-path artifact; uncertain installation custody, not project source"
+    }
+  ],
+  "skippedForUnverifiablePriorOwner": [
+    "wp-remediation-recovery-r1-openai",
+    "wp-ev02-name-review",
+    "wp-sw-api-root"
+  ],
+  "liveOtherWriters": 0,
+  "verification": {
+    "toml": "Exact expected structure parsed; cached whitespace passed for each config",
+    "scopedDocumentation": "489passed3.45s; plugin tests.route_inventory disabled; isolated owned paths; no cacheprovider",
+    "normalHook": "Ruff passed; broad pytest deliberately interrupted after partial progress; no complete-suite or runtime acceptance claimed",
+    "commitHookException": "Invocation-only core.hooksPath= for instruction-only nested-agent settings and scoped publication records, per ORCHESTRATION_PROTOCOL instruction-maintenance exception; persistent hook config unchanged"
+  },
+  "cleanup": {
+    "sweep": "Report-only: all16 ineligible (primary/current protection or non-task stamps); no removal or branch deletion",
+    "largeIgnoredRetained": [
+      {
+        "path": "primary/.venv",
+        "bytes": 156643938,
+        "reason": "Existing unattended hook runtime"
+      },
+      {
+        "path": "primary/node_modules",
+        "bytes": 63812410,
+        "reason": "Existing unattended hook dependency"
+      },
+      {
+        "path": "primary/archive",
+        "bytes": 89015949,
+        "reason": "User assets"
+      },
+      {
+        "path": "primary/build",
+        "bytes": 111358328,
+        "reason": "Permanent hash manifests/receipts and named open-campaign inputs;397reparse entries unfollowed"
+      },
+      {
+        "path": "wp-sw-api-root/build",
+        "bytes": 72903880,
+        "reason": "Protected user-owned/external unresolved resources;1reparse entry unfollowed"
+      },
+      {
+        "path": "wp-sw-api-root/node_modules",
+        "bytes": 63811423,
+        "reason": "Existing hook dependency in protected external checkout"
+      }
+    ],
+    "trackedLargeDocsTests": "Preserved source and history; no untracked/ignored individual asset >=50MB proposed for commit"
+  },
+  "storage": {
+    "task": "33d31fedec50433b9c1997f75c707841",
+    "retainedScratchFiles": 1462,
+    "retainedScratchBytes": 14825118,
+    "reason": "Supported completion SafetyStop on synthetic .bak fixture;36protected-name files,0links. Full batch sent to hub msg_f772569e85e7; no raw purge/retry",
+    "reviewDate": "2026-12-13; earlier hub resolution requested",
+    "quarantinedBytes": 0,
+    "scanFolderRemovedFiles": 21,
+    "scanFolderRemovedBytes": 356,
+    "finalDeliverables": "This compact permanent receipt and allocation ledger; Git objects required by commits/push retained",
+    "outsideTool": "No remaining task C:/tmp folder; protected fixture scratch moved out of pytest TEMP and worktree into registered payload"
+  },
+  "acceptance": "Publication only; no merge to integration/main, no release/baseline/hardware/qualification change"
+}
