@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:53:44.106789+00:00",
+  "observedUtc": "2026-11-13T18:56:21.768983+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -99,7 +99,7 @@
       "peerBarrier": "All three worker_done/report hashes captured before copies were exchanged into common folder; original reports remain byte-identical and are inputs to R2, not consensus."
     },
     "R2": {
-      "status": "fresh_pinned_Sol_Argon_readiness_before_GO_Opus_queued",
+      "status": "Sol_Argon_readiness_verified_assessment_GO_Opus_queued",
       "dispatches": [
         {
           "task": "task_8b5953875986",
@@ -108,8 +108,10 @@
           "model": "gpt-6.1-sol",
           "effort": "high",
           "worktree": "fc13-r1-sol",
-          "status": "ready_readiness_only",
-          "report": "R2_SOL.md"
+          "status": "assessment_GO",
+          "report": "R2_SOL.md",
+          "readiness": "actual OpenAI native model/high, selected provider/session-account match, danger-full-access/approval-never, no prompt, supported weekly88%; source/inputs/R1 preserved",
+          "goMessage": "msg_16b8c48ae7b3"
         },
         {
           "task": "task_e0940bd58693",
@@ -118,8 +120,10 @@
           "model": "gemini-4-argon-high",
           "effort": "high provider-id; CLI null",
           "worktree": "fc13-r1-argon",
-          "status": "ready_readiness_only",
-          "report": "R2_ARGON.md"
+          "status": "assessment_GO",
+          "report": "R2_ARGON.md",
+          "readiness": "actual Argon-high, selected account match, full-access/no-prompt, supported weekly30%/session79%; source/inputs/R1 preserved",
+          "goQuestion": "msg_c3a7e3b7edbd"
         }
       ],
       "proposedPlanSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",

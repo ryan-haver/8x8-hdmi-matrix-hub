@@ -1,5 +1,40 @@
 # Agent allocation and execution ledger
 
+## Three R1 opinions captured; R2 same-plan decisions running — 2026-11-13
+
+Original source remains f2a122f955def578960303bc15242fed00d01be3, unaccepted
+and unpublished. Genuine independent Sol/OpenAI, Opus/Anthropic and Argon/Google
+R1 reports were captured at their declared hashes, verified report-only scope,
+and only then exchanged. Sol worker released with transcript capture. Opus release
+returned retained/external_terminal, not exit proof; idle conversation is needed
+for this workflow. Argon original and its failed diagnostic follow-up settled
+through native worker-release; no raw close or process kill.
+
+The queued quota note auto-reopened as Carbon under task_c1120b2a8d9f/
+ctx_a87c81f69632. It held immediately on actual model mismatch, reported failed,
+and left the genuine Argon report unchanged. No diagnostic retry, extra opinion,
+source acceptance or qualification credit. Hub acknowledged the routing gap and
+requires fresh explicit pins for R2; shared tools were not changed.
+
+R2 [proposed plan](../planning/fable-consensus-20261113/ROUND2_PROPOSED_PLAN.md)
+SHAf19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9
+and input8a53d74d are committed atfada6c59. Source/input/model/account/access/
+capacity readiness verified; assessment-only GO replies issued for Sol
+task_8b5953875986/ctx_03a17d856f5b and Argon
+task_e0940bd58693/ctx_5f541ff56343. Opus R2 task_9e9983f0d6be is queued.
+At most two active seats, no helpers. R2 decisions and consensus are not yet delivered.
+
+Hub msg_950ea1f660ca confirms binding CR01 no-wiring/qualification/provenance
+hold; actual owner disposition is pending, no narrowing or retake. Visual/H5/
+root ownership/landing gates remain. Fable new admission is held under the actual
+below30% event (latest23% dedicated); no author Task or GO, no reset inference.
+Argon admitted and readiness-checked at30% weekly/79% session remaining; no
+unlimited-capacity claim or silent substitute. Full custody and report references
+remain in [TRACKING.json](../planning/fable-consensus-20261113/TRACKING.json).
+Only planning records were committed locally; no source push/merge/test run.
+Active bounded coordinator receipts are about85KB; three task trees remain needed
+by open R2/custody, not retained merely for historical evidence.
+
 ## Owner Fable handoff and two-round consensus queued — 2026-11-13
 
 Owner message msg_b052a16e725b authorizes an original-author handoff, independent

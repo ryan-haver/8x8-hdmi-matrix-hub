@@ -1,5 +1,30 @@
 # Current coordinator handoff
 
+## R2 decisions active; source and Fable admission held — 2026-11-13
+
+Workflow task_c94bdfc187f6 / run_37205f6095b3 continues. All three genuine R1
+opinions were captured before exchange at frozen source f2a122f955def578960303bc15242fed00d01be3.
+Read [TRACKING.json](../../planning/fable-consensus-20261113/TRACKING.json), the
+three original R1 reports and [proposed R2 plan](../../planning/fable-consensus-20261113/ROUND2_PROPOSED_PLAN.md)
+SHAf19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9
+(input8a53d74d; preparation commitfada6c59). No consensus or source acceptance yet.
+
+Fresh explicitly pinned Sol R2 task_8b5953875986/ctx_03a17d856f5b and Argon R2
+task_e0940bd58693/ctx_5f541ff56343 passed native readiness and received
+assessment-only GO. Opus candidate R2 task_9e9983f0d6be waits for a slot. No
+helpers/third round. The real Carbon diagnostic follow-up remains failed and
+released; original completed Argon R1 bytes are untouched and separately attributed.
+Do not retry the diagnostic or assume late worker mail preserves model selection.
+
+Binding D6/WSR03 no-wiring/qualification/provenance hold remains; hub is taking
+existing-candidate disposition to owner. No narrowing, retake, attribution change,
+wiring/intake/acceptance/landing while held. Fable dedicated capacity is below30%
+(latest23%): hold new Fable launches/restarts/remediation Task admission/GO until
+actual healthy telemetry, never merely a reported reset time. Preserve source,
+owner conversation, visual before/after approval, H5 privacy and root-file ownership.
+Continue eligible independent planning. No source changes/push/merge this stage;
+coordinator records are committed locally, not published. Native mail/wakes only.
+
 ## Owner Fable consensus continuation active — 2026-11-13
 
 Owner authority msg_b052a16e725b starts a bounded two-round read-only debate of
