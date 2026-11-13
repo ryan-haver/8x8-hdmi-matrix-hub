@@ -1,5 +1,37 @@
 # Agent allocation and execution ledger
 
+## Owner-directed unused-worktree cleanup: six to four — 2026-11-13
+
+Bulletin msg_de128659789c triggered complete finite repo analysis:6managed/Git
+trees,5workspace folders/no orphans; native fleet94rows untruncated/local with
+no omitted host, own188Dispatches/2full pages/no unsettled assignment and no
+open gate. Sol/Argon R1/R2 planning Tasks are completed and terminals released;
+no completed-worker mail, recovery restart, test/build or new worker was needed.
+
+Removed fc13-r1-sol and fc13-r1-argon through exact Orca worktree removal,
+omitting --delete-branch. Fresh per-tree checks proved no live/unknown terminal,
+no unsettled worker, matching task stamp/ref/head, no stash naming either branch,
+no local filter, no linked member and no unexpected ignored/dirty content.
+Four duplicate reports matched actual published0bb66091Git bytes and were
+removed only after preservation verification. Exact review branches remain
+atf2a122f955def578960303bc15242fed00d01be3; original author branch/checkout,
+all Git history and verified shared LFS asset objects remain. No candidate
+publication, integration or source acceptance was needed or inferred for removal
+of these report-only checkouts. The integrated/delete-branch helper report had
+no eligible tree; the explicit SPOKE5 keep-branch route applies instead, with
+no invented acceptedIntegration or branch-deletion gate.
+
+Measured removal611798204logical bytes/9812regular files including4duplicate
+reports43540bytes; allocated space reclaimed UNKNOWN, no workspace archive or
+quarantine. Native/Git/path readback proves2absent and both branches unchanged.
+Four remain:3protected(primary/coordinator/original Fable) plus1blocked external
+live Opus resource, not exit proof. All remaining native terminals carry agent
+identity; no bare shell is eligible. Exact scope/custody/removal evidence is in
+[WORKTREE_CLEANUP_20261113_BULLETIN.json](WORKTREE_CLEANUP_20261113_BULLETIN.json).
+Scoped checks cover receipt JSON, report/asset hashes, refs, local targets and
+whitespace; no new tests/builds or source qualification claim. Post-publication
+and supported disposable storage completion are recorded outside this commit.
+
 ## Owner retention disposition recorded; source gates unchanged — 2026-11-13
 
 Hub msg_2d0c01ea01a5 conveys the owner's “all approved” disposition:

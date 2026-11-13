@@ -1,0 +1,211 @@
+{
+  "authority": "msg_de128659789c",
+  "run": "run_37205f6095b3",
+  "managedBefore": 6,
+  "gitBefore": 6,
+  "repoFilesystemChildrenBefore": 5,
+  "orphans": [],
+  "coverage": {
+    "fleetPsRows": 94,
+    "fleetPsTruncated": false,
+    "repoManagedRows": 6,
+    "repoManagedTruncated": false,
+    "hosts": [
+      "local"
+    ],
+    "omittedHosts": [],
+    "workerPages": 2,
+    "dispatchRows": 188,
+    "hasMore": false,
+    "unsettled": 0,
+    "tasks": 187,
+    "openWorkflow": "task_c94bdfc187f6 pending",
+    "openGates": 0
+  },
+  "sourceHead": "f2a122f955def578960303bc15242fed00d01be3",
+  "integrationHead": "680e93b88b711369e452cdbe415415ef23ab99ed",
+  "publishedReportsCommit": "0bb660918585c3acae122fc012720b9e6f6c09ad",
+  "branchPolicy": "Keep exact review branches. No source/publication GO; no report-author source commits. Original candidate/source branches and owner checkout stay.",
+  "helper": "Read-only integrated-delete-branch sweep found no eligible trees; keep-branch route is separate explicit SPOKE5/native owner-authorized lifecycle. Do not assert integration or request branch deletion.",
+  "allocatedBytes": "UNKNOWN",
+  "rows": [
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-sol",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-sol",
+      "branch": "refs/heads/ryan-haver/fc13-r1-sol",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "filesBefore": 4906,
+      "logicalBytesBefore": 305897183,
+      "links": [],
+      "reports": [
+        {
+          "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-sol/docs/planning/fable-consensus-20261113/R1_SOL.md",
+          "publishedPath": "docs/planning/fable-consensus-20261113/R1_SOL.md",
+          "bytes": 12103,
+          "sha256": "7355c484bebf4cb7fc170c89a13b12bf27f1c6ced6f3870c1eb5c56ec558ace5"
+        },
+        {
+          "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-sol/docs/planning/fable-consensus-20261113/R2_SOL.md",
+          "publishedPath": "docs/planning/fable-consensus-20261113/R2_SOL.md",
+          "bytes": 7749,
+          "sha256": "e528a116bb7610b26546ee87ce6b834c2d5e4fe36ca17eed8527830a64a5000f"
+        }
+      ],
+      "decision": "REMOVED_CHECKOUT_BRANCH_KEPT",
+      "removed": true,
+      "freshRecheck": {
+        "utc": "2026-11-13T22:50:04.6233359Z",
+        "workerPages": 2,
+        "dispatchRows": 188,
+        "liveTerminals": 0,
+        "unsettledAssignments": 0,
+        "clean": true,
+        "branchPreserved": "f2a122f955def578960303bc15242fed00d01be3",
+        "reportCopiesRemovedBytes": 19852.0
+      },
+      "nativeAttempted": true,
+      "nativeRemoval": {
+        "id": "a7d5ef0e-327c-4190-ac1d-e2df184ae079",
+        "ok": true,
+        "result": {
+          "removed": true,
+          "catalogVersion": {
+            "epoch": "6257222e-442a-4afa-b1b7-53e816ac0eca",
+            "sequence": 868
+          }
+        },
+        "_meta": {
+          "runtimeId": "e943b6ec-63a5-47c4-a29d-eb4adfb01afe"
+        }
+      },
+      "readback": {
+        "nativeAbsent": true,
+        "gitAbsent": true,
+        "pathAbsent": true,
+        "branchHead": "f2a122f955def578960303bc15242fed00d01be3",
+        "nativeExit": 0
+      }
+    },
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-argon",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-argon",
+      "branch": "refs/heads/ryan-haver/fc13-r1-argon",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "filesBefore": 4906,
+      "logicalBytesBefore": 305901021,
+      "links": [],
+      "reports": [
+        {
+          "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-argon/docs/planning/fable-consensus-20261113/R1_ARGON.md",
+          "publishedPath": "docs/planning/fable-consensus-20261113/R1_ARGON.md",
+          "bytes": 12504,
+          "sha256": "eea3daf25f8662c5f8a2a49fe82ddf604efa161feac839bfb2f26ed5ef6c07af"
+        },
+        {
+          "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-argon/docs/planning/fable-consensus-20261113/R2_ARGON.md",
+          "publishedPath": "docs/planning/fable-consensus-20261113/R2_ARGON.md",
+          "bytes": 11184,
+          "sha256": "dcca56d249cafc75bf6f7e0e8a26e9b038e680972a3e90924a558776387f1029"
+        }
+      ],
+      "decision": "REMOVED_CHECKOUT_BRANCH_KEPT",
+      "removed": true,
+      "freshRecheck": {
+        "utc": "2026-11-13T22:50:16.7034111Z",
+        "workerPages": 2,
+        "dispatchRows": 188,
+        "liveTerminals": 0,
+        "unsettledAssignments": 0,
+        "clean": true,
+        "branchPreserved": "f2a122f955def578960303bc15242fed00d01be3",
+        "reportCopiesRemovedBytes": 23688.0
+      },
+      "nativeAttempted": true,
+      "nativeRemoval": {
+        "id": "8076a869-97ee-4a30-829f-31773dee5824",
+        "ok": true,
+        "result": {
+          "removed": true,
+          "catalogVersion": {
+            "epoch": "6257222e-442a-4afa-b1b7-53e816ac0eca",
+            "sequence": 876
+          }
+        },
+        "_meta": {
+          "runtimeId": "e943b6ec-63a5-47c4-a29d-eb4adfb01afe"
+        }
+      },
+      "readback": {
+        "nativeAbsent": true,
+        "gitAbsent": true,
+        "pathAbsent": true,
+        "branchHead": "f2a122f955def578960303bc15242fed00d01be3",
+        "nativeExit": 0
+      }
+    }
+  ],
+  "lfsCustody": {
+    "lfsPaths": 1153,
+    "uniqueObjectsVerified": 1053,
+    "logicalObjectBytes": 174298446,
+    "sharedObjectStore": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\.git\\lfs\\objects",
+    "allObjectsSizeAndSha256Match": true,
+    "objectsRetained": true,
+    "manifestSha256": "a241558b5675212a5c61e4bd6d93091e49dc00dea7ba55bebb2f0584e3f81b18"
+  },
+  "retained": [
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "branch": "refs/heads/wp-runtime-completion",
+      "head": "680e93b88b711369e452cdbe415415ef23ab99ed",
+      "classification": "RETAINED_PROTECTED",
+      "reason": "Primary checkout, live owner agents, user/runtime data and preserved admin-hook artifact; not an unused task checkout"
+    },
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "branch": "refs/heads/ryan-haver/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "headBeforeRecordCommit": "0bb660918585c3acae122fc012720b9e6f6c09ad",
+      "classification": "RETAINED_PROTECTED",
+      "reason": "Active long-lived coordinator"
+    },
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/audit-remediation-fable52",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/audit-remediation-fable52",
+      "branch": "refs/heads/ryan-haver/audit-remediation-fable52",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "classification": "RETAINED_PROTECTED",
+      "reason": "Owner-requested current Fable author conversation and prepared continuation with unlanded candidate;2native agent-identity terminals; original report/ignored open-task assets retained"
+    },
+    {
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus",
+      "branch": "refs/heads/ryan-haver/fc13-r1-opus",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "classification": "BLOCKED_EXTERNAL_CUSTODY",
+      "reason": "R1 dispatchctx_7b442f74f42e succeeded but terminal remains exactWorker live/external, retainedReason external_terminal, releaseState not_requested. Earlier worker-release retained external/processAction none; no raw close, stop, permission bypass or repeated recovery.2untracked reports stay in active checkout"
+    }
+  ],
+  "after": {
+    "observedUtc": "2026-11-13T22:51:45.6655680Z",
+    "managed": 4,
+    "git": 4,
+    "repoFilesystemChildren": 3,
+    "orphans": 0,
+    "removed": 2,
+    "retainedProtected": 3,
+    "blockedExternal": 1,
+    "coverageComplete": true,
+    "logicalBytesRemoved": 611798204.0,
+    "allocatedBytesReclaimed": "UNKNOWN",
+    "branchDeletions": 0,
+    "quarantinedWorkspaceBytes": 0,
+    "workspaceArchivesCreated": 0,
+    "noNewWorkersTestsBuilds": true,
+    "sourceAcceptanceOrPublicationGO": false,
+    "ordinaryRemediation": "queued, not admitted",
+    "terminalCleanup": "No null/absent agentIdentity terminals remain in current scoped lists; no eligible bare shell; no terminal close this cleanup",
+    "scope": "Repository only. Fleet94 fully listed to locate own6, not a claim of cleaning other repos."
+  }
+}

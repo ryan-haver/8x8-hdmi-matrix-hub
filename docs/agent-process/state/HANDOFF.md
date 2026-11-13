@@ -1,5 +1,28 @@
 # Current coordinator handoff
 
+## Owner-directed unused checkouts removed; four remain — 2026-11-13
+
+Under hub bulletin msg_de128659789c, reviewed all6managed/Git worktrees and
+the5repo workspace folders; no orphans. Full worker coverage188rows/2pages,
+no unsettled assignment,187Tasks with only workflowtask_c94bdfc187f6 pending,
+and no open native gate. Removed unused fc13-r1-sol and fc13-r1-argon through
+exact Orca lifecycle calls **without branch deletion**, after fresh native,
+status/ignored/filter/stash/stamp and source/report custody checks per tree.
+Both local branches still point to f2a122f955def578960303bc15242fed00d01be3.
+The4original reports are byte-identical to published coordinator commit0bb66091;
+verified1153LFSpaths/1053unique shared objects retain the actual asset bytes.
+No source publication or acceptance was inferred or performed.
+
+Four managed/Git trees remain: primary, this coordinator, the owner-requested
+original Fable continuation, and fc13-r1-opus with exact live/external retained
+R1 worker custody. General cleanup does not authorize closing that agent.
+No eligible bare shell remains. Removed611798204logical bytes; allocated
+space reclaimed is UNKNOWN. No workspace archive or quarantine was created.
+The [receipt](../../production/WORKTREE_CLEANUP_20261113_BULLETIN.json)
+records exact ids, preserved refs, hashes, per-removal readbacks and all retained
+reasons. Earlier notes retaining all3debate checkouts are superseded by this
+actual cleanup. Ordinary Fable remediation still has no Task/dispatch/GO.
+
 ## Owner disposition: preserve for separately qualified intake — 2026-11-13
 
 Hub msg_2d0c01ea01a5 reports the owner's “all approved” reply covering the
