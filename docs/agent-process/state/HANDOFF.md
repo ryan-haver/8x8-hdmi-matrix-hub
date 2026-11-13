@@ -1,5 +1,21 @@
 # Current coordinator handoff
 
+## Owner disposition: preserve for separately qualified intake — 2026-11-13
+
+Hub msg_2d0c01ea01a5 reports the owner's “all approved” reply covering the
+recommended retention of provenance-held work. The actual disposition is
+**PRESERVE FOR SEPARATELY QUALIFIED INTAKE**, recorded in
+[OWNER_PROVENANCE_DISPOSITION.json](../../planning/fable-consensus-20261113/OWNER_PROVENANCE_DISPOSITION.json).
+It resolves the retention choice only. Preserve exact WS commit
+3eb459197c19b3a346e02b7fc173ce0f4ead8095, original bytes/actor-unknown holds
+and unchanged D6_PROVENANCE_HOLD.json with wiring_leases_granted0.
+No CR01/WSR03 wiring, source acceptance/credit, authorship relabeling,
+qualification/review waiver, publication GO or author slot is granted.
+The immutable conditional lease and existing ordinary prepared queue remain
+subject to every actual native/local/visual/H5/privacy/host-resource gate and
+later-wave admission. No author Task/dispatch/GO or corrected head exists.
+Earlier pending-retention statements below are historical observations.
+
 ## Exact R2 lease accepted; wait for actual author admission — 2026-11-13
 
 Existing Runrun_37205f6095b3 / workflowtask_c94bdfc187f6. Hub msg_f2f43accc580

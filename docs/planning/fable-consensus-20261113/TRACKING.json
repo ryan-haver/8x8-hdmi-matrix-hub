@@ -241,5 +241,14 @@
     "authority": "msg_4bc469e25fbb",
     "status": "accepted narrowly by hub msg_f2f43accc580 at e85a1c0e; no implementation/source/landing GO"
   },
-  "storageCloseout": "Current coordination receipts/failed-check metadata will be compactly preserved outside the identified commit; disposable payload closes through supported seven-day quarantine after actual source/spec preservation. Future author-wave diagnostics use new owned output; no author Task is created by this note."
+  "storageCloseout": "Current coordination receipts/failed-check metadata will be compactly preserved outside the identified commit; disposable payload closes through supported seven-day quarantine after actual source/spec preservation. Future author-wave diagnostics use new owned output; no author Task is created by this note.",
+  "ownerProvenanceDisposition": {
+    "authority": "msg_2d0c01ea01a5",
+    "status": "PRESERVE FOR SEPARATELY QUALIFIED INTAKE",
+    "record": "OWNER_PROVENANCE_DISPOSITION.json",
+    "scope": "Retention choice resolved; earlier pending-disposition observations are historical. Actual wiring, provenance/actor-unknown, qualification, source acceptance, publication and author-admission holds remain.",
+    "exactWsCommit": "3eb459197c19b3a346e02b7fc173ce0f4ead8095",
+    "wiringLeasesGranted": 0,
+    "authorSlotGranted": false
+  }
 }

@@ -1,5 +1,30 @@
 # Agent allocation and execution ledger
 
+## Owner retention disposition recorded; source gates unchanged — 2026-11-13
+
+Hub msg_2d0c01ea01a5 conveys the owner's “all approved” disposition:
+**PRESERVE FOR SEPARATELY QUALIFIED INTAKE**. The
+[disposition record](../planning/fable-consensus-20261113/OWNER_PROVENANCE_DISPOSITION.json)
+preserves exact WS commit3eb459197c19b3a346e02b7fc173ce0f4ead8095, original
+source bytes/actor-unknown attribution holds and unchanged D6_PROVENANCE_HOLD.json
+with wiring_leases_granted0. This closes the retention choice, without source
+acceptance/credit, CR01/WSR03 wiring, authorship relabeling, qualification/review
+waiver, publication GO, landing or release of an author slot.
+
+Runrun_37205f6095b3/workflowtask_c94bdfc187f6 and sourcef2a122f9 persist.
+The immutable conditional lease38427782644e8ccc and ordinary prepared D3 queue
+remain subject to actual local/native/visual/H5/privacy/host-resource gates and
+later-wave admission. No implementation Task, dispatch, GO or corrected head.
+Earlier pending-retention statements below retain their historical provenance.
+Only coordinator records are changed; scoped checks and exact publication
+readback are recorded separately from the commit they identify.
+
+Scoped checks:489existing documentation tests passed3.29s with route-inventory
+and cache plugins disabled and isolated worktree data/config/pytest paths.
+JSON, local link targets, whitespace and unchanged hold/lease/source pins checked.
+The invocation-only documentation hook exception applies; no implementation
+hook, source qualification or full runtime pass is claimed.
+
 ## R2 closeout accepted; exact conditional leases frozen — 2026-11-13
 
 Hub msg_f2f43accc580 accepted the concrete G1–G3 clauses at e85a1c0e as narrow

@@ -1,0 +1,25 @@
+{
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "authority": "msg_2d0c01ea01a5",
+  "ownerReplyAsReportedByHub": "all approved",
+  "disposition": "PRESERVE FOR SEPARATELY QUALIFIED INTAKE",
+  "scope": "Retention and disposition only; source acceptance and separately qualified intake are not established",
+  "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
+  "exactWsCommit": "3eb459197c19b3a346e02b7fc173ce0f4ead8095",
+  "preserve": [
+    "Original source bytes and Git history",
+    "Actual source-family attribution and actor-unknown holds",
+    "docs/production/remediation-20261104/recovery-execution/D6_PROVENANCE_HOLD.json unchanged",
+    "D6 wiring_leases_granted remains 0"
+  ],
+  "notGranted": [
+    "CR01 or WSR03 wiring",
+    "Source acceptance or retroactive source credit",
+    "Authorship relabeling or qualification waiver",
+    "Review waiver, publication GO or landing",
+    "An author slot or changed admission gates"
+  ],
+  "ordinaryPreparedWork": "Continue the existing queue under actual native/local/visual/H5/privacy/host-resource gates and a later author-wave slot; no implementation Task, dispatch or GO exists",
+  "immutableConditionalLeaseSha256": "38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9"
+}
