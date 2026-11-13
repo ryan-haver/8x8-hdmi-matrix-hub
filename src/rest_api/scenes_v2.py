@@ -112,6 +112,16 @@ def _scene_dict(mgr: SceneManager, scene: Scene, profiles_map: dict[str, Any]) -
     return result
 
 
+def _output_number(value: Any) -> int:
+    """``output_num`` of an override body as an int; anything that is not a whole number is a ValueError (400)."""
+    if isinstance(value, bool) or not isinstance(value, int | str):
+        raise ValueError("output_num must be an integer")
+    try:
+        return int(value)
+    except ValueError:
+        raise ValueError("output_num must be an integer") from None
+
+
 def _pin_key(scene_id: str) -> str:
     """Attempt-limiter key of a scene (SEC-06)."""
     return f"scene:{scene_id}"
@@ -503,21 +513,27 @@ async def handle_set_override(request: web.Request) -> web.Response:
         data = await request.json()
         mgr = _get_scene_manager()
 
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.set_override(
             scene_id,
             profile_id=data["profile_id"],
-            output_num=int(data["output_num"]),
+            output_num=_output_number(data["output_num"]),
             setting_key=data["setting_key"],
             disabled=bool(data.get("disabled", True)),
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except KeyError as e:
         return await _json_response(False, error=f"Missing field: {e}", status=400)
+    except ValueError as e:
+        return await _json_response(False, error=str(e), status=400)
     except Exception as e:
         _LOG.error("Error setting override: %s", e)
         return await _json_response(False, error=str(e), status=500)
@@ -535,20 +551,26 @@ async def handle_clear_override(request: web.Request) -> web.Response:
         data = await request.json()
         mgr = _get_scene_manager()
 
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.clear_override(
             scene_id,
             profile_id=data["profile_id"],
-            output_num=int(data["output_num"]),
+            output_num=_output_number(data["output_num"]),
             setting_key=data["setting_key"],
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except KeyError as e:
         return await _json_response(False, error=f"Missing field: {e}", status=400)
+    except ValueError as e:
+        return await _json_response(False, error=str(e), status=400)
     except Exception as e:
         _LOG.error("Error clearing override: %s", e)
         return await _json_response(False, error=str(e), status=500)
@@ -593,7 +615,7 @@ async def handle_add_step(request: web.Request) -> web.Response:
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -611,11 +633,13 @@ async def handle_remove_step(request: web.Request) -> web.Response:
         index = int(request.match_info["index"])
         mgr = _get_scene_manager()
 
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.remove_step(scene_id, index)
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except (ValueError, KeyError) as e:
         return await _json_response(False, error=f"Invalid index: {e}", status=400)
     except Exception as e:
