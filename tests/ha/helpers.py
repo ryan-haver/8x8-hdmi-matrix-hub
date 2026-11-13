@@ -22,7 +22,7 @@ import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker, AiohttpClientMockResponse
 
 from custom_components.hdmi_matrix.const import DOMAIN
 
@@ -46,6 +46,11 @@ READ_ROUTES = {
 # Generic success body for write endpoints (shape of rest_api.utils._json_response).
 WRITE_OK = {"success": True, "data": {}, "error": None}
 
+#: The hub's access state. Unlike the routes above it answers a bare object, and its
+#: ``session_level`` depends on the request's ``X-API-Key``. The real hub's answer is pinned
+#: by tests/test_security_auth_hardening.py::test_auth_status_reports_what_an_api_key_may_do.
+AUTH_ROUTE = "/api/auth/status"
+
 
 def load_fixture(name: str) -> dict[str, Any]:
     """Load a contract fixture (a full ``{success, data, error}`` body)."""
@@ -68,6 +73,11 @@ class MockHub:
         self.post_overrides: dict[str, dict[str, Any]] = {}
         #: ``{(base_url, route): body}``: what one particular hub answers (a second matrix).
         self.host_responses: dict[tuple[str, str], dict[str, Any]] = {}
+        #: The control lock: with a control PIN, only these API keys may send commands.
+        self.control_pin_set = False
+        self.api_keys: set[str] = set()
+        #: 404 makes this a hub from before the access model (it has no such route).
+        self.auth_status_code = 200
         self.register()
 
     def register(self) -> None:
@@ -80,10 +90,29 @@ class MockHub:
                 self.mock.get(_route(route), exc=self.read_exc[route])
             else:
                 self.mock.get(_route(route), json=body, status=self.status_codes.get(route, 200))
+        self.mock.get(_route(AUTH_ROUTE), side_effect=self._auth_status)
         for path, kwargs in self.post_overrides.items():
             self.mock.post(_route(path), **kwargs)
         # Any other write endpoint succeeds.
         self.mock.post(re.compile(r"^http://[^/]+/api/.*"), json=WRITE_OK)
+
+    async def _auth_status(self, method: str, url: Any, _data: Any) -> AiohttpClientMockResponse:
+        """``/api/auth/status`` as the hub answers it for the key this request carries."""
+        if self.auth_status_code != 200:
+            return AiohttpClientMockResponse(method, url, status=self.auth_status_code, text="404: Not Found")
+        headers = self.mock.mock_calls[-1][3] or {}  # the mocker records the call before it answers
+        accepted = headers.get("X-API-Key") in self.api_keys
+        return AiohttpClientMockResponse(method, url, json={
+            "admin_pin_set": False,
+            "control_pin_set": self.control_pin_set,
+            "session_level": "control" if accepted else "none",
+            "device_remembered": False,
+        })
+
+    def lock_control(self, *api_keys: str) -> None:
+        """Set a control PIN on the hub; only ``api_keys`` are accepted from now on."""
+        self.control_pin_set = True
+        self.api_keys = set(api_keys)
 
     def set_response(self, route: str, body: dict[str, Any] | None = None, status: int = 200) -> None:
         """Change what a read route returns (e.g. to simulate an error)."""

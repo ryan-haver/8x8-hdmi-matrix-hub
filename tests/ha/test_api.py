@@ -101,3 +101,48 @@ async def test_base_url_brackets_ipv6(host: str, url: str) -> None:
     127.0.0.1, so the connection itself is not exercised here."""
     async with aiohttp.ClientSession() as session:
         assert HubClient(session, host, 8080).base_url == url
+
+
+async def test_auth_status_reads_the_bare_answer_of_the_auth_routes() -> None:
+    """``/api/auth/*`` answers a bare object: requiring ``success`` made it an error."""
+    locked = {"admin_pin_set": False, "control_pin_set": True, "session_level": "none", "device_remembered": False}
+    seen: list[str | None] = []
+
+    async def status(request: web.Request) -> web.Response:
+        key = request.headers.get("X-API-Key")
+        seen.append(key)
+        return web.json_response({**locked, "session_level": "control" if key == "ha-key" else "none"})
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", status)
+    server = TestServer(app, host="127.0.0.1")
+    await server.start_server()
+    try:
+        async with aiohttp.ClientSession() as session:
+            without = HubClient(session, "127.0.0.1", server.port)
+            wrong = HubClient(session, "127.0.0.1", server.port, "wrong-key")
+            right = HubClient(session, "127.0.0.1", server.port, "ha-key")
+
+            assert await without.auth_status() == locked
+            assert [await client.control_allowed() for client in (without, wrong, right)] == [False, False, True]
+            assert seen == [None, None, "wrong-key", "ha-key"]
+            assert not session.connector._acquired, "a response was not released"  # noqa: SLF001
+    finally:
+        await server.close()
+
+
+async def test_auth_status_errors_are_hub_errors() -> None:
+    async def missing(_request: web.Request) -> web.Response:
+        return web.Response(text="404: Not Found", status=404)
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", missing)
+    server = TestServer(app, host="127.0.0.1")
+    await server.start_server()
+    try:
+        async with aiohttp.ClientSession() as session:
+            with pytest.raises(HubResponseError) as error:
+                await HubClient(session, "127.0.0.1", server.port).auth_status()
+            assert error.value.status == 404
+    finally:
+        await server.close()

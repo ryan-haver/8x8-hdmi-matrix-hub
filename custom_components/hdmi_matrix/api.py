@@ -48,8 +48,14 @@ class HubClient:
         self.base_url = f"http://{url_host}:{port}"
         self._timeout = aiohttp.ClientTimeout(total=REQUEST_TIMEOUT)
 
-    async def _request(self, method: str, path: str, payload: dict[str, Any] | None = None) -> Any:
-        """One request; returns the ``data`` member of a successful answer."""
+    async def _request(
+        self, method: str, path: str, payload: dict[str, Any] | None = None, *, envelope: bool = True
+    ) -> Any:
+        """One request; returns the ``data`` member of a successful answer.
+
+        With ``envelope=False`` (the ``/api/auth/*`` routes, which answer a bare
+        JSON object) a 2xx answer is returned whole.
+        """
         kwargs: dict[str, Any] = {"timeout": self._timeout}
         if self.api_key:
             kwargs["headers"] = {"X-API-Key": self.api_key}
@@ -66,6 +72,10 @@ class HubClient:
             raise HubConnectionError(f"{method} {path}: {err or type(err).__name__}") from err
         if not isinstance(body, dict):
             raise HubResponseError(path, status, "the hub sent no JSON answer")
+        if not envelope:
+            if not 200 <= status < 300:
+                raise HubResponseError(path, status, body.get("error"))
+            return body
         if not 200 <= status < 300 or body.get("success") is not True:
             raise HubResponseError(path, status, body.get("error"))
         return body.get("data")
@@ -102,6 +112,21 @@ class HubClient:
         """``/api/status/device``: model, firmware version, MAC (needs the matrix online)."""
         data = await self.get("/api/status/device")
         return dict((data or {}).get("device") or {})
+
+    async def auth_status(self) -> dict[str, Any]:
+        """``/api/auth/status``: which locks are set and what this client may do.
+
+        ``control_pin_set`` says whether control commands need a key at all;
+        ``session_level`` is ``"control"`` when the hub accepts this client's
+        API key and ``"none"`` when it does not. Reading it changes nothing on
+        the hub and counts no PIN attempt.
+        """
+        return await self._request("GET", "/api/auth/status", envelope=False)
+
+    async def control_allowed(self) -> bool:
+        """Whether the hub will accept this client's control commands (routing, power, CEC)."""
+        auth = await self.auth_status()
+        return not auth.get("control_pin_set") or auth.get("session_level") in ("control", "admin")
 
     # ------------------------------------------------------------ writes
 
