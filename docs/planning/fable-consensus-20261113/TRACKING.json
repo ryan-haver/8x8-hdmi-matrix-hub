@@ -2,7 +2,7 @@
   "authority": "msg_b052a16e725b",
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
-  "observedUtc": "2026-11-13T18:15:35.705490+00:00",
+  "observedUtc": "2026-11-13T18:23:26.370629+00:00",
   "integration": "680e93b88b711369e452cdbe415415ef23ab99ed",
   "sourceCandidate": "f2a122f955def578960303bc15242fed00d01be3",
   "sourceWorktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\audit-remediation-fable52",
@@ -23,13 +23,47 @@
   },
   "stages": {
     "R1": {
-      "status": "preparing_independent_read_only",
+      "status": "two_independent_assessors_running_third_queued",
       "planned": [
         "Sol/high",
         "Argon-high",
         "Opus5.5/high owner-authorized bounded manual trial msg_13f63a372426"
       ],
-      "dispatches": []
+      "dispatches": [
+        {
+          "family": "OpenAI",
+          "task": "task_25ffe700a15a",
+          "dispatch": "ctx_a084950d97ee",
+          "model": "gpt-6.1-sol",
+          "effort": "high",
+          "worktree": "fc13-r1-sol",
+          "base": "f2a122f955def578960303bc15242fed00d01be3",
+          "requestedEffectiveMatch": true,
+          "nativeIdentity": "GPT-6.1-Sol high, working; no prompt",
+          "report": "R1_SOL.md"
+        },
+        {
+          "family": "Google",
+          "task": "task_e751c7293126",
+          "dispatch": "ctx_1d3527f000fb",
+          "model": "gemini-4-argon-high",
+          "effort": "high from provider model id; CLI effort null",
+          "worktree": "fc13-r1-argon",
+          "base": "f2a122f955def578960303bc15242fed00d01be3",
+          "requestedEffectiveMatch": true,
+          "nativeIdentity": "Gemini4Argon/high, active read-only work; footer AI:Out of credits despite33%remaining pool, worker asked to report actual quota limitation without fallback",
+          "report": "R1_ARGON.md"
+        }
+      ],
+      "queuedTask": {
+        "task": "task_277c59831d36",
+        "model": "claude-opus-5-5",
+        "effort": "high",
+        "manualCandidateTrial": true,
+        "why": "trial",
+        "authority": "msg_13f63a372426 and msg_d13d091271af",
+        "dispatch": null
+      }
     },
     "R2": {
       "status": "queued_after_all_R1",
@@ -51,7 +85,7 @@
     "maxActiveWorkers": 3,
     "maxInitialNewActive": 2,
     "noNesting": true,
-    "observations": "Sol90%weekly remaining; Claude59%; Fable37%; Argon33%weekly96%session; MiniMax95%weekly99%session. Refresh before each dispatch; other-repo commitments unknown; no token/spend allocation inferred.",
+    "observations": "Immediately before wave: Sol89%weekly remaining, Claude57%, Fable31%, Argon33%weekly remaining, MiniMax95%. Argon footer credit warning is unresolved and not called healthy backend proof. Future Fable author stage rechecks threshold and qualification; no silent replacement.",
     "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived"
   },
   "guards": [
@@ -66,5 +100,12 @@
   "temporaryPayload": "60822c6d687749bcb8a211bd3f427590",
   "sourceMutatedByCoordinator": false,
   "consensus": "not_established",
-  "candidateTrialAuthority": "Opus5.5/high read-only planning trial only; candidate status unchanged, no Anthropic independent acceptance of Fable source"
+  "candidateTrialAuthority": "Opus5.5/high read-only planning trial only; candidate status unchanged, no Anthropic independent acceptance of Fable source",
+  "prelaunchValidation": {
+    "docs": "489passed4.09s",
+    "whitespace": "passed",
+    "frozenBytes": "e93b9cef9d9a01bb095b92f0894c0445b031874c working/Git exact; inputs43a42fd0 packet1262b3c2",
+    "initialFailure": "40805644 packet CRLF-vs-LF check failed before launch; corrected manifest in e93b9cef, original Fable report untouched; failure receipt in active payload",
+    "publication": "Coordinator planning records committed locally only; candidate/integration source not pushed or merged"
+  }
 }
