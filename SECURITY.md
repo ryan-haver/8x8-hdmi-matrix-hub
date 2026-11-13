@@ -109,7 +109,9 @@ Admin is the "household settings" level.
   WebSocket commands are rejected without an admin session.
 * **Brute force:** after **5 wrong attempts** the PIN entry point locks out with an
   exponential backoff (doubling from a second up to a one-hour cap) and answers
-  `429 Too Many Requests`. A correct PIN resets the counter.
+  `429 Too Many Requests`. A correct PIN resets the counter. The PINs of one client
+  address are checked one at a time, so requests sent in parallel get no more
+  guesses than requests sent one after another.
 * The Admin PIN is set on first run in the web UI (skippable), via `ADMIN_PIN`, or
   later through `POST /api/auth/pin` — which itself requires the **current** admin
   PIN when one is already set.

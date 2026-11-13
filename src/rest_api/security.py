@@ -23,6 +23,13 @@ SESSION_COOKIE = "orei_session"
 DEVICE_COOKIE = "orei_device_token"
 SESSION_IDLE = 30 * 60
 DEVICE_LIFETIME = 365 * 24 * 60 * 60
+#: Wrong PINs one peer may send for one level before it is locked out.
+PIN_MAX_FAILURES = 5
+#: Ceilings for the security state, so neither memory nor ``security.json`` grows without bound.
+MAX_SESSIONS = 1024
+MAX_FAILURE_KEYS = 4096
+MAX_DEVICES = 64
+MAX_API_KEYS = 64
 
 
 def _digest(value: str) -> str:
@@ -148,6 +155,8 @@ class SecurityManager:
             self._save()
         self.sessions: dict[str, tuple[str, float]] = {}
         self.failures: dict[str, tuple[int, float]] = {}
+        #: ``level:peer`` -> [lock, requests holding or waiting for it]; an entry lives only while in use.
+        self._pin_checks: dict[str, list] = {}
         self._lock = asyncio.Lock()
         self._env_ready = False
 
@@ -171,24 +180,74 @@ class SecurityManager:
     def pin_set(self, level: str) -> bool:
         return bool(self.state.get(f"{level}_pin"))
 
-    async def verify_pin(self, level: str, pin: str, peer: str = "unknown") -> bool:
+    async def verify_pin(self, level: str, pin: object, peer: str = "unknown") -> bool:
+        """Check ``pin`` for ``level``; the fifth wrong PIN from ``peer`` locks it out (429).
+
+        One check per ``level:peer`` runs at a time. The lockout is read, the PIN
+        hashed and the failure recorded under one lock, so requests sent in
+        parallel cannot all pass the lockout check before the first hash ends,
+        and one peer never holds more than one hashing thread.
+        """
         key = f"{level}:{peer}"
+        entry = self._pin_checks.setdefault(key, [asyncio.Lock(), 0])
+        entry[1] += 1
+        try:
+            async with entry[0]:
+                return await self._verify_pin_locked(key, level, pin)
+        finally:
+            entry[1] -= 1
+            if entry[1] == 0:
+                self._pin_checks.pop(key, None)
+
+    async def _verify_pin_locked(self, key: str, level: str, pin: object) -> bool:
         failures, until = self.failures.get(key, (0, 0))
         if time.monotonic() < until:
             raise web.HTTPTooManyRequests(text="PIN temporarily locked")
         stored = self.state.get(f"{level}_pin")
         try:
-            valid = bool(stored and await asyncio.get_running_loop().run_in_executor(None, verify_passcode, pin, stored))
+            valid = bool(
+                stored
+                and isinstance(pin, str)
+                and await asyncio.get_running_loop().run_in_executor(None, verify_passcode, pin, stored)
+            )
         except (PasswordError, TypeError):
             valid = False
         if valid:
             self.failures.pop(key, None)
             return True
         failures += 1
-        self.failures[key] = (failures, time.monotonic() + min(3600, 2 ** (failures - 5)) if failures >= 5 else 0)
-        if failures >= 5:
+        locked = failures >= PIN_MAX_FAILURES
+        # Re-inserted, so the dict stays ordered from least to most recently failed.
+        self.failures.pop(key, None)
+        self.failures[key] = (
+            failures,
+            time.monotonic() + min(3600, 2 ** (failures - PIN_MAX_FAILURES)) if locked else 0,
+        )
+        self._trim_failures()
+        if locked:
             raise web.HTTPTooManyRequests(text="PIN temporarily locked")
         return False
+
+    def _trim_failures(self) -> None:
+        """Keep at most ``MAX_FAILURE_KEYS`` peers: drop the oldest that are not locked out, then the oldest."""
+        excess = len(self.failures) - MAX_FAILURE_KEYS
+        if excess <= 0:
+            return
+        now = time.monotonic()
+        unlocked = [key for key, (_, until) in self.failures.items() if until <= now]
+        locked = [key for key, (_, until) in self.failures.items() if until > now]
+        for key in (unlocked + locked)[:excess]:
+            del self.failures[key]
+
+    def _trim_sessions(self) -> None:
+        """Forget idle sessions; above ``MAX_SESSIONS`` also the least recently used."""
+        now = time.monotonic()
+        for digest in [d for d, (_, seen) in self.sessions.items() if now - seen > SESSION_IDLE]:
+            del self.sessions[digest]
+        excess = len(self.sessions) - MAX_SESSIONS
+        if excess > 0:
+            for digest in sorted(self.sessions, key=lambda d: self.sessions[d][1])[:excess]:
+                del self.sessions[digest]
 
     def session_level(self, request: web.Request) -> str:
         token = request.cookies.get(SESSION_COOKIE, "")
@@ -225,17 +284,36 @@ class SecurityManager:
     def new_session(self, response: web.Response, level: str) -> None:
         token = secrets.token_urlsafe(32)
         self.sessions[_digest(token)] = (level, time.monotonic())
+        self._trim_sessions()
         response.set_cookie(SESSION_COOKIE, token, httponly=True, samesite="Strict", max_age=SESSION_IDLE)
 
     def remember_device(self, response: web.Response, name: str) -> None:
         token = secrets.token_urlsafe(32)
-        self.state["devices"][secrets.token_hex(8)] = {"name": name[:80], "hash": _digest(token), "created": int(time.time())}
+        devices = self.state["devices"]
+        # A full list forgets its oldest device (dicts keep insertion order): that
+        # device is asked for the control PIN again, and "remember" keeps working.
+        while len(devices) >= MAX_DEVICES:
+            del devices[next(iter(devices))]
+        devices[secrets.token_hex(8)] = {"name": name[:80], "hash": _digest(token), "created": int(time.time())}
         self._save()
         response.set_cookie(DEVICE_COOKIE, token, httponly=True, samesite="Strict", max_age=DEVICE_LIFETIME)
 
 
 def manager(request: web.Request) -> SecurityManager:
     return request.app["security_manager"]
+
+
+async def _json_object(request: web.Request, *, allow_empty: bool = False) -> dict:
+    """The JSON object body of an ``/api/auth/*`` request; anything else is a 400, never a 500."""
+    if allow_empty and not request.can_read_body:
+        return {}
+    try:
+        body = await request.json()
+    except ValueError:  # JSONDecodeError and UnicodeDecodeError are both ValueErrors
+        raise web.HTTPBadRequest(text="Invalid JSON body") from None
+    if not isinstance(body, dict):
+        raise web.HTTPBadRequest(text="Request body must be a JSON object")
+    return body
 
 
 @web.middleware
@@ -271,7 +349,7 @@ async def auth_status(request: web.Request) -> web.Response:
 
 async def auth_unlock(request: web.Request) -> web.Response:
     security = manager(request)
-    body = await request.json()
+    body = await _json_object(request)
     level = body.get("level", "admin")
     if level not in ("admin", "control"):
         raise web.HTTPBadRequest(text="Invalid level")
@@ -296,7 +374,7 @@ async def auth_lock(request: web.Request) -> web.Response:
 
 async def auth_pin(request: web.Request) -> web.Response:
     security = manager(request)
-    body = await request.json()
+    body = await _json_object(request)
     level = body.get("level", "admin")
     if level not in ("admin", "control"):
         raise web.HTTPBadRequest(text="Invalid level")
@@ -304,6 +382,8 @@ async def auth_pin(request: web.Request) -> web.Response:
         if not await security.verify_pin("admin", body.get("current_pin"), request.remote or "unknown"):
             raise web.HTTPUnauthorized(text="Current Admin PIN required")
     pin = body.get("pin")
+    if pin is not None and not isinstance(pin, str):
+        raise web.HTTPBadRequest(text="pin must be a string")
     try:
         stored = await asyncio.get_running_loop().run_in_executor(None, hash_passcode, pin) if pin else None
     except PasswordError as exc:
@@ -333,7 +413,10 @@ async def auth_api_keys(request: web.Request) -> web.Response:
         security.state["api_keys"].pop(request.match_info["key_id"], None)
         security._save()
         return web.json_response({"deleted": True})
-    body = await request.json()
+    body = await _json_object(request, allow_empty=True)
+    if len(security.state["api_keys"]) >= MAX_API_KEYS:
+        # Never dropped silently: a key in use by Home Assistant or Flic would stop working.
+        raise web.HTTPBadRequest(text=f"API key limit reached ({MAX_API_KEYS}); delete an unused key first")
     key = secrets.token_urlsafe(32)
     key_id = secrets.token_hex(8)
     security.state["api_keys"][key_id] = {"name": str(body.get("name") or "API key")[:80], "hash": _digest(key), "created": int(time.time())}

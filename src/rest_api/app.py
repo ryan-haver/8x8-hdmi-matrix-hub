@@ -266,13 +266,7 @@ def create_rest_app(data_dir: Path | None = None, *, runtime=None, integration_r
     # The hub's live event stream (/ws) and its status poller (docs/api/WEBSOCKET.md)
     install_event_stream(app, runtime=runtime)
 
-    @web.middleware
-    async def cors_middleware(request: web.Request, handler):
-        if request.method == "OPTIONS":
-            response = web.Response()
-        else:
-            response = await handler(request)
-
+    def add_cors_headers(request: web.Request, response: web.StreamResponse) -> None:
         origin = request.headers.get("Origin")
         if os.environ.get("CORS_ALLOWED_ORIGINS", "").strip() == "*":
             response.headers["Access-Control-Allow-Origin"] = "*"
@@ -285,8 +279,37 @@ def create_rest_app(data_dir: Path | None = None, *, runtime=None, integration_r
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, X-API-Key, X-Admin-PIN"
         response.headers["Access-Control-Max-Age"] = "86400"
+
+    @web.middleware
+    async def cors_headers_middleware(request: web.Request, handler):
+        """Outermost: every answer carries the CORS headers, also a refusal from an inner guard.
+
+        The rate limiter answers 429 and the security guard raises 401/403/415/421/429
+        before any route handler runs. Without these headers a browser on an allowed
+        origin cannot read such an answer and reports a network error instead of
+        "unlock required" or "slow down".
+        """
+        try:
+            response = await handler(request)
+        except web.HTTPException as exc:
+            add_cors_headers(request, exc)
+            raise
+        add_cors_headers(request, response)
         return response
 
+    @web.middleware
+    async def cors_middleware(request: web.Request, handler):
+        """Innermost, as before: answer a preflight that passed the rate limiter and the Host guard.
+
+        The headers themselves are added by ``cors_headers_middleware`` on the way out.
+        """
+        if request.method == "OPTIONS":
+            return web.Response()
+        return await handler(request)
+
+    # aiohttp runs middlewares in list order, the first one outermost:
+    # cors_headers, rate_limit, security, cors (preflight).
+    app.middlewares.insert(0, cors_headers_middleware)
     app.middlewares.append(security_middleware)
     app.middlewares.append(cors_middleware)
 
