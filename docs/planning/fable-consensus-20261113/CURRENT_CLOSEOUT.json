@@ -1,0 +1,382 @@
+{
+  "observedUtc": "2026-11-13T23:01:36.316202+00:00",
+  "authority": "msg_21e6b8d4824e",
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "scope": "Finite current ledger of all4remaining managed/Git checkouts and known repo folders; no repo orphans; snapshot before writing these administrative records",
+  "state": "CLEAN_FABLE_TASK_SOURCE_BUT_REMEDIATION_AND_ACCEPTANCE_OUTSTANDING",
+  "coverage": {
+    "managed": 4,
+    "git": 4,
+    "repoWorkspaceFolders": 3,
+    "knownOrphans": 0,
+    "fleetPsRowsAtRead": 89,
+    "fleetPsTruncated": false,
+    "omittedHosts": [],
+    "dispatches": 188,
+    "workerPages": 2,
+    "workerHasMore": false,
+    "unsettledAssignments": 0,
+    "nativeOpenGates": 0,
+    "nativeTasks": 187,
+    "workflowPending": true
+  },
+  "checkouts": [
+    {
+      "name": "primary",
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "ref": "refs/heads/wp-runtime-completion",
+      "headBeforeAdministrativeRecordCommit": "680e93b88b711369e452cdbe415415ef23ab99ed",
+      "role": "protected primary/owner",
+      "trackedChanges": [],
+      "stagedChanges": [],
+      "untrackedFiles": [
+        {
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
+          "link": false,
+          "bytes": 351,
+          "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
+          "sha256": "791471b4ff472aab844a4fceaa48bbb0a12193616f971e8e940625498b4938a6"
+        },
+        {
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
+          "link": false,
+          "bytes": 347,
+          "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
+          "sha256": "21e961572bb3f43a5f2fbafc1cc764d86046cc2e5f0bbecebfe9684a0b73b664"
+        },
+        {
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
+          "link": false,
+          "bytes": 345,
+          "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
+          "sha256": "75da0da66a803b4b030ad50801ba57062c6196105eb1d2251590d100edb9390b"
+        },
+        {
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
+          "link": false,
+          "bytes": 341,
+          "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
+          "sha256": "df5417b2daa3aa144c19681d1e997df7ebfe144fb7e3e05138bd80ae998008e4"
+        }
+      ],
+      "fableOwnedUncommittedProductSource": 0,
+      "custody": "Primary has owner agents/admin-hook artifact; unrelated custody remains unknown; no commit/delete/config change",
+      "ignoredIsNotSourceDirt": "Protected runtime/user assets, archive/media, hook dependencies and existing open evidence; no content copied or committed"
+    },
+    {
+      "name": "coordinator",
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "ref": "refs/heads/ryan-haver/p-coord-unfoldedcircle-orei-hdmi-matrix-integration",
+      "headBeforeAdministrativeRecordCommit": "9ba4fb7c7aba7b2edc73abc9b42725d0671ad9a3",
+      "role": "active long-lived coordinator",
+      "trackedChanges": [],
+      "stagedChanges": [],
+      "untrackedFiles": [],
+      "fableOwnedUncommittedProductSource": 0,
+      "custody": "Coordinator owns only administrative records; ordinary source packages remain separately leased/gated",
+      "ignoredIsNotSourceDirt": "No ignored paths in last scoped status"
+    },
+    {
+      "name": "original Fable",
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/audit-remediation-fable52",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/audit-remediation-fable52",
+      "ref": "refs/heads/ryan-haver/audit-remediation-fable52",
+      "headBeforeAdministrativeRecordCommit": "f2a122f955def578960303bc15242fed00d01be3",
+      "role": "owner-pinned original Fable author continuation",
+      "trackedChanges": [],
+      "stagedChanges": [],
+      "untrackedFiles": [],
+      "fableOwnedUncommittedProductSource": 0,
+      "custody": "Native original Fable state done; handoff ctx_44dc5f1e0cc4 succeeded/settled; terminal live/external/user_requested and intentionally retained; no admitted implementation writer",
+      "ignoredIsNotSourceDirt": "node_modules/.ruff_cache/route-coverage.json/src/rest_api/__pycache__ and original tagged task output remain in-use/open-task assets; no new output generated"
+    },
+    {
+      "name": "Opus planning",
+      "id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus",
+      "ref": "refs/heads/ryan-haver/fc13-r1-opus",
+      "headBeforeAdministrativeRecordCommit": "f2a122f955def578960303bc15242fed00d01be3",
+      "role": "completed R1/R2 report-only work; external live terminal custody",
+      "trackedChanges": [],
+      "stagedChanges": [],
+      "untrackedFiles": [],
+      "fableOwnedUncommittedProductSource": 0,
+      "custody": "ctx_7b442f74f42e succeeded/settled, exactWorker live/external; native agent state done, retained external_terminal; no terminal close/stop or custody override",
+      "ignoredIsNotSourceDirt": "No ignored paths in last scoped status"
+    }
+  ],
+  "ownedReportSettlement": {
+    "removedExactPublishedDuplicateCopies": [
+      {
+        "tree": "audit-remediation-fable52",
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/audit-remediation-fable52/docs/planning/fable-consensus-20261113/FABLE_HANDOFF.md",
+        "publishedPath": "docs/planning/fable-consensus-20261113/FABLE_HANDOFF.md",
+        "bytes": 9614,
+        "sha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027",
+        "exactPublishedBytes": true
+      },
+      {
+        "tree": "fc13-r1-opus",
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus/docs/planning/fable-consensus-20261113/R1_OPUS.md",
+        "publishedPath": "docs/planning/fable-consensus-20261113/R1_OPUS.md",
+        "bytes": 9455,
+        "sha256": "6862c130b59e285fc77287b9864d9e08f4d76248b5e5a502802cd753a3b53192",
+        "exactPublishedBytes": true
+      },
+      {
+        "tree": "fc13-r1-opus",
+        "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/fc13-r1-opus/docs/planning/fable-consensus-20261113/R2_OPUS.md",
+        "publishedPath": "docs/planning/fable-consensus-20261113/R2_OPUS.md",
+        "bytes": 8848,
+        "sha256": "6c52500ef097eec73508ab189bb39ef3e4a17afaa096c10d7ae7f3a36e5b8b1d",
+        "exactPublishedBytes": true
+      }
+    ],
+    "logicalBytesRemoved": 27917,
+    "publicationCommit": "0bb660918585c3acae122fc012720b9e6f6c09ad",
+    "guards": "Only3owned completed report copies removed after byte/hash/published-Git equality, exact path/link and exclusive-open checks; current agent states done and source heads/status unchanged. No source commit, terminal action, runtime/user file deletion or authorship change."
+  },
+  "committedCandidate": {
+    "base": "680e93b88b711369e452cdbe415415ef23ab99ed",
+    "head": "f2a122f955def578960303bc15242fed00d01be3",
+    "tree": "3384886fc4e624175046536bfd13e998923d5933",
+    "fiveOriginalCommits": [
+      "730c0c2888386bef150d0fffee0ebd5ce9c57996",
+      "3eb459197c19b3a346e02b7fc173ce0f4ead8095",
+      "38dad33c1b9801e378e71fba7c96762ecf55e25b",
+      "2a24a518f958996d54bcdd58c98c78221af9aaac",
+      "f2a122f955def578960303bc15242fed00d01be3"
+    ],
+    "files": 30,
+    "insertions": 2037,
+    "deletions": 160,
+    "authorship": "Original Fable handoff reports these commits; preserve actual native attribution and legacy WS actor-unknown/provenance holds. No relabeling.",
+    "independentlyAccepted": false,
+    "published": false,
+    "merged": false
+  },
+  "acceptedOriginalFindingsAndActualResiduals": {
+    "scope": "Accepted planning directions and original author findings, not accepted implementation or a fresh source audit",
+    "rows": [
+      {
+        "ids": "H1",
+        "original": "Passwordless forms; false updated response; malformed JSON/port/DNS behavior",
+        "candidate": "Backend partial correction committed38dad33c; hostname/TLS risk remains, credential rule retained",
+        "remaining": "D3 hostname-preserving validated connect/reconnect; D6 both masked password fields/applied:false; D4 exact existing REST records"
+      },
+      {
+        "ids": "H2",
+        "original": "HA key/auth/config-flow faults",
+        "candidate": "Committed2a24a518; author-reported117HA passes on2026.2.3 only",
+        "remaining": "D5 fail-closed404/malformed200, migration/key clearing/exactly-one reload and both actual HA versions"
+      },
+      {
+        "ids": "H3",
+        "original": "WebSocket get_status lifecycle/bounds",
+        "candidate": "Committed3eb459; unaccepted provenance-held candidate",
+        "remaining": "D1 preserve for separately qualified intake; D2 design-only cap4/freshness/app ownership/drain, no wiring or source-review waiver"
+      },
+      {
+        "ids": "H4",
+        "original": "500/CORS, PIN race, bounded auth state; query key separately refuted as defect",
+        "candidate": "Committed730c0c28, no independent corrected-source acceptance",
+        "remaining": "Qualified exact corrected-head acceptance after admitted ordinary fixes; query-key accepted design unchanged"
+      },
+      {
+        "ids": "H5",
+        "original": "Privacy/redaction",
+        "candidate": "Deferred; no fix/copy on Fable branch",
+        "remaining": "D7 stays held; original privacy-c4 exact source chain and all-six-axis/owner extra-attempt gates; no cherry-pick/retry"
+      },
+      {
+        "ids": "M1/M2/L1",
+        "original": "clearOverride body, keyboard shortcuts, truthful Power Cycle result",
+        "candidate": "Committedf2a122f; author reports source tests but no actual visual owner acceptance",
+        "remaining": "Qualified exact-head source acceptance; D6 capture/review includes the existing two visible text changes; do not load the unused drawer or redesign"
+      },
+      {
+        "ids": "M3",
+        "original": "Scene unknown/input behavior",
+        "candidate": "Committed38dad33c",
+        "remaining": "D4 existing scene404 and applied-list contract records,100% registered-route coverage without field retype"
+      },
+      {
+        "ids": "M4",
+        "original": "Security/CORS behavior",
+        "candidate": "Committed730c0c28",
+        "remaining": "Qualified exact corrected-head source acceptance; old author evidence is not renewed"
+      },
+      {
+        "ids": "M5/L2",
+        "original": "Python dependency floor and nonblocking CI lints",
+        "candidate": "Deferred coordinator-owned paths; Dockerfile subclaim refuted",
+        "remaining": "D8 honest>=3.12 and separately owned blocking lint, no lock/suppression changes; actual family disclosure/review"
+      },
+      {
+        "ids": "L3/L4",
+        "original": "Accepted debt and owner release gates",
+        "candidate": "No ordinary product grant",
+        "remaining": "Preserve actual visual/HIL/72-hour/week/final-artifact gates, no proxy approval"
+      }
+    ],
+    "originalHandoff": "FABLE_HANDOFF.md"
+  },
+  "actualPlanning": {
+    "roundsCompleted": 2,
+    "roundCap": 2,
+    "R1": "Three genuine independent Sol/OpenAI, Opus/Anthropic, Argon/Google reports before exchange",
+    "R2": "Three genuine same-plan reconciliations; original votes accept/require_changes/accept",
+    "planSha256": "f19a1d6850aa984e755f0ae83b75828a00a22670b51554d4602bdc9736214aa9",
+    "hubLiteralClosure": "msg_f2f43accc580",
+    "immutableLease": "FINAL_LEASES.json",
+    "leaseSha256": "38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9",
+    "noThirdRoundOrRepeatedSourceAudit": true,
+    "unanimousAmendedHashPeerAcceptance": false
+  },
+  "ownerDecisions": {
+    "ordinaryChoices": "D3/D4/D5/D6/D8 directions and literal grants are already settled; no repeated design permission",
+    "WS": "msg_2d0c01ea01a5 PRESERVE FOR SEPARATELY QUALIFIED INTAKE only; D6_PROVENANCE_HOLD unchanged/wiring_leases_granted0; no CR01/WSR03 wiring, qualification, acceptance, authorship relabel or publication waiver",
+    "privacy": "D7/H5 defer under actual chain/qualification/owner-attempt-budget holds",
+    "visual": "Before-code and after captures plus owner review before PR/landing; old-source new renders labeled reference reproduction; no agent baseline/CSS/look-and-feel authority"
+  },
+  "preparedPackages": [
+    {
+      "id": "D3",
+      "owner": "Fable/Anthropic",
+      "exactPaths": [
+        "src/rest_api/settings.py",
+        "src/orei_matrix.py",
+        "src/telnet_client.py",
+        "SECURITY.md",
+        "tests/test_settings_matrix_host.py",
+        "tests/test_security_ssrf_tls.py"
+      ],
+      "agreedBehavior": "Preserve configured/saved/displayed hostname/URL/SNI; validate actual HTTP/Telnet destination at each connect/reconnect incl literals/mixed answers/same-host port; no unchecked re-resolution or backend/TLS/credential relaxation",
+      "missingAcceptance": "Synthetic name/IP/CA/verify-true/fingerprint/address/rebinding/reconnect controls and applicable combined exact-source tests",
+      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
+      "actualImplementationTask": null,
+      "actualImplementationDispatch": null,
+      "correctedHead": null,
+      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+    },
+    {
+      "id": "D5-G1",
+      "owner": "Fable/Anthropic",
+      "exactPaths": [
+        "custom_components/hdmi_matrix/api.py",
+        "custom_components/hdmi_matrix/config_flow.py",
+        "custom_components/hdmi_matrix/__init__.py",
+        "tests/ha/test_api.py",
+        "tests/ha/test_config_flow.py",
+        "tests/ha/test_init.py",
+        "docs/HOME_ASSISTANT.md",
+        "custom_components/hdmi_matrix/strings.json",
+        "custom_components/hdmi_matrix/translations/en.json"
+      ],
+      "agreedBehavior": "Already-agreed fail-closed missing/malformed auth capability, migration/key clearing/exactly-one reload; G1 ONLY truthful localization; no auth/compatibility/form/floor expansion",
+      "missingAcceptance": "Missing/wrong/revoked key and404/malformed200, migration/key clearing/one reload, actual HA2025.1.0 and2026.2.3 isolated suites",
+      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
+      "actualImplementationTask": null,
+      "actualImplementationDispatch": null,
+      "correctedHead": null,
+      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+    },
+    {
+      "id": "D6-G2",
+      "owner": "Fable/Anthropic",
+      "exactPaths": [
+        "web/index.html",
+        "web/js/components/settings-panel.js",
+        "web/js/components/general-drawer.js",
+        "tests/test_ui_classic_api_and_shortcuts.py",
+        "tests/e2e/flows.spec.ts",
+        "tests/e2e/visual/catalog.ts"
+      ],
+      "agreedBehavior": "Already-agreed masked fields in both existing surfaces, secret-state lifecycle and applied:false handling, no backend relaxation/unloaded-drawer/new-form redesign",
+      "missingAcceptance": [
+        "Pinned Linux Playwright renderer",
+        "Capture before code and after changes, including existing two text changes",
+        "New renders of old source labeled reference reproduction, not original historical capture",
+        "Concrete owner sign-off before PR/landing; baseline approval owner-only"
+      ],
+      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
+      "actualImplementationTask": null,
+      "actualImplementationDispatch": null,
+      "correctedHead": null,
+      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+    },
+    {
+      "id": "D4-G3",
+      "owner": "Coordinator; disclose actual implementation family",
+      "exactPaths": [
+        "src/hub/openapi.py",
+        "docs/validation/features.yaml",
+        "tests/sim/test_sim_rest_reads.py",
+        "tests/validation/scenarios/contracts.py",
+        "tests/validation/scenarios/scenes.py",
+        "docs/validation/LEDGER.md",
+        "docs/API_REFERENCE.md"
+      ],
+      "agreedBehavior": "ONLY records of existing matrix-host applied:boolean versus unchanged scene/profile applied:string-list, scene404 and HTTP443; no new response behavior or field retype/rename",
+      "missingAcceptance": "Actual registered-route100%, supported-generator-only ledger serial with registry/full hooks, no evidence promotion; qualified independent source/code/test/doc review",
+      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
+      "actualImplementationTask": null,
+      "actualImplementationDispatch": null,
+      "correctedHead": null,
+      "blocker": "Coordinator ownership does not grant an extra global author slot. Separate implementation lease/admission and qualified review needed; mixed OpenAI/Anthropic final-head acceptance requires a qualified independent third family, not merely Argon planning participation."
+    },
+    {
+      "id": "D8",
+      "owner": "Coordinator; disclose actual implementation family",
+      "exactPaths": [
+        "pyproject.toml",
+        "CONTRIBUTING.md",
+        "docs/agent-process/REPO_CONFIG.json",
+        ".github/workflows/ci.yml",
+        "tests/test_packaging_version_sync.py"
+      ],
+      "agreedBehavior": "Already-agreed honest>=3.12 support metadata and separately owned blocking lints; no locks/suppressions/device-limit changes",
+      "missingAcceptance": "3.12 install/core and deliberate failing-lint proof, separate qualified review; mixed-family full head requires qualified third-family acceptance",
+      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
+      "actualImplementationTask": null,
+      "actualImplementationDispatch": null,
+      "correctedHead": null,
+      "blocker": "Coordinator ownership does not grant an extra global author slot. Separate implementation lease/admission and qualified review needed; mixed OpenAI/Anthropic final-head acceptance requires a qualified independent third family, not merely Argon planning participation."
+    }
+  ],
+  "evidenceGaps": [
+    "Original author reports5hooks4255pass6skip35deselected/177routes,117HApasses2026.2.3 and clean lints; no fresh renewal or independent acceptance",
+    "Hooks exercised the working tree with all changes, not isolated intermediate commits; HA ran pre-commit identical content, not a corrected exact head",
+    "Six skips unexamined individually; UC, Docker-marked image/matrix-host, actual browser/visual and tools.validate campaigns were not run by original author",
+    "D3 synthetic name/IP/CA/verify-true/fingerprint/mixed-answer/rebinding/reconnect controls still required",
+    "D5 actual HA2025.1.0 and2026.2.3/auth-negative/migration/one-reload checks still required",
+    "D4 actual registered-route100% and supported serial ledger/registry checks; D8 actual3.12 install/core and deliberate failing-lint proof still required",
+    "Fresh qualified independent exact corrected-SHA review remains after author correction; same-family Opus cannot independently accept Fable; Argon planning is not source-domain qualification"
+  ],
+  "currentAdmission": {
+    "globalAuthorSlots": {
+      "cap": 3,
+      "occupiedAsDirectedByHub": [
+        "Fuse final repair",
+        "Nexus followup",
+        "Chore ROLE"
+      ],
+      "HDMISlotGranted": false
+    },
+    "firstPreparedPackage": "D3",
+    "spec": "FABLE_D3_QUEUED_SPEC.txt",
+    "nextPacket": "NEXT_AUTHOR_ADMISSION_PACKET.md",
+    "quota": "No new probe; last23% Fable LOW/general51% are historical, not current headroom. Real admission requires fresh known usable general+dedicated pools and independent AGENTS.md verified fallback below30 or actual owner exception; none is invented.",
+    "heavy": "Only Fuse task87263 has named bounded heavy GO while existing PGK merge runs; HDMI heavy installs/builds/full gates remain queued. Read-only source/light planning allowed.",
+    "nextAction": "On actual author-slot release request HDMI next-ready; fresh exact Fable/new selected system account/high/full-access/custody/route/quota/reviewer checks and native Task/Dispatch-bound D3 lease precede any GO; no fourth author or automatic model substitution"
+  },
+  "custodyActionPacket": "EXTERNAL_OPUS_CUSTODY_PACKET.md",
+  "notCompletion": "No uncommitted Fable product source remains, but outstanding candidate remediation, qualified review, source publication/landing and formal release holds remain. Primary4untracked admin-hook files are unrelated preserved owner/custody ambiguity, not committed to manufacture green status."
+}

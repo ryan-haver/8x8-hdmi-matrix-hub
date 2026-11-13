@@ -1,5 +1,37 @@
 # Current coordinator handoff
 
+## Priority closeout: task source clean; remediation is outstanding — 2026-11-13
+
+Applied hub msg_21e6b8d4824e. [CURRENT_CLOSEOUT.json](../../planning/fable-consensus-20261113/CURRENT_CLOSEOUT.json)
+is the current ledger for all4remaining trees, actual actor/custody, original
+findings/residuals, decisions, two completed rounds/cap, exact grants, missing
+tests and blockers. Both task trees now have zero tracked/untracked changes:
+settled3owned report duplicates27917bytes only after exact published0bb66091
+Git/hash/preservation and current done-agent/source/status checks. Original
+reports remain unchanged in the coordinator branch. Source candidatef2a122f9
+still has5commits/30files, unpublished/unaccepted/unmerged; clean dirt is not
+completion. Primary's4encoded-path admin-hook files1384bytes are unrelated
+owner/custody ambiguity and remain untouched; ignored runtime/user data are
+separate from uncommitted source.
+
+No planning/debate is missing: genuine Sol/Opus/Argon R1+R2 and actual narrow
+hub grant reconciliation are complete, without amended-hash peer unanimity.
+[NEXT_AUTHOR_ADMISSION_PACKET.md](../../planning/fable-consensus-20261113/NEXT_AUTHOR_ADMISSION_PACKET.md)
+prepares the exact next D3 action. Current global3author slots are Fuse final
+repair/Nexus followup/Chore ROLE; no HDMI slot or heavy GO. Request next-ready
+on actual slot release, then real Fable/system-account/high/full-access/custody,
+both pools/local fallback and qualified-review checks. Historical23% is not
+fresh capacity; no polling, author substitute, fourth writer or repeated suite.
+Ordinary choices are settled; source/visual/privacy/qualification gates remain.
+
+The [external Opus packet](../../planning/fable-consensus-20261113/EXTERNAL_OPUS_CUSTODY_PACKET.md)
+contains actual supported custody evidence and the minimal conditional owner
+session-close action if immediate checkout removal is desired. No terminal action
+was taken; this blocks that cleanup only, not otherwise admitted source work.
+Original Fable conversation and the4current checkouts remain protected as
+recorded. Earlier statements that these report copies remain untracked are
+historical. Administrative records are checked/published separately from source.
+
 ## Owner-directed unused checkouts removed; four remain — 2026-11-13
 
 Under hub bulletin msg_de128659789c, reviewed all6managed/Git worktrees and

@@ -1,5 +1,45 @@
 # Agent allocation and execution ledger
 
+## Fable priority ledger concrete; source dirt settled — 2026-11-13
+
+Hub msg_21e6b8d4824e prioritizes finishing Fable and dirty-task work. Current
+[closeout ledger](../planning/fable-consensus-20261113/CURRENT_CLOSEOUT.json)
+covers all4remaining managed/Git trees/3repo folders/no orphans and188Dispatches
+across2complete pages/no unsettled assignment or open gate. Original Fable and
+external Opus native agents are done, but their processes are live/external;
+no custody or exit claim was invented. Settled3owned exact published report
+duplicates27917bytes after path/link/hash/exclusive-open/source/custody checks;
+both task trees now have zero tracked/untracked changes. No source or terminal
+action, user-file removal or catch-all commit was used. Primary's4unrelated
+encoded-path admin-hook files1384bytes retain exact path/hash/unknown custody;
+runtime/user/ignored data are not counted as uncommitted source.
+
+The actual original5commits/30files atf2a122f9 remain committed, unaccepted,
+unpublished and unmerged. The ledger distinguishes author's reported outcomes
+from actual residual D3/D5/D6 ordinary work, D4/D8 coordinator-owned packages,
+missing exact-source/HA/visual/route/floor/lint checks and held WS/privacy work.
+Two genuine three-family rounds/cap2 are complete; no repeat debate/review/suite.
+The immutable lease38427782644e8ccc and owner preserve-for-qualified-intake
+disposition remain binding; no new design permission is requested.
+
+Prepared [next admission packet](../planning/fable-consensus-20261113/NEXT_AUTHOR_ADMISSION_PACKET.md)
+binds the unchanged exact6file D3 first author package to actual global slot
+release, fresh model/new-system-account/high/full-access/custody, both provider
+pools/independent local fallback condition and qualified review/correction reserve.
+Current3slots are Fuse final repair/Nexus followup/Chore ROLE. HDMI has no slot,
+implementation Task/dispatch/corrected head/GO or heavy verification admission.
+No quota probe/reset inference, author substitution, fourth author, account/spend
+change or immediate heavy test/build. Coordinator D4/D8 work gets its own actual
+family/admission/review and no implicit extra slot.
+
+[External Opus custody packet](../planning/fable-consensus-20261113/EXTERNAL_OPUS_CUSTODY_PACKET.md)
+records supported native evidence, limits of worker-release and the minimal
+conditional external-owner session-close action for checkout removal. That
+resource is not a source-work prerequisite. Primary/owner keeps and all real
+CR01/WSR03/privacy/visual/every-author-family/exact-SHA/release holds persist.
+Administrative checks/publication/storage receipts remain separate from the
+candidate, with no new runtime qualification claim.
+
 ## Owner-directed unused-worktree cleanup: six to four — 2026-11-13
 
 Bulletin msg_de128659789c triggered complete finite repo analysis:6managed/Git
