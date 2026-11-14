@@ -1,0 +1,299 @@
+{
+  "authority": "msg_9ff0d358753c",
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "observedUtc": "2026-11-14T19:20:44.910150+00:00",
+  "status": "ONE_IMPLEMENTABLE_D3_UNIT_PREPARED_NATIVE_TASK_BLOCKED_REVIEW_ELIGIBILITY_AND_GLOBAL_SLOT",
+  "newAuthorTask": "task_e94f1312aea7",
+  "newDispatch": null,
+  "sourceGO": false,
+  "heavyGO": false,
+  "source": {
+    "base": "f2a122f955def578960303bc15242fed00d01be3",
+    "sourceTree": "3384886fc4e624175046536bfd13e998923d5933",
+    "readUtc": "2026-11-14T19:16:52.601130+00:00",
+    "files": [
+      {
+        "path": "src/rest_api/settings.py",
+        "gitBlob": "b92a1c0acc602a23a4b7b2b4ed72ae0117f85a27",
+        "gitBytes": 11314,
+        "gitSha256": "fd0e71c2aebb3f92636c016f0361c315c306d32a5cd67204e7d6878f89092a07",
+        "workingBytes": 11591,
+        "workingSha256": "ed1f6e5ecf890295420f64d1c3c7078b7be1bc3b256dd18babf5914a435a7d5e",
+        "cleanFilteredGitBytes": true
+      },
+      {
+        "path": "src/orei_matrix.py",
+        "gitBlob": "5eed4a1c937215e02c1af250e9b45104e33abc62",
+        "gitBytes": 135020,
+        "gitSha256": "c07036221151501f514b93487c91e931c7673900382c069daa9ebaba3c487d1c",
+        "workingBytes": 138191,
+        "workingSha256": "b19e615949396b5871547b86ae46a493f882c8dd8aaca7169431025035d73d94",
+        "cleanFilteredGitBytes": true
+      },
+      {
+        "path": "src/telnet_client.py",
+        "gitBlob": "7b407e25ea8dbd5196cd558348d3ff40ff1aa79c",
+        "gitBytes": 49222,
+        "gitSha256": "1823d0e803d5e97fb808bd4dea106771493a80d04df4577298eaa8345580a3aa",
+        "workingBytes": 50445,
+        "workingSha256": "68365447a1204027db8845ec5563d5693041e22a8a58bedd459294dbe784b06c",
+        "cleanFilteredGitBytes": true
+      },
+      {
+        "path": "SECURITY.md",
+        "gitBlob": "a075e7e4db20021f6e87837a4cf6a4053788493c",
+        "gitBytes": 20144,
+        "gitSha256": "cb1c321f44106dc61675f117dfd049e0221cd91539ba2cea9b57c8cd9d438768",
+        "workingBytes": 20498,
+        "workingSha256": "6f40f05be817b626b1e23f240810f8621485a02f5ddb88862aaffb9122968f7b",
+        "cleanFilteredGitBytes": true
+      },
+      {
+        "path": "tests/test_settings_matrix_host.py",
+        "gitBlob": "455cec3017b1b97be04983d9a8fd9c0c5817e89b",
+        "gitBytes": 9548,
+        "gitSha256": "e79256ec5db5c401afd197d419b91cbdc1d739b234609167692550703a51e6cc",
+        "workingBytes": 9548,
+        "workingSha256": "e79256ec5db5c401afd197d419b91cbdc1d739b234609167692550703a51e6cc",
+        "cleanFilteredGitBytes": true
+      },
+      {
+        "path": "tests/test_security_ssrf_tls.py",
+        "gitBlob": "780f5a0883f939d17320a1e3e07e8f3b71eb8653",
+        "gitBytes": 7902,
+        "gitSha256": "71160ac86bb6b2632d1d73d60648a00e2b5b5ea00e456c528c9e929a5250daa1",
+        "workingBytes": 8101,
+        "workingSha256": "903012648281162e01953b52274830a1fe8f5cfd82151e25d7bdb699f8b94aa6",
+        "cleanFilteredGitBytes": true
+      }
+    ],
+    "trackedUntrackedDirty": []
+  },
+  "handoff": {
+    "genuineReport": "FABLE_HANDOFF.md",
+    "sha256": "ffece03c28aa388aaf4f9940e2549018e7e92efae19bcb263135b2a48f5db027",
+    "nativeTask": "task_8221ac785b94",
+    "dispatch": "ctx_44dc5f1e0cc4",
+    "worker": "succeeded/settled;exactWorker live/external/user_requested;original agent done,no in-progress source assignment",
+    "actorAction": "No restart/reopen/send/adoption of ignored settled Fable; coordinator dispatches an actual replacement author only after real admission"
+  },
+  "planning": {
+    "actualRounds": 2,
+    "cap": 2,
+    "sameAcceptedBehaviorAndSixPaths": true,
+    "newDebateNeeded": false,
+    "unchangedLeaseSha256": "38427782644e8cccd65ba55a0e6fd21f64e68c1b805ef92c2f8f9e75adca5eb9",
+    "delegationChange": "Owner supersedes only old Fable-only author pin for remaining agreed delegation scope; actual new authorship disclosed, no SOURCE trial grant transferred"
+  },
+  "builder": {
+    "model": "gpt-6-astra",
+    "agent": "codex",
+    "effort": "high",
+    "family": "OpenAI",
+    "class": "build_hard",
+    "status": "qualified",
+    "fidelity": "pass",
+    "strengths": [
+      "code",
+      "review",
+      "hard",
+      "security"
+    ],
+    "classAndPoolEligible": true,
+    "runtimeActorLaunched": false,
+    "pool": "codex",
+    "statusSupported": "ok",
+    "sampleAt": "2026-11-14T19:16:15.035Z",
+    "remainingPercent": 76,
+    "localFloor": "Above30 in actual supported cached observation; old sole-Fable LOW/fallback hold is not the selected-Astra blocker. No low-floor waiver. Recheck at actual launch; no cross-pool fallback asserted."
+  },
+  "review": {
+    "class": "audit_security",
+    "authorFamilies": [
+      "Anthropic",
+      "OpenAI"
+    ],
+    "eligibleSelected": null,
+    "routeExit": 2,
+    "proposedOnly": {
+      "model": "gemini-4-carbon-high",
+      "family": "Google",
+      "status": "candidate",
+      "fidelity": "unknown",
+      "disqualifiers": [
+        "candidate"
+      ],
+      "remainingPercent": 95.0,
+      "sampleAt": "2026-11-14T19:16:18.053Z"
+    },
+    "whyOtherRoutesFail": "Sol/Astra share OpenAI author family; Fable/Opus ignored, Anthropic also inherited author; Sonnet candidate and not independent of inherited Anthropic; Argon/M3 candidate/fail; M3.1Flash lacks audit capability/tier and no local DNS/TLS review proof. No promotion inferred from past planning or generic code qualification.",
+    "minimumOwnerDecision": "One exact bounded Carbon-high candidate AUDIT exception for this D3 Task corrected six-file SHA when available, explicitly addressing this repo DNS/TLS/SSRF domain/local reviewer-qualification requirement, or name an actually qualified independent eligible reviewer. No Carbon SOURCE trial/new source author approval, promotion, retake, wider-family qualification or grant from OpRead/P3 is inferred.",
+    "scopeLimit": "D3 six-file correction only with inherited ordinary context and both known author families. Unknown3eb WS actor, prior failed qualification targets and H5/privacy remain excluded/held; no full-candidate source acceptance/land from this review."
+  },
+  "globalAdmission": {
+    "maxCurrentSourceAssignments": 3,
+    "reserved": [
+      "OpRead",
+      "P3",
+      "Exporter frozen-plan priority"
+    ],
+    "HDMISlot": false,
+    "heavySequencesUnallocated": 1,
+    "HDMIHeavyGrant": false,
+    "next": "Review-eligibility decision plus real source-slot admission before Task ready/worker-start; request heavy sequence only for concrete permitted verification, not by this bulletin"
+  },
+  "currentCustody": {
+    "repoWorktrees": 4,
+    "workerPages": 2,
+    "dispatchRows": 188,
+    "unsettledAssignments": 0,
+    "originalSourceDirty": 0,
+    "nativeNoOmittedHost": true,
+    "externalOpus": "Exact live/external retained;not exit/deletion authority",
+    "primaryHookFiles": "4/1384B preserved;owner preservation questionmsg_9fb3c204028c pending",
+    "sourceNoCleanupAction": "No new worker/worktree or runtime deletion; positive unused Sol/Argon removal already recorded, not redone"
+  },
+  "units": [
+    {
+      "unit": "D3",
+      "findingIds": "H1 hostname/DNS/TLS",
+      "remainingAgreedFix": "Preserve configured/saved/displayed hostname/URL/SNI; validate actual HTTP/Telnet destination at each connect/reconnect incl literals/mixed answers/same-host port; no unchecked re-resolution or backend/TLS/credential relaxation",
+      "paths": [
+        "src/rest_api/settings.py",
+        "src/orei_matrix.py",
+        "src/telnet_client.py",
+        "SECURITY.md",
+        "tests/test_settings_matrix_host.py",
+        "tests/test_security_ssrf_tls.py"
+      ],
+      "base": "f2a122f955def578960303bc15242fed00d01be3",
+      "dirtySourceCommits": [],
+      "existingCandidate": "5commits/30files, not30commits; committed/unaccepted/unpublished/unmerged",
+      "builder": "gpt-6-astra/high build_hard OpenAI selected for D3; later units need their actual route/lease",
+      "reviewer": "gemini-4-carbon-high Google audit_security proposed ONLY subject to OWNER exact bounded AUDIT exception covering local/domain eligibility; no reviewer admitted",
+      "nextStep": "Actual D3 Task task_e94f1312aea7 blocked; get independent review admission and global source slot, then fresh native/account/custody/route checks and dedicated Orca launch",
+      "testsStillRequired": "Synthetic name/IP/CA/verify-true/fingerprint/address/rebinding/reconnect controls and applicable combined exact-source tests",
+      "landStep": "Qualified/explicitly excepted independent exact-corrected-SHA acceptance and existing exact-SHA gate; D3-only review does not land whole held candidate",
+      "completionProof": "Exact permitted diff/actual author+reviewer/native scope, relevant permitted tests/negative controls/direct exits/skips and accepted exact SHA; reviewed/integrated/published distinct",
+      "disposition": "Preserve source refs/assets/report provenance, supported worker release, verify publication/custody before exact unused-tree removal with branch policy; owned outputs closed via storage tool"
+    },
+    {
+      "unit": "D5-G1",
+      "findingIds": "H2 HA auth/flow",
+      "remainingAgreedFix": "Already-agreed fail-closed missing/malformed auth capability, migration/key clearing/exactly-one reload; G1 ONLY truthful localization; no auth/compatibility/form/floor expansion",
+      "paths": [
+        "custom_components/hdmi_matrix/api.py",
+        "custom_components/hdmi_matrix/config_flow.py",
+        "custom_components/hdmi_matrix/__init__.py",
+        "tests/ha/test_api.py",
+        "tests/ha/test_config_flow.py",
+        "tests/ha/test_init.py",
+        "docs/HOME_ASSISTANT.md",
+        "custom_components/hdmi_matrix/strings.json",
+        "custom_components/hdmi_matrix/translations/en.json"
+      ],
+      "base": "f2a122f955def578960303bc15242fed00d01be3",
+      "dirtySourceCommits": [],
+      "existingCandidate": "5commits/30files, not30commits; committed/unaccepted/unpublished/unmerged",
+      "builder": "gpt-6-astra/high build_hard OpenAI selected for D3; later units need their actual route/lease",
+      "reviewer": "gemini-4-carbon-high Google audit_security proposed ONLY subject to OWNER exact bounded AUDIT exception covering local/domain eligibility; no reviewer admitted",
+      "nextStep": "Separate serial native unit/actual actor/admission after D3; no broad source bundle",
+      "testsStillRequired": "Missing/wrong/revoked key and404/malformed200, migration/key clearing/one reload, actual HA2025.1.0 and2026.2.3 isolated suites",
+      "landStep": "Qualified/explicitly excepted independent exact-corrected-SHA acceptance and existing exact-SHA gate; D3-only review does not land whole held candidate",
+      "completionProof": "Exact permitted diff/actual author+reviewer/native scope, relevant permitted tests/negative controls/direct exits/skips and accepted exact SHA; reviewed/integrated/published distinct",
+      "disposition": "Preserve source refs/assets/report provenance, supported worker release, verify publication/custody before exact unused-tree removal with branch policy; owned outputs closed via storage tool"
+    },
+    {
+      "unit": "D6-G2",
+      "findingIds": "H1 UI credentials;M2/L1 visible text",
+      "remainingAgreedFix": "Already-agreed masked fields in both existing surfaces, secret-state lifecycle and applied:false handling, no backend relaxation/unloaded-drawer/new-form redesign",
+      "paths": [
+        "web/index.html",
+        "web/js/components/settings-panel.js",
+        "web/js/components/general-drawer.js",
+        "tests/test_ui_classic_api_and_shortcuts.py",
+        "tests/e2e/flows.spec.ts",
+        "tests/e2e/visual/catalog.ts"
+      ],
+      "base": "f2a122f955def578960303bc15242fed00d01be3",
+      "dirtySourceCommits": [],
+      "existingCandidate": "5commits/30files, not30commits; committed/unaccepted/unpublished/unmerged",
+      "builder": "gpt-6-astra/high build_hard OpenAI selected for D3; later units need their actual route/lease",
+      "reviewer": "gemini-4-carbon-high Google audit_security proposed ONLY subject to OWNER exact bounded AUDIT exception covering local/domain eligibility; no reviewer admitted",
+      "nextStep": "Separate serial native unit/actual actor/admission after D3; no broad source bundle",
+      "testsStillRequired": [
+        "Pinned Linux Playwright renderer",
+        "Capture before code and after changes, including existing two text changes",
+        "New renders of old source labeled reference reproduction, not original historical capture",
+        "Concrete owner sign-off before PR/landing; baseline approval owner-only"
+      ],
+      "landStep": "Qualified/explicitly excepted independent exact-corrected-SHA acceptance and existing exact-SHA gate; D3-only review does not land whole held candidate",
+      "completionProof": "Exact permitted diff/actual author+reviewer/native scope, relevant permitted tests/negative controls/direct exits/skips and accepted exact SHA; reviewed/integrated/published distinct",
+      "disposition": "Preserve source refs/assets/report provenance, supported worker release, verify publication/custody before exact unused-tree removal with branch policy; owned outputs closed via storage tool"
+    },
+    {
+      "unit": "D4-G3",
+      "findingIds": "H1/M3 REST records",
+      "remainingAgreedFix": "ONLY records of existing matrix-host applied:boolean versus unchanged scene/profile applied:string-list, scene404 and HTTP443; no new response behavior or field retype/rename",
+      "paths": [
+        "src/hub/openapi.py",
+        "docs/validation/features.yaml",
+        "tests/sim/test_sim_rest_reads.py",
+        "tests/validation/scenarios/contracts.py",
+        "tests/validation/scenarios/scenes.py",
+        "docs/validation/LEDGER.md",
+        "docs/API_REFERENCE.md"
+      ],
+      "base": "f2a122f955def578960303bc15242fed00d01be3",
+      "dirtySourceCommits": [],
+      "existingCandidate": "5commits/30files, not30commits; committed/unaccepted/unpublished/unmerged",
+      "builder": "gpt-6-astra/high build_hard OpenAI selected for D3; later units need their actual route/lease",
+      "reviewer": "gemini-4-carbon-high Google audit_security proposed ONLY subject to OWNER exact bounded AUDIT exception covering local/domain eligibility; no reviewer admitted",
+      "nextStep": "Separate serial native unit/actual actor/admission after D3; no broad source bundle",
+      "testsStillRequired": "Actual registered-route100%, supported-generator-only ledger serial with registry/full hooks, no evidence promotion; qualified independent source/code/test/doc review",
+      "landStep": "Qualified/explicitly excepted independent exact-corrected-SHA acceptance and existing exact-SHA gate; D3-only review does not land whole held candidate",
+      "completionProof": "Exact permitted diff/actual author+reviewer/native scope, relevant permitted tests/negative controls/direct exits/skips and accepted exact SHA; reviewed/integrated/published distinct",
+      "disposition": "Preserve source refs/assets/report provenance, supported worker release, verify publication/custody before exact unused-tree removal with branch policy; owned outputs closed via storage tool"
+    },
+    {
+      "unit": "D8",
+      "findingIds": "M5/L2 support floor/blocking lint",
+      "remainingAgreedFix": "Already-agreed honest>=3.12 support metadata and separately owned blocking lints; no locks/suppressions/device-limit changes",
+      "paths": [
+        "pyproject.toml",
+        "CONTRIBUTING.md",
+        "docs/agent-process/REPO_CONFIG.json",
+        ".github/workflows/ci.yml",
+        "tests/test_packaging_version_sync.py"
+      ],
+      "base": "f2a122f955def578960303bc15242fed00d01be3",
+      "dirtySourceCommits": [],
+      "existingCandidate": "5commits/30files, not30commits; committed/unaccepted/unpublished/unmerged",
+      "builder": "gpt-6-astra/high build_hard OpenAI selected for D3; later units need their actual route/lease",
+      "reviewer": "gemini-4-carbon-high Google audit_security proposed ONLY subject to OWNER exact bounded AUDIT exception covering local/domain eligibility; no reviewer admitted",
+      "nextStep": "Separate serial native unit/actual actor/admission after D3; no broad source bundle",
+      "testsStillRequired": "3.12 install/core and deliberate failing-lint proof, separate qualified review; mixed-family full head requires qualified third-family acceptance",
+      "landStep": "Qualified/explicitly excepted independent exact-corrected-SHA acceptance and existing exact-SHA gate; D3-only review does not land whole held candidate",
+      "completionProof": "Exact permitted diff/actual author+reviewer/native scope, relevant permitted tests/negative controls/direct exits/skips and accepted exact SHA; reviewed/integrated/published distinct",
+      "disposition": "Preserve source refs/assets/report provenance, supported worker release, verify publication/custody before exact unused-tree removal with branch policy; owned outputs closed via storage tool"
+    }
+  ],
+  "heldUnits": [
+    {
+      "unit": "D1-D2/CR01/WSR03",
+      "baseCommit": "3eb459197c19b3a346e02b7fc173ce0f4ead8095",
+      "status": "Preserve for separately qualified intake; actor unknown;no wiring lease/target narrowing/relabel/retry;D6wiring_leases0"
+    },
+    {
+      "unit": "D7/H5",
+      "status": "Privacy source/qualified-chain/owner extra-attempt holds;no copy/cherry-pick/automatic retry"
+    }
+  ],
+  "nextConcretePackets": [
+    "D3_DELEGATED_TASK_SPEC_20261114.txt",
+    "D3_REVIEW_EXCEPTION_REQUEST_20261114.md"
+  ],
+  "sourceChanged": false,
+  "claimedCompletion": false
+}

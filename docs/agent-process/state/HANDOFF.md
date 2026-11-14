@@ -1,5 +1,41 @@
 # Current coordinator handoff
 
+## Delegated D3 is a concrete blocked native unit — 2026-11-14
+
+Owner direction via hub msg_9ff0d358753c supersedes the Fable-only author pin
+only for remaining agreed delegation scope. Genuine original handoff and both
+actual rounds remain inputs; ignored settled Fable/Opus are not restarted or
+reopened. [Finite closure map](../../planning/fable-consensus-20261113/DELEGATION_CLOSEOUT_20261114.json)
+retains D3/D5/D6/D4/D8 fixes/paths/base/tests/acceptance/disposition and actual
+WS/privacy/hook holds. Original candidate has5commits changing30files, not30commits.
+
+Actual D3 Task **task_e94f1312aea7** is BLOCKED, child of task_c94bdfc187f6;
+no Dispatch/actor/sourceGO. The exact [Astra spec](../../planning/fable-consensus-20261113/D3_DELEGATED_TASK_SPEC_20261114.txt)
+and [six-file frozen Git/working-byte pins](../../planning/fable-consensus-20261113/D3_FROZEN_INPUTS_20261114.json)
+bind clean sourcef2a122f955def578960303bc15242fed00d01be3. Original Fable
+handoff remains succeeded/settled, exact live/external/user_requested, with no
+current source assignment; custody is preserved, not treated as exit.
+
+Selected builder is gpt-6-astra/high OpenAI, qualified/pass for build_hard.
+Supported Codex sample2026-11-14T19:16:15.035Z is statusok/76%remaining, above
+the actual repo30% fallback trigger. This is a current selected-route observation,
+not future launch readiness; the old sole-Fable LOW hold is not the Astra blocker.
+Independent audit_security routing with Anthropic/OpenAI authors selects NONE.
+Carbon-high/Google has the required class strengths and95%pool sample but remains
+candidate/unknown: [one exact owner AUDIT decision](../../planning/fable-consensus-20261113/D3_REVIEW_EXCEPTION_REQUEST_20261114.md)
+is needed including local/domain qualification, or a genuinely eligible reviewer.
+No promotion/retake or cross-unit SOURCE grant is inferred. M3.1 lacks audit
+capability/tier; other OpenAI routes are not independent; ignored/demoted models
+and Sonnet's unrelated grants do not fill the gap.
+
+Global MAX3source assignments reserve OpRead/P3/Exporter priority. No HDMI slot;
+one heavy sequence unallocated is no test/build/live/full-hook GO. After actual
+review admission and source slot, recheck native/model/account/helpers/custody/
+quota/lease, ready/start the SAME D3 Task with a fresh dedicated native Astra
+actor. No new source work/test/build/worker/worktree was launched in preparation.
+D3 review alone never lands unknown3eb actor/WS or privacy/full candidate. The
+encoded-hook1384B original-path preservation question remains separately held.
+
 ## Four loose hook files: targeted provenance, no move — 2026-11-13
 
 Hub msg_575dc3457e0c requested concrete classification of the4primary files.

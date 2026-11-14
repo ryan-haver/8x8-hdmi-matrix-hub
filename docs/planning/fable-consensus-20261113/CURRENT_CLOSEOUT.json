@@ -4,7 +4,7 @@
   "run": "run_37205f6095b3",
   "workflowTask": "task_c94bdfc187f6",
   "scope": "Finite current ledger of all4remaining managed/Git checkouts and known repo folders; no repo orphans; snapshot before writing these administrative records",
-  "state": "CLEAN_FABLE_TASK_SOURCE_BUT_REMEDIATION_AND_ACCEPTANCE_OUTSTANDING",
+  "state": "DELEGATED_D3_NATIVE_TASK_BLOCKED_REVIEW_ELIGIBILITY_AND_GLOBAL_SOURCE_SLOT",
   "coverage": {
     "managed": 4,
     "git": 4,
@@ -33,32 +33,32 @@
       "stagedChanges": [],
       "untrackedFiles": [
         {
-          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-checkout",
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-checkout",
           "link": false,
           "bytes": 351,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "791471b4ff472aab844a4fceaa48bbb0a12193616f971e8e940625498b4938a6"
         },
         {
-          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-commit",
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-commit",
           "link": false,
           "bytes": 347,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "21e961572bb3f43a5f2fbafc1cc764d86046cc2e5f0bbecebfe9684a0b73b664"
         },
         {
-          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/post-merge",
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/post-merge",
           "link": false,
           "bytes": 345,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
           "sha256": "75da0da66a803b4b030ad50801ba57062c6196105eb1d2251590d100edb9390b"
         },
         {
-          "relativePath": "Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
-          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/Cscriptsunfoldedcircle-orei-hdmi-matrix-integration.githooks/pre-push",
+          "relativePath": "C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
+          "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/C\uf03a\uf05cscripts\uf05cunfoldedcircle-orei-hdmi-matrix-integration\uf05c.githooks/pre-push",
           "link": false,
           "bytes": 341,
           "classification": "PRESERVE_UNRELATED_OWNER_ADMIN_HOOK_ARTIFACT_CUSTODY_UNKNOWN_NOT_FABLE",
@@ -249,7 +249,7 @@
   "preparedPackages": [
     {
       "id": "D3",
-      "owner": "Fable/Anthropic",
+      "owner": "Proposed gpt-6-astra/high OpenAI",
       "exactPaths": [
         "src/rest_api/settings.py",
         "src/orei_matrix.py",
@@ -260,15 +260,16 @@
       ],
       "agreedBehavior": "Preserve configured/saved/displayed hostname/URL/SNI; validate actual HTTP/Telnet destination at each connect/reconnect incl literals/mixed answers/same-host port; no unchecked re-resolution or backend/TLS/credential relaxation",
       "missingAcceptance": "Synthetic name/IP/CA/verify-true/fingerprint/address/rebinding/reconnect controls and applicable combined exact-source tests",
-      "state": "PREPARED_CONDITIONAL_BOUNDARY_NOT_EXECUTION_GO",
-      "actualImplementationTask": null,
+      "state": "NATIVE_TASK_BLOCKED_NOT_DISPATCHED",
+      "actualImplementationTask": "task_e94f1312aea7",
       "actualImplementationDispatch": null,
       "correctedHead": null,
-      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+      "blocker": "Global source slot and eligible independent-review reserve absent; not a current Codex below30 problem; no heavy/test grant",
+      "ownerHistorical": "Fable/Anthropic"
     },
     {
       "id": "D5-G1",
-      "owner": "Fable/Anthropic",
+      "owner": "Replacement author permitted only by delegation scope; actual actor/admission required",
       "exactPaths": [
         "custom_components/hdmi_matrix/api.py",
         "custom_components/hdmi_matrix/config_flow.py",
@@ -286,11 +287,12 @@
       "actualImplementationTask": null,
       "actualImplementationDispatch": null,
       "correctedHead": null,
-      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+      "blocker": "Separate later serial package with actual builder/independent review/native source+heavy admission; no new candidate SOURCE exception or unassigned global slot inferred",
+      "ownerHistorical": "Fable/Anthropic"
     },
     {
       "id": "D6-G2",
-      "owner": "Fable/Anthropic",
+      "owner": "Replacement author permitted only by delegation scope; actual actor/admission required",
       "exactPaths": [
         "web/index.html",
         "web/js/components/settings-panel.js",
@@ -310,11 +312,12 @@
       "actualImplementationTask": null,
       "actualImplementationDispatch": null,
       "correctedHead": null,
-      "blocker": "Global three-author schedule full and fresh sole-Fable local/native admission not performed; last Fable23% LOW is historical, no verified authorized fallback/owner exception. No new heavy verification GO."
+      "blocker": "Separate later serial package with actual builder/independent review/native source+heavy admission; no new candidate SOURCE exception or unassigned global slot inferred",
+      "ownerHistorical": "Fable/Anthropic"
     },
     {
       "id": "D4-G3",
-      "owner": "Coordinator; disclose actual implementation family",
+      "owner": "Replacement author permitted only by delegation scope; actual actor/admission required",
       "exactPaths": [
         "src/hub/openapi.py",
         "docs/validation/features.yaml",
@@ -330,11 +333,12 @@
       "actualImplementationTask": null,
       "actualImplementationDispatch": null,
       "correctedHead": null,
-      "blocker": "Coordinator ownership does not grant an extra global author slot. Separate implementation lease/admission and qualified review needed; mixed OpenAI/Anthropic final-head acceptance requires a qualified independent third family, not merely Argon planning participation."
+      "blocker": "Separate later serial package with actual builder/independent review/native source+heavy admission; no new candidate SOURCE exception or unassigned global slot inferred",
+      "ownerHistorical": "Coordinator; disclose actual implementation family"
     },
     {
       "id": "D8",
-      "owner": "Coordinator; disclose actual implementation family",
+      "owner": "Replacement author permitted only by delegation scope; actual actor/admission required",
       "exactPaths": [
         "pyproject.toml",
         "CONTRIBUTING.md",
@@ -348,7 +352,8 @@
       "actualImplementationTask": null,
       "actualImplementationDispatch": null,
       "correctedHead": null,
-      "blocker": "Coordinator ownership does not grant an extra global author slot. Separate implementation lease/admission and qualified review needed; mixed OpenAI/Anthropic final-head acceptance requires a qualified independent third family, not merely Argon planning participation."
+      "blocker": "Separate later serial package with actual builder/independent review/native source+heavy admission; no new candidate SOURCE exception or unassigned global slot inferred",
+      "ownerHistorical": "Coordinator; disclose actual implementation family"
     }
   ],
   "evidenceGaps": [
@@ -361,21 +366,29 @@
     "Fresh qualified independent exact corrected-SHA review remains after author correction; same-family Opus cannot independently accept Fable; Argon planning is not source-domain qualification"
   ],
   "currentAdmission": {
+    "delegationAuthority": "msg_9ff0d358753c",
+    "oldFableOnlyPin": "Superseded only for remaining agreed delegation scope; Fable/Opus ignored actors not restarted/reopened; actual authorship preserved",
     "globalAuthorSlots": {
       "cap": 3,
-      "occupiedAsDirectedByHub": [
-        "Fuse final repair",
-        "Nexus followup",
-        "Chore ROLE"
+      "reserved": [
+        "OpRead",
+        "P3",
+        "Exporter frozen-plan priority"
       ],
       "HDMISlotGranted": false
     },
     "firstPreparedPackage": "D3",
-    "spec": "FABLE_D3_QUEUED_SPEC.txt",
-    "nextPacket": "NEXT_AUTHOR_ADMISSION_PACKET.md",
-    "quota": "No new probe; last23% Fable LOW/general51% are historical, not current headroom. Real admission requires fresh known usable general+dedicated pools and independent AGENTS.md verified fallback below30 or actual owner exception; none is invented.",
-    "heavy": "Only Fuse task87263 has named bounded heavy GO while existing PGK merge runs; HDMI heavy installs/builds/full gates remain queued. Read-only source/light planning allowed.",
-    "nextAction": "On actual author-slot release request HDMI next-ready; fresh exact Fable/new selected system account/high/full-access/custody/route/quota/reviewer checks and native Task/Dispatch-bound D3 lease precede any GO; no fourth author or automatic model substitution"
+    "nativeTask": "task_e94f1312aea7",
+    "nativeStatus": "blocked",
+    "nativeDispatch": null,
+    "spec": "D3_DELEGATED_TASK_SPEC_20261114.txt",
+    "sourceInputs": "D3_FROZEN_INPUTS_20261114.json",
+    "closureMap": "DELEGATION_CLOSEOUT_20261114.json",
+    "builder": "gpt-6-astra/high build_hard OpenAI, installed qualified/pass; Codex76% statusok sampled2026-11-14T19:16:15.035Z",
+    "currentLocalFloor": "Selected builder above30; no low-floor waiver or inferred fallback. Recheck actual admission; old sole-Fable23% condition is historical, not this route blocker.",
+    "reviewer": "No eligible selected independent audit route. Carbon-high/Google proposed only subject to exact owner AUDIT exception addressing local/domain requirements; candidate/unknown remains, no cross-unit SOURCE trial grant.",
+    "heavy": "One sequence unallocated, no HDMI test/build/live/install/full-hook grant",
+    "nextAction": "Obtain concrete independent-review admission and actual source slot, revalidate native/model/account/helper/custody/capacity/exclusive lease, ready/start the SAME task_e94f1312aea7 with fresh Astra in dedicated native worktree; never reopen settled Fable"
   },
   "custodyActionPacket": "EXTERNAL_OPUS_CUSTODY_PACKET.md",
   "notCompletion": "No uncommitted Fable product source remains, but outstanding candidate remediation, qualified review, source publication/landing and formal release holds remain. Primary4untracked admin-hook files are unrelated preserved owner/custody ambiguity, not committed to manufacture green status.",
@@ -390,5 +403,14 @@
     "sourceBytesMovedOrCopied": 0,
     "minimalOwnerChoice": "Authorize exact4file/1384B preservation move to named registered retained destinations, superseding only specific artifact protection for this move, or keep original paths",
     "sourceWorkImpact": "None; ordinary Fable queue and all source/global-slot gates unchanged"
+  },
+  "authorityCurrent": "msg_9ff0d358753c",
+  "currentDelegation": {
+    "finiteMap": "DELEGATION_CLOSEOUT_20261114.json",
+    "minimumOwnerDecision": "One exact Carbon-high candidate AUDIT exception for corrected D3 six-file SHA/local DNS/TLS/SSRF qualification condition, or name legitimately qualified independent eligible reviewer; no new ordinary design vote",
+    "sourceChanged": false,
+    "sourcePublished": false,
+    "originalCandidate": "five commits changing30files, unchanged",
+    "held": "Unknown3eb actor/WS wiring and H5/privacy; encoded-hook1384B owner preservation question unchanged"
   }
 }

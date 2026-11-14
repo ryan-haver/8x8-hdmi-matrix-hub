@@ -190,7 +190,7 @@
     "noNesting": true,
     "observations": "Before R2 admission: codex88%remaining, generalClaude51%, Fable23%(held), Argon30%at threshold, MiniMax95%. Latest all185 prior Dispatch rows settled, no duplicate writer; integration exact origin/local680e93b8. Existing authorized debate assignments can finish; any further admission needs fresh sufficient pool and verified fallback/hold.",
     "reviewReserve": "Sol different-family source acceptance/corrections reserved in principle; fresh qualification/capacity check at actual gate; privacy/CR01 domain holds not waived",
-    "currentPolicy": "LOW usable shared routes may remain eligible/rank last, not healthy by relabel. Independent repo below30 verified-fallback condition survives; sole Fable has no authorized fallback; later operational wave also holds admission. No new telemetry probe solely for correction."
+    "currentPolicy": "Delegated D3 selects qualified Astra/high at known Codex76% sample19:16:15Z on2026-11-14; above local fallback trigger. Global source slot and independent review admission remain actual blockers; recheck at real launch. All older capacity/model/pin observations retained as dated history."
   },
   "guards": [
     "backend credential requirement",
@@ -250,5 +250,18 @@
     "exactWsCommit": "3eb459197c19b3a346e02b7fc173ce0f4ead8095",
     "wiringLeasesGranted": 0,
     "authorSlotGranted": false
+  },
+  "currentDelegatedD3": {
+    "authority": "msg_9ff0d358753c",
+    "task": "task_e94f1312aea7",
+    "status": "blocked",
+    "dispatch": null,
+    "builder": "gpt-6-astra/high OpenAI proposed; qualified build_hard route/Codex76% cached current sample",
+    "reviewer": "Carbon-high proposed OWNER AUDIT exception pending; current route selected none",
+    "sourceBase": "f2a122f955def578960303bc15242fed00d01be3",
+    "inputs": "D3_FROZEN_INPUTS_20261114.json",
+    "map": "DELEGATION_CLOSEOUT_20261114.json",
+    "scope": "Same agreed six-file behavior only; old Fable author pin superseded here, no source/qualification/landing waiver",
+    "GO": false
   }
 }

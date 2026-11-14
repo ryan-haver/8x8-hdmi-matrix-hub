@@ -1,5 +1,50 @@
 # Agent allocation and execution ledger
 
+## Delegation closes the author pin; D3 Task and exact review blocker prepared — 2026-11-14
+
+Hub msg_9ff0d358753c carries actual owner authorization for replacement authors
+on agreed remaining Fable scope. No ignored Fable/Opus relay, actor restart,
+retroactive authorship relabel, new debate or full source re-audit. The
+[finite closure map](../planning/fable-consensus-20261113/DELEGATION_CLOSEOUT_20261114.json)
+lists all5ordinary units' finding ids, exact fixes/paths/base/tests/land proof/
+safe output disposition, plus held WS/privacy/hooks. Native source is still
+clean f2a122f9:5original commits changing30files, unaccepted/unpublished/unmerged.
+
+Created actual child Tasktask_e94f1312aea7 under workflowtask_c94bdfc187f6,
+immediately BLOCKED before any Dispatch/actor/GO. Exact six-file D3 input Git
+blobs/SHA256 and working-byte hashes are pinned in
+[D3_FROZEN_INPUTS_20261114.json](../planning/fable-consensus-20261113/D3_FROZEN_INPUTS_20261114.json);
+the [self-contained native spec](../planning/fable-consensus-20261113/D3_DELEGATED_TASK_SPEC_20261114.txt)
+uses the genuine handoff/accepted rounds and unchanged behavior/file lease.
+Original Fable handoff succeeded/settled, exact live/external/user_requested;
+all188Dispatches/2pages settled, no duplicate implementation writer. No new
+worktree/worker/test/build or source edit was created. Source-author pin changes
+only under the owner delegation; actual implementation family will be OpenAI.
+
+Installed build_hard route selects qualified/pass Astra/high with code/hard/
+security strengths; supported Codex sample19:16:15Z has76%remaining/statusok.
+No below30waiver or fallback is asserted: the old sole-Fable LOW prerequisite
+is not the selected-Astra blocker. Audit_security with both Anthropic/OpenAI
+author context selects none(exit2). Carbon-high/Google matches class strengths
+and has95%pool sample19:16:18Z but is candidate/fidelityunknown; remaining
+disqualifier is candidate eligibility. The
+[one exact review request](../planning/fable-consensus-20261113/D3_REVIEW_EXCEPTION_REQUEST_20261114.md)
+needs OWNER bounded AUDIT exception explicitly covering local DNS/TLS/SSRF
+review qualification, or a legitimate independently qualified eligible reviewer.
+No source-trial transfer, family promotion or failed-assessment retry. M3.1's
+generic fast/code qualification supplies no missing audit class/domain entitlement.
+
+Global3SOURCE slots remain OpRead/P3 plus Exporter priority; HDMI has no slot,
+and unallocated1heavy sequence provides no test/build/full-hook grant. After
+actual reviewer admission and source slot, ready/start the SAME new D3 Task
+with a fresh native Astra/dedicated worktree and verified launch/account/helper/
+custody/local floor. Author fixes, reviewer reports at actual corrected SHA;
+normal staged tests/hooks and exact-SHA land prerequisites remain. Unknown3eb
+actor/WS source and H5/privacy are not accepted by D3; no target narrowing.
+Source, owner hook files and external resources remain untouched. Scoped JSON,
+input/report/hash/local-target/whitespace checks and actual publication/storage
+receipts are administrative only, without a new runtime qualification claim.
+
 ## Targeted primary hook-artifact provenance: preserve pending owner disposition — 2026-11-13
 
 For hub msg_575dc3457e0c, classified only the4loose encoded-path primary hook

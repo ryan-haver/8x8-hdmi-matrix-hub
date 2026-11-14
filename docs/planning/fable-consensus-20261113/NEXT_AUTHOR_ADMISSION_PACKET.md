@@ -1,5 +1,15 @@
 # Next ordinary Fable author admission
 
+Current execution direction2026-11-14: hub msg_9ff0d358753c authorizes another
+actual author for agreed delegation scope, superseding the old Fable-only pin.
+Use [DELEGATION_CLOSEOUT_20261114.json](DELEGATION_CLOSEOUT_20261114.json),
+[D3_DELEGATED_TASK_SPEC_20261114.txt](D3_DELEGATED_TASK_SPEC_20261114.txt) and
+actual blocked Task task_e94f1312aea7. Proposed Astra/high has qualified
+build_hard/pool eligibility; no independent eligible reviewer/source slot or
+heavy/test grant exists. The [specific review decision](D3_REVIEW_EXCEPTION_REQUEST_20261114.md)
+is prepared. Do not execute the Fable-only model/slot/LOW clauses below: they
+are preserved historical preparation, not current launch instructions.
+
 This is concrete preparation under hub msg_21e6b8d4824e, not a source Task,
 dispatch, slot release or GO. Existing workflow: task_c94bdfc187f6 in
 run_37205f6095b3. [CURRENT_CLOSEOUT.json](CURRENT_CLOSEOUT.json) covers all four

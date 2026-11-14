@@ -1,0 +1,62 @@
+{
+  "base": "f2a122f955def578960303bc15242fed00d01be3",
+  "sourceTree": "3384886fc4e624175046536bfd13e998923d5933",
+  "readUtc": "2026-11-14T19:16:52.601130+00:00",
+  "files": [
+    {
+      "path": "src/rest_api/settings.py",
+      "gitBlob": "b92a1c0acc602a23a4b7b2b4ed72ae0117f85a27",
+      "gitBytes": 11314,
+      "gitSha256": "fd0e71c2aebb3f92636c016f0361c315c306d32a5cd67204e7d6878f89092a07",
+      "workingBytes": 11591,
+      "workingSha256": "ed1f6e5ecf890295420f64d1c3c7078b7be1bc3b256dd18babf5914a435a7d5e",
+      "cleanFilteredGitBytes": true
+    },
+    {
+      "path": "src/orei_matrix.py",
+      "gitBlob": "5eed4a1c937215e02c1af250e9b45104e33abc62",
+      "gitBytes": 135020,
+      "gitSha256": "c07036221151501f514b93487c91e931c7673900382c069daa9ebaba3c487d1c",
+      "workingBytes": 138191,
+      "workingSha256": "b19e615949396b5871547b86ae46a493f882c8dd8aaca7169431025035d73d94",
+      "cleanFilteredGitBytes": true
+    },
+    {
+      "path": "src/telnet_client.py",
+      "gitBlob": "7b407e25ea8dbd5196cd558348d3ff40ff1aa79c",
+      "gitBytes": 49222,
+      "gitSha256": "1823d0e803d5e97fb808bd4dea106771493a80d04df4577298eaa8345580a3aa",
+      "workingBytes": 50445,
+      "workingSha256": "68365447a1204027db8845ec5563d5693041e22a8a58bedd459294dbe784b06c",
+      "cleanFilteredGitBytes": true
+    },
+    {
+      "path": "SECURITY.md",
+      "gitBlob": "a075e7e4db20021f6e87837a4cf6a4053788493c",
+      "gitBytes": 20144,
+      "gitSha256": "cb1c321f44106dc61675f117dfd049e0221cd91539ba2cea9b57c8cd9d438768",
+      "workingBytes": 20498,
+      "workingSha256": "6f40f05be817b626b1e23f240810f8621485a02f5ddb88862aaffb9122968f7b",
+      "cleanFilteredGitBytes": true
+    },
+    {
+      "path": "tests/test_settings_matrix_host.py",
+      "gitBlob": "455cec3017b1b97be04983d9a8fd9c0c5817e89b",
+      "gitBytes": 9548,
+      "gitSha256": "e79256ec5db5c401afd197d419b91cbdc1d739b234609167692550703a51e6cc",
+      "workingBytes": 9548,
+      "workingSha256": "e79256ec5db5c401afd197d419b91cbdc1d739b234609167692550703a51e6cc",
+      "cleanFilteredGitBytes": true
+    },
+    {
+      "path": "tests/test_security_ssrf_tls.py",
+      "gitBlob": "780f5a0883f939d17320a1e3e07e8f3b71eb8653",
+      "gitBytes": 7902,
+      "gitSha256": "71160ac86bb6b2632d1d73d60648a00e2b5b5ea00e456c528c9e929a5250daa1",
+      "workingBytes": 8101,
+      "workingSha256": "903012648281162e01953b52274830a1fe8f5cfd82151e25d7bdb699f8b94aa6",
+      "cleanFilteredGitBytes": true
+    }
+  ],
+  "trackedUntrackedDirty": []
+}
