@@ -1,5 +1,39 @@
 # Current coordinator handoff
 
+## Corrected source frozen; one focused QA evaluation admitted — 2026-11-15
+
+Root `msg_4e40fd707506` accepts Google correction source END and names exclusive
+HEAVY for ONE changed-artifact focused Q1 evaluation, coordinator only/no workers.
+Tracking Task `task_778176eb7b2f`, parent/dependency completed correction
+`task_9db2390da570`, dispatch null, workflowc94; **planned, not started**.
+Old failed QA Task65480/64pass1fail/original49808B proof remains failed/untouched.
+
+Correction ctx_c72d0e013b80 is completed/exited/released; terminal archive is
+unavailable, not a full transcript. Independently proved one byte changed at
+security test330/offset13807 only; target18324B CRLF new SHA256
+5f2e91ab0dc902086e33515bab02e50828376bae0b7a23a08b10ec639a4aed49.
+Other14pins/HEADs/index/modes and exact6+9dirty paths unchanged. Source remains
+unaccepted/unstaged; author AST/diff checks only. Correction report12822B/f8bd6e78...
+and independent receipt retained in registered payload2580..., reviewNov16.
+SolHigh HA metadata taskb5 is completed/released, Rootae3d accepted exactfloor
+HA2025.1.0/plugin0.13.201 declared match and coordinator3 primary checks;8 total
+lookups, no install/runtime proof or Linux engine/cache restoration.
+
+First publish this exact two-doc checkpoint, sole parentbc9028ef, actual scoped
+static checks/evidence-only invocation hook exception, ordinary existing
+coordinator-branch push/exact equality/integration local+origin680 unchanged.
+Then fresh native/binding/custody/15corrected-source guards and absent contained
+nonreparse `build/d3-qa1-corrected-261115`, marker FIRST/private data+config before
+imports. Execute only Root4e40's exact two-file pytest command once with unchanged
+child-only four overlays/fifteen removals/default native inheritance. No retries,
+extra collection/import/install/source/hook/commit/engine operations. Natural END,
+direct exit/both EOF/capture complete/actual cases and child-sampling limits,
+before+after pins and bounded proof are required; release HEAVY/runtime at END.
+No later stage follows automatically. All independent ALL-six AstraHigh exact-SHA,
+normal product commit, real TLS, legacy fixture-origin, HA/D6/WS/privacy/assets/
+formal/landing gates remain. Dirty trees and original failed proof are preserved;
+minimal new proof/metadata retained for open QA, reviewNov16, no manual cleanup.
+
 ## Q1 first failure preserved; two bounded actors planned — 2026-11-15
 
 Root `msg_3b4f979a1c08` accepts Q1 Task `task_65480d0c61e0` FAILED_TEST_HOLD,

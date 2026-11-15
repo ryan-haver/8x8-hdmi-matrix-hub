@@ -1,5 +1,47 @@
 # Agent allocation and execution ledger
 
+## Corrected D3 sealed; named focused QA admitted — 2026-11-15
+
+Root `msg_4e40fd707506` accepts actual correction SOURCE END and assigns exclusive
+HEAVY to ONE new corrected-source Q1 evaluation. Coordinator-owned tracking Task
+`task_778176eb7b2f` is a child/dependency of completed correction
+`task_9db2390da570`, dispatch null, workflow `task_c94bdfc187f6`. This evaluation
+is **planned, not started**. Original failed QA `task_65480d0c61e0` stays failed;
+its 64pass/1fail and untouched proof under `build/d3-qa1-261115` remain historical.
+
+Google CarbonHigh correction Dispatch `ctx_c72d0e013b80` completed and exact
+worker release read back completed/exited/released; terminal archive unavailable,
+so keep dirty checkout and honest transcript gap. The only source delta from its
+prior seal is byte13807 at test line330, within the named function's login fixture.
+`tests/test_security_ssrf_tls.py` remains18324B CRLF, new SHA256
+`5f2e91ab0dc902086e33515bab02e50828376bae0b7a23a08b10ec639a4aed49`;
+one-byte reversal reproduces prior acc0ddf0... seal. Other14 source seals,
+HEADsf2a122f9/index/modes unchanged, exact6+9dirty/no new untracked paths.
+Correction report12822B SHA256
+`f8bd6e7825a4aa6e570193d0047dc0321db04f7ea3cc17a75a4e98c138180ae0`
+and independent seal receipt remain in retained payload2580..., reviewNov16.
+Author ran only AST parse/CR-aware diff check; no runtime PASS is implied.
+
+Parallel read-only SolHigh Task `task_b5f705d2c5fd` completed/released, exact-floor
+metadata accepted by Root `msg_ae3d11d72a20`: HA2025.1.0 Python>=3.12.0 with
+plugin0.13.201 Python>=3.12/exact HA pin. Three coordinator primary checks verify
+full dependency lists;8/20 aggregate lookups. Report10804B/d0d7edfe... retained;
+transitive/install/platform/runtime/Linux engine/cache readiness remains unknown.
+
+After this exact two-doc checkpoint is checked/committed/pushed with remote
+head equality and integration680 unchanged, coordinator may run ONLY the named
+corrected-source two-file pytest command, fresh owned
+`build/d3-qa1-corrected-261115`, marker first/private data+config/default native
+inheritance and the original exact four overlays/fifteen removals. ONE invocation,
+maxfail1/no retries, <=5MiB combined diagnostics/<=20MiB QA, natural END/direct
+exit/both EOF and before/after15 source guards. Report actual cases/counts/limits,
+withdraw runtime/release HEAVY at END. No source workers; no product edits/hooks/
+commits/acceptance/landing. Qualified AstraHigh ALL-D3six exact-corrected-SHA plus
+paired-context reserve and actual Anthropic+Google authorship remain; accepted
+unchanged OpenAI baseline/R1C disclosed. Q2-Q7/HA/D6/WS/privacy/assets/formal holds
+remain. This evidence-only checkpoint uses permitted invocation-only hook
+exception after actual scoped checks; full hook and tests are not run for it.
+
 ## Q1 failed; bounded correction and HA metadata follow-ups admitted — 2026-11-15
 
 Root `msg_3b4f979a1c08` accepts actual Q1 Task `task_65480d0c61e0` as
