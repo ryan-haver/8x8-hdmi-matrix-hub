@@ -1,0 +1,560 @@
+{
+  "schema": "hdmi-consolidated-qa-normal-commit-packet-v1",
+  "status": "SUBMITTED_FOR_QUEUE_NOT_EXECUTION_GO_SUBGATES_EXPLICIT",
+  "authority": [
+    "owner recovery/parallel remediation instruction",
+    "hub msg_1df5b5583282 consolidated finite packet request",
+    "hub bulletin msg_8146d370942d"
+  ],
+  "run": "run_37205f6095b3",
+  "workflowTask": "task_c94bdfc187f6",
+  "supersedes": "D3-only request msg_eae30bcbf502; this is ONE D3/D5 queue packet, no new phase/debate/policy/qualification grant",
+  "allocation": {
+    "source": "D3/D5 writers ended and source seats1/2 released; no new SOURCE reservation inferred",
+    "heavy": "queue behind actual Exporter and Dashboard QA; do not start until named HDMI grant",
+    "workers": "both old source actors released/exited, never reopen them; no helper/nesting; any new author requires fresh exact native Task/Dispatch/custody/quota/route grant"
+  },
+  "sealedUnits": [
+    {
+      "unit": "D3",
+      "task": "task_c5c1913501a9",
+      "dispatch": "ctx_666a98f1a963",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\d3-carbon-source-261114",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "tree": "3384886fc4e624175046536bfd13e998923d5933",
+      "sourcePaths": [
+        "src/rest_api/settings.py",
+        "src/orei_matrix.py",
+        "src/telnet_client.py",
+        "SECURITY.md",
+        "tests/test_settings_matrix_host.py",
+        "tests/test_security_ssrf_tls.py"
+      ],
+      "diffBytes": 33919,
+      "diffSha256": "bf2b4c1fdfd8674621fea2f4e60984990f897bb7a95f94dcc483c9f6d31078a7",
+      "finalManifestSha256": "3f592bd670df8c1a8188ecf1df3c08a92ff8146279bcf8ee7a3e836a7d6f84ff",
+      "payload": "3a2f754954ac4e36812bc17a5ec8e7a6",
+      "payloadBytes": 323503,
+      "writer": "ended/released/exited",
+      "knownAcceptedR1CRegions": "12 ranges independently byte-identical, not behavioral regression proof"
+    },
+    {
+      "unit": "D5-G1",
+      "task": "task_58a0a3ab20e4",
+      "dispatch": "ctx_e3e5284147f2",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\d5-carbon-source-261115",
+      "head": "f2a122f955def578960303bc15242fed00d01be3",
+      "tree": "3384886fc4e624175046536bfd13e998923d5933",
+      "sourcePaths": [
+        "custom_components/hdmi_matrix/api.py",
+        "custom_components/hdmi_matrix/config_flow.py",
+        "custom_components/hdmi_matrix/__init__.py",
+        "tests/ha/test_api.py",
+        "tests/ha/test_config_flow.py",
+        "tests/ha/test_init.py",
+        "docs/HOME_ASSISTANT.md",
+        "custom_components/hdmi_matrix/strings.json",
+        "custom_components/hdmi_matrix/translations/en.json"
+      ],
+      "diffBytes": 31832,
+      "diffSha256": "6cb8580170fa3ffad115f2d5956ac98f93ed3d3802cc4b13f3539c9caf13f11a",
+      "finalProvenanceSha256": "17e6e4888957464a32ff72effcff55998367fcbc5daf79e7c4449dbecb186f67",
+      "payload": "a353ad60ba4a4e11af7c6485b4ef412d",
+      "payloadBytes": 209014,
+      "writer": "ended/released/exited",
+      "floorSafeClaim": "worker implementation claim only, UNTESTED"
+    }
+  ],
+  "toolWitness": {
+    "python": "existing primary .venv Python3.12.10 (pyvenv.cfg)",
+    "pytest": "9.1.1",
+    "pytest_asyncio": "1.4.0",
+    "aiohttp": "3.13.3",
+    "ruff": "0.17.1",
+    "mypy": "2.4.0",
+    "node": "26.13.1 binary metadata",
+    "normalHook": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.githooks/pre-commit",
+    "hookSha256": "e69e64194ca07a606718b5fea748f44a06ddf767b6f6756cef578b8565f544bc",
+    "hookBehavior": "find current/main .venv then PATH; ruff check src tests custom_components tools run.py run_server.py as present, then pytest tests/ --ignore=tests/ha --ignore=tests/uc -q -x -p no:cacheprovider. No hook bypass/config edit permitted",
+    "dependencies": "primary existing Python tools witnessed; source-tree Node dependencies absent. Do not copy graphs/run lint against wrong primary source. Any needed exact lockfile installation/dependency reuse gets named finite setup authority, owned cache/output and no credential/account changes"
+  },
+  "preflight": [
+    "Actual named allocation and current Run binding/native fleet/custody; no overlap or generic repeated permission round",
+    "Recheck source HEAD/index/modes/all15 sealed bytes and diff identity; stop unexpected drift, no reset/clean",
+    "Create native QA tracking under existing workflow and absent owned per-unit build/qa-<task>/.owner.json FIRST, owner/run/task/dispatch/null/time/purpose/keep fields; no source files written by QA executor",
+    "Fresh isolated MATRIX_DATA_DIR and UC_CONFIG_HOME BEFORE importing tests/project, mock/hardware deselection preserved, no private root reads/writes; do not dump ambient env/credentials",
+    "Capture exact argv/tools/approved fixture pins/source and final SHA/time/direct exit/pass-fail-error-skip counts/raw bounded sanitized output. Missing HA/collection0/skip is not acceptance",
+    "Only granted QA/fix/setup stages; stop first unexpected failure, preserve it, no automatic retry/fix/route fallback or phase waiver",
+    "Standing pre-wave administrative/integration record publication and exact remote/local verification remain applicable; submission/named QA request does not waive them. Current recovery records are uncommitted and no stage/commit/publication is executed by this preparation. Resolve the actual permitted publication scope before a new execution wave, without force or source assembly."
+  ],
+  "stages": [
+    {
+      "id": "Q1-D3-focused",
+      "ready": "existing-host stage after named heavy grant, independent of Linux engine and later fixture repair",
+      "executor": "coordinator, read/run only, no new worker needed",
+      "cwd": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\d3-carbon-source-261114",
+      "executable": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+      "argv": [
+        "-B",
+        "-m",
+        "pytest",
+        "tests/test_settings_matrix_host.py",
+        "tests/test_security_ssrf_tls.py",
+        "-q",
+        "--tb=short",
+        "--maxfail=1",
+        "-p",
+        "no:tests.route_inventory",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=build/qa-<actual-task>/pytest",
+        "--junitxml=build/qa-<actual-task>/junit.xml"
+      ],
+      "limits": "one invocation, no install/network/hook/stage/commit; source hashes unchanged; no partial route proof"
+    },
+    {
+      "id": "Q2-D3-SSRF-TLS-controls",
+      "coverageRequired": [
+        "hostname saved/displayed/URL/Host/SNI identity",
+        "all-answer validation before HTTP/Telnet connections and reconnects, mixed and rebound DNS, allowed literals, same-host HTTP/Telnet port changes",
+        "loopback/link-local/unspecified/multicast/mapped and legacy numeric refusal with no actual disallowed socket dial",
+        "fresh backend credentials, honest200/applied:false rollback unchanged",
+        "verify-true/custom-CA name validation: trusted/matching positive, untrusted and wrong-name negative; no insecure retry",
+        "matching/wrong fingerprint controls preserving existing fingerprint precedence, not inventing CA/name semantics for fingerprint-only mode",
+        "no second unchecked DNS and real reconnect/session lifecycle regression"
+      ],
+      "currentEvidenceLimit": "new unexecuted tests mock SSL context and connector/session options. They do NOT yet prove actual TLS handshake/certificate/SNI behavior; do not call them end-to-end TLS acceptance.",
+      "executionGate": "any missing test/harness is new implementation: finite exact additional SOURCE authority, actual origin, qualified independent review route reserved; no coordinator/OpenAI code/assertion/pseudocode supplied, no automatic extension of prior Carbon trial",
+      "negativeControlRule": "minimal owned exact old-source control plus exact Google test text only after authority. Use fully synthetic/no-external-dial cases, verify expected old-behavior reason; do NOT blindly run disallowed-IP tests against unfixed code that might dial real destinations. Keep original red result and exact pins; no mutated product checkout"
+    },
+    {
+      "id": "Q3-old127-fixture-compatibility",
+      "current": "static map only, no tests run/no edits approved",
+      "requirements": [
+        "fully mocked/canned classification cases may be unaffected; do not rewrite every literal hit",
+        "production destination validator and policyA remain exercised, no whitelist/test flag/trusted mock/constructor bypass or monkeypatch allowing disallowed actual destinations",
+        "real HTTP/Telnet/drain tests must remain real transport tests on positively owned allowed local synthetic endpoints; no private LAN/device probe, OS network reconfiguration or external traffic",
+        "retain explicit127/::1/mapped/link-local negative cases, refusal error causes and no secret leakage",
+        "if no allowed owned endpoint/environment exists, HOLD affected real fixture campaign; do not convert it silently to weaker mocks/skip",
+        "pin actual affected subset/provenance before root grants finite SOURCE lease; source fixes by actual author, reviewer reports, no automatic author/candidate audit grant"
+      ],
+      "provenanceGate": "R1C fixture has accepted OpenAI authorship; other material fixture origins are UNKNOWN until evidenced. A material OpenAI/UNKNOWN adaptation does not fit the reserved all-Anthropic+Google/Astra path. Do not infer nonmateriality, exclude unaccepted material, relabel or waive independence. Resolve exact affected origin/review route under current owner restrictions before writing.",
+      "map": [
+        {
+          "path": "tests/ha/test_api.py",
+          "lines": [
+            44,
+            75,
+            118,
+            140
+          ],
+          "gitBlob": "02a5a929940e19774008bcbbd058a5b8a6ef60df",
+          "classification": "unrelated HA HubClient loopback HTTP test servers, no D3 transport policy edit inferred",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/hil_tools/helpers.py",
+          "lines": [
+            83
+          ],
+          "gitBlob": "689cc05c2896f9a76371448a913d12fcf04048f2",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/hil_tools/test_capture_golden.py",
+          "lines": [
+            195
+          ],
+          "gitBlob": "760a35e66bd54e33e78b304ef8f67ae543f25922",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/hil_tools/test_capture_read.py",
+          "lines": [
+            101
+          ],
+          "gitBlob": "555c432b0425132a6487502b8ed11a1a17063b85",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/sim/conftest.py",
+          "lines": [
+            59,
+            94
+          ],
+          "gitBlob": "2af52a8c89cb81e21580932fc9b639429c164f93",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/sim/test_sim_enabled_reboot.py",
+          "lines": [
+            129
+          ],
+          "gitBlob": "aaa43eb098c43a25e2f89249c6a5760200fa50ac",
+          "classification": "mixed common simulator tests plus canned reboot acknowledgement; do not rewrite canned literal merely because found",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/sim/test_sim_faults.py",
+          "lines": [
+            237,
+            248
+          ],
+          "gitBlob": "75eabbe8c04ba5e2296593374ee59f61987efc04",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/sim/test_sim_login_credentials.py",
+          "lines": [
+            18,
+            73
+          ],
+          "gitBlob": "1ef9d16d62437115364f314ae6f8f2e59cb96ca4",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_cec_enable_r1f.py",
+          "lines": [
+            33
+          ],
+          "gitBlob": "e93cd022c6e227dd9b253d3054869f48e6c4a320",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_composition_r1.py",
+          "lines": [
+            362,
+            375
+          ],
+          "gitBlob": "f852aff171247ff964e4e3424aaa606504d21b2d",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_cycle_shared.py",
+          "lines": [
+            28
+          ],
+          "gitBlob": "cfd8e1c39ef1c2a64727425a99cb4f1f08b665e8",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_installed_entry_r1p.py",
+          "lines": [
+            234
+          ],
+          "gitBlob": "929c24dc4e6d0c512eab9c5d8a6b80965eeabd93",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_preset_cache_r1e.py",
+          "lines": [
+            33
+          ],
+          "gitBlob": "55ace752724ae00e10620b745bc96d3ab4bd92d4",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_preset_errors_r4b.py",
+          "lines": [
+            46
+          ],
+          "gitBlob": "33ab7fea3f3a7de1868b753597ef075c6a448170",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_transport_drain_r1c.py",
+          "lines": [
+            22,
+            54,
+            287,
+            335
+          ],
+          "gitBlob": "28443165a6c7c6f0069bd459b6b901b64fb29060",
+          "classification": "known real loopback HTTP drain fixture, accepted OpenAI Sol R1C author; material adaptation/origin independence gate before edits",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_runtime_websocket_sync_r3e.py",
+          "lines": [
+            56
+          ],
+          "gitBlob": "6e619b88b96d3bb3c1a3018df5f7bf3fe5d044e9",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_security_v3_auth_scenarios.py",
+          "lines": [
+            113
+          ],
+          "gitBlob": "1a4ddd84024d8a6f26be1207f7c61e9b4152135d",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_security_v3_hardening_scenarios.py",
+          "lines": [
+            70,
+            473,
+            514
+          ],
+          "gitBlob": "1851ec81443134b2343bd7344b47ce2b39f8408f",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_telnet_outcomes.py",
+          "lines": [
+            21
+          ],
+          "gitBlob": "d0a326778526584cf30d3cac4547a46c4d4704b0",
+          "classification": "classification-only canned _send_raw, no connect observed; keep unless actual failure establishes need",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_telnet_real_captures.py",
+          "lines": [
+            239
+          ],
+          "gitBlob": "29039b56a2544f86ecd3de1bc8aa67ae21bc40d2",
+          "classification": "real simulator/transport positive fixture candidate; inspect exact calls and provenance before any separate finite edit lease",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/test_telnet_transport.py",
+          "lines": [
+            39,
+            124,
+            130,
+            142,
+            149,
+            172
+          ],
+          "gitBlob": "762dfd7b69297c284558a851f8c8026a8bcaa898",
+          "classification": "fake streams/pre-set connected state in inspected helpers; no connect call found in bounded file scan, not automatically affected",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_flic_replay_live_r6.py",
+          "lines": [
+            136,
+            745
+          ],
+          "gitBlob": "45348ea481b4e8130508dc615baebc76cec6eea5",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_preset_slots.py",
+          "lines": [
+            74,
+            99
+          ],
+          "gitBlob": "045d966f56b84933c138a4bc6a8c1483c38fa1a8",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_runner.py",
+          "lines": [
+            97,
+            133
+          ],
+          "gitBlob": "3e022c8f334d117f9d19973af2e413b322a2778f",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_runner_timing.py",
+          "lines": [
+            204
+          ],
+          "gitBlob": "2e7927c1f2acea2739d67d88fcd37d13c753c755",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_runtime_readiness_r1d.py",
+          "lines": [
+            41,
+            69,
+            283
+          ],
+          "gitBlob": "3bdb8af812030a98e2ed86eafba50813a2869720",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/validation/test_sw_api_read_04.py",
+          "lines": [
+            136
+          ],
+          "gitBlob": "8f5e8cb7b1cbd828cf104fbb3dadb841b284f9c9",
+          "classification": "runtime/subprocess/validation or other static candidate; positive/negative intent and actual failure not established, no blanket edit authority",
+          "materialAuthorEvidence": "OpenAI/Sol R1C task_382de8e16e1f for known R1C; otherwise UNKNOWN until real native/accepted source evidence",
+          "editAuthorized": false
+        },
+        {
+          "path": "tests/sim/test_sim_rest_reads.py",
+          "lines": [
+            65
+          ],
+          "classification": "known shared-runtime env uses127; constructor factory supplied by common fixture; no current edit authority",
+          "gitBlob": "887676215c2deac5c010bdf3e0610e894258ea3b",
+          "materialAuthorEvidence": "UNKNOWN",
+          "editAuthorized": false
+        }
+      ]
+    },
+    {
+      "id": "Q4-D5-Linux-environment",
+      "current": "supported local Docker IPC context; Linux engine pipe missing at read-only inspection. Image cache presence UNKNOWN, no HA metadata in primary host venv; no containers/services started or pulled",
+      "gate": "finite named QA/environment readiness authority must explicitly cover supported owned local Linux-engine restoration if needed; preserve unknown/user containers, no force/OS kill/reset/config/account/credential changes",
+      "versions": [
+        {
+          "ha": "2026.2.3",
+          "python": "3.13 per current CI/requirements",
+          "pytestPlugin": "pytest-homeassistant-custom-component==0.13.316",
+          "source": "requirements-test-ha.txt pins exact HA via plugin"
+        },
+        {
+          "ha": "2025.1.0 EXACT",
+          "python": "must match actual exact-floor package requirement; not inferred from current environment",
+          "pytestPlugin": "UNKNOWN; resolve supported compatible exact metadata before install/execution, no forced mismatched --no-deps environment",
+          "notEquivalent": "2025.1.4 or current2026.2.3 is not2025.1.0 floor proof"
+        }
+      ],
+      "setupLimits": "existing usable images/environments first; after any explicit bounded setup grant, pin actual versions/digests/locked inputs and owned worktree caches. No root manifest/lock edit, graph copy, silent pull/install or new credentials/spend. If unresolved stop affected HA branch while ready Q1 continues"
+    },
+    {
+      "id": "Q5-D5-HA-suites",
+      "depends": "Q4 positive actual version/plugin/custody, named serial allocation",
+      "cwd": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\d5-carbon-source-261115",
+      "commandTemplate": [
+        "<verified exact HA environment python>",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/ha",
+        "-q",
+        "--tb=short",
+        "--maxfail=1",
+        "-p",
+        "no:tests.route_inventory",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=<owned-unit-output>/pytest",
+        "--junitxml=<owned-unit-output>/junit.xml"
+      ],
+      "runs": "one complete HA suite per actual2025.1.0 and2026.2.3 environment; real plugin/HA versions recorded, no skip-as-pass",
+      "controls": [
+        "missing/wrong/revoked key rejected on locked hub; explicit unlocked positive",
+        "404 and malformed200 capability failclosed across initial/reconfigure/changed-key options flows",
+        "blank-key clearing and shadowed data/options key migration, no accidental old-key fallback",
+        "setup migration before listener has0extra reload; reconfigure/options exactly1 actual reload, no listener double reload",
+        "truthful identical strings/en localization, no form/auth/floor/compat expansion"
+      ],
+      "negativeControl": "one selected exact Google failclosed404 test against pinned original Fable2a/entry behavior in an owned control ONLY after authority and compatible HA environment; expected old failure reason recorded, no full repeated baseline suite"
+    },
+    {
+      "id": "Q6-normal-source-commits",
+      "depends": [
+        "all required unit QA/controls/fixture gates positive, actual intended source diff inspected, no source drift",
+        "actual dependency readiness for full normal hook including Node lint tests; no silent shared-cache changes/install",
+        "actual source author/foreign-review reserve for any correction/fixture/tooling material; no automatic candidate promotion",
+        "explicit named hook/stage/commit allocation; this packet alone is not GO"
+      ],
+      "unitOrder": [
+        "D3 exact accepted unit paths plus only separately granted fixture corrections",
+        "D5 exact9 paths"
+      ],
+      "readOnlyTyping": [
+        "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+        "-B",
+        "-m",
+        "mypy",
+        "src/"
+      ],
+      "staging": "stage exact permitted files only; independently inspect cached file/mode/binary diff against actual accepted unit scope. Keep coordinator administrative docs, unknown WS/privacy, assets/hooks/root manifests separate.",
+      "commitCommands": [
+        [
+          "git",
+          "commit",
+          "-m",
+          "fix(security): preserve matrix hostname and validate transport targets"
+        ],
+        [
+          "git",
+          "commit",
+          "-m",
+          "fix(ha): fail closed on auth capability and reload once"
+        ]
+      ],
+      "normalHook": "use configured hook unchanged, no core.hooksPath exception/no-verify/skip; preserve first failure. ROUTE_COVERAGE_STRICT=1 on full hook run with isolated data/output; actual100% registered-route coverage required, no historical route count. Keep partial route plugin disabled only in focused Q1/Q5.",
+      "seriality": "no registry/ledger generator during hook/full route checks; no D4 registry/ledger edit or evidence promotion by this packet. A passing normal hook can supply that exact-source full-core result; do not gratuitously repeat same suite.",
+      "proof": "capture pre/post index/tree content equality, exact new commit SHA, hook command/direct exit/results/skips and source identity. Git committer metadata does not relabel actual Google source authors; preserve genuine original Anthropic+actualGoogle Task/Dispatch attribution. No product implementation by coordinator."
+    },
+    {
+      "id": "Q7-independent-acceptance",
+      "readyOnlyAfter": "actual corrected commit(s), qualified review access/capacity and complete material author set",
+      "reserved": "fresh genuine Orca gpt-6-astra/high OpenAI audit_security, read-only, exact corrected SHA and accepted-base680e93b8 scoped unit diff plus author-basef2a delta/context",
+      "limit": "only all-unaccepted Anthropic+Google material is independent. Known accepted unchanged OpenAI baseline disclosed/excluded from retroqualification only, no whole-head/held WS/privacy acceptance. Material OpenAI/UNKNOWN fixture/code/assertion adaptation holds this route; no candidate AUDIT or owner exception inferred. Reviewer reports, actual author fixes, exact-SHA re-review material fixes."
+    }
+  ],
+  "notGranted": [
+    "QA/runtime/test/source correction/hook/stage/commit by submission alone",
+    "combined assembly/integration, push/landing or exact-SHA owner gate waiver",
+    "D4/D8 implementation, D6 render/source/visual approval, H5/privacy/unknown3eb intake",
+    "force, OS kill, account/credential/config changes, dependency graph copies or inventory uploads",
+    "test weakening, skipped floor, route evidence promotion or source authorship relabel"
+  ],
+  "storageLifecycle": {
+    "diagnostics": "bounded20MiB total QA diagnostics, max5MiB each invocation; stop before overflow, keep failures/direct exit, no truncation-as-success",
+    "placement": "build/cache outputs in task-owned worktree build or tagged C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<actual-task>/.owner.json FIRST; no new drive-root/%TEMP%/tool-scratch builds",
+    "copies": "only exact needed source/test/control inputs and small manifests; no full graph/dependency/evidence copies",
+    "newBuildBudget": "investigate/hold before exceeding1GiB; actual larger dependency/image storage needs explicit owner/purpose/disposition, no undocumented shared-cache redirect",
+    "retainedNow": "D3/D5 dirty source and actual needed open handoff payloads; coordinator owned receipts remain bounded",
+    "release": "old source actors already released/exited, do not reopen; settle any later actual worker through Orca before ack",
+    "cleanup": "unavailable terminal archives are honest destructive-checkout cleanup gap; no transcript fabrication/private-history hunt. Later managed cleanup only after real source/ref/publication/review/preservation gates; current packet grants none",
+    "payloadCompletion": "once actual open QA/acceptance no longer needs bytes, supported agent_storage.py complete ID --reviewed-disposable --reason ... --recreate ... into7day quarantine; no unsupported close/raw purge"
+  },
+  "actualExecution": "NONE; packet is requirements/custody/commands for review, not coordinator-authored product/test implementation or completed qualification"
+}

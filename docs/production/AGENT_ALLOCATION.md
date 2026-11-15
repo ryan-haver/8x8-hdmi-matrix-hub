@@ -1,5 +1,276 @@
 # Agent allocation and execution ledger
 
+## One consolidated D3/D5 QA and normal-commit packet submitted — 2026-11-15
+
+Hub `msg_1df5b5583282` accepts the actual source-only writerEND/releases and
+releases global SOURCE1/2, preserving all unverified dirty source and the honest
+archive gap. Acknowledged `msg_bdaccc6d106a`. The new
+[consolidated packet](../planning/fable-consensus-20261113/D3_D5_QA_NORMAL_COMMIT_PACKET_20261115.json)
+is34010bytes, working SHA256
+`fccec6705e78597d2f79f9c4a6ab031126276a88bf7278bee08ca38fcf889677`, submitted
+as `msg_586f71c61433`. It supersedes earlier D3-only questionmsg_eae30bcbf502;
+queue behind actual Exporter and Dashboard QA, not immediate execution authority.
+
+Seven bounded stages cover focused D3 checks, honest SSRF/TLS controls,28-file
+static old127 compatibility map, exact Linux HA environment readiness, full
+2025.1.0/2026.2.3 HA suites, sequential normal scoped commits and qualified fresh
+AstraHigh exact-corrected-SHA unit acceptance. Current tool metadata and actual
+configured hook commands are pinned. No blanket fixture edits: canned/no-connect
+cases may be unaffected; real transport proof must remain real on positively
+owned permitted local synthetic endpoints. Production policyA cannot be bypassed.
+
+Current SSL/connector mocks do not prove real certificate/SNI behavior. A missing
+fixture/harness is additional implementation needing actual source authority and
+independent coverage, not coordinator-supplied code. Known accepted OpenAI R1C
+fixture authorship and legacyUNKNOWN origins remain explicit materiality/review
+subgates; no automatic extension of the Anthropic+Google/Astra review boundary.
+Actual HAfloor-compatible plugin/Python and Linux engine readiness remain to be
+verified, without substituting current HA, skipping, forced dependencies or
+unknown-cache claims. Node dependency readiness is also explicit before hooks.
+
+Packet submission performed only read-only source/tool inspection and JSON/
+whitespace checks. No QA/runtime/hook/stage/commit, new worker/source, Linux
+service start, dependency installation, assembly acceptance or cleanup. Standing
+pre-wave publication/exact remote verification is preserved, not waived. All15
+sealed source files, actual authorship and12unchanged named R1C regions remain;
+both source actors stay released, no reopening or transcript fabrication.
+Administrative records/packet are uncommitted; open receipts remain retained.
+
+## D3 and D5 sealed; writers released; bounded QA requested — 2026-11-15
+
+Processed actual source-only deliveries `msg_d6b419c4a18f` (D3) and
+`msg_dccd2da2aa8d` (D5). Both Tasks succeeded in their source-only scope, with
+writerEND/custody recorded. Independently verified all15 baseline/current byte,
+canonical and working seals, reconstructed both delivered diffs exactly from
+retained entry snapshots/current files, and confirmed exact6/9 changed paths,
+staged0/untracked0 and unchanged HEADf2a122f9. Twelve named accepted Sol R1C
+regions independently match byte-for-byte. Static AST/text checks are worker
+reports, not runtime QA, independent acceptance or qualification.
+
+D3 diff33919B SHA256`bf2b4c1fdfd8674621fea2f4e60984990f897bb7a95f94dcc483c9f6d31078a7`;
+final manifest22723B SHA256`3f592bd670df8c1a8188ecf1df3c08a92ff8146279bcf8ee7a3e836a7d6f84ff`.
+D5 diff31832B SHA256`6cb8580170fa3ffad115f2d5956ac98f93ed3d3802cc4b13f3539c9caf13f11a`;
+actual provenance21812B SHA256`17e6e4888957464a32ff72effcff55998367fcbc5daf79e7c4449dbecb186f67`.
+Actual Google authorship/original Anthropic changes and accepted mixed baseline
+remain disclosed; qualified AstraHigh exact-corrected-commit unit acceptance
+is still ahead, not established by coordinator custody checks.
+
+Both exact managed writer terminals released through Orca, independent readback
+released/exited. Native archives both report `terminal [unavailable]`: no complete
+transcript preservation claim; destructive checkout cleanup is held. Both dirty
+source checkouts and registered open handoffs are preserved (D3payload3a2f...
+323503B; D5payloada353...209014B). No branch/source removal, force or OS kill.
+Current source writers0, rolling source seats1/2 reported releasable to hub;
+this grants no D6 source admission. Root notified in `msg_a9d1757176d2`.
+
+Concrete D3-QA1 request `msg_eae30bcbf502` queues ONE focused invocation of
+`tests/test_settings_matrix_host.py` and `tests/test_security_ssrf_tls.py`, with
+existing primary interpreter, fresh owned data/config/output, disabled partial
+route/cache writers, maxfail1 and bounded logs/JUnit. No execution yet; named
+HEAVY admission required after Exporter's current reservation actually releases.
+Exact command/guards are in coordinator payload2580.../
+`d3-focused-qa1-admission-request.json`. Later fixture scope also includes
+`tests/test_runtime_transport_drain_r1c.py`'s real loopback simulator, alongside
+the two already known simulator files. Production policyA stays strict; no
+fixture exception, bypass or outside-six source edit was made.
+
+Bounded read-only D5 environment discovery found a local Docker IPC context but
+the Linux engine pipe unavailable; exact HAimage inspections failed to connect.
+This is not proof cached images are absent or old processes exited. Primary host
+venv has no HA/pytest-HA distribution metadata; no auto-skip is acceptance.
+Current requirements pin HA2026.2.3 via plugin0.13.316/Python3.13, not exact
+2025.1.0 floor proof. No Docker/service start, pull/install/config/credential
+change or HA test ran. Specific environment blocker reported `msg_059da21ed45f`;
+D3 host-focused QA remains independent. D6 preparation and all unknown WS/privacy/
+assets/hooks/visual/exact-SHA holds remain. Administration still uncommitted.
+
+## D5 source-only GO delivered; D6 capture preparation bounded — 2026-11-15
+
+Acknowledged hub bulletin `msg_8146d370942d` as `msg_1d305b6ab57b`: SOURCE1 D3,
+SOURCE2 D5-G1, SOURCE3 DashboardRF01. The sole HEAVY is reserved for Exporter's
+normal32-path commit/13-regression hookchain, not free or allocated to HDMI.
+No old-reservation reconciliation or artificial preparation worker is needed.
+
+Actual D5 readiness ASK `msg_167897d63289` reports zero edits/sourceGit/runtime/
+helpers. Independently verified nine current Git blobs/working hashes, clean
+f2a122f9/tree3384886, live exact native CarbonHigh/nullCLI/embeddedHigh and current
+supported selection present/active=selected. Entry readback4615B SHA256
+`f95cb1308704483b7875c3fc64ae383a35150657b2fcb679cbe7dc60e770e2f9`;
+planned provenance19509B SHA256
+`2a18c2d8f4bf7248d5129468b30850bd8e0c130f005b3649859df91439d3d04c`.
+All nine planned files disclose accepted mixed baseline, original unaccepted
+Anthropic2a24a518 and new Google work/importednone. Worker payload
+`a353ad60ba4a4e11af7c6485b4ef412d` has11files/128482bytes, within1MiB.
+
+Reply `msg_9146cb07a866` delivers actual **D5 nine-path SOURCE ONLY GO** under
+root `msg_f172ad66125f`, without another generic hub FIRSTASK. Qualified AstraHigh
+review/correction reserve remains for ALL unaccepted material only if genuinely
+Anthropic+Google; any unaccepted OpenAI/UNKNOWN origin holds, without excluding
+code to game independence. Supported05:44UTC author90%/review72%, statusok above
+local floor; future capacity is not guaranteed. Both D3 and D5 source-only stages
+are now cleared, actual final diffs/seals/writerEND pending. No QA/runtime/hooks/
+commit/install/network/cleanup/assets/landing, no new auth/form/floor/compat scope.
+
+D6 remains preparation only. Coordinator's bounded expected-location check found
+no original `build/fable-consensus-20261113/ui-review` in the Fable checkout;
+genuine handoff reports no browser execution. Primary gallery has no inspected
+top-level JSON source/renderer manifest, so no exact-source before-capture is
+credited; this is not a global absence claim. Current CI pins Playwright1.63.0
+Linux digest `eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27`.
+The stock wrapper uses only a tag, shared caches, whole baseline copying and
+configured full hub/simulator startup, including held WS code. It was not run.
+
+Read-only preparation in registered coordinator payload2580... records two exact
+source refs (680e93b8 and f2a122f9), four existing catalog targets at five viewports
+(40reference captures) plus the actual changed Power Cycle error toast (10more,
+not covered by its confirmation-dialog capture). A bounded synthetic UI-only
+harness or expressly permitted path, its actual independent tooling review,
+task-owned outputs and named future heavy admission remain prerequisites; no
+helper/source implementation, Task, checkout, container or capture launched.
+No baseline/CSS/owner visual or unknown WS/privacy approval is inferred. New
+old-source renders must say reference reproduction. Administration uncommitted.
+
+## D3 readiness ASK answered; existing source-only GO confirmed — 2026-11-15
+
+Actual recovered Carbon ASK `msg_a4ee321e94bf` reports zero source edits and no
+tests/runtime/sourceGit/network/helpers. Independently verified its23895byte
+manifest SHA256`1614e963463b9af33daf146e137b74f8fc4e7bd2b83374b817540a285fe7209f`,
+six per-function/test plans and262509byte owned output in worker payload
+`3a2f754954ac4e36812bc17a5ec8e7a6` (six exact baseline snapshots plus manifest,
+within1MiB). Known accepted Sol R1C is disclosed/unchanged, new material planned
+as Google without OpenAI/UNKNOWN import/adaptation; actual final origins still
+require verification, not implementation acceptance. Zero-helper ACK received.
+
+Fresh independent native live/model/high/null-effort readback, all six Git and
+amended working hashes, f2a122f9/tree3384886 and clean status verified. Supported
+05:34UTC author90%/review72% remaining, statusok, qualified Astra/high unit review
+and corrections reserved. Current two disjoint workers plus coordinator; no
+additional seat/helper or original-resource action.
+
+Reply `msg_36e57df6a026` directly resolves all three actual questions: preserve
+existing CRLF working bytes including test_settings9788B/cca664cbdc9d1aa26b08f617c829add2800b542c47c68677fd3b9a99c144d477;
+existing policyA rejects actual loopback destinations, including direct constructor
+connect/reconnect, with outside-six simulator fixtures held for later admission;
+conditional six-path **SOURCE ONLY GO confirmed** under existing authority,
+without another generic root FIRSTASK. Original failed checks/metadata and
+candidate/fidelityunknown remain unchanged. No whitelist/mock exception/new mode.
+
+Actual source edits/seal are still pending, not observed by this reply. No QA/
+runtime/hooks/commit/dependencies/network/cleanup/landing. Any new OpenAI or
+UNKNOWN material holds before writing; no unaccepted material may be excluded
+to game independence. D5 remains separately in readiness, D6 preparation only.
+Answer and bounded receipt remain in coordinator's existing registered open
+payload2580e50c5acd48cda685b978da9b9fdd, reviewNov15. Administration uncommitted.
+
+## D5-G1 native worker started in parallel; provenance before source — 2026-11-15
+
+Hub `msg_f172ad66125f` manually admits one bounded D5-G1 CarbonHigh/Google
+SOURCE trial and supersedes only old administrative serial-wave ordering for
+disjoint D3/D5. Global seat2 is D5; seat3 is reserved elsewhere. D6 is explicitly
+**preparation only**, requiring the pinned Linux before-code reference capture
+before any source edit. No candidate AUDIT, promotion, scope or landing waiver.
+
+Actual D5 Task `task_58a0a3ab20e4` under existing workflow `task_c94bdfc187f6`,
+Dispatch `ctx_e3e5284147f2`, terminal
+`term_82fbfa92-0b24-4793-9898-a86ada0d6eb7`, started in new isolated
+`d5-carbon-source-261115`, setupskip, at exact f2a122f9/tree3384886. Its actual
+native launch is ready/inputaccepted/live/exactWorker; requested/effective
+Carbon-high and null CLI effort match, embeddedHigh screen, no prompt observed.
+Current launch-cohort process creation05:32:49.254414Z has expected model/bypass
+token once/no second public mode/effort/account override. Native selection
+metadata is present/active=selected; cloud-serving identity remains uncertified.
+No raw argv/account identity/env was persisted. Central task stamp is installed.
+
+Nine frozen blobs/modes/canonical hashes match, working104358bytes, clean at
+entry. Eight unaccepted changed paths trace only to original Fable/Anthropic
+`2a24a518f958996d54bcdd58c98c78221af9aaac` by bounded scoped history and genuine
+native handoff; `tests/ha/test_init.py` is unchanged accepted baseline. Original
+accepted mixed/legacy UNKNOWN baseline remains disclosed, not retroqualified.
+Actual new material must be Google; any OpenAI/UNKNOWN unaccepted material holds
+independent acceptance, without excluding unaccepted work to game independence.
+
+Qualified Astra/high audit_security review is reserved for all unaccepted
+Anthropic+Google D5 material. Supported05:29UTC author91%/review72% remaining,
+both statusok, are above the local floor; bounded D3+D5 review/correction demand
+is reserved, other-host demand remains unknown. Before launch, all190Dispatches/
+two pages were checked: only D3 unsettled; original sourceclean/no D5 duplicate.
+Two current workers plus coordinator, no nesting, retained resources preserved.
+
+D5 **native readiness work STARTED; SOURCE GO NOT YET DELIVERED**. Worker
+receives actual native facts/nine checkout hashes in `msg_ad0c41b95916` and must
+return current per-function/test planned provenance and no-helper ACK before
+conditional text-only clearance. No extra generic hub FIRSTASK. Exact nine paths
+and agreed behavior remain in [FINAL_LEASES](../planning/fable-consensus-20261113/FINAL_LEASES.json).
+No QA/runtime/build/hooks/stage/commit/install/network/cleanup/assets/landing.
+D3 remains separately active with source-only clearance; D4/D8 preparation stays
+coordinator-owned. WS/privacy/unknown3eb/hooks/visual/exact-SHA holds unchanged.
+
+Bounded spec, original pins, checkout hashes and native receipt are in registered
+open payload `2580e50c5acd48cda685b978da9b9fdd`, shared coordinator budget1MiB,
+reviewNov15. Worker owns its separate bounded handoff output. No source or QA
+delivery/acceptance/publication is claimed; recovery administration is uncommitted.
+
+## Same-Task Carbon recovery started; source-only clearance delivered — 2026-11-15
+
+Owner-directed recovery reuses Run `run_37205f6095b3`, now bound to actual
+coordinator `term_c812d3f9-db2f-4a02-99e1-6a4cbb388afc`, generation9. One own
+foreground batch was consumed after binding; later native wake handled separately.
+All189dispatches/two pages were reconciled:179released,9retained and1settled
+compatibility row without terminal accounting; no unsettled assignment before
+recovery. Five managed trees remain. Original Fable, Opus and Carbon checkouts
+are source-clean; primary retains the four protected encoded hook files; this
+coordinator was clean before these administrative recovery records. Ignored
+runtime/user/build/assets remain protected; no cleanup occurred.
+
+Predecessor `ctx_f4650c8d0448` is abandoned/revoked, with native terminal missing.
+Positive physical exit comes from local Windows boot
+`2026-11-14T23:18:41.5000000Z`, after its recorded process creation
+`2026-11-14T22:23:22.0591020Z`, not from missing metadata. No process was killed.
+All six Git blobs and amended checkout working hashes match at
+`f2a122f955def578960303bc15242fed00d01be3`, tree
+`3384886fc4e624175046536bfd13e998923d5933`, dirty0/ignored0. Original EOL
+amendment and failed checks remain unchanged. The native retry-of request was
+refused without launch effects because the same Task was already ready; exact
+Dispatch inspection followed by the recovery guide's same-Task ready-start
+preserves failed history without a new Task or breaker escape.
+
+Actual recovered D3 Task `task_c5c1913501a9`, Dispatch `ctx_666a98f1a963`,
+terminal `term_4612f545-4715-4663-a467-d46eca03ff55`, reuses its exact isolated
+`d3-carbon-source-261114` checkout. Requested/effective Carbon-high match,
+embeddedHigh/CLI effort null; current native live/exactWorker and screen high,
+no permission prompt observed. Current launch-cohort process creation
+`2026-11-15T05:18:36.0835480Z` has the expected model, bypass token exactly once,
+no second public permission mode/effort/account override. Supported native
+selection is present and active=selected; cloud-serving identity is uncertified.
+No raw argv, account identity or environment was persisted. Accepted additive
+permission witness does not rewrite the original contradictory checker/causeUNKNOWN.
+
+Hub `msg_5e556f7bd77b` reconciles global source reservations and reserves D3seat1.
+Supported author91%/review73% remaining observations are statusok, above the local
+30% floor. Qualified Astra/high audit_security is reserved for the bounded new
+nonOpenAI D3 material and original Fable correction only. Known accepted Sol R1C
+stays unchanged/disclosed; any new OpenAI adaptation/assertion/pseudocode or new
+material originUNKNOWN holds independent acceptance. No helpers/nesting allowed.
+Conditional six-path **SOURCE ONLY GO delivered** as `msg_611147459b4c`; actual
+edits/delivery are not yet observed. No runtime/QA/hooks/stage/commit/dependencies/
+network/cleanup/landing is granted. PolicyA rejects actual loopback destinations;
+no whitelist, mock exception or outside-six edit is authorized.
+
+Parallel D5-G1 nine-file and D6-G2 six-file Carbon/Google source-only trials with
+qualified OpenAI Astra review are **planned, not launched**, in exact request
+`msg_d43ba703162c`. Their paths remain those in
+[the finite closure map](../planning/fable-consensus-20261113/DELEGATION_CLOSEOUT_20261114.json).
+Candidate SOURCE admission is pending; no candidate AUDIT/promotion or new Task
+was inferred. D4-G3 and D8 shared-path preparation remains coordinator read-only.
+Unknown WS/privacy/assets/encoded hooks, owner visual approval, every-author-family
+review, exact-SHA landing and formal release gates stay open as applicable.
+
+Bounded recovery receipts live in registered payload
+`2580e50c5acd48cda685b978da9b9fdd`, budget1MiB/review2026-11-15, needed by the
+open handoff. Existing `b559363102ba4e3094a867cbbbc2099f` frozen inputs and
+`56402be6fbd245ac854d7abf0a62e623` original Google provenance remain intact.
+These administrative records are not yet committed/published or source acceptance.
+
 ## Delegation closes the author pin; D3 Task and exact review blocker prepared — 2026-11-14
 
 Hub msg_9ff0d358753c carries actual owner authorization for replacement authors

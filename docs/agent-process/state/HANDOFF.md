@@ -1,5 +1,170 @@
 # Current coordinator handoff
 
+## Consolidated QA/commit packet queued, no execution GO — 2026-11-15
+
+Root `msg_1df5b5583282` accepts sealed writerEND/releases and releases source
+slots1/2. Actual source-only D3/D5 remain unverified/uncommitted; actors stay
+released, dirty source and open payloads preserved. No complete transcript claim.
+
+One [D3/D5 QA/normal-commit packet](../../planning/fable-consensus-20261113/D3_D5_QA_NORMAL_COMMIT_PACKET_20261115.json)
+submitted `msg_586f71c61433`,34010B/working SHA256
+fccec6705e78597d2f79f9c4a6ab031126276a88bf7278bee08ca38fcf889677.
+Supersedes earlier focused-only request, queued behind actual Exporter/Dashboard
+QA. Exact tools/hook, focused checks, SSRF/TLS negative controls,28-file static
+old127 map, exact HAfloor/current environments, normal scoped commits and fresh
+AstraHigh exact-SHA unit reviews are explicit stages, not execution permission.
+
+Real TLS proof exceeds current mocked option checks. Fixture changes require
+real provenance/independent review: OpenAI R1C/legacyUNKNOWN adaptation is not
+silently independent of Astra. No validator bypass/testflag/weaker mocks/blanket
+edits; no skip-as-HA-floor proof. Local Linux engine pipe currently unavailable,
+cache presence unknown, no start/pull/install. No QA/runtime/hooks/stage/commit/
+assembly acceptance or cleanup yet; pre-wave publication/verification rules stay.
+D6/WS/privacy/assets/hooks/visual/exact-SHA holds unchanged. Records uncommitted;
+wait for native named admission. [Ledger](../../production/AGENT_ALLOCATION.md)
+has actual states; coordinator payload2580... holds custody/storage receipts.
+
+## Both source handoffs sealed; QA admission pending — 2026-11-15
+
+D3 `msg_d6b419c4a18f` and D5 `msg_dccd2da2aa8d` are actual successful source-only
+deliveries, not QA/acceptance. All15 byte seals and exact reconstructed diffs
+verified, HEADbothf2a122f9, staged0/untracked0/exact6+9paths. Twelve named accepted
+Sol R1C regions independently byte-identical. D3diff33919B/bf2b4c1f...;
+D5diff31832B/6cb85801.... Both writersEND, exact Orca releases independently
+read back released/exited. Native terminal archives unavailable: preserve dirty
+checkouts and open handoff payloads3a2f...(323503B)/a353...(209014B), no destructive
+cleanup/full-transcript claim. Source writers0/rolling seats reported to hub.
+
+Pending finite D3-QA1 request `msg_eae30bcbf502`: one existing-host focused
+two-file pytest invocation, isolated owned data/config/output and bounded logs,
+no install/hook/commit/route proof or corrective rerun. No QA executed, no named
+HEAVY grant; last allocation reserves Exporter's normal commit hookchain.
+Exact request/custody receipts are in coordinator registered payload2580....
+R1C's real loopback fixture is another known later fixture gap; policyA unchanged,
+no whitelist/mock exception or extra file edit. D5 Linux Docker IPC pipe is
+currently missing; bounded metadata inspection failed, cache presence UNKNOWN.
+Host venv has no HA/plugin metadata, exact2025.1.0+2026.2.3 suites remain unrun.
+No engine/service start/pull/install/config action; report `msg_059da21ed45f`.
+
+Qualified AstraHigh exact corrected-commit unit acceptance, normal commits,
+integration/publication/cleanup still required. D6 source/capture unadmitted,
+only read-only preparation; WS/privacy/unknown3eb/hooks/assets/visual/exact-SHA
+holds intact. [Ledger](../../production/AGENT_ALLOCATION.md) has exact hashes and
+actual release states. Administrative records uncommitted; await native wakes.
+
+## D3 and D5 cleared source-only; HEAVY reserved elsewhere — 2026-11-15
+
+Current hub bulletin `msg_8146d370942d` acknowledged: SOURCE1D3/SOURCE2D5/
+SOURCE3DashboardRF01; sole HEAVY reserved Exporter normal32-path commit with
+13-regression hookchain. No HDMI runtime/QA/hook admission or obsolete slot query.
+
+D5 actual readiness `msg_167897d63289` passed independent current nine-pin/clean
+source/native/selection checks. Its planned provenance19509B SHA256
+2a18c2d8f4bf7248d5129468b30850bd8e0c130f005b3649859df91439d3d04c
+discloses accepted mixed baseline, original unaccepted Anthropic2a24a518 and new
+Google work/importednone. Worker payloada353ad60ba4a4e11af7c6485b4ef412d has
+11files/128482bytes. Actual **nine-path SOURCE ONLY GO** reply
+`msg_9146cb07a866` delivered; D3's prior six-path GO remains. Both final source
+diffs/seals/writerEND pending. Qualified AstraHigh review is reserved only if all
+actual unaccepted material is Anthropic+Google; OpenAI/UNKNOWN means HOLD, with
+no scope exclusion to game independence. Supported author90%/review72%05:44UTC.
+
+D6 read-only before-capture preparation is in coordinator payload2580.../
+`d6-before-capture-readonly-preparation.json`; no D6 actor/source/capture launched.
+Expected original review output absent; no exact-source capture proof credited.
+Pinned CI renderer digest known; stock tag-only runner/full held-WS backend/
+shared-cache effects prevent treating it as an approved finite capture command.
+Packet lists exact old/current refs,40existing-target references plus10actual
+Power Cycle toast captures, with new bounded harness/tooling review and named
+heavy/output ownership still needed. No runtime/source grant inferred. Owner
+visual, unknown WS/privacy/assets/hooks/exact-SHA holds remain; see current
+[ledger](../../production/AGENT_ALLOCATION.md). Records uncommitted, native wakes only.
+
+## D3 actual readiness answered; source-only GO confirmed — 2026-11-15
+
+Recovered D3 ASK `msg_a4ee321e94bf` delivered current23895byte provenance
+manifest SHA2561614e963463b9af33daf146e137b74f8fc4e7bd2b83374b817540a285fe7209f,
+zero edits/helpers/QA, and worker payload3a2f754954ac4e36812bc17a5ec8e7a6 with
+262509bytes. Coordinator verified manifest, six current Git/amended working
+pins, clean f2a122f9/tree3384886 and live exact CarbonHigh. Qualified AstraHigh
+reserve remains bounded/nonOpenAI new material only, supported author90%/review72%.
+
+Actual reply `msg_36e57df6a026` confirms existing SOURCE ONLY GO and answers Q1
+(preserve native CRLF including9788byte test_settings amendment), Q2 (policyA
+rejects actual loopback destinations/direct constructors; simulator fixtures
+outside-six held for a separate QA lease), Q3 (no extra generic root FIRSTASK).
+No new exception/whitelist/mode or history rewrite. Known accepted Sol baseline
+unchanged/disclosed; any actual new OpenAI/UNKNOWN material means HOLD. Final
+diff/seal/writerEND/custody is pending; no QA/runtime/hooks/commit/network/cleanup/
+landing yet. D5 readiness active separately, D6 preparation only. Await native
+wakes; see current [ledger](../../production/AGENT_ALLOCATION.md). Records uncommitted.
+
+## D5 parallel actor active; D6 preparation only — 2026-11-15
+
+Root `msg_f172ad66125f` admits exact nine-path D5-G1 CarbonHigh SOURCE trial,
+seat2, under existing workflow. Actual Task `task_58a0a3ab20e4`, Dispatch
+`ctx_e3e5284147f2`, terminal `term_82fbfa92-0b24-4793-9898-a86ada0d6eb7`, new
+isolated `d5-carbon-source-261115`, exact f2a122f9/tree3384886, setupskip and
+central stamp installed. Native current model/embeddedHigh/null effort/full-access
+token/selection/no-prompt checks and all nine Git/canonical checkout pins passed.
+Eight unaccepted changed files are original Fable2a24a518/Anthropic; test_init
+accepted baseline unchanged. Qualified AstraHigh independent unit review reserved
+only for genuinely all-Anthropic+Google unaccepted material; OpenAI/UNKNOWN means
+HOLD, with no scope exclusions to game independence. Supported author91%/review72%.
+
+**Readiness STARTED, D5 source edits still HELD** for actual current per-function/
+test provenance and no-helper ACK. Coordinator entry facts/current working hashes
+were delivered in `msg_ad0c41b95916`; no extra generic hub FIRSTASK needed. D3 is
+separately active with its six-path conditional source-only GO. No QA/runtime/
+hooks/commit/install/network/cleanup/assets/landing. D6 is NOT SOURCE admitted:
+resolve existing valid pinned Linux before-code reference capture first; seat3
+reserved for another repo. D4/D8 stay coordinator read-only preparation. Original
+WS/privacy/unknown3eb/assets/hooks/visual/exact-SHA holds remain intact.
+
+See [allocation ledger](../../production/AGENT_ALLOCATION.md) and registered
+payload `2580e50c5acd48cda685b978da9b9fdd` for bounded D5 spec/pins/native receipts.
+All190prelaunchDispatches/two pages reconciled; no duplicate D5 writer. Two actual
+workers plus coordinator, no nesting. These administrative updates remain
+uncommitted; wait for native worker wakes, no polling/background check.
+
+## Guarded same-Task Carbon recovery active — 2026-11-15
+
+Owner recovery instruction supersedes earlier interruption-only holds for this
+finite same-Task recovery. Run `run_37205f6095b3` is bound to actual coordinator
+`term_c812d3f9-db2f-4a02-99e1-6a4cbb388afc`, generation9. Physical predecessor
+exit is proved by local Windows boot23:18:41Z after its creation22:23:22Z on
+November14; native missing/unverifiable alone was not used. Failed predecessor
+`ctx_f4650c8d0448` remains abandoned/revoked in history and resources preserved.
+
+SAME Task `task_c5c1913501a9` now has actual live recovered Dispatch
+`ctx_666a98f1a963`, terminal `term_4612f545-4715-4663-a467-d46eca03ff55`, in
+the existing clean `d3-carbon-source-261114` checkout. All six frozen Git and
+amended working hashes match f2a122f9/tree3384886; no normalization. Fresh native
+Carbon-high/embeddedHigh/CLI-null, exact bypass token once/no second mode,
+selection present/active=selected and no observed prompt support current entry.
+Original false permission checker/causeUNKNOWN remains; cloud identity is not
+certified. Qualified Astra/high bounded review reserved, author91%/review73%
+supported remaining, no helpers/nesting. Hub `msg_5e556f7bd77b` reserves D3seat1
+and reconciles former global3 reservations.
+
+Current `msg_611147459b4c` delivers conditional **six-path SOURCE ONLY GO**;
+actual edits/sealed delivery are not yet observed. No new generic root FIRSTASK.
+Retain disclosed byte-identical Sol R1C baseline; new OpenAI implementation,
+assertion, adaptation, executable pseudocode or new originUNKNOWN means HOLD.
+Existing loopback policyA rejects actual destinations, no whitelist/mock bypass.
+No runtime/QA/hooks/stage/commit/deps/network/cleanup/landing yet. Original owner
+checkouts, unknown WS/privacy/assets and encoded hook files remain protected.
+
+D5-G1 and D6-G2 exact disjoint Carbon SOURCE/Astra review proposals are pending
+root manual admission in `msg_d43ba703162c`; no Tasks/worktrees/actors launched.
+D4/D8 remain coordinator read-only preparation. All189old dispatches/two pages
+and five managed trees reconciled. See the current
+[allocation entry](../../production/AGENT_ALLOCATION.md) for actual binding,
+custody, scope and distinctions. Bounded registered recovery receipts are in
+payload `2580e50c5acd48cda685b978da9b9fdd` (open handoff,1MiB,reviewNov15);
+original b559/56402 inputs/provenance intact. Recovery docs are uncommitted;
+no new source acceptance, publication or cleanup is claimed.
+
 ## Delegated D3 is a concrete blocked native unit — 2026-11-14
 
 Owner direction via hub msg_9ff0d358753c supersedes the Fable-only author pin
