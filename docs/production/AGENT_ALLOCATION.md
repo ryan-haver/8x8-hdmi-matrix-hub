@@ -1,5 +1,43 @@
 # Agent allocation and execution ledger
 
+## Q2 source frozen; bounded diagnostic correction planned — 2026-11-15
+
+Root `msg_6561d34d844b` accepts Q2 source END/scope/custody only, not TLS QA or
+qualification. Task22df/ctx307 completed/exited/released, terminal archive unavailable;
+43855B target80b495a0..., exact18324B/5f2e prefix preserved,366addedlines/25531B
+growth, other14pins/heads/index/modes unchanged. Report15685B/c8876c22... and old
+proofs/seals immutable, retained openQA/reviewNov16. SOURCE1 lease ended; no TLS run.
+
+Static prerequisite errors can expose environment-derived values/exception causes;
+this is unexecuted source concern, not observed serialization/conduct/fidelity count.
+Root `msg_96d50ace9f86` admits ONE fresh manual Google CarbonHigh corrective trial:
+Task `task_a592cf87ddcd`, child/dependency completed `task_22df58be5d8c`, existing
+workflowc94. **Planned, not launched**; no settled actor reopening. Only
+`tests/test_security_ssrf_tls.py`, preimage43855B/80b495a0..., original-preimage
+helper469-526, immediateforwarder540-545 and synthetic regression723-747 only.
+Preserve original461lines/67cases and remaining newTLS code/other14pins. TOTAL
+Q2 caps400addedlines/32768Bgrowth relative18324B; no additional cap/reset,
+minification or guard weakening. Fixed value-free categories/key names, no captured
+input values or value-bearing parser/filesystem causes; sentinel regression must
+cover forwarding/chain and controlled inherited-default behavior.
+
+Fresh exactnative/requested/effective High/fullaccess/noPrompt/selection/pool/custody,
+FIRST phase0 NOEDIT ASK+END, then separate coordinator SOURCEGO are required.
+Author text+targetAST only; no import/compile/tests/collection/PKI/socket/network/
+container/package/install/probe/hooks/stage/commit/cleanup. Sole NEW <=16KiB report
+registeredP2580.../`D3-Q2-DIAGNOSTIC-CORRECTION-SOURCE-HANDOFF.json`, reviewNov16,
+old handoff/history frozen. Qualified AstraHigh ALL SIX D3 FILES exactfutureSHA+
+pairedcontext reserve remains conditional on actual new Anthropic+Google material.
+
+Coordinator performed the ONE Root96 permitted existing-interpreter stdlib
+importlib.metadata lookup: installed psutil7.2.1/native0; no psutil/product import,
+environment/package inventory or cache output, no repeat. Offline QA not admitted.
+Source1HDMI planned, Source2/3free/HEAVYfree perRoot96; max3workers+coordinator/no
+nesting. Q3 materialadaptation, Q4 ChoreU09/resource and Q5-Q7/D6/WS/privacy/assets/
+formal/landing holds remain. Standing scoped prewave administrative publication
+only, evidence-hook exception after checks, integration680 unchanged; no source
+or QApacket edits by coordinator. No wholeTLS output-safety acceptance inferred.
+
 ## Corrected Q1 passed; new bounded Q2 source trial planned — 2026-11-15
 
 Root `msg_7f48b2c742e0` accepts actual Task `task_778176eb7b2f` focused-only
