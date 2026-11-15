@@ -1,5 +1,47 @@
 # Agent allocation and execution ledger
 
+## Single assertion sealed; named offline prerequisite QA planned — 2026-11-15
+
+Root `msg_7aa75cd44a90` accepts actual type-assertion SOURCE END: Task4ba64/ctx30ae
+completed/exited/released/archiveUNAVAILABLE; one assertion960/delta-4B/noaddedlines,
+target57343B/6ed5264c..., alloutsidebytes/original18324B5f2e/other14pins exact.
+Report8178B/1b91b028... and oldclaims/handoffs/Q1proofs immutable. Specific
+concrete-type strength discrepancy resolved statically, no globalsemantic/output-
+safety/runtime/TLS/qualification/sourceacceptance inferred. Source write lease ended.
+
+Root admits ONE named finite coordinator-only Q2 OFFLINE_PREREQUISITE QA:
+Task `task_7b4961fe08a7`, child/dependency completed `task_4ba64af9833e`, workflowc94,
+dispatch null/no worker, **planned, not started**. GlobalHEAVY reserved solely for
+this unit/0SOURCE/all3writeallocationsFREE perRoot7aa. Exactselected node is
+`tests/test_security_ssrf_tls.py::test_real_tls_prerequisite_guard_fails_closed_before_network_contact`;
+37synthetic cases/14categories/73internalnegativecalls are sourcecontract, not37
+pytestnodes. ActualJUnit/nativeexit/EOF/capture determines partial evidence.
+
+After this exact2doc checkpoint parentcead645a is checked/pushed with origin
+equality/integration680unchanged, fresh ownRun/coorfullaccess/noPrompt/custody/
+15sourcepins/head/index/modes and absent/contained/nonreparse outputleaf guards,
+run Root7aa exactprimaryvenv command ONCE. Fresh `build/d3-q2-prereq-261115` owner
+marker FIRST/actualQAtask/dispatchnull/UTC/purpose/reviewNov16, private data/config
+beforeimports. Existing nativePSI defaultinheritance/capture method only: four
+childoverlays/exact20removals per92eb/7aa, no parentenv mutation/values inventory.
+Prior tools/psutil7.2.1 reference reused, no importprobe/packagequery/install.
+
+Onepytestnode/no suite/collect/rerun/repair/extraQA/hooks/stage/sourcecommit; any
+missingdependency/collection0/error/skip/capture/budget issue NOTPASS/firstHOLD.
+Synthetic maps/dictionary/zeroSocket assertion only; no realTLSfixture/PKI/server/
+interface/account/credential/config/env inventory or network. Combined diagnostics
+<=5MiB/totalQA<=20MiB, no source/dependencycopies/newcontroller/watchdog/kill.
+NaturalEND/directexit/bothEOF/capturecomplete/PIDbirth/twochildsnapshot limits,
+actualnodeid/counts/loghashes/source15+oldproofs unchanged required. SELFwithdraw
+runtime/releaseHEAVY atactualEND evenfailed; no nextstage fromPASS. Minimalproof
+retained ownedroot/metadataexisting1MiBP/openQA reviewNov16, no manualcleanup.
+
+Pass is OFFLINE_PREREQUISITE_PARTIAL_ONLY, not realTLS/noSkipTLS/routes/allD3/HA/
+qualification/normalcommit/independentexactSHAacceptance/landing. AllrealTLS/resource/
+Q3materialreviewer/Q4ChoreU09/Q5-Q7/D6/WSprivacy/assets/formal/ownerquestions remain.
+Standing administrative evidence-only hookexception/scopedchecks only for checkpoint;
+fullhook/tests NOTRUN for docs. Additional action needs separateconcreteRootgrant.
+
 ## Readable Q2 source frozen; single type-assertion correction planned — 2026-11-15
 
 Root `msg_fd03813b585d` accepts readable source END/scoped seals/layout only,
