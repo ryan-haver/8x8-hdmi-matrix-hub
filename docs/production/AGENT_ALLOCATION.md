@@ -1,5 +1,41 @@
 # Agent allocation and execution ledger
 
+## Readable Q2 source frozen; single type-assertion correction planned — 2026-11-15
+
+Root `msg_fd03813b585d` accepts readable source END/scoped seals/layout only,
+not fullsemantic/output-safety/QA/qualification. Task451089/ctxf320 completed/exited/
+released, archiveUNAVAILABLE; target57347B/e221ac55...,593Q2addedlines/39023Bgrowth,
+original18324B5f2e prefix/twochunks/other14pins exact. Report16175B/66ef4d9e... and
+priorclaims/proofs immutable. Static concrete-type assertion discrepancy at960 is
+not executedfailure/intent or automatic incident/fidelity count.
+
+Root admits ONE minimal manualGoogleCarbonHigh SOURCE1 correction:
+Task `task_4ba64af9833e`, parent/dependency completed `task_451089645fdc`, workflowc94;
+**planned, not launched**, freshactor/sameD3/no ctxf320 reopening/defaultfollowup.
+Sole source `tests/test_security_ssrf_tls.py` at57347Be221preimage; ONLY concrete
+exception-type assertion960. Restore unspoofable actual-concrete-type strength;
+all other bytes/readablelayout/37inputs/14categories/73call contract/traceback/
+frames/causes/zerosocket behavior frozen. Absolute source delta<=128B/no addedlines,
+TOTAL Q2<=600addedlines49152Bgrowth/whole<=67476B unchanged; no minification/weakening.
+Author owns implementation, no coordinator/reviewer code/pseudocode/patch.
+
+FIRST native phase0 NOEDIT exactscopeACK+END before separate SOURCEGO and current
+exactnativeHigh/incarnation/fullaccessonce/noPrompt/selection/pool/custody guards.
+Qualified AstraHigh ALL SIX D3 FILES exactfutureSHA+pairedcontext reserve FIRST,
+conditional on actual new Anthropic+Google/unchanged disclosedOpenAI baselineR1C;
+no new adaptedOpenAI/UNKNOWN. CurrentGoogle81weekly94session/Astra67%statusok;
+freshlaunch/GO guards pending. Text+AST only, no imports/compile/tests/collect/
+network/PKI/socket/engine/package/metadatarepeat/hooks/commit/cleanup. SourceEND
+must prove singleassert-onlydelta/allpins/oldproofs/settlement/storage, then return
+ready offlineguard-node proposal for finiteRootQA; NO execution/automatic newcycle.
+
+SoleNEW<=8KiB `D3-Q2-TYPE-ASSERTION-SOURCE-HANDOFF.json` in positivelyowned
+registeredP2580.../<=1MiB/reviewNov16. Source1HDMIplanned/2+3free/HEAVY0 perRootfd,
+max3workers+coor/no nesting. Existing AnsibleR4/Nexusreviewer/Exporterhistorical
+ownerdecisions pending, no approval inferred. All realTLS/resource/Q3/Q4/later/
+formal/landing holds unchanged. Standing scoped prewave administrative publication
+only/evidence-hook exception after checks/integration680 preserved/no source edit.
+
 ## Corrective Q2 frozen; prospective readability-only trial planned — 2026-11-15
 
 Root `msg_05717b52ab7b` accepts corrective source END/custody/numeric facts only.
