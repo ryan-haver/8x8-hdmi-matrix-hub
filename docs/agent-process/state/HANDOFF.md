@@ -1,5 +1,35 @@
 # Current coordinator handoff
 
+## Q1 first failure preserved; two bounded actors planned — 2026-11-15
+
+Root `msg_3b4f979a1c08` accepts Q1 Task `task_65480d0c61e0` FAILED_TEST_HOLD,
+64pass/1fail/0error/0skip, native1/naturalEND/bothEOF,15source seals unchanged,
+no retry/fix. Failure at security test351 in
+`test_http_connect_and_reconnect_block_dns_rebinding_and_mixed_answers`;
+actual49808B first proof/result SHA8d2edda6de4e60644ae5dfba246781ee5dcea28aed2a9e5dad658dec841199e0
+retained D3 `build/d3-qa1-261115`, reviewNov16. Runtime withdrawn/HEAVY released;
+no new source/model/conduct finding. Old successful source Tasks remain succeeded.
+
+After authorized two-doc checkpoint publication, **planned, not launched**:
+fresh CarbonHigh/Google manual SOURCE1 correction child of D3sourcec5, same dirty
+D3 checkout, only failing-function fixture/setup in `tests/test_security_ssrf_tls.py`.
+PHASE0 native ASK/NOEDIT first; exact static producer-contract mismatch and actual
+native/custody/pool guards before separate source GO. No production/security change,
+assertion weakening/skip/bypass/legacy OpenAI adaptation or pytest; qualified fresh
+AstraHigh ALL-D3 exact-corrected-SHA reserve remains independent of actual authors.
+Parallel fresh Codex Sol/high READONLY Q4 child of D5source58a0, separate D5 checkout,
+official exact2025.1.0 Python/plugin dependency metadata only, <=20release lookups
+including coordinator fact checks; no code/install/runtime/Docker/private probes.
+
+Sole expressly leased absent reports in registered coordinator payload2580...:
+`D3-Q1-CORRECTION-SOURCE-HANDOFF.json` and `D5-HA-EXACT-FLOOR-METADATA.md`,
+<=16384B each, <=1MiB total payload/reviewNov16. Current supported Google84%/
+OpenAI68%statusok; native pre-GO guards pending. No helpers/nesting/old actor
+reopening/source copies or cleanup. Checkpoint only these two docs, parentd839,
+existing evidence-only hook exception/static checks, ordinary coordinator push,
+integration680 unchanged; no QApacket rewrite or new heavy grant. All later
+QA/fixture-origin/HA/commit/audit/D6/WS/privacy/visual/formal gates remain.
+
 ## Consolidated QA/commit packet queued, no execution GO — 2026-11-15
 
 Root `msg_1df5b5583282` accepts sealed writerEND/releases and releases source

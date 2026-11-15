@@ -1,5 +1,48 @@
 # Agent allocation and execution ledger
 
+## Q1 failed; bounded correction and HA metadata follow-ups admitted — 2026-11-15
+
+Root `msg_3b4f979a1c08` accepts actual Q1 Task `task_65480d0c61e0` as
+FAILED_TEST_HOLD:64passed/1failed/0errors/0skips, nativeexit1/naturalEND/bothEOF.
+Settings19passed; security45passed/1failed at
+`test_http_connect_and_reconnect_block_dns_rebinding_and_mixed_answers`:351.
+Result receipt25841B SHA256`8d2edda6de4e60644ae5dfba246781ee5dcea28aed2a9e5dad658dec841199e0`
+and actual49808B owned proof remain in D3 `build/d3-qa1-261115`, reviewNov16.
+All15source seals/heads/index/modes unchanged, no rerun/fix; runtime withdrawn,
+HEAVY released. This is no new model/conduct/qualification finding.
+
+Root now admits two **planned, not launched** fresh genuine actors after this
+two-doc publication checkpoint. SOURCE1: manual CarbonHigh/Google correction
+child of completed D3 source Task `task_c5c1913501a9`, same dirty isolated D3
+checkout/f2a122f9/tree3384886, no old actor reopening. Only
+`tests/test_security_ssrf_tls.py`, fixture/setup and strictly necessary same-function
+controls inside the failing function. Initial PHASE0 readiness/native ASK with
+NOEDIT and static producer-contract evidence; coordinator source GO only after
+positive current guards and confirmed fixture mismatch. No production semantics,
+other functions/files, weaker assertions, skip/catch-to-pass, validator bypass,
+legacy OpenAI fixture adaptation or runtime. Qualified fresh AstraHigh final ALL-D3
+six-file exact-corrected-SHA review/correction reserve remains conditional on all
+actual unaccepted material being Anthropic+Google. Sole correction report in
+existing registered payload2580.../`D3-Q1-CORRECTION-SOURCE-HANDOFF.json`, <=16384B.
+
+Parallel zeroSOURCE/zeroHEAVY: fresh qualified Codex gpt-6.1-sol/high read-only
+Q4-readiness child of completed D5 source Task `task_58a0a3ab20e4`, separate D5
+checkout, exact HA2025.1.0 Requires-Python and compatible pytest-HA-plugin
+Requires-Dist from official primary metadata only; contrast2026.2.3/plugin0.13.316.
+At most20candidate-release metadata lookups including reserved coordinator fact
+checks, no downloads/install/pip/Docker/service/cache/profiles/code/assertions.
+Sole payload2580.../`D5-HA-EXACT-FLOOR-METADATA.md`, <=16384B, metadata not runtime
+floor proof. Current supported author84%/OpenAI68% remaining/statusok; fresh
+native/model/access/selection/custody/localcap checks still required before GO.
+
+Both reports together <=32768B within existing1MiB payload, reviewNov16 for open
+dependencies; no snapshots/graphs/helpers/nesting or cleanup. Existing Q1 failure,
+old source history/proofs, missing Linux-pipe/cacheUNKNOWN and Q2-Q7/D6/WS/privacy/
+assets/visual/formal/landing holds preserved. Root expressly admits only this
+two-doc evidence checkpoint: scoped static checks, one existing-policy invocation
+hook exception commit parentd839, ordinary coordinator-branch push/exact equality,
+integration680 unchanged; postpush proof outside commit. No new QA grant.
+
 ## One consolidated D3/D5 QA and normal-commit packet submitted — 2026-11-15
 
 Hub `msg_1df5b5583282` accepts the actual source-only writerEND/releases and
