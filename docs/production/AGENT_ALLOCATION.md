@@ -1,5 +1,45 @@
 # Agent allocation and execution ledger
 
+## Corrective Q2 frozen; prospective readability-only trial planned — 2026-11-15
+
+Root `msg_05717b52ab7b` accepts corrective source END/custody/numeric facts only.
+Taska592/ctxe314 completed/exited/released, archive unavailable; target51077B/
+4d2a1621...,399Q2addedlines/32753Bgrowth, original18324B5f2e prefix/fourprotected
+chunks/other14pins preserved. Report16264B/c2737ca1... and old proofs immutable.
+Prior noMinificationOrGuardWeakening assertion remains an unendorsed author claim;
+Root requires readable regression rather than packed expressions. No purpose,
+intent, fidelity/conduct classification or new incident count is established.
+
+Root admits ONE prospective readability-only manualGoogleCarbonHigh SOURCE1 trial,
+Task `task_451089645fdc`, parent/dependency completed `task_a592cf87ddcd` under
+workflowc94; **planned, not launched**. Fresh actor/sameD3/no oldDispatch reopening.
+Sole source `tests/test_security_ssrf_tls.py`, preimage51077B/4d2a1621..., only current
+synthetic prerequisite regression738-780. Ordinary readable statements/namedcases,
+ALL scenario inputs/category/cause/context/default-inherited-path/assertions/
+traceback and zero-socket semantics preserved; no functional change, deletion,
+weaker assertion, helper/production/TLSfixture mutation or complexity hiding.
+All outside-regression bytes/other14pins/heads/index/modes remain frozen.
+
+NEW prospective TOTAL Q2 bounds relative original18324B/461line prefix are
+600addedlines/49152Bgrowth (whole<=67476B/1061lines); old400/32768 limits remain
+historical priorgrant, never retroactively approved. If readable semantic-preserving
+implementation cannot fit, HOLD evidence, no minification/broadening. FIRST native
+phase0 exactscopeNOEDIT ACK+END before separate coordinator SOURCEGO, with current
+nativeCarbonHigh/ownincarnation/accessonce/noPrompt/selection/pool/custody guards.
+Qualified AstraHigh ALL SIX D3 FILES exactfutureSHA+pairedcontext reserve remains
+conditional on genuine new Anthropic+Google material/unchanged disclosed OpenAI
+baselineR1C; no copied/adapted OpenAI/UNKNOWN. Google82weekly96session/Astra67%
+current supported headroom, fresh pre-GO checks still required.
+
+Text+targetAST authoring only, no imports/compile/test/collect/PKI/network/socket/
+engine/package/metadatarepeat/QA/hooks/stage/commit/cleanup. Sole new <=16KiB
+`D3-Q2-READABILITY-SOURCE-HANDOFF.json` in positivelyowned registeredP2580...,
+semantic preservation matrix/seals/provenance/storage, <=1MiB/reviewNov16. Source1
+HDMIplanned/2+3free/HEAVY0 perRoot057, max3workers+coor/no nesting; AnsibleR4owner
+pending. Offlineguard QA NOT admitted; realTLS/Q3/Q4/Q5-Q7/D6/WSprivacy/assets/
+formal/landing unchanged. Standing scoped administrative prewave publication only,
+evidence-hook exception after checks/integration680 preserved/no product writes.
+
 ## Q2 source frozen; bounded diagnostic correction planned — 2026-11-15
 
 Root `msg_6561d34d844b` accepts Q2 source END/scope/custody only, not TLS QA or
