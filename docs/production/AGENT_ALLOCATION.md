@@ -1,5 +1,44 @@
 # Agent allocation and execution ledger
 
+## Corrected Q1 passed; new bounded Q2 source trial planned — 2026-11-15
+
+Root `msg_7f48b2c742e0` accepts actual Task `task_778176eb7b2f` focused-only
+67pass/0fail/0error/0skip (settings19/security48), native0/naturalEND/bothEOF.
+Result23544B SHA256fee84fc144a86b23874492322a8f8f9cda6de3b40a68c069664bec5924760364;
+actual53733B proof retained in `build/d3-qa1-corrected-261115`, reviewNov16.
+All15corrected source seals/heads/index/modes unchanged; old failed QA65480/49808B
+proof/8d2e hash preserved. Runtime withdrawn/HEAVY released; no Q1 replay needed.
+
+Root `msg_3801e79237d4` admits NEW manual Google CarbonHigh Q2 SOURCE1 trial.
+Task `task_22df58be5d8c`, workflow parentc94, dependencies completed9db/778176;
+**planned, not launched**. Same retained D3 checkout/f2a122f9/tree3384886;
+only `tests/test_security_ssrf_tls.py`, preimage18324B CRLF/5f2e91ab...,
+additive fixtures/cases <=400added lines/32768B growth. Existing67passing cases
+and assertions/other14paired source pins remain frozen. Genuine fresh actor,
+PHASE0 explicitNOEDIT ASK+END before separate SOURCEGO; exact requested/effective/
+native High/fullaccess/noPrompt/currentselection/pool/custody guards are required.
+
+Plain contract: real trustedCA/matching-name positive, untrusted/wrong-name TLS
+negatives with meaningful certificate cause, correct/wrong fingerprint and existing
+precedence, no insecure fallback, validator/resolver/SNI unchanged. Future server
+must use positively owned permitted private interface, never loopback redirect or
+allowlist. Authoring only: text and target-text AST, no imports/compile/tests/
+collection/sockets/cert generation/simulator/Docker/package queries/runtime/hooks/
+stage/commit/cleanup. No copied/adapted OpenAI/UNKNOWN material or simulator TLS
+helper. Qualified AstraHigh ALLsix exactfutureSHA+pairedcontext reserve remains
+conditional on actual unaccepted Anthropic+Google authorship; accepted unchanged
+OpenAI baseline/R1C stays disclosed. Candidate prior incident is preserved, no
+promotion/rehabilitation/accepted outcome inferred. Sole leased <=16384B report
+payload2580.../`D3-Q2-REAL-TLS-SOURCE-HANDOFF.json`, <=1MiB payload/reviewNov16.
+
+Global SOURCE1 HDMI; SOURCE2 Ansible finalR3 and SOURCE3free per Root; no HEAVY,
+local max3workers+coordinator/no nesting. Q3 exact minimum two-fixture material
+adaptation/reviewer hold persists; Q4 linked to existing ChoreU09, no engine Start/
+readback/container/install authority. Q5-Q7/D6/WS/privacy/assets/formal/landing
+remain. Standing prewave administrative record publication uses scoped static
+checks/evidence-only invocation hook exception/ordinary existing coordinator-branch
+push/exact equality/integration680unchanged; no product or QApacket edits.
+
 ## Corrected D3 sealed; named focused QA admitted — 2026-11-15
 
 Root `msg_4e40fd707506` accepts actual correction SOURCE END and assigns exclusive
