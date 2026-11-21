@@ -154,7 +154,7 @@
     "Integration/conflicts and canonical release/evidence metadata"
   ],
   "environment_requirements": [
-    "Preserve Python/aiohttp project architecture; metadata Python 3.11/3.12, HA suite requires its supported separate Python/dependencies (3.13+ in current contributing guide).",
+    "Preserve Python/aiohttp project architecture; metadata requires Python >=3.12, HA suite requires its supported separate Python/dependencies (3.13+ in current contributing guide).",
     "Use .venv/Scripts/python.exe on this Windows host; isolate MATRIX_DATA_DIR and UC_CONFIG_HOME for tests.",
     "Pinned Node/npm/Playwright and Docker only for applicable explicitly authorized checks; adoption starts no services.",
     "Strict complete core route inventory; partial documentation checks disable tests.route_inventory and do not overwrite route proof.",

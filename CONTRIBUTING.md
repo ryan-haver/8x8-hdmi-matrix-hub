@@ -41,7 +41,7 @@ labels (DEP-06). The runtime entry point is **`run.py`** — `python run.py`
 boots the core (REST API, web UI at `/ui`, kiosk at `/kiosk`); setting
 `UC_ENABLED=true` also starts the Remote 3 integration on WebSocket
 port `9095` (`docs/DOCKER.md`, `run.py:9-12`). Tests target Python 3.12
-(the metadata supports Python 3.11 and Python 3.12; HA tests need 3.13+).
+(the packaging metadata requires Python `>=3.12` — Python 3.11 is no longer supported; HA tests need 3.13+).
 
 ### 3. Install dependencies (hashed, locked)
 

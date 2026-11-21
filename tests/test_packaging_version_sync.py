@@ -196,7 +196,7 @@ def test_built_metadata_modules_and_assets(distributions: tuple[Path, Path, str]
         metadata = BytesParser().parsebytes(archive.read(next(name for name in names if name.endswith("/METADATA"))))
         assert metadata["Name"] == config["project"]["name"]
         assert metadata["Version"] == expected_version
-        assert metadata["Requires-Python"] == ">=3.11"
+        assert metadata["Requires-Python"] == ">=3.12"
         assert metadata["License-Expression"] == "MPL-2.0"
         requirements = metadata.get_all("Requires-Dist", [])
         for dependency in config["project"]["dependencies"]:

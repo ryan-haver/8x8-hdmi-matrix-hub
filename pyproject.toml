@@ -9,7 +9,7 @@ description = "OREI BK-808 HDMI Matrix integration for Unfolded Circle Remote Tw
 readme = "README.md"
 license = "MPL-2.0"
 license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "LICENSES/python/**/*"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 authors = [
     {name = "Ryan Haver", email = "13879652+ryan-haver@users.noreply.github.com"}
 ]
@@ -18,7 +18,6 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Home Automation",
 ]
@@ -92,7 +91,7 @@ web = ["**/*.html", "**/*.json", "**/*.js", "**/*.css", "**/*.svg"]
 
 [tool.black]
 line-length = 120
-target-version = ["py311", "py312"]
+target-version = ["py312"]
 
 [tool.ruff]
 line-length = 120
