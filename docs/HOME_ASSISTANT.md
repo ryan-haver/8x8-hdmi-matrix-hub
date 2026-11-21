@@ -678,11 +678,14 @@ like this:
 - **Checked before it is stored.** All three places ask the hub (`GET /api/auth/status`,
   which changes nothing on the hub) whether it accepts the key. On a locked hub a
   missing, wrong or revoked key is refused with *invalid_auth*; setup no longer
-  succeeds with a key that every later command would answer `401` to. A hub without a
-  control lock needs no key and accepts any.
-- **Reconfigure keeps it.** Leaving the field as it is keeps the stored key; the flow
-  is also the place to add one to an entry created before the hub was locked. Clearing
-  the field removes the key.
+  succeeds with a key that every later command would answer `401` to. If
+  `GET /api/auth/status` is missing (`404`) or returns a malformed answer, probing
+  fails closed with *invalid_auth_status* rather than assuming the hub is unlocked.
+  A hub that explicitly reports `control_pin_set: false` needs no key and accepts any.
+- **Reconfigure and Options keep or clear it.** Leaving the field as it is keeps the
+  stored key; either flow can add a key to an entry created before the hub was locked,
+  or clear the field to remove a stored key when the hub is unlocked, reloading the
+  entry once.
 - **Control level only.** That is all the integration uses. An API key cannot unlock
   admin routes, so the **Reboot** button (an admin route) needs an admin PIN session
   and will report an error if the hub has an admin PIN set. Everything else —
@@ -772,10 +775,13 @@ The hub may have its control lock enabled, which requires an API key on every re
    [API Key](#api-key-required-only-when-the-hubs-control-lock-is-on).
 3. The integration reloads itself after the change; entities return on the next poll.
 
-A `cannot_connect` error during initial setup usually means the host or port is wrong;
-on a locked hub it can also mean the key was missing, so re-run the flow with it filled
-in. The key travels as an HTTP header over the hub's plain-HTTP REST API, so keep Home
-Assistant and the hub on a trusted LAN or a VPN.
+During setup, reconfigure, or options checks: `cannot_connect` means Home Assistant
+could not reach the hub (check the host, port, and container); `invalid_auth` means the
+hub's control lock is enabled and the API key was missing, wrong, or revoked; and
+`invalid_auth_status` means the address answered `/api/health` without a valid
+`/api/auth/status` response (for example an older hub build or another service on that
+port), so setup fails closed. The key travels as an HTTP header over the hub's
+plain-HTTP REST API, so keep Home Assistant and the hub on a trusted LAN or a VPN.
 
 ### REST Commands Not Working
 

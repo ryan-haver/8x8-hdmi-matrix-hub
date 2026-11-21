@@ -146,3 +146,44 @@ async def test_auth_status_errors_are_hub_errors() -> None:
             assert error.value.status == 404
     finally:
         await server.close()
+
+
+@pytest.mark.parametrize(
+    ("content_type", "raw_body"),
+    [
+        ("text/plain", "ok"),
+        ("application/json", "null"),
+        ("application/json", "[]"),
+        ("application/json", "{}"),
+        ("application/json", '{"success": true, "data": {"control_pin_set": false}}'),
+        ("application/json", '{"control_pin_set": "false", "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": 0, "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": null, "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": false}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "superuser"}'),
+        ("application/json", '{"control_pin_set": false, "session_level": 1}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "none", "admin_pin_set": "no"}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "none", "device_remembered": 1}'),
+    ],
+)
+async def test_auth_status_and_control_allowed_reject_malformed_200_payloads(
+    content_type: str, raw_body: str
+) -> None:
+    """Malformed HTTP 200 answers on ``/api/auth/status`` raise ``HubResponseError`` (fail closed)."""
+
+    async def malformed(_request: web.Request) -> web.Response:
+        return web.Response(text=raw_body, content_type=content_type, status=200)
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", malformed)
+    async with TestServer(app, host="127.0.0.1") as server, aiohttp.ClientSession() as session:
+        client = HubClient(session, "127.0.0.1", server.port, "ha-key")
+        with pytest.raises(HubResponseError) as auth_err:
+            await client.auth_status()
+        assert auth_err.value.status == 200
+        with pytest.raises(HubResponseError) as ctrl_err:
+            await client.control_allowed()
+        assert ctrl_err.value.status == 200
+        connector = session.connector
+        assert connector is not None
+        assert not connector._acquired, "a response was not released"  # noqa: SLF001

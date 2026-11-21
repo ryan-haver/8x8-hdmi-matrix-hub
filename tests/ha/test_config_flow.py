@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import json
 from datetime import timedelta
+from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import aiohttp
@@ -10,13 +13,28 @@ import pytest
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType, InvalidData
+from homeassistant.helpers import translation
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
+from custom_components import hdmi_matrix
 from custom_components.hdmi_matrix.const import CONF_API_KEY, CONF_SCAN_INTERVAL, DOMAIN
 
 from .helpers import BASE_URL, HOST, MAC, PORT, MockHub, coordinator
 
 USER_INPUT = {"host": HOST, "port": PORT}
+COMPONENT = Path(__file__).resolve().parents[2] / "custom_components" / "hdmi_matrix"
+_MALFORMED_AUTH_BODIES = (
+    "not-json",
+    "null",
+    "[]",
+    "{}",
+    '{"success": true, "data": {}}',
+    '{"control_pin_set": "false", "session_level": "none"}',
+    '{"control_pin_set": 0, "session_level": "none"}',
+    '{"control_pin_set": false}',
+    '{"control_pin_set": false, "session_level": "bogus"}',
+)
 
 
 @pytest.fixture
@@ -281,15 +299,19 @@ async def test_user_flow_unlocked_hub_needs_no_key_and_ignores_one(
     assert result["data"][CONF_API_KEY] == "anything"
 
 
-async def test_user_flow_hub_without_the_access_model_sets_up(hass: HomeAssistant, hub: MockHub, mock_setup_entry) -> None:
-    """A hub from before the access model has no ``/api/auth/status`` (404) and no locks."""
+async def test_user_flow_fails_closed_when_auth_status_is_404(
+    hass: HomeAssistant, hub: MockHub, mock_setup_entry
+) -> None:
+    """Missing ``/api/auth/status`` (404) fails closed instead of assuming the hub is unlocked."""
     hub.auth_status_code = 404
 
     result = await _start_flow(hass)
     result = await hass.config_entries.flow.async_configure(result["flow_id"], USER_INPUT)
 
-    assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert result["data"] == USER_INPUT
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth_status"}
+    assert not hass.config_entries.async_entries(DOMAIN)
+    assert not mock_setup_entry.mock_calls
 
 
 async def test_reconfigure_locked_hub_rejects_a_wrong_key(hass: HomeAssistant, hub: MockHub, setup_integration) -> None:
@@ -409,3 +431,195 @@ async def test_options_flow_changes_the_interval_while_the_hub_is_unreachable(
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options == {CONF_SCAN_INTERVAL: 45}
     assert "/api/auth/status" not in [call[1].path for call in hub.mock.mock_calls]
+
+
+async def test_reconfigure_and_options_fail_closed_when_auth_status_is_404(
+    hass: HomeAssistant, hub: MockHub, setup_integration
+) -> None:
+    """Reconfigure and changed-key Options checks also fail closed when ``/api/auth/status`` is 404."""
+    entry = setup_integration
+    hub.auth_status_code = 404
+
+    reconf = await entry.start_reconfigure_flow(hass)
+    reconf = await hass.config_entries.flow.async_configure(
+        reconf["flow_id"], {**USER_INPUT, CONF_API_KEY: "new-key"}
+    )
+    assert reconf["type"] is FlowResultType.FORM
+    assert reconf["errors"] == {"base": "invalid_auth_status"}
+    assert entry.data == USER_INPUT
+
+    opt = await hass.config_entries.options.async_init(entry.entry_id)
+    opt = await hass.config_entries.options.async_configure(
+        opt["flow_id"], {CONF_SCAN_INTERVAL: 30, CONF_API_KEY: "new-key"}
+    )
+    assert opt["type"] is FlowResultType.FORM
+    assert opt["errors"] == {"base": "invalid_auth_status"}
+    assert (entry.data, entry.options) == (USER_INPUT, {})
+
+
+@pytest.mark.parametrize("raw_body", _MALFORMED_AUTH_BODIES)
+async def test_user_flow_fails_closed_when_auth_status_is_malformed_200(
+    hass: HomeAssistant, hub: MockHub, mock_setup_entry, raw_body: str
+) -> None:
+    """Malformed HTTP 200 answers on ``/api/auth/status`` fail closed in the user step."""
+
+    async def _malformed(method: str, url: Any, _data: Any) -> AiohttpClientMockResponse:
+        return AiohttpClientMockResponse(method, url, status=200, text=raw_body)
+
+    with patch.object(hub, "_auth_status", side_effect=_malformed):
+        hub.register()
+        result = await _start_flow(hass)
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], USER_INPUT)
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth_status"}
+    assert not hass.config_entries.async_entries(DOMAIN)
+    assert not mock_setup_entry.mock_calls
+
+
+@pytest.mark.parametrize("raw_body", _MALFORMED_AUTH_BODIES)
+async def test_reconfigure_and_options_fail_closed_when_auth_status_is_malformed_200(
+    hass: HomeAssistant, hub: MockHub, setup_integration, raw_body: str
+) -> None:
+    """Malformed HTTP 200 answers on ``/api/auth/status`` fail closed in Reconfigure and Options."""
+    entry = setup_integration
+
+    async def _malformed(method: str, url: Any, _data: Any) -> AiohttpClientMockResponse:
+        return AiohttpClientMockResponse(method, url, status=200, text=raw_body)
+
+    with patch.object(hub, "_auth_status", side_effect=_malformed):
+        hub.register()
+        reconf = await entry.start_reconfigure_flow(hass)
+        reconf = await hass.config_entries.flow.async_configure(
+            reconf["flow_id"], {**USER_INPUT, CONF_API_KEY: "new-key"}
+        )
+        assert reconf["type"] is FlowResultType.FORM
+        assert reconf["errors"] == {"base": "invalid_auth_status"}
+        assert entry.data == USER_INPUT
+
+        opt = await hass.config_entries.options.async_init(entry.entry_id)
+        opt = await hass.config_entries.options.async_configure(
+            opt["flow_id"], {CONF_SCAN_INTERVAL: 30, CONF_API_KEY: "new-key"}
+        )
+        assert opt["type"] is FlowResultType.FORM
+        assert opt["errors"] == {"base": "invalid_auth_status"}
+        assert (entry.data, entry.options) == (USER_INPUT, {})
+
+
+async def test_options_flow_clearing_key_removes_it_or_rejects_when_locked(
+    hass: HomeAssistant, hub: MockHub
+) -> None:
+    """Clearing the API key in Options fails closed on a locked hub and removes it on an unlocked hub."""
+    hub.lock_control("ha-key")
+    entry = MockConfigEntry(domain=DOMAIN, data={**USER_INPUT, CONF_API_KEY: "ha-key"}, unique_id=MAC)
+    entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {CONF_SCAN_INTERVAL: 30, CONF_API_KEY: ""}
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth"}
+    assert entry.data == {**USER_INPUT, CONF_API_KEY: "ha-key"}
+    assert coordinator(entry).client.api_key == "ha-key"
+
+    hub.control_pin_set = False
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {CONF_SCAN_INTERVAL: 30, CONF_API_KEY: "   "}
+    )
+    await hass.async_block_till_done()
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert entry.data == USER_INPUT
+    assert entry.options == {CONF_SCAN_INTERVAL: 30}
+    assert coordinator(entry).client.api_key is None
+
+
+async def test_reconfigure_and_options_each_reload_exactly_once(
+    hass: HomeAssistant, hub: MockHub
+) -> None:
+    """Setup migration, Reconfigure (changed or unchanged), and Options each run setup once."""
+    setup_calls = 0
+    real_setup_entry = hdmi_matrix.async_setup_entry
+
+    async def _counting_setup(hass_arg: HomeAssistant, entry_arg: Any) -> bool:
+        nonlocal setup_calls
+        setup_calls += 1
+        return await real_setup_entry(hass_arg, entry_arg)
+
+    hub.lock_control("old-key", "new-key")
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={**USER_INPUT, CONF_API_KEY: "stale-key"},
+        options={CONF_SCAN_INTERVAL: 20, CONF_API_KEY: "old-key"},
+        unique_id=MAC,
+    )
+    entry.add_to_hass(hass)
+
+    with patch("custom_components.hdmi_matrix.async_setup_entry", side_effect=_counting_setup):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        assert setup_calls == 1
+
+        reconf = await entry.start_reconfigure_flow(hass)
+        reconf = await hass.config_entries.flow.async_configure(
+            reconf["flow_id"], {"host": "192.0.2.20", "port": 8081, CONF_API_KEY: "new-key"}
+        )
+        await hass.async_block_till_done()
+        assert reconf["type"] is FlowResultType.ABORT
+        assert reconf["reason"] == "reconfigure_successful"
+        assert setup_calls == 2
+        assert entry.data == {"host": "192.0.2.20", "port": 8081, CONF_API_KEY: "new-key"}
+        assert entry.options == {CONF_SCAN_INTERVAL: 20}
+        assert coordinator(entry).client.api_key == "new-key"
+
+        reconf_same = await entry.start_reconfigure_flow(hass)
+        reconf_same = await hass.config_entries.flow.async_configure(
+            reconf_same["flow_id"], {"host": "192.0.2.20", "port": 8081, CONF_API_KEY: "new-key"}
+        )
+        await hass.async_block_till_done()
+        assert reconf_same["reason"] == "reconfigure_successful"
+        assert setup_calls == 3
+
+        hub.control_pin_set = False
+        opt = await hass.config_entries.options.async_init(entry.entry_id)
+        opt = await hass.config_entries.options.async_configure(
+            opt["flow_id"], {CONF_SCAN_INTERVAL: 45, CONF_API_KEY: ""}
+        )
+        await hass.async_block_till_done()
+        assert opt["type"] is FlowResultType.CREATE_ENTRY
+        assert setup_calls == 4
+        assert entry.data == {"host": "192.0.2.20", "port": 8081}
+        assert entry.options == {CONF_SCAN_INTERVAL: 45}
+        assert coordinator(entry).client.api_key is None
+
+
+async def test_localized_auth_error_messages_are_truthful(
+    hass: HomeAssistant, setup_integration: MockConfigEntry
+) -> None:
+    """Every flow error code has a distinct, truthful localized message in strings and English translations."""
+    assert setup_integration.domain == DOMAIN
+    strings = json.loads((COMPONENT / "strings.json").read_text(encoding="utf-8"))
+    en = json.loads((COMPONENT / "translations" / "en.json").read_text(encoding="utf-8"))
+    assert strings == en
+
+    for section in ("config", "options"):
+        errors = strings[section]["error"]
+        assert {"cannot_connect", "invalid_auth", "invalid_auth_status", "unknown"} <= set(errors)
+        assert len(set(errors.values())) == len(errors)
+        assert "/api/auth/status" in errors["invalid_auth_status"]
+        assert "Cannot connect" not in errors["invalid_auth_status"]
+        assert "control PIN" not in errors["invalid_auth_status"]
+        assert "control PIN" in errors["invalid_auth"]
+        assert "Cannot connect" in errors["cannot_connect"]
+
+    config_tr = await translation.async_get_translations(hass, "en", "config", {DOMAIN}, config_flow=True)
+    options_tr = await translation.async_get_translations(hass, "en", "options", {DOMAIN})
+    assert config_tr[f"component.{DOMAIN}.config.error.invalid_auth_status"] == (
+        strings["config"]["error"]["invalid_auth_status"]
+    )
+    assert options_tr[f"component.{DOMAIN}.options.error.invalid_auth_status"] == (
+        strings["options"]["error"]["invalid_auth_status"]
+    )
