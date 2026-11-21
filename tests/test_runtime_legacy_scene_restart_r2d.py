@@ -255,7 +255,9 @@ async def test_normal_process_http_create_restart_and_execute(tmp_path, separate
         env.update({
             "DATA_DIR": str(data), "MATRIX_DATA_DIR": str(data), "UC_CONFIG_HOME": str(config),
             "MATRIX_HOST": "127.0.0.1", "MATRIX_PORT": str(sim.https_port),
-            "OREI_TELNET_PORT": str(sim.telnet_port), "API_PORT": str(api_port),
+            "OREI_TELNET_PORT": str(sim.telnet_port),
+            "OREI_SIMULATOR_LOOPBACK_PORTS": f"{sim.https_port},{sim.telnet_port}",
+            "API_PORT": str(api_port),
             "UC_ENABLED": str(uc).lower(), "UC_INTEGRATION_HTTP_PORT": str(free_port()),
             "UC_DISABLE_MDNS_PUBLISH": "true", "FLIC_ENABLED": "false", "HA_DISCOVERY_ENABLED": "false",
             "STATUS_POLL_INTERVAL": "0.2", "PYTHONPATH": os.pathsep.join((str(ROOT / "src"), str(ROOT))),

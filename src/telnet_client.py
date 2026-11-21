@@ -17,8 +17,11 @@ failures. See ``_telnet_proto`` for the completion rules (BE-07, HIL-A).
 """
 
 import asyncio
+import ipaddress
 import logging
+import os
 import re
+import socket
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -155,6 +158,154 @@ class MatrixStatus:
     routing: dict[int, int] = field(default_factory=dict)  # output -> input mapping
 
 
+_PERMITTED_MATRIX_NETWORKS = tuple(
+    ipaddress.ip_network(cidr)
+    for cidr in (
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fc00::/7",
+        "192.0.2.0/24",
+        "198.51.100.0/24",
+        "203.0.113.0/24",
+    )
+)
+_IPV4_LINK_LOCAL_NET = ipaddress.IPv4Network("169.254.0.0/16")
+_MatrixIp = ipaddress.IPv4Address | ipaddress.IPv6Address
+_CANONICAL_LOOPBACK_ADDRS: frozenset[_MatrixIp] = frozenset(
+    (ipaddress.IPv4Address("127.0.0.1"), ipaddress.IPv6Address("::1"))
+)
+_SIMULATOR_LOOPBACK_PORTS: dict[int, int] = {}
+_MATRIX_HOSTNAME_RE = re.compile(
+    r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$"
+)
+_LEGACY_NUMERIC_IP_RE = re.compile(r"(?:0x[0-9a-f]+|[0-9]+)(?:\.(?:0x[0-9a-f]+|[0-9]+))*", re.IGNORECASE)
+
+
+def register_simulator_loopback_port(port: int) -> None:
+    """Allow transport connections to canonical loopback on one exact local simulator port."""
+    if isinstance(port, bool) or not isinstance(port, int) or not 1 <= port <= 65535:
+        raise ValueError(f"Invalid simulator loopback port: {port!r}")
+    _SIMULATOR_LOOPBACK_PORTS[port] = _SIMULATOR_LOOPBACK_PORTS.get(port, 0) + 1
+
+
+def unregister_simulator_loopback_port(port: int) -> None:
+    """Remove a previously registered local simulator loopback port."""
+    count = _SIMULATOR_LOOPBACK_PORTS.get(port, 0)
+    if count <= 1:
+        _SIMULATOR_LOOPBACK_PORTS.pop(port, None)
+    else:
+        _SIMULATOR_LOOPBACK_PORTS[port] = count - 1
+
+
+def _env_simulator_loopback_ports() -> frozenset[int]:
+    raw = os.environ.get("OREI_SIMULATOR_LOOPBACK_PORTS", "").strip()
+    if not raw:
+        return frozenset()
+    ports: set[int] = set()
+    for token in raw.split(","):
+        token = token.strip()
+        if not token or not token.isdigit():
+            continue
+        port = int(token)
+        if 1 <= port <= 65535:
+            ports.add(port)
+    return frozenset(ports)
+
+
+def _is_registered_simulator_loopback(addr: _MatrixIp, port: int) -> bool:
+    """True only for canonical 127.0.0.1 / ::1 targeting an explicitly registered simulator port."""
+    if addr not in _CANONICAL_LOOPBACK_ADDRS:
+        return False
+    return port in _SIMULATOR_LOOPBACK_PORTS or port in _env_simulator_loopback_ports()
+
+
+def is_permitted_matrix_ip(addr: _MatrixIp) -> bool:
+    """Return True only when ``addr`` satisfies the matrix SSRF destination policy."""
+    check_addr: _MatrixIp = addr.ipv4_mapped if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped else addr
+    if check_addr.is_loopback or check_addr.is_link_local or check_addr.is_unspecified or check_addr.is_multicast:
+        return False
+    if isinstance(check_addr, ipaddress.IPv4Address) and check_addr in _IPV4_LINK_LOCAL_NET:
+        return False
+    if any(check_addr in network for network in _PERMITTED_MATRIX_NETWORKS):
+        return True
+    return os.environ.get("ALLOW_PUBLIC_MATRIX_HOST", "").lower() == "true" and check_addr.is_global
+
+
+def validate_matrix_target_syntax(host: str, port: int) -> _MatrixIp | None:
+    """Validate matrix ``host`` and ``port`` before connecting.
+
+    Returns the parsed canonical IP address when ``host`` is an allowed IP
+    literal, or ``None`` when ``host`` is a syntactically valid hostname that
+    must be resolved and checked via :func:`resolve_matrix_endpoints`.
+    """
+    if isinstance(port, bool) or not isinstance(port, int) or not 1 <= port <= 65535:
+        raise ValueError(f"Invalid matrix port: {port!r}")
+    if (
+        not isinstance(host, str)
+        or not host
+        or host != host.strip()
+        or "://" in host
+        or "/" in host
+        or "%" in host
+    ):
+        raise ValueError(f"Invalid matrix host: {host!r}")
+    try:
+        literal = ipaddress.ip_address(host)
+    except ValueError:
+        if len(host) > 253 or not _MATRIX_HOSTNAME_RE.fullmatch(host) or _LEGACY_NUMERIC_IP_RE.fullmatch(host):
+            raise ValueError(f"Invalid matrix hostname: {host!r}") from None
+        return None
+    if not is_permitted_matrix_ip(literal) and not _is_registered_simulator_loopback(literal, port):
+        raise ValueError(f"Disallowed matrix destination address: {host!r}")
+    return literal
+
+
+async def resolve_matrix_endpoints(
+    host: str,
+    port: int,
+    *,
+    family: int = socket.AF_UNSPEC,
+) -> list[_MatrixIp]:
+    """Resolve ``host`` once and return validated numeric IPs (IPv4 preferred)."""
+    literal = validate_matrix_target_syntax(host, port)
+    if literal is not None:
+        if family == socket.AF_INET and not isinstance(literal, ipaddress.IPv4Address):
+            raise OSError(f"Address family mismatch for matrix host {host!r}")
+        if family == socket.AF_INET6 and not isinstance(literal, ipaddress.IPv6Address):
+            raise OSError(f"Address family mismatch for matrix host {host!r}")
+        return [literal]
+
+    loop = asyncio.get_running_loop()
+    if family == socket.AF_UNSPEC:
+        answers = await loop.getaddrinfo(host, port, type=socket.SOCK_STREAM)
+    else:
+        answers = await loop.getaddrinfo(host, port, family=family, type=socket.SOCK_STREAM)
+    if not answers:
+        raise socket.gaierror(socket.EAI_NONAME, f"Name resolution returned no address associated with {host!r}")
+
+    allow_localhost_sim = host.lower() == "localhost"
+    validated: list[_MatrixIp] = []
+    for answer in answers:
+        raw_ip = answer[4][0]
+        if not isinstance(raw_ip, str) or "%" in raw_ip:
+            raise OSError(f"Disallowed scoped or malformed DNS answer for {host!r}")
+        try:
+            ip_obj = ipaddress.ip_address(raw_ip)
+        except ValueError as exc:
+            raise OSError(f"Malformed DNS answer for {host!r}") from exc
+        if not is_permitted_matrix_ip(ip_obj) and not (
+            allow_localhost_sim and _is_registered_simulator_loopback(ip_obj, port)
+        ):
+            raise OSError(f"Disallowed matrix destination address {ip_obj} for {host!r}")
+        if ip_obj not in validated:
+            validated.append(ip_obj)
+
+    ipv4 = [addr for addr in validated if isinstance(addr, ipaddress.IPv4Address)]
+    ipv6 = [addr for addr in validated if isinstance(addr, ipaddress.IPv6Address)]
+    return ipv4 + ipv6
+
+
 class TelnetClient:
     """
     Async Telnet client for OREI BK-808 matrix.
@@ -234,6 +385,19 @@ class TelnetClient:
                 except Exception as e:
                     _LOG.error(f"Error in connection change callback: {e}")
 
+    async def _open_validated_stream(self) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+        """Resolve and validate the target once, then dial a validated numeric IP."""
+        targets = await resolve_matrix_endpoints(self.host, self.port)
+        last_error: OSError | None = None
+        for target in targets:
+            try:
+                return await asyncio.open_connection(str(target), self.port)
+            except OSError as exc:
+                last_error = exc
+        if last_error is not None:
+            raise last_error
+        raise ConnectionError(f"No validated Telnet destination for {self.host}:{self.port}")
+
     async def connect(self) -> bool:
         """
         Connect to the matrix Telnet interface.
@@ -255,7 +419,7 @@ class TelnetClient:
                 _LOG.info(f"Connecting to Telnet at {self.host}:{self.port}")
 
                 self._reader, self._writer = await asyncio.wait_for(
-                    asyncio.open_connection(self.host, self.port), timeout=COMMAND_TIMEOUT
+                    self._open_validated_stream(), timeout=COMMAND_TIMEOUT
                 )
                 # Fresh IAC parser state for a fresh connection.
                 self._filter = TelnetIACFilter()

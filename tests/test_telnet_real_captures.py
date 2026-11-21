@@ -197,13 +197,18 @@ class ReplayDevice:
     async def __aenter__(self) -> ReplayDevice:
         self.server = await asyncio.start_server(self._client, "127.0.0.1", 0)
         self.port = self.server.sockets[0].getsockname()[1]
+        telnet_client.register_simulator_loopback_port(self.port)
         return self
 
     async def __aexit__(self, *exc: object) -> None:
-        assert self.server is not None
-        self.server.close()
-        with contextlib.suppress(Exception):
-            await asyncio.wait_for(self.server.wait_closed(), 2)
+        try:
+            assert self.server is not None
+            self.server.close()
+            with contextlib.suppress(Exception):
+                await asyncio.wait_for(self.server.wait_closed(), 2)
+        finally:
+            if self.port:
+                telnet_client.unregister_simulator_loopback_port(self.port)
 
     @staticmethod
     async def _send(ex: dict[str, Any], writer: asyncio.StreamWriter) -> None:

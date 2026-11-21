@@ -71,24 +71,6 @@ async def _is_safe_host(host: str, port: int) -> bool:
     return bool(await _safe_addresses(host, port))
 
 
-def _connect_host(host: str, addresses: list[_Address]) -> str:
-    """The host the hub connects to: an address that passed the check, never a name to resolve again.
-
-    A name is resolved again for every connect and reconnect. Whoever controls
-    its DNS record could answer the check with a LAN address and a later connect
-    with loopback or link-local (DNS rebinding), and the hub would send the
-    matrix login there. Connecting to the validated address closes that gap.
-    IPv4 is preferred: it is what the matrix speaks.
-    """
-    try:
-        ipaddress.ip_address(host)
-        return host
-    except ValueError:
-        pass
-    ipv4 = [addr for addr in addresses if isinstance(addr, ipaddress.IPv4Address)]
-    return str((ipv4 or addresses)[0])
-
-
 async def handle_get_settings(request: web.Request) -> web.Response:
     """Get current backend settings."""
     matrix_device = get_matrix_device()
@@ -129,8 +111,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
             return _json_response(False, error="telnet_port must be a port number (1-65535)", status=400)
 
         # Validate host to prevent SSRF attacks
-        addresses = await _safe_addresses(host, port)
-        if not addresses:
+        if not await _is_safe_host(host, port):
             return _json_response(False, error="Invalid host address", status=400)
 
         # Update the matrix device host
@@ -149,17 +130,12 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
             new_target = current is None or (host, port) != (current.host, current.port)
         else:
             new_target = (
-                host != old_host
+                (host, port) != (old_host, old_port)
                 and isinstance(getattr(matrix_device, "password", None), str)
                 and bool(matrix_device.password)
             )
         if new_target and not has_password:
             return _json_response(False, error="Password is required when changing the matrix host", status=400)
-
-        # A new name is connected to by its validated address (DNS rebinding, see _connect_host).
-        # The name the hub already uses came from its own configuration and is kept.
-        if host != old_host:
-            host = _connect_host(host, addresses)
 
         _LOG.info(f"Updating matrix host from {old_host}:{old_port} to {host}:{port}")
 
@@ -190,7 +166,7 @@ async def handle_set_matrix_host(request: web.Request) -> web.Response:
         # Update host configuration
         matrix_device.host = host
         matrix_device.port = port
-        if host != old_host and has_password:
+        if has_password:
             matrix_device.password = password
         matrix_device.telnet_port = telnet_port if telnet_port is not None else default_telnet_port()
 
