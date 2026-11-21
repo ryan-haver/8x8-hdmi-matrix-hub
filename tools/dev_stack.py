@@ -98,6 +98,8 @@ def main(argv: list[str] | None = None) -> int:
         "LOG_LEVEL": args.log_level,
         "PYTHONUNBUFFERED": "1",
     }
+    if args.host in ("127.0.0.1", "::1", "localhost"):
+        hub_env["OREI_SIMULATOR_LOOPBACK_PORTS"] = f"{args.https_port},{args.telnet_port}"
     for key in ("OREI_USER", "OREI_PASSWORD", "OREI_PORT"):
         hub_env.pop(key, None)
 

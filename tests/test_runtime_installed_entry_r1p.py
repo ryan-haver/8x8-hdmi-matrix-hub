@@ -309,6 +309,7 @@ async def test_real_installed_uc_setup_control_restart_and_module_origins(instal
     try:
         sim.start()
         env["OREI_TELNET_PORT"] = str(sim.telnet_port)
+        env["OREI_SIMULATOR_LOOPBACK_PORTS"] = f"{sim.https_port},{sim.telnet_port}"
         for attempt in range(2):
             stop.unlink(missing_ok=True)
             log = tmp_path / f"installed-uc-{attempt}.log"

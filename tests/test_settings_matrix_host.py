@@ -4,15 +4,14 @@
 - On the shared runtime, a first target or a new port without a password
   passed the handler, was refused by ``runtime.reconfigure`` and was still
   answered "Matrix host updated".
-- A host name was checked once and then connected to by name: every later
-  connect resolved it again, to whatever its DNS record said by then.
+- A host name must stay preserved as configured/displayed while settings saves
+  (including same-host port changes) and transport connects validate every answer.
 - ``GET /api/settings`` reported the Telnet port 23 as the default matrix port.
 """
 
 from __future__ import annotations
 
 import asyncio
-import ipaddress
 import json
 import socket
 from unittest.mock import AsyncMock, MagicMock
@@ -166,47 +165,79 @@ async def test_runtime_rollback_is_not_reported_as_an_update(monkeypatch):
     assert "updated" not in body["message"]
 
 
-# ----------------------------------------------------------------------------- DNS rebinding
+# ----------------------------------------------------------------------------- hostname preservation & DNS rebinding
 
 
-async def test_a_new_host_name_is_connected_to_by_its_validated_address(monkeypatch):
-    # Arrange: the name answers with a LAN address when it is checked
-    asked = answers(monkeypatch, {"matrix.lan": ["192.168.1.77"]})
+async def test_new_hostname_preserves_saved_displayed_and_response_host(monkeypatch):
+    asked = answers(monkeypatch, {"matrix.lan": ["fd00::77", "192.168.1.77"]})
     device = matrix()
     monkeypatch.setattr(settings, "get_matrix_device", lambda: device)
+    monkeypatch.setattr(utils, "get_runtime", lambda: None)
 
-    # Act
     response = await settings.handle_set_matrix_host(request({"host": "matrix.lan", "password": "new-secret"}))
 
-    # Assert: the hub keeps the address, so no later connect can resolve the name to something else
     assert response.status == 200
-    assert device.host == "192.168.1.77"
-    assert (await data(response))["data"]["host"] == "192.168.1.77"
+    body = (await data(response))["data"]
+    assert device.host == "matrix.lan"
+    assert device.password == "new-secret"
+    assert body["host"] == "matrix.lan"
+    assert body["applied"] is True
     assert asked == ["matrix.lan"]
     device.connect.assert_awaited_once()
 
+    shown = await settings.handle_get_settings(request({}))
+    assert (await data(shown))["data"]["matrix_host"] == "matrix.lan"
 
-async def test_the_runtime_is_given_the_validated_address(monkeypatch):
-    answers(monkeypatch, {"matrix.lan": ["192.168.1.77"]})
+
+async def test_runtime_reconfigure_preserves_hostname_and_validates_same_host_port_change(monkeypatch):
+    asked = answers(monkeypatch, {"matrix.lan": ["192.168.1.77"]})
     runtime = FakeRuntime(MatrixAddress("192.168.1.20", 443), ReconfigureResult(True, connected=True))
     monkeypatch.setattr(settings, "get_matrix_device", lambda: matrix())
     monkeypatch.setattr(utils, "get_runtime", lambda: runtime)
 
-    response = await settings.handle_set_matrix_host(request({"host": "matrix.lan", "password": "new-secret"}))
+    first = await settings.handle_set_matrix_host(
+        request({"host": "matrix.lan", "port": 443, "password": "new-secret"})
+    )
+    assert first.status == 200
+    assert runtime.calls[-1] == MatrixAddress("matrix.lan", 443, None, None, "new-secret")
+    assert (await data(first))["data"]["host"] == "matrix.lan"
 
-    assert response.status == 200
-    assert [call.host for call in runtime.calls] == ["192.168.1.77"]
+    runtime.address = MatrixAddress("matrix.lan", 443)
+    runtime.result = ReconfigureResult(False, "refused", True)
+    second = await settings.handle_set_matrix_host(
+        request({"host": "matrix.lan", "port": 8443, "password": "port-secret"})
+    )
+    assert second.status == 200
+    body = (await data(second))["data"]
+    assert (body["host"], body["port"], body["applied"], body["connected"]) == ("matrix.lan", 8443, False, False)
+    assert body["message"].startswith("Matrix host not changed")
+    assert runtime.calls[-1] == MatrixAddress("matrix.lan", 8443, None, None, "port-secret")
+    assert asked == ["matrix.lan", "matrix.lan"]
 
 
-async def test_ipv4_is_preferred_among_validated_addresses(monkeypatch):
-    answers(monkeypatch, {"matrix.lan": ["fd00::77", "192.168.1.77"]})
-    device = matrix()
+async def test_same_host_port_or_telnet_port_change_rejects_rebound_or_mixed_dns(monkeypatch):
+    dns_records = ["127.0.0.1"]
+
+    async def rebinding_getaddrinfo(host, port, **_kwargs):
+        assert host == "matrix.lan"
+        return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", (ip, port)) for ip in dns_records]
+
+    monkeypatch.setattr(asyncio.get_running_loop(), "getaddrinfo", rebinding_getaddrinfo)
+    runtime = FakeRuntime(MatrixAddress("matrix.lan", 443), ReconfigureResult(True, connected=True))
+    device = matrix(host="matrix.lan")
     monkeypatch.setattr(settings, "get_matrix_device", lambda: device)
+    monkeypatch.setattr(utils, "get_runtime", lambda: runtime)
 
-    response = await settings.handle_set_matrix_host(request({"host": "matrix.lan", "password": "new-secret"}))
+    telnet_change = await settings.handle_set_matrix_host(request({"host": "matrix.lan", "telnet_port": 2323}))
+    assert telnet_change.status == 400
 
-    assert response.status == 200
-    assert device.host == "192.168.1.77"
+    dns_records[:] = ["192.168.1.77", "169.254.169.254"]
+    port_change = await settings.handle_set_matrix_host(
+        request({"host": "matrix.lan", "port": 8443, "password": "secret"})
+    )
+    assert port_change.status == 400
+    assert runtime.calls == []
+    device.disconnect.assert_not_awaited()
 
 
 async def test_a_name_with_any_unsafe_address_is_still_refused(monkeypatch):
@@ -224,6 +255,7 @@ async def test_a_name_with_any_unsafe_address_is_still_refused(monkeypatch):
 
 async def test_the_name_the_hub_already_uses_is_kept(monkeypatch):
     """A name from the hub's own configuration is not rewritten by a save that does not change it."""
+    monkeypatch.setattr(utils, "get_runtime", lambda: None)
     answers(monkeypatch, {"matrix.lan": ["192.168.1.77"]})
     device = matrix(host="matrix.lan")
     monkeypatch.setattr(settings, "get_matrix_device", lambda: device)
@@ -234,7 +266,16 @@ async def test_the_name_the_hub_already_uses_is_kept(monkeypatch):
     assert device.host == "matrix.lan"
 
 
-def test_an_address_literal_is_used_as_given():
-    literal = "192.168.1.30"
+async def test_allowed_address_literals_preserved_and_standalone_port_change_requires_password(monkeypatch):
+    monkeypatch.setattr(utils, "get_runtime", lambda: None)
+    device = matrix(host="192.168.1.30", password="old-secret")
+    monkeypatch.setattr(settings, "get_matrix_device", lambda: device)
 
-    assert settings._connect_host(literal, [ipaddress.ip_address(literal)]) == literal
+    missing_pw = await settings.handle_set_matrix_host(request({"host": "192.168.1.30", "port": 8443}))
+    assert missing_pw.status == 400
+    device.disconnect.assert_not_awaited()
+
+    allowed_v6 = await settings.handle_set_matrix_host(request({"host": "fc00::30", "password": "v6-secret"}))
+    assert allowed_v6.status == 200
+    assert device.host == "fc00::30"
+    assert (await data(allowed_v6))["data"]["host"] == "fc00::30"

@@ -25,11 +25,13 @@ status read. Only when that health read fails too is the link marked lost.
 import asyncio
 import copy
 import datetime
+import inspect
 import json
 import logging
 import os
 import random
 import re
+import socket
 import ssl
 import time
 from collections.abc import Awaitable, Callable
@@ -38,6 +40,7 @@ from enum import IntEnum, StrEnum
 from typing import Any, TypeVar
 
 import aiohttp
+from aiohttp.abc import AbstractResolver
 from pyee.asyncio import AsyncIOEventEmitter
 
 # Import Telnet client for CEC and cable detection
@@ -65,7 +68,14 @@ try:
     from .device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from .telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
+    from .telnet_client import (
+        CecOutcome,
+        MatrixStatus,
+        TelnetClient,
+        TelnetState,
+        resolve_matrix_endpoints,
+        validate_matrix_target_syntax,
+    )
 except ImportError:
     from _task_supervisor import create_supervised_task  # type: ignore[no-redef]
     from device_codes import (  # type: ignore[no-redef]
@@ -90,7 +100,14 @@ except ImportError:
     from device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
+    from telnet_client import (  # type: ignore[no-redef]
+        CecOutcome,
+        MatrixStatus,
+        TelnetClient,
+        TelnetState,
+        resolve_matrix_endpoints,
+        validate_matrix_target_syntax,
+    )
 
 _LOG = logging.getLogger(__name__)
 
@@ -137,6 +154,29 @@ def _matrix_tls_policy() -> bool | ssl.SSLContext | aiohttp.Fingerprint:
     if ca_cert:
         return ssl.create_default_context(cafile=ca_cert)
     return os.environ.get("OREI_VERIFY_SSL", "false").lower() == "true"
+
+
+class _ValidatedMatrixResolver(AbstractResolver):
+    """Resolve matrix hostnames once per connect and enforce SSRF destination policy."""
+
+    async def resolve(self, host: str, port: int = 0, family: int = socket.AF_UNSPEC) -> list[Any]:
+        effective_port = port if port > 0 else 443
+        addresses = await resolve_matrix_endpoints(host, effective_port, family=family)
+        return [
+            {
+                "hostname": host,
+                "host": str(addr),
+                "port": effective_port,
+                "family": socket.AF_INET if addr.version == 4 else socket.AF_INET6,
+                "proto": socket.IPPROTO_TCP,
+                "flags": socket.AI_NUMERICHOST | socket.AI_NUMERICSERV,
+            }
+            for addr in addresses
+        ]
+
+    async def close(self) -> None:
+        return None
+
 
 # Connection retry configuration
 MAX_RETRIES = int(os.environ.get("OREI_MAX_RETRIES", "5"))
@@ -360,6 +400,7 @@ class OreiMatrix:
         #: ``not_found`` (the name does not resolve), ``refused`` (no connection), ``other``; None after success.
         self.login_failure: str | None = None
         self._session: aiohttp.ClientSession | None = None
+        self._owned_session: Any = None
         self._state = ConnectionState.DISCONNECTED
         # Typed as Any: pyee annotates event names as `str`, but this codebase
         # keys events by the `Events` IntEnum (any hashable works at runtime).
@@ -709,17 +750,40 @@ class OreiMatrix:
         try:
             protocol = "https" if self.use_https else "http"
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
+            validate_matrix_target_syntax(self.host, self.port)
+
+            if self._session is not None and self._session is self._owned_session:
+                prior_session = self._session
+                self._session = None
+                self._owned_session = None
+                close_fn = getattr(prior_session, "close", None)
+                if callable(close_fn):
+                    try:
+                        maybe_coro = close_fn()
+                        if inspect.isawaitable(maybe_coro):
+                            await maybe_coro
+                    except Exception as close_ex:
+                        _LOG.warning("Error closing previous HTTP session: %s", close_ex)
 
             # A fingerprint takes precedence over a custom CA; both opt in to TLS verification.
             if not self._session:
+                resolver = _ValidatedMatrixResolver()
                 if self.use_https:
                     tls_policy = _matrix_tls_policy()
-                    connector = aiohttp.TCPConnector(ssl=tls_policy)
+                    connector = aiohttp.TCPConnector(
+                        ssl=tls_policy,
+                        resolver=resolver,
+                        use_dns_cache=False,
+                    )
                     if tls_policy is False:
                         _LOG.warning("SSL verification disabled for matrix connection")
                 else:
-                    connector = None
+                    connector = aiohttp.TCPConnector(
+                        resolver=resolver,
+                        use_dns_cache=False,
+                    )
                 self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector)
+                self._owned_session = self._session
 
             _LOG.debug("Authenticating with matrix...")
             logged_in = await self._login()
@@ -820,6 +884,7 @@ class OreiMatrix:
             if self._intentional_disconnect:
                 return _HttpResult("transport", error="Matrix intentionally disconnected")
             try:
+                validate_matrix_target_syntax(self.host, self.port)
                 async with session.post(
                     self._url(), json=payload, timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT)
                 ) as response:

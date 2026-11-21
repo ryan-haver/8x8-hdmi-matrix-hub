@@ -205,6 +205,10 @@ class HubProcess:
             poll = self.polling_interval
         if poll is not None:
             env["STATUS_POLL_INTERVAL"] = str(poll)
+        if self.matrix_host in ("127.0.0.1", "::1", "localhost"):
+            sim_ports = [str(p) for p in (self.matrix_port, self.telnet_port) if p]
+            if sim_ports:
+                env["OREI_SIMULATOR_LOOPBACK_PORTS"] = ",".join(sim_ports)
         env.update(self.extra_env)
         existing_py = env.get("PYTHONPATH", "")
         env["PYTHONPATH"] = f"{HARNESS_SITE}{os.pathsep}{existing_py}" if existing_py else str(HARNESS_SITE)
@@ -408,10 +412,20 @@ class SimulatorProcess:
     control_port: int = 0
     _proc: subprocess.Popen[bytes] | None = None
     _log: IO[bytes] | None = None
+    _registered_loopback_ports: list[int] = field(default_factory=list, init=False, repr=False)
 
     @property
     def control_url(self) -> str:
         return f"http://{self.host}:{self.control_port}"
+
+    def _unregister_loopback_ports(self) -> None:
+        if not self._registered_loopback_ports:
+            return
+        from telnet_client import unregister_simulator_loopback_port
+
+        for port in self._registered_loopback_ports:
+            unregister_simulator_loopback_port(port)
+        self._registered_loopback_ports.clear()
 
     def start(self) -> dict[str, Any]:
         self.https_port = self.https_port or free_port(self.host)
@@ -429,14 +443,29 @@ class SimulatorProcess:
             "--log-level", "INFO",
         ]
         self._proc = subprocess.Popen(cmd, cwd=ROOT, stdout=self._log, stderr=subprocess.STDOUT)  # noqa: S603
-        return _wait_for(f"{self.control_url}/_sim/health", self._proc, 30, "simulator")
+        try:
+            health = _wait_for(f"{self.control_url}/_sim/health", self._proc, 30, "simulator")
+        except Exception:
+            self.stop()
+            raise
+        if self.host in ("127.0.0.1", "::1", "localhost"):
+            from telnet_client import register_simulator_loopback_port
+
+            for port in (self.https_port, self.telnet_port):
+                if port:
+                    register_simulator_loopback_port(port)
+                    self._registered_loopback_ports.append(port)
+        return health
 
     def stop(self) -> None:
-        _stop(self._proc, "simulator")
-        self._proc = None
-        if self._log:
-            self._log.close()
-            self._log = None
+        try:
+            _stop(self._proc, "simulator")
+            self._proc = None
+            if self._log:
+                self._log.close()
+                self._log = None
+        finally:
+            self._unregister_loopback_ports()
 
 
 class SimStack:

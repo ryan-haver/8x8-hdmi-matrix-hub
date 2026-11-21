@@ -375,6 +375,7 @@ threading.Thread(target=watch, daemon=True).start()
         MATRIX_HOST="127.0.0.1",
         MATRIX_PORT=str(sim.https_port),
         OREI_TELNET_PORT=str(sim.telnet_port),
+        OREI_SIMULATOR_LOOPBACK_PORTS=f"{sim.https_port},{sim.telnet_port}",
         OREI_AUTO_RECONNECT="false",
         API_PORT=str(api_port),
         STATUS_POLL_INTERVAL="0.2",
