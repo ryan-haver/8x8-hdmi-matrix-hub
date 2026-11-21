@@ -768,7 +768,14 @@ Status: `200` when every output (routing, stream, mute, HDR, HDCP, scaler, ARC) 
 power-on macro were applied; `207` when only part was (`success: false`,
 `failed_outputs` and `errors` say what the matrix did not accept); `500` when
 nothing was; `403` with `passcode_required` / `invalid_passcode` for a
-protected profile.
+protected profile. `data.applied` is a list of applied change strings (`list[str]`),
+distinct from `POST /api/settings/matrix-host`'s boolean `data.applied`.
+
+> **Scenes v2 (`404` & Redacted Scene View)**: Every `/api/v2/scenes/{scene_id}*`
+> route — including execute, set/clear override (`PUT`/`DELETE /api/v2/scenes/{scene_id}/override`),
+> and remove step (`DELETE /api/v2/scenes/{scene_id}/steps/{index}`) — returns `404`
+> when `scene_id` does not exist, and returns the same redacted scene view
+> (`passcode_inherited`, no passcode hashes) as `GET /api/v2/scenes/{scene_id}`.
 
 #### GET /api/profile/{id}/macros
 Get macros assigned to a profile.
@@ -1183,6 +1190,57 @@ ignored). For the complete environment variable reference (canonical core variab
 ## Backend Settings (v2.10.0+)
 
 Backend configuration endpoints for matrix connection and system settings.
+
+#### GET /api/settings
+Get the current backend matrix connection settings.
+
+```bash
+curl http://localhost:8080/api/settings
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "matrix_host": "192.168.0.100",
+    "matrix_port": 443,
+    "connected": true
+  },
+  "error": null
+}
+```
+
+`matrix_port` defaults to `443` (the matrix HTTPS control port; distinct from Telnet port `23`).
+
+#### POST /api/settings/matrix-host
+Reconfigure the matrix host, HTTPS control port, or Telnet port (admin access when `ADMIN_PIN` is set).
+
+**Request body (JSON object):**
+- `host` (string, required): Matrix IP address or hostname. Loopback, link-local, cloud metadata, and disallowed public addresses are rejected with `400`; configured hostnames are preserved and re-validated on every connect/reconnect.
+- `port` (integer, optional, default `443`): Matrix HTTPS control port (`1-65535`).
+- `telnet_port` (integer, optional, default `OREI_TELNET_PORT` or `23`): Matrix Telnet port (`1-65535`).
+- `user` (string, optional): Matrix login username.
+- `password` (string, conditionally required): Required whenever changing the target `(host, port)` or configuring a first target so stored/environment credentials are never sent to a new address.
+
+**Response (`200`):**
+```json
+{
+  "success": true,
+  "data": {
+    "host": "192.168.0.100",
+    "port": 443,
+    "telnet_port": 23,
+    "connected": true,
+    "applied": true,
+    "message": "Matrix host updated to 192.168.0.100:443 - Connected!"
+  },
+  "error": null
+}
+```
+
+- `data.applied` is a **boolean** (`true` when the change was applied; `false` when the runtime rolled back to its previous matrix with `connected: false`). This is distinct from `data.applied` on `POST /api/profile/{profile_id}/recall` and `POST /api/scene/{scene_id}/recall`, which is a list of applied change strings (`list[str]`).
+- Non-object JSON bodies, out-of-range ports, unsafe SSRF targets, or missing passwords on target changes return `400`.
 
 #### POST /api/settings/test-connection
 Test the connection to the currently configured matrix device.

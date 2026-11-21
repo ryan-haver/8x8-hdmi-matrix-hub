@@ -566,6 +566,32 @@ async def test_openapi_spec_and_swagger_docs_reads(data_hub, simulator):
     assert "/api/openapi.json" in spec["paths"]
     assert "/api/docs" in spec["paths"]
     assert spec["components"]["schemas"]["SceneV2ResponseEnvelope"]["required"] == ["success"]
+    settings_data = spec["components"]["schemas"]["SettingsResponseData"]["properties"]
+    assert settings_data["matrix_port"]["default"] == 443
+    assert spec["paths"]["/api/settings"]["get"]["responses"]["200"]["x-data-schema"] == {
+        "$ref": "#/components/schemas/SettingsResponseData"
+    }
+    matrix_host_data = spec["components"]["schemas"]["MatrixHostUpdateData"]["properties"]
+    assert matrix_host_data["applied"]["type"] == "boolean"
+    assert matrix_host_data["port"]["default"] == 443
+    assert matrix_host_data["telnet_port"]["default"] == 23
+    assert spec["paths"]["/api/settings/matrix-host"]["post"]["responses"]["200"]["x-data-schema"] == {
+        "$ref": "#/components/schemas/MatrixHostUpdateData"
+    }
+    recall_data = spec["components"]["schemas"]["RecallResponseData"]["properties"]
+    assert recall_data["applied"]["type"] == "array"
+    assert recall_data["applied"]["items"] == {"type": "string"}
+    for recall_path in ("/api/profile/{profile_id}/recall", "/api/scene/{scene_id}/recall"):
+        assert spec["paths"][recall_path]["post"]["responses"]["200"]["x-data-schema"] == {
+            "$ref": "#/components/schemas/RecallResponseData"
+        }
+    for method, scene_path in (
+        ("post", "/api/v2/scenes/{scene_id}/execute"),
+        ("put", "/api/v2/scenes/{scene_id}/override"),
+        ("delete", "/api/v2/scenes/{scene_id}/override"),
+        ("delete", "/api/v2/scenes/{scene_id}/steps/{index}"),
+    ):
+        assert "404" in spec["paths"][scene_path][method]["responses"]
     for direction in ("next", "previous"):
         parameters = spec["paths"][f"/api/input/{direction}"]["post"]["parameters"]
         cycle = next(parameter for parameter in parameters if parameter["name"] == "cycle")

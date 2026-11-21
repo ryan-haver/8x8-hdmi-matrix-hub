@@ -4716,12 +4716,12 @@ features:
     rest: [GET /api/settings, POST /api/settings/matrix-host, POST /api/settings/test-connection]
   target: V2
   current: V1
-  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py and tests/sim/test_sim_rest_writes.py. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
+  basis: 'Registered-route simulator reads and writes: tests/sim/test_sim_rest_reads.py, tests/sim/test_sim_rest_writes.py, and tests/test_settings_matrix_host.py. GET /api/settings defaults matrix_port to HTTPS 443 (distinct from Telnet 23) and POST /api/settings/matrix-host returns boolean data.applied (distinct from profile/scene recall string-list data.applied), recorded in OpenAPI 3.1 and docs/API_REFERENCE.md. Shipped-image scenarios cover saved readback and device effects; grouped routes have additional scope beyond these scenarios.'
   evidence:
   - docs/validation/evidence/F-API-027/2026-10-04-V2-7dbc4dc7-contracts.settings-api.json
   - docs/validation/evidence/F-API-027/2026-10-04-V2-7dbc4dc7-writes.connection_test-api.json
   findings: [SEC-03, TST-03]
-  scenarios: [contracts.settings, writes.connection_test]
+  scenarios: [contracts.settings, contracts.openapi_settings_and_recall_types, writes.connection_test]
 - id: F-API-028
   area: api
   title: Flic integration routes
@@ -5553,6 +5553,7 @@ features:
   - domain_manage.scene_h_put_missing
   - domain_manage.scene_h_delete_missing
   - domain_manage.scene_z_delete
+  - scenes.remove_step_unknown
 - id: F-DOM-011
   area: domain
   title: 'Run a scene: profile steps'
@@ -5638,7 +5639,7 @@ features:
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_scaler_arc-api.json
   - docs/validation/evidence/F-DOM-014/2026-10-04-V2-7dbc4dc7-scenes.override_leaves_setting-api.json
   findings: [API-04]
-  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override, scenes.override_leaves_scaler_arc]
+  scenarios: [scenes.run_profile_macro_preset, scenes.override_leaves_setting, scenes.enabled_override, scenes.override_leaves_scaler_arc, scenes.override_unknown]
 - id: F-DOM-015
   area: domain
   title: Protect a scene with a passcode
@@ -7706,7 +7707,7 @@ features:
     rest: [POST /api/settings/matrix-host]
   target: V3
   current: V1
-  basis: 'tests/test_security_ssrf_tls.py and tests/test_security_v3_auth_scenarios.py verify matrix-host password re-entry requirement and SSRF rejection for loopback, link-local, IPv4-mapped IPv6, and cloud metadata addresses.'
+  basis: 'tests/test_security_ssrf_tls.py, tests/test_settings_matrix_host.py, and tests/test_security_v3_auth_scenarios.py verify matrix-host password re-entry requirement, rollback applied:false reporting, hostname preservation, and transport-level SSRF rejection for loopback, link-local, IPv4-mapped IPv6, and cloud metadata addresses.'
   evidence: []
   findings: [SEC-03]
   scenarios:

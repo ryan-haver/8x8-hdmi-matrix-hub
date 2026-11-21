@@ -308,6 +308,79 @@ def scene_v2_envelope_schema() -> dict[str, Any]:
     return schema
 
 
+def settings_response_data_schema() -> dict[str, Any]:
+    """``data`` payload for GET /api/settings (HTTPS default port 443, distinct from Telnet 23)."""
+    return {
+        "type": "object",
+        "properties": {
+            "matrix_host": {"type": ["string", "null"], "description": "Configured matrix host or null."},
+            "matrix_port": {
+                "type": "integer",
+                "default": 443,
+                "minimum": 1,
+                "maximum": 65535,
+                "description": "Matrix HTTPS control port (defaults to 443; distinct from Telnet port 23).",
+            },
+            "connected": {"type": "boolean", "description": "Whether the hub is connected to the matrix."},
+        },
+        "required": ["matrix_host", "matrix_port", "connected"],
+    }
+
+
+def matrix_host_update_data_schema() -> dict[str, Any]:
+    """``data`` payload for POST /api/settings/matrix-host with boolean ``applied``."""
+    return {
+        "type": "object",
+        "properties": {
+            "host": {"type": "string", "description": "Requested matrix host."},
+            "port": {
+                "type": "integer",
+                "default": 443,
+                "minimum": 1,
+                "maximum": 65535,
+                "description": "Matrix HTTPS control port (defaults to 443).",
+            },
+            "telnet_port": {
+                "type": "integer",
+                "default": 23,
+                "minimum": 1,
+                "maximum": 65535,
+                "description": "Matrix Telnet control port (defaults to OREI_TELNET_PORT or 23).",
+            },
+            "connected": {"type": "boolean", "description": "True when connected to the requested target."},
+            "applied": {
+                "type": "boolean",
+                "description": (
+                    "True when the hub applied the new target; false when the runtime rolled back to the "
+                    "previous matrix. Distinct from profile/scene recall `applied`, which is a list of strings."
+                ),
+            },
+            "message": {"type": "string", "description": "Human-readable status message."},
+        },
+        "required": ["host", "port", "telnet_port", "connected", "applied", "message"],
+    }
+
+
+def recall_response_data_schema() -> dict[str, Any]:
+    """``data`` payload for profile/legacy-scene recall with string-list ``applied``."""
+    return {
+        "type": "object",
+        "properties": {
+            "applied": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": (
+                    "List of applied routing/output change descriptions. "
+                    "Distinct from POST /api/settings/matrix-host boolean `applied`."
+                ),
+            },
+            "failed_outputs": {"type": "array", "items": {"type": "integer"}},
+            "errors": {"type": ["array", "null"], "items": {"type": "string"}},
+        },
+        "additionalProperties": True,
+    }
+
+
 def security_schemes() -> dict[str, Any]:
     """Credentials accepted by the live security middleware."""
     return {
@@ -401,6 +474,20 @@ def _responses(route: RouteInfo) -> dict[str, Any]:
         responses["503"] = _error_response("503")
     if route.method in _BODY_METHODS:
         responses["429"] = _error_response("429")
+    if route.method == "GET" and route.path == "/api/settings":
+        responses["200"]["x-data-schema"] = {"$ref": "#/components/schemas/SettingsResponseData"}
+    if route.method == "POST" and route.path == "/api/settings/matrix-host":
+        responses["200"]["x-data-schema"] = {"$ref": "#/components/schemas/MatrixHostUpdateData"}
+    if route.method == "POST" and route.path in {
+        "/api/profile/{profile_id}/recall",
+        "/api/scene/{scene_id}/recall",
+    }:
+        responses["200"]["x-data-schema"] = {"$ref": "#/components/schemas/RecallResponseData"}
+        responses["207"] = {
+            "description": "Partial recall; data.applied lists applied changes and failed_outputs/errors list failures.",
+            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/ApiResponseEnvelope"}}},
+            "x-data-schema": {"$ref": "#/components/schemas/RecallResponseData"},
+        }
     if route.method == "POST" and route.path == "/api/v2/scenes":
         responses["201"] = responses.pop("200")
     if route.method == "POST" and route.path == "/api/v2/scenes/{scene_id}/execute":
@@ -409,6 +496,8 @@ def _responses(route: RouteInfo) -> dict[str, Any]:
             "content": {"application/json": {"schema": {}}},
         }
     if route.path.startswith("/api/v2/scenes"):
+        if "404" in responses:
+            responses["404"]["description"] = "Scene not found (unknown scene_id returns 404)"
         for response in responses.values():
             response["content"]["application/json"]["schema"] = {
                 "$ref": "#/components/schemas/SceneV2ResponseEnvelope"
@@ -450,10 +539,46 @@ def _operation(route: RouteInfo, security: Sequence[dict[str, Any]]) -> dict[str
         if level:
             operation["x-auth-condition"] = f"Required when {level.upper()}_PIN is configured."
         if route.method in _BODY_METHODS:
-            operation["requestBody"] = {
-                "required": False,
-                "content": {"application/json": {"schema": {"type": "object", "additionalProperties": True}}},
-            }
+            if route.method == "POST" and route.path == "/api/settings/matrix-host":
+                operation["requestBody"] = {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["host"],
+                                "properties": {
+                                    "host": {"type": "string", "description": "Matrix IP address or hostname."},
+                                    "port": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "maximum": 65535,
+                                        "default": 443,
+                                        "description": "Matrix HTTPS control port (defaults to 443).",
+                                    },
+                                    "telnet_port": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "maximum": 65535,
+                                        "default": 23,
+                                        "description": "Matrix Telnet port (defaults to OREI_TELNET_PORT or 23).",
+                                    },
+                                    "user": {"type": "string", "description": "Optional matrix login user."},
+                                    "password": {
+                                        "type": "string",
+                                        "description": "Required when changing target host/port or setting a first target.",
+                                    },
+                                },
+                                "additionalProperties": True,
+                            }
+                        }
+                    },
+                }
+            else:
+                operation["requestBody"] = {
+                    "required": False,
+                    "content": {"application/json": {"schema": {"type": "object", "additionalProperties": True}}},
+                }
     return operation
 
 
@@ -523,7 +648,10 @@ def build_openapi_spec(
         "components": {
             "schemas": {
                 "ApiResponseEnvelope": envelope_schema(),
+                "MatrixHostUpdateData": matrix_host_update_data_schema(),
+                "RecallResponseData": recall_response_data_schema(),
                 "SceneV2ResponseEnvelope": scene_v2_envelope_schema(),
+                "SettingsResponseData": settings_response_data_schema(),
             },
             "securitySchemes": security_schemes(),
         },
