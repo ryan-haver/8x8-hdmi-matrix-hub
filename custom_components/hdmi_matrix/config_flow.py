@@ -10,7 +10,13 @@ import re
 from typing import Any
 
 import voluptuous as vol
-from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigEntryState,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import format_mac
@@ -61,7 +67,10 @@ def stored_api_key(entry: ConfigEntry) -> str | None:
     integration may still carry a copy, which took precedence then and does
     until setup moves it into ``entry.data`` (``_async_adopt_options_api_key``).
     """
-    return entry.options.get(CONF_API_KEY, entry.data.get(CONF_API_KEY)) or None
+    raw = entry.options[CONF_API_KEY] if CONF_API_KEY in entry.options else entry.data.get(CONF_API_KEY)
+    if not isinstance(raw, str):
+        return None
+    return raw.strip() or None
 
 
 def _with_api_key(data: dict[str, Any], api_key: str | None) -> dict[str, Any]:
@@ -84,7 +93,9 @@ async def async_probe(
     Health and device information need no key, so they say nothing about it.
     ``/api/auth/status`` does: with the hub's control lock set, a missing,
     wrong or revoked key is ``invalid_auth`` here, not a 401 on every command
-    after setup. A hub without a control lock accepts any (or no) key.
+    after setup. Missing (404) or malformed ``/api/auth/status`` answers fail
+    closed as ``invalid_auth_status``. A hub that explicitly reports
+    ``control_pin_set: false`` accepts any (or no) key.
     """
     client = HubClient(async_get_clientsession(hass), host, port, api_key)
     try:
@@ -98,10 +109,14 @@ async def async_probe(
         if not await client.control_allowed():
             return None, {"base": "invalid_auth"}
     except HubResponseError as err:
-        if err.status != 404:  # 404: a hub from before the access model, which has no locks
-            return None, {"base": "cannot_connect"}
+        if err.status == 404 or 200 <= err.status < 300:
+            return None, {"base": "invalid_auth_status"}
+        return None, {"base": "cannot_connect"}
     except HubError:
         return None, {"base": "cannot_connect"}
+    except Exception:  # noqa: BLE001 - shown as "unknown", logged for the user
+        LOGGER.exception("Unexpected error checking hub auth status at %s:%s", host, port)
+        return None, {"base": "unknown"}
     try:
         mac = (await client.device()).get("mac_address")
     except HubError:
@@ -158,11 +173,19 @@ class HdmiMatrixConfigFlow(ConfigFlow, domain=DOMAIN):
                     self._abort_if_unique_id_mismatch(reason="wrong_device")
                 # The whole data, not an update: a cleared key is removed, not stored as "".
                 # Options lose their old copy of the key, which would otherwise win at setup.
-                return self.async_update_reload_and_abort(
-                    entry,
-                    data=_with_api_key({**entry.data, CONF_IP_ADDRESS: host, CONF_PORT: port}, api_key),
-                    options={key: value for key, value in entry.options.items() if key != CONF_API_KEY},
+                new_data = _with_api_key({**entry.data, CONF_IP_ADDRESS: host, CONF_PORT: port}, api_key)
+                new_options = {key: value for key, value in entry.options.items() if key != CONF_API_KEY}
+                listener_attached = (
+                    entry.state is ConfigEntryState.LOADED and getattr(entry, "runtime_data", None) is not None
                 )
+                changed = self.hass.config_entries.async_update_entry(
+                    entry,
+                    data=new_data,
+                    options=new_options,
+                )
+                if not (changed and listener_attached):
+                    self.hass.config_entries.async_schedule_reload(entry.entry_id)
+                return self.async_abort(reason="reconfigure_successful")
             user_input = {CONF_IP_ADDRESS: host, CONF_PORT: port, CONF_API_KEY: api_key or ""}
         defaults = user_input or {
             CONF_IP_ADDRESS: entry.data[CONF_IP_ADDRESS],
@@ -199,7 +222,10 @@ class HdmiMatrixOptionsFlow(OptionsFlow):
                     self.hass, entry.data[CONF_IP_ADDRESS], entry.data[CONF_PORT], entered
                 )
             if not errors:
-                options = {CONF_SCAN_INTERVAL: current}
+                options = {
+                    **{key: value for key, value in entry.options.items() if key != CONF_API_KEY},
+                    CONF_SCAN_INTERVAL: current,
+                }
                 # One update for data and options, so the entry reloads once.
                 self.hass.config_entries.async_update_entry(
                     entry, data=_with_api_key(dict(entry.data), entered), options=options

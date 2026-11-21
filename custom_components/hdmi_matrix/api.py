@@ -35,6 +35,23 @@ class HubResponseError(HubError):
         super().__init__(f"{path}: {self.error} (HTTP {status})")
 
 
+def _validate_auth_status(auth: Any) -> dict[str, Any]:
+    """Require a well-formed ``/api/auth/status`` payload so malformed answers fail closed."""
+    if not isinstance(auth, dict):
+        raise HubResponseError("/api/auth/status", 200, "the hub returned a malformed auth status")
+    control_pin_set = auth.get("control_pin_set")
+    session_level = auth.get("session_level")
+    if (
+        not isinstance(control_pin_set, bool)
+        or not isinstance(session_level, str)
+        or session_level not in ("none", "control", "admin")
+        or ("admin_pin_set" in auth and not isinstance(auth["admin_pin_set"], bool))
+        or ("device_remembered" in auth and not isinstance(auth["device_remembered"], bool))
+    ):
+        raise HubResponseError("/api/auth/status", 200, "the hub returned a malformed auth status")
+    return auth
+
+
 class HubClient:
     """The hub at ``http://host:port``."""
 
@@ -119,14 +136,15 @@ class HubClient:
         ``control_pin_set`` says whether control commands need a key at all;
         ``session_level`` is ``"control"`` when the hub accepts this client's
         API key and ``"none"`` when it does not. Reading it changes nothing on
-        the hub and counts no PIN attempt.
+        the hub and counts no PIN attempt. Missing or mistyped fields raise
+        :class:`HubResponseError` so callers fail closed.
         """
-        return await self._request("GET", "/api/auth/status", envelope=False)
+        return _validate_auth_status(await self._request("GET", "/api/auth/status", envelope=False))
 
     async def control_allowed(self) -> bool:
         """Whether the hub will accept this client's control commands (routing, power, CEC)."""
-        auth = await self.auth_status()
-        return not auth.get("control_pin_set") or auth.get("session_level") in ("control", "admin")
+        auth = _validate_auth_status(await self.auth_status())
+        return (not auth["control_pin_set"]) or auth["session_level"] in ("control", "admin")
 
     # ------------------------------------------------------------ writes
 

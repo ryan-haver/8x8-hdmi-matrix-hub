@@ -33,6 +33,7 @@
     "error": {
       "cannot_connect": "Cannot connect to the hub. Check the host and port, and that the hub is running.",
       "invalid_auth": "The hub has a control PIN and did not accept this API key. Create a key in the hub's settings and enter it here.",
+      "invalid_auth_status": "The hub responded, but did not report a valid authentication status (/api/auth/status). Check that this address points to a current HDMI Matrix hub.",
       "unknown": "An unexpected error occurred."
     },
     "abort": {
@@ -58,6 +59,7 @@
     "error": {
       "cannot_connect": "Cannot connect to the hub, so the new API key could not be checked.",
       "invalid_auth": "The hub has a control PIN and did not accept this API key. Create a key in the hub's settings and enter it here.",
+      "invalid_auth_status": "The hub responded, but did not report a valid authentication status (/api/auth/status), so the new API key could not be checked.",
       "unknown": "An unexpected error occurred."
     }
   },

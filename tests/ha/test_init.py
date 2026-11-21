@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any
+from unittest.mock import patch
 
 import aiohttp
 from homeassistant.config_entries import ConfigEntryState
@@ -17,8 +19,9 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components import hdmi_matrix
 from custom_components.hdmi_matrix.api import HubConnectionError, HubResponseError
-from custom_components.hdmi_matrix.const import DOMAIN
+from custom_components.hdmi_matrix.const import CONF_API_KEY, CONF_SCAN_INTERVAL, DOMAIN
 
 from .helpers import BASE_URL, HOST, MAC, PORT, MockHub, coordinator, entity_id, load_fixture, refresh
 
@@ -246,3 +249,82 @@ def test_brand_icons() -> None:
         assert data[:8] == PNG_SIGNATURE and data[12:16] == b"IHDR"
         assert int.from_bytes(data[16:20], "big") == px and int.from_bytes(data[20:24], "big") == px
         assert data[25] == 6  # colour type 6: RGBA (transparent background)
+
+
+async def test_setup_migrates_options_api_key_without_extra_reload(
+    hass: HomeAssistant, hub: MockHub
+) -> None:
+    """Legacy ``entry.options['api_key']`` moves into ``entry.data`` at setup without reloading."""
+    setup_calls = 0
+    real_setup_entry = hdmi_matrix.async_setup_entry
+
+    async def _counting_setup(hass_arg: HomeAssistant, entry_arg: Any) -> bool:
+        nonlocal setup_calls
+        setup_calls += 1
+        return await real_setup_entry(hass_arg, entry_arg)
+
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={"host": HOST, "port": PORT, CONF_API_KEY: "stale-key"},
+        options={CONF_SCAN_INTERVAL: 30, CONF_API_KEY: " migrated-key "},
+        unique_id=MAC,
+    )
+    entry.add_to_hass(hass)
+
+    with patch("custom_components.hdmi_matrix.async_setup_entry", side_effect=_counting_setup):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+
+    assert entry.state is ConfigEntryState.LOADED
+    assert setup_calls == 1
+    assert entry.data == {"host": HOST, "port": PORT, CONF_API_KEY: "migrated-key"}
+    assert entry.options == {CONF_SCAN_INTERVAL: 30}
+    assert entry.runtime_data.client.api_key == "migrated-key"
+    assert all((headers or {}).get("X-API-Key") == "migrated-key" for _, _, _, headers in hub.mock.mock_calls)
+
+
+async def test_setup_clears_empty_legacy_api_key_without_extra_reload(
+    hass: HomeAssistant, hub: MockHub
+) -> None:
+    """Empty or whitespace legacy ``api_key`` values in options or data are removed without reloading."""
+    setup_calls = 0
+    real_setup_entry = hdmi_matrix.async_setup_entry
+
+    async def _counting_setup(hass_arg: HomeAssistant, entry_arg: Any) -> bool:
+        nonlocal setup_calls
+        setup_calls += 1
+        return await real_setup_entry(hass_arg, entry_arg)
+
+    with patch("custom_components.hdmi_matrix.async_setup_entry", side_effect=_counting_setup):
+        entry_from_options = MockConfigEntry(
+            domain=DOMAIN,
+            data={"host": HOST, "port": PORT, CONF_API_KEY: "stale-key"},
+            options={CONF_SCAN_INTERVAL: 25, CONF_API_KEY: "   "},
+            unique_id=MAC,
+        )
+        entry_from_options.add_to_hass(hass)
+        assert await hass.config_entries.async_setup(entry_from_options.entry_id)
+        await hass.async_block_till_done()
+
+        assert setup_calls == 1
+        assert entry_from_options.data == {"host": HOST, "port": PORT}
+        assert entry_from_options.options == {CONF_SCAN_INTERVAL: 25}
+        assert entry_from_options.runtime_data.client.api_key is None
+        assert await hass.config_entries.async_remove(entry_from_options.entry_id)
+        await hass.async_block_till_done()
+
+        entry_from_data = MockConfigEntry(
+            domain=DOMAIN,
+            data={"host": HOST, "port": PORT, CONF_API_KEY: ""},
+            options={},
+            unique_id=MAC,
+        )
+        entry_from_data.add_to_hass(hass)
+        assert await hass.config_entries.async_setup(entry_from_data.entry_id)
+        await hass.async_block_till_done()
+
+        assert setup_calls == 2
+        assert entry_from_data.data == {"host": HOST, "port": PORT}
+        assert entry_from_data.options == {}
+        assert entry_from_data.runtime_data.client.api_key is None
+        assert all("X-API-Key" not in (headers or {}) for _, _, _, headers in hub.mock.mock_calls)
