@@ -1143,19 +1143,16 @@ async def test_http_redirects_are_not_followed_to_forbidden_destinations(monkeyp
 
     import telnet_client
 
-    sink_hits: list[str] = []
+    sink_connections: list[tuple[str, int]] = []
 
-    async def sink_handler(request: web.Request) -> web.Response:
-        sink_hits.append(request.path_qs)
-        return web.json_response({"result": 1})
+    async def sink_accept(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
+        peer = writer.get_extra_info("peername")
+        sink_connections.append(peer if isinstance(peer, tuple) else ("unknown", 0))
+        writer.close()
+        await writer.wait_closed()
 
-    sink_app = web.Application()
-    sink_app.router.add_route("*", "/{tail:.*}", sink_handler)
-    sink_runner = web.AppRunner(sink_app)
-    await sink_runner.setup()
-    sink_site = web.TCPSite(sink_runner, "127.0.0.1", 0)
-    await sink_site.start()
-    sink_port = sink_site._server.sockets[0].getsockname()[1]
+    sink_server = await asyncio.start_server(sink_accept, "127.0.0.1", 0)
+    sink_port = sink_server.sockets[0].getsockname()[1]
 
     redirect_hits = 0
 
@@ -1181,11 +1178,12 @@ async def test_http_redirects_are_not_followed_to_forbidden_destinations(monkeyp
         assert result.kind == "http_error"
         assert result.error == "HTTP 307"
         assert redirect_hits == 1
-        assert sink_hits == []
+        assert sink_connections == []
     finally:
         if matrix._session is not None:
             await matrix._session.close()
             matrix._session = None
         telnet_client.unregister_simulator_loopback_port(src_port)
         await src_runner.cleanup()
-        await sink_runner.cleanup()
+        sink_server.close()
+        await sink_server.wait_closed()
