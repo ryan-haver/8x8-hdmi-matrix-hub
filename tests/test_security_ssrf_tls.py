@@ -1110,3 +1110,82 @@ async def test_simulator_loopback_registration_is_exact_port_and_never_weakens_d
     # Unregistering restores full default blocking.
     with pytest.raises(ValueError, match="Disallowed matrix destination address"):
         telnet_client.validate_matrix_target_syntax("127.0.0.1", 54321)
+
+
+@pytest.mark.asyncio
+async def test_ipv6_metadata_endpoint_is_blocked_for_literals_and_mixed_dns(monkeypatch):
+    import telnet_client
+
+    for opt_in in ("false", "true"):
+        monkeypatch.setenv("ALLOW_PUBLIC_MATRIX_HOST", opt_in)
+        assert not telnet_client.is_permitted_matrix_ip(ipaddress.IPv6Address("fd00:ec2::254"))
+        assert not await settings._is_safe_host("fd00:ec2::254", 443)
+        with pytest.raises(ValueError, match="Disallowed matrix destination address"):
+            telnet_client.validate_matrix_target_syntax("fd00:ec2::254", 443)
+
+        loop = asyncio.get_running_loop()
+
+        async def fake_mixed_getaddrinfo(host, port, **_kwargs):
+            return [
+                (socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", ("192.168.1.30", port)),
+                (socket.AF_INET6, socket.SOCK_STREAM, socket.IPPROTO_TCP, "", ("fd00:ec2::254", port, 0, 0)),
+            ]
+
+        monkeypatch.setattr(loop, "getaddrinfo", fake_mixed_getaddrinfo)
+        assert not await settings._is_safe_host("matrix.lan", 443)
+        with pytest.raises(OSError, match="Disallowed matrix destination address"):
+            await telnet_client.resolve_matrix_endpoints("matrix.lan", 443)
+
+
+@pytest.mark.asyncio
+async def test_http_redirects_are_not_followed_to_forbidden_destinations(monkeypatch):
+    from aiohttp import web
+
+    import telnet_client
+
+    sink_hits: list[str] = []
+
+    async def sink_handler(request: web.Request) -> web.Response:
+        sink_hits.append(request.path_qs)
+        return web.json_response({"result": 1})
+
+    sink_app = web.Application()
+    sink_app.router.add_route("*", "/{tail:.*}", sink_handler)
+    sink_runner = web.AppRunner(sink_app)
+    await sink_runner.setup()
+    sink_site = web.TCPSite(sink_runner, "127.0.0.1", 0)
+    await sink_site.start()
+    sink_port = sink_site._server.sockets[0].getsockname()[1]
+
+    redirect_hits = 0
+
+    async def redirect_handler(request: web.Request) -> web.Response:
+        nonlocal redirect_hits
+        redirect_hits += 1
+        raise web.HTTPTemporaryRedirect(location=f"http://127.0.0.1:{sink_port}/cgi-bin/instr")
+
+    src_app = web.Application()
+    src_app.router.add_post("/cgi-bin/instr", redirect_handler)
+    src_runner = web.AppRunner(src_app)
+    await src_runner.setup()
+    src_site = web.TCPSite(src_runner, "127.0.0.1", 0)
+    await src_site.start()
+    src_port = src_site._server.sockets[0].getsockname()[1]
+
+    telnet_client.register_simulator_loopback_port(src_port)
+    matrix = OreiMatrix("127.0.0.1", port=src_port)
+    monkeypatch.setattr(matrix, "_url", lambda: f"http://127.0.0.1:{src_port}/cgi-bin/instr")
+    try:
+        matrix._session = aiohttp.ClientSession()
+        result = await matrix._post({"comhead": "get video status", "language": 0})
+        assert result.kind == "http_error"
+        assert result.error == "HTTP 307"
+        assert redirect_hits == 1
+        assert sink_hits == []
+    finally:
+        if matrix._session is not None:
+            await matrix._session.close()
+            matrix._session = None
+        telnet_client.unregister_simulator_loopback_port(src_port)
+        await src_runner.cleanup()
+        await sink_runner.cleanup()

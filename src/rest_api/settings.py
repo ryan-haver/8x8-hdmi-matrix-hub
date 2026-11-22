@@ -5,13 +5,13 @@ Settings endpoints for backend configuration.
 import asyncio
 import ipaddress
 import logging
-import os
 import re
 import socket
 
 from aiohttp import web
 
 from orei_matrix import Events, default_telnet_port
+from telnet_client import _PERMITTED_MATRIX_NETWORKS, is_permitted_matrix_ip
 
 from .utils import (
     _json_response,
@@ -22,25 +22,15 @@ from .validation import BadRequestError, parse_json_object
 
 _LOG = logging.getLogger("rest_api.settings")
 
-_ALLOWED_MATRIX_NETWORKS = tuple(ipaddress.ip_network(cidr) for cidr in (
-    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7",
-    "192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24",
-))
+_ALLOWED_MATRIX_NETWORKS = _PERMITTED_MATRIX_NETWORKS
+
 _HOSTNAME_RE = re.compile(r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$")
 _LEGACY_IP_RE = re.compile(r"(?:0x[0-9a-f]+|[0-9]+)(?:\.(?:0x[0-9a-f]+|[0-9]+))*", re.IGNORECASE)
 
 
 def _is_allowed_address(addr: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
-    """Every DNS answer must meet this policy, including mapped IPv4 addresses."""
-    if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped:
-        addr = addr.ipv4_mapped
-    if addr.is_loopback or addr.is_link_local or addr.is_unspecified or addr.is_multicast:
-        return False
-    if addr in ipaddress.ip_network("169.254.0.0/16"):
-        return False
-    if any(addr in network for network in _ALLOWED_MATRIX_NETWORKS):
-        return True
-    return os.environ.get("ALLOW_PUBLIC_MATRIX_HOST", "").lower() == "true" and addr.is_global
+    """Every DNS answer must meet the shared matrix SSRF destination policy."""
+    return is_permitted_matrix_ip(addr)
 
 
 _Address = ipaddress.IPv4Address | ipaddress.IPv6Address

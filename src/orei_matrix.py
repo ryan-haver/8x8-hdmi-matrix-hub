@@ -886,7 +886,10 @@ class OreiMatrix:
             try:
                 validate_matrix_target_syntax(self.host, self.port)
                 async with session.post(
-                    self._url(), json=payload, timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT)
+                    self._url(),
+                    json=payload,
+                    timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT),
+                    allow_redirects=False,
                 ) as response:
                     status = response.status
                     # Matrix returns text/plain, so read as text then parse JSON

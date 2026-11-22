@@ -279,3 +279,9 @@ async def test_allowed_address_literals_preserved_and_standalone_port_change_req
     assert allowed_v6.status == 200
     assert device.host == "fc00::30"
     assert (await data(allowed_v6))["data"]["host"] == "fc00::30"
+
+    blocked_v6_imds = await settings.handle_set_matrix_host(
+        request({"host": "fd00:ec2::254", "password": "imds-secret"})
+    )
+    assert blocked_v6_imds.status == 400
+    assert device.host == "fc00::30"

@@ -38,13 +38,15 @@ sees what was proved, not only what was merged.
 - PIN checks for one client address run one at a time, so parallel requests
   cannot pass the five-attempt lockout. Sessions, failure records, remembered
   devices (64) and API keys (64) have ceilings.
-- `/ws` `get_status`: one read per client and eight per hub at a time, cancelled
-  when the client disconnects or the hub stops.
 - CORS headers are present on `401`/`403`/`415`/`421`/`429` answers.
 - Matrix host change: a new host or port needs the matrix password on the shared
-  runtime too (was answered "updated" with nothing changed); a new host name is
-  connected to by its validated address; a rolled-back change says so
-  (`applied: false`). `/api/settings` reports `443` as the default matrix port.
+  runtime too (was answered "updated" with nothing changed); configured hostnames
+  are preserved and re-validated on every HTTP and Telnet connect/reconnect with
+  HTTP redirects disabled and cloud metadata endpoints (`169.254.169.254`,
+  `fd00:ec2::254`) blocked; a rolled-back change says so (`applied: false`).
+  `/api/settings` reports `443` as the default matrix port.
+- Note: `/ws` `get_status` admission wiring (`CR-01`) remains held out of this
+  candidate pending separate provenance intake.
 - Scene override and step routes report inherited PIN protection, answer `404`
   for an unknown scene (was `400`) and `400` for a malformed body (was `500`).
 - Home Assistant: setup, Reconfigure and Options refuse an API key a locked hub

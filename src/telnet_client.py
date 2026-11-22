@@ -172,6 +172,9 @@ _PERMITTED_MATRIX_NETWORKS = tuple(
 )
 _IPV4_LINK_LOCAL_NET = ipaddress.IPv4Network("169.254.0.0/16")
 _MatrixIp = ipaddress.IPv4Address | ipaddress.IPv6Address
+_BLOCKED_METADATA_IPS: frozenset[_MatrixIp] = frozenset(
+    (ipaddress.IPv4Address("169.254.169.254"), ipaddress.IPv6Address("fd00:ec2::254"))
+)
 _CANONICAL_LOOPBACK_ADDRS: frozenset[_MatrixIp] = frozenset(
     (ipaddress.IPv4Address("127.0.0.1"), ipaddress.IPv6Address("::1"))
 )
@@ -223,6 +226,8 @@ def _is_registered_simulator_loopback(addr: _MatrixIp, port: int) -> bool:
 def is_permitted_matrix_ip(addr: _MatrixIp) -> bool:
     """Return True only when ``addr`` satisfies the matrix SSRF destination policy."""
     check_addr: _MatrixIp = addr.ipv4_mapped if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped else addr
+    if check_addr in _BLOCKED_METADATA_IPS:
+        return False
     if check_addr.is_loopback or check_addr.is_link_local or check_addr.is_unspecified or check_addr.is_multicast:
         return False
     if isinstance(check_addr, ipaddress.IPv4Address) and check_addr in _IPV4_LINK_LOCAL_NET:
