@@ -1,5 +1,47 @@
 # Current coordinator handoff
 
+## Remediation integration landed on `wp-runtime-completion` (`b8029e69`) — 2026-11-21
+
+Completed remediation closeout, cross-family independent audit, integration onto `wp-runtime-completion`, and worktree cleanup for `8x8-hdmi-matrix-hub` (`run_37205f6095b3`, base `680e93b88b711369e452cdbe415415ef23ab99ed` -> `b8029e69c861a4259513b256fd93a7f984c9ed63`):
+
+- **Committed & pushed task branches**:
+  - `origin/ryan-haver/d5-carbon-source-261115` @ `6fb6f8dc51cecc133c1f90189d1d8a09663e5ffd` (`D5-G1`: HA fail-closed on auth capability, key clearing, single reload, synced `strings.json`/`translations/en.json`; normal `.githooks/pre-commit`: `4255 passed, 6 skipped, 35 deselected`, `177/177` routes).
+  - `origin/ryan-haver/d3-carbon-source-261114` @ `cd80331bddc578f8038f493a42a96f46303f6ebf` (`D3`+`Q3`: transport SSRF checks on `OreiMatrix`/`TelnetClient` + exact-port simulator loopback registration `register_simulator_loopback_port`/`OREI_SIMULATOR_LOOPBACK_PORTS` without weakening production defaults or `POST /api/settings/matrix-host`; normal `.githooks/pre-commit`: `4261 passed, 9 skipped, 35 deselected`, `mypy` 0 issues, `177/177` routes).
+- **Integrated stack on `origin/wp-runtime-completion` @ `b8029e69c861a4259513b256fd93a7f984c9ed63`** (11 commits off `680e93b8`, verified remote == local HEAD; `main` untouched):
+  1. `efb7cad1` (`730c0c28`) — PIN serialization, bounded auth state, CORS on refusals (Anthropic/Fable)
+  2. `19c763d6` (`38dad33c`) — `matrix-host` & scene v2 override/step input handling (Anthropic/Fable)
+  3. `21452f8b` (`2a24a518`) — HA API key verification & single storage (Anthropic/Fable)
+  4. `5d5aeda8` (`f2a122f9`) — Web UI keyboard shortcuts, `clearOverride` body, honest Power Cycle (Anthropic/Fable)
+  5. `2b68123e` (`6fb6f8dc`) — `D5-G1` HA fail-closed & single reload (Google/Carbon+Gemini)
+  6. `420b7249` (`cd80331b`) — `D3`+`Q3` transport SSRF & exact-port simulator loopback (Google/Carbon+Gemini)
+  7. `0a9ec922` — `D4-G3` OpenAPI `x-data-schema` (`SettingsResponseData`, `MatrixHostUpdateData`, `RecallResponseData`), `API_REFERENCE.md`, symmetric scenarios, `features.yaml` (no evidence promotion), serial `LEDGER.md` (Google/Gemini)
+  8. `6eb01223` — `D8` Python `>=3.12` metadata floor & blocking CI ESLint/Stylelint (Google/Gemini)
+  9. `32416a73` — Audit fix: `allow_redirects=False` on matrix HTTP requests, explicit AWS IPv6 IMDS (`fd00:ec2::254`) & IPv4 metadata blocking shared across transport and REST settings, `CHANGELOG.md` aligned with CR-01 hold (Google/Gemini)
+  10. `a3ec7e1e` — Audit fix: raw TCP accept zero-connection proof on blocked redirect target (Google/Gemini)
+  11. `b8029e69` — UC reconfigure test fix: pass second simulator's exact dynamic ports to `uc_hub_factory` (Google/Gemini)
+- **Independent Cross-Family Exact-SHA Audit**:
+  - Conducted via `codex-cli 0.171.0` (`openai` `gpt-6-astra`, `high` effort, `--sandbox read-only --ephemeral`, independent of both Anthropic and Google authors; note `orca orchestration worker-start` remained properly fenced to `p-coord` coordinator `term_c812d3f9-db2f-4a02-99e1-6a4cbb388afc` so `run_37205f6095b3` binding was not disturbed):
+    - Round 1 (`6eb01223`): `verdict=blocking` (3 real findings: HTTP redirects, IPv6 IMDS `fd00:ec2::254`, `CHANGELOG.md` `/ws` claim) — all fixed in `32416a73`.
+    - Round 2 (`32416a73`): `verdict=blocking` (1 test refinement: TCP accept zero-connection counter) — fixed in `a3ec7e1e`.
+    - Round 3 (`a3ec7e1e`): `verdict=clean sha=a3ec7e1e8d1156aa8af0997107ae2175d0dbf589`.
+    - Round 4 (`b8029e69`, incremental UC test fix): **`verdict=clean sha=b8029e69c861a4259513b256fd93a7f984c9ed63`**.
+- **Combined Verification on `wp-runtime-completion` @ `b8029e69`**:
+  - `ruff check src tests custom_components tools run.py run_server.py`: passed
+  - `mypy src/`: 0 issues in 92 source files
+  - `python -m tools.validate check`: gate OK (0 known failures)
+  - `npm run lint:js` (ESLint) & `npm run lint:css` (Stylelint 521/521 baseline): passed
+  - Full core `pytest` with `ROUTE_COVERAGE_STRICT=1`: `4256 passed, 9 skipped, 35 deselected`, `177/177` (100.0%) route coverage
+  - Full dedicated `pytest tests/uc`: `100 passed` (0 failed)
+- **Open Owner Gates & Governance Holds (Honest Gaps)**:
+  - **`3eb45919` (`CR-01` `/ws` admission wiring)**: Excluded from `wp-runtime-completion` per `OWNER_PROVENANCE_DISPOSITION.json`; preserved intact on `origin/ryan-haver/audit-remediation-fable52`.
+  - **`D6-G2` (Web UI matrix password fields + visual review)**: Held at `REMEDIATION_PLAN.md` §5.3 pinned Linux Playwright before-capture gate because host Docker engine (`//./pipe/docker_engine`) is offline.
+  - **HA dual-version live suite (`2025.1.0` & `2026.2.3`)**: Not executed on this host (Docker engine offline; host Python is `3.12.10` without HA/Python 3.13 Linux environment). Static/AST/ruff/string-sync checks passed.
+  - **`H5` (`D7` `tools/validate/` privacy files)**: Untouched pending owner confirmation.
+  - **Hardware/Release Gates**: `V4` physical HIL, 72-hour soak, `V5` field sign-off, visual baselines, `main` merge, and release tags remain open owner gates.
+- **Worktree/Storage Cleanup**:
+  - Permanent SHA-256 manifest of `d3-carbon-source-261114/build/` preserved at `docs/planning/fable-consensus-20261113/D3_BUILD_QA_MANIFEST_20261121.json`.
+  - Settled clean pushed worktrees (`audit-remediation-fable52`, `d3-carbon-source-261114`, `d5-carbon-source-261115`, `remediation-candidate-261120`) removed via `orca worktree rm` (no `--force`); primary checkout and `p-coord` preserved; orphaned `p-coord` terminal `term_89b49d8e-3dfe-4ba4-882f-0c642cddac83` closed after cross-Run custody audit.
+
 ## Offline prerequisite QA admitted; one node not started — 2026-11-15
 
 Root `msg_7aa75cd44a90` accepts singleassert SOURCE END/scoped proof: Task4ba64/

@@ -1,5 +1,20 @@
 # Agent allocation and execution ledger
 
+## Remediation integration, cross-family audit, and worktree cleanup — 2026-11-21
+
+- **Integration head**: `wp-runtime-completion` fast-forwarded and pushed to `origin/wp-runtime-completion` at `b8029e69c861a4259513b256fd93a7f984c9ed63` (verified `git ls-remote` equality; `main` untouched).
+- **Task branches pushed & verified**:
+  - `origin/ryan-haver/d5-carbon-source-261115` @ `6fb6f8dc51cecc133c1f90189d1d8a09663e5ffd` (`D5-G1`, Google/Carbon+Gemini)
+  - `origin/ryan-haver/d3-carbon-source-261114` @ `cd80331bddc578f8038f493a42a96f46303f6ebf` (`D3`+`Q3`, Google/Carbon+Gemini)
+  - `origin/ryan-haver/remediation-candidate-261120` @ `b8029e69c861a4259513b256fd93a7f984c9ed63` (clean 11-commit stack excluding held `3eb45919`)
+  - `origin/ryan-haver/audit-remediation-fable52` @ `f2a122f955def578960303bc15242fed00d01be3` (retained intact for held `3eb45919` provenance)
+- **Authorship & Independent Review Attribution**:
+  - Authors on integrated stack: Anthropic (`Claude Fable 5.2`: `efb7cad1`, `19c763d6`, `21452f8b`, `5d5aeda8`) and Google (`Carbon`/`Gemini`: `2b68123e`, `420b7249`, `0a9ec922`, `6eb01223`, `32416a73`, `a3ec7e1e`, `b8029e69`).
+  - Independent reviewer (different underlying family): OpenAI `gpt-6-astra` (`high`, `codex-cli 0.171.0`, `--sandbox read-only --ephemeral`, Codex quota 98% remaining at launch). Round 1 (`6eb01223`, 3 findings fixed) -> Round 2 (`32416a73`, 1 test-proof refinement fixed) -> Round 3 (`a3ec7e1e`, `verdict=clean`) -> Round 4 (`b8029e69`, `verdict=clean`).
+- **Verification**: `ruff` clean, `mypy src/` 0 issues (92 files), `tools.validate check` OK, `npm run lint:js` & `npm run lint:css` (521/521 baseline) clean, full core `pytest` with `ROUTE_COVERAGE_STRICT=1` (`4256 passed, 9 skipped, 35 deselected`, `177/177` 100.0% routes), dedicated `pytest tests/uc` (`100 passed`).
+- **Unresolved Gates / Holds**: `D6-G2` (offline Docker engine blocks §5.3 pinned Linux Playwright before-captures), HA `2025.1.0`/`2026.2.3` live test environment gap, held `3eb45919` (`CR-01`), held `H5` (`D7`), hardware `V4`/`V5` & visual baseline owner gates.
+- **Storage & Settlement**: `d3-carbon-source-261114/build/` QA bytes preserved by SHA-256 manifest (`docs/planning/fable-consensus-20261113/D3_BUILD_QA_MANIFEST_20261121.json`); 4 settled task worktrees removed via `orca worktree rm` (no `--force`); orphaned `p-coord` terminal `term_89b49d8e-3dfe-4ba4-882f-0c642cddac83` closed after cross-Run custody audit; owned temp folder removed. Docs-only `p-coord` checkpoint committed with invocation-only hook exception after scoped JSON/whitespace checks.
+
 ## Single assertion sealed; named offline prerequisite QA planned — 2026-11-15
 
 Root `msg_7aa75cd44a90` accepts actual type-assertion SOURCE END: Task4ba64/ctx30ae
