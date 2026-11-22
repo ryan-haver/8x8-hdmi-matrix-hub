@@ -24,7 +24,7 @@ import aiohttp
 
 from tools.uc_remote_sim import SetupOutcome, UcRemoteSim
 from tools.validate.device import SimDevice
-from tools.validate.stack import HubProcess, SimulatorProcess, free_port
+from tools.validate.stack import SimulatorProcess, free_port
 
 from ._helpers import CYCLE, INPUT_NAMES, POLL, sent, wait_for
 
@@ -232,45 +232,60 @@ async def test_reconfigure_keeps_the_subscribed_entities_working(uc_remote: UcRe
     assert (await sim.state())["outputs"][0]["source"] == 6
 
 
-async def test_reconfigure_to_another_matrix_disposes_the_old_connection(uc_remote: UcRemoteSim, uc_hub,
-                                                                         uc_log_dir, sim: SimDevice) -> None:
+async def test_reconfigure_to_another_matrix_disposes_the_old_connection(
+    uc_hub_factory, uc_simulator: SimulatorProcess, uc_log_dir, sim: SimDevice
+) -> None:
     """BE-10: after a successful reconfigure to a new address the subscribed entities control the new matrix,
     and the old matrix client is disposed: the old device gets no more requests (no leaked poller/session)."""
     other = SimulatorProcess(log_dir=uc_log_dir / "new-matrix")
     await asyncio.to_thread(other.start)
     try:
-        outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
-                                          current_password="admin")
-        assert outcome.state == "OK"
-        assert (_config(uc_hub)["host"], _config(uc_hub)["port"]) == (other.host, other.https_port)
-        async with SimDevice(other.control_url) as new:
-            await sim.clear_log()
-            await new.clear_log()
-            assert (await uc_remote.select_source("media_player.output_1", "PS5"))["code"] == 200
-            assert (await new.state())["outputs"][0]["source"] == 6
-            await asyncio.sleep(3 * POLL)
-            assert sent(await new.log(), "get video status"), "the new matrix is polled"
-            # HTTP only: the harness points every matrix client at the first simulator's Telnet port.
-            old_http = [e.get("command") for e in await sim.log() if e.get("channel") == "http"]
-            assert old_http == [], f"the old matrix is still used: {old_http}"
+        uc_hub = await uc_hub_factory(extra_env={
+            "OREI_SIMULATOR_LOOPBACK_PORTS": (
+                f"{uc_simulator.https_port},{uc_simulator.telnet_port},{other.https_port},{other.telnet_port}"
+            ),
+        })
+        async with UcRemoteSim(uc_hub.uc_url) as uc_remote:
+            await uc_remote.attach()
+            outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
+                                              current_password="admin")
+            assert outcome.state == "OK"
+            assert (_config(uc_hub)["host"], _config(uc_hub)["port"]) == (other.host, other.https_port)
+            async with SimDevice(other.control_url) as new:
+                await sim.clear_log()
+                await new.clear_log()
+                assert (await uc_remote.select_source("media_player.output_1", "PS5"))["code"] == 200
+                assert (await new.state())["outputs"][0]["source"] == 6
+                await asyncio.sleep(3 * POLL)
+                assert sent(await new.log(), "get video status"), "the new matrix is polled"
+                # HTTP only: the harness points every matrix client at the first simulator's Telnet port.
+                old_http = [e.get("command") for e in await sim.log() if e.get("channel") == "http"]
+                assert old_http == [], f"the old matrix is still used: {old_http}"
     finally:
         await asyncio.to_thread(other.stop)
 
 
-async def test_the_login_entered_for_a_matrix_is_used_after_a_restart(uc_remote: UcRemoteSim, uc_hub: HubProcess,
-                                                                      uc_log_dir) -> None:
+async def test_the_login_entered_for_a_matrix_is_used_after_a_restart(
+    uc_hub_factory, uc_simulator: SimulatorProcess, uc_log_dir
+) -> None:
     """The login entered in the setup belongs to that matrix: saved with its address and used after a restart
     (the environment's OREI_PASSWORD, the seed 'admin', would be rejected by this matrix)."""
     other = SimulatorProcess(log_dir=uc_log_dir / "own-login")
     await asyncio.to_thread(other.start)
     try:
+        uc_hub = await uc_hub_factory(extra_env={
+            "OREI_SIMULATOR_LOOPBACK_PORTS": (
+                f"{uc_simulator.https_port},{uc_simulator.telnet_port},{other.https_port},{other.telnet_port}"
+            ),
+        })
         async with SimDevice(other.control_url) as new:
             await new.patch_state({"auth": {"user": "Admin", "password": "matrix-2-login"}})
-            outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
-                                              login={"user": "Admin", "password": "matrix-2-login"},
-                                              current_password="admin")
-            assert outcome.state == "OK"
-            await uc_remote.close()
+            async with UcRemoteSim(uc_hub.uc_url) as uc_remote:
+                await uc_remote.attach()
+                outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
+                                                  login={"user": "Admin", "password": "matrix-2-login"},
+                                                  current_password="admin")
+                assert outcome.state == "OK"
             await asyncio.to_thread(uc_hub.restart)
             await new.clear_log()
             async with UcRemoteSim(uc_hub.uc_url) as remote:
@@ -358,17 +373,26 @@ async def test_unauthenticated_client_cannot_repoint_the_matrix(uc_remote_factor
         await asyncio.to_thread(attacker.stop)
 
 
-async def test_current_password_authorizes_reconfigure(uc_remote, uc_hub, uc_log_dir) -> None:
+async def test_current_password_authorizes_reconfigure(
+    uc_hub_factory, uc_simulator: SimulatorProcess, uc_log_dir
+) -> None:
     other = SimulatorProcess(log_dir=uc_log_dir / "authorized")
     await asyncio.to_thread(other.start)
     try:
-        denied = await uc_remote.setup_driver({"host": other.host, "port": other.https_port,
-                                               "current_password": "wrong"}, reconfigure=True)
-        assert denied.error == "AUTHORIZATION_ERROR"
-        outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
-                                          current_password="admin")
-        assert outcome.state == "OK"
-        assert _config(uc_hub)["port"] == other.https_port
+        uc_hub = await uc_hub_factory(extra_env={
+            "OREI_SIMULATOR_LOOPBACK_PORTS": (
+                f"{uc_simulator.https_port},{uc_simulator.telnet_port},{other.https_port},{other.telnet_port}"
+            ),
+        })
+        async with UcRemoteSim(uc_hub.uc_url) as uc_remote:
+            await uc_remote.attach()
+            denied = await uc_remote.setup_driver({"host": other.host, "port": other.https_port,
+                                                   "current_password": "wrong"}, reconfigure=True)
+            assert denied.error == "AUTHORIZATION_ERROR"
+            outcome = await _setup_with_login(uc_remote, other.host, other.https_port, reconfigure=True,
+                                              current_password="admin")
+            assert outcome.state == "OK"
+            assert _config(uc_hub)["port"] == other.https_port
     finally:
         await asyncio.to_thread(other.stop)
 
