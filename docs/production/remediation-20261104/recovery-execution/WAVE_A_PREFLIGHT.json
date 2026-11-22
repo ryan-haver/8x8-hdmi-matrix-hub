@@ -1,0 +1,173 @@
+{
+  "observed_utc": "2026-11-04T10:40:42.423394+00:00",
+  "status": "ADOPTED plan; two bounded source corrections PREPARED, no worktrees/Tasks/Dispatches yet",
+  "consensus_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "consensus": "docs/agent-process/phases/remediation-recovery-20261104/CONSENSUS.json",
+  "jobs": {
+    "ws-c01": {
+      "key": "ws-c01",
+      "id": "WS-C01",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "name": "wp-remediation-ws-work-c01",
+      "branch": "remediation/ws-work-c01",
+      "base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/WS_C01_TASK.md",
+      "title": "WS-C01 bounded original-author product correction",
+      "deps": [
+        "task_3c062bb9de42",
+        "task_dfe340b7113e",
+        "task_79d0d9028045"
+      ],
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "tracked_paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py",
+        "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+      ],
+      "ignored_root": "build/remediation-recovery-20261104/ws-c01/**",
+      "temp_root": "C:/t/remediation-recovery/ws-c01/**"
+    },
+    "privacy-c4": {
+      "key": "privacy-c4",
+      "id": "PRIV-C4",
+      "agent": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "name": "wp-sec-data-02-c4",
+      "branch": "remediation/privacy-c4",
+      "base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "report": "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md",
+      "spec": "docs/production/remediation-20261104/recovery-execution/PRIV_C4_TASK.md",
+      "title": "PRIV-C4 bounded original-author product correction",
+      "deps": [
+        "task_3c062bb9de42",
+        "task_dfe340b7113e",
+        "task_79d0d9028045"
+      ],
+      "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "tracked_paths": [
+        "tools/validate/evidence.py",
+        "tools/validate/clients/api.py",
+        "tools/validate/model.py",
+        "tools/validate/runner.py",
+        "tools/validate/clients/ha.py",
+        "tests/validation/test_sw_sec_data_02_c4.py",
+        "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+      ],
+      "ignored_root": "build/remediation-recovery-20261104/priv-c4/**",
+      "temp_root": "C:/t/remediation-recovery/priv-c4/**"
+    }
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T10:36:20.079870+00:00",
+    "integration_head": "2d1445513fb0e655113a855ecd15ca65d5abc40d",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 150,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 150,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzU5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNzoxNzozMCIsImRpc3BhdGNoSWQiOiJjdHhfMDMzNDMwOTg1NGZkIiwiZGF0YWJhc2VJZCI6OTA0fX0"
+        },
+        {
+          "limit": 100,
+          "total": 150,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 143,
+        "retained": 7
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 12,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793788126432,
+        "error": null,
+        "age_seconds": 454
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400035,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 4,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600035,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793788126005,
+        "error": null,
+        "age_seconds": 454
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932852,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 19,
+          "windowMinutes": 300,
+          "resetsAt": 1793794421794,
+          "resetDescription": null
+        },
+        "updatedAt": 1793788126249,
+        "error": null,
+        "age_seconds": 454
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "catalog_sha256": "cb8c371e7a275b28a12e00f565283bb9c3100ef444b7ff64584820647afccac5",
+      "catalog_modified_utc": "2026-11-04T10:36:11.026863+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 2 planned source authors + coordinator + protected external =4of4; no nesting",
+    "alternatives": "OpenAI Astra/high, Anthropic Opus5.5/high and MiniMax-M3 are planning candidates only, based on accepted actual planning/prose work. Failed source-domain assessments remain failed and confer no source role. Google alternate route remains unverified; DeepSeek unavailable.",
+    "reserve": "three-family/three-round bounded prose contributions, staggered at two current; future implementation/qualification/correction reserve must be decided and freshly gated; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "D6_gate": {
+    "id": "D6-target-provenance",
+    "status": "HELD / NOT_DISPATCHABLE_AS_SCOPED",
+    "target": "12ad507eb3c0b24bd896b3bf1757d03980d19696",
+    "facts": "R3 Anthropic reports and coordinator independently reads Claude Opus5.5 Co-Authored-By trailers on websocket.py commits323af8e4/c39ee8d5/dbf5349e and app.py commits323af8e4/bc3b9353. These are conflict indicators, not a replacement for actual native source-family attribution. Required non-Anthropic target/independence has NOT been established.",
+    "disposition": "Apply unchanged FINAL_PACKET D6 limits and provenance/conflict gate: HOLD the async-review candidate and WS wiring, continue independent covered source corrections. No target narrowing, authorship relabel, retake or changed family allocation at dispatch. Actual attribution or material revised target/strategy requires the stated process before a later decision.",
+    "plan_interpretation": "No material packet change or new acceptance condition: all participants accepted fail-closed provenance/qualification gates. Anthropic explicitly confirms this is nonblocking for other packages; OpenAI/MiniMax accept the same gate.",
+    "candidate_attempts_launched": 0,
+    "wiring_leases_granted": 0
+  },
+  "independence": "Anthropic component correction -> qualified Astra source review. Sol privacy correction -> explicitly HELD independent acceptance; candidate M3/review only after actual qualification, no fallback qualification invented.",
+  "source_overlap": "No path overlap: rest_api controller/tests versus tools/validate/newC4test. Shared model/runner/ha diagnostic serial leases only, root manifests/registry/integration excluded.",
+  "capacity": "Source authors and future review/candidate/judge/correction demand stated; all intended pools checked before creation/start and future stages freshly gated, absolute allowance/otherhost unknown.",
+  "concurrency": "0current owned +2planned authors+coordinator+protectedexternal=4; seven retained metadata rows are not seven active workers.",
+  "publication": "Publish exact scoped adoption/ready checkpoint and verify independent remote/local head before creating source worktrees or launching. No force/reset or quiet failure recovery."
+}

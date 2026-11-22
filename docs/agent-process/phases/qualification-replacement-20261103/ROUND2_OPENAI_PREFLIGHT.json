@@ -1,0 +1,131 @@
+{
+  "observed_utc": "2026-11-03T18:20:58.693633+00:00",
+  "status": "OpenAI third R2 prepared, not launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local Zelu win32; supported fresh discovery captured privately",
+  "job": {
+    "participant": "openai",
+    "family": "OpenAI",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+    "worktree_name": "wp-qr-r1-openai",
+    "expected_branch": "ryan-haver/wp-qr-r1-openai",
+    "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND2_OPENAI.txt",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+    "title": "Qualification replacement R2 OpenAI peer challenge",
+    "dependencies": [
+      "task_b2647dfbc03e",
+      "task_8fda5920c385",
+      "task_62000ea30205"
+    ],
+    "input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+    "gate_path": [
+      "replacement_qualification",
+      "round2",
+      "openai"
+    ],
+    "stage": "prepared, not launched",
+    "branch_reservation": "planning/qr-20261103-r1-openai",
+    "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+    "actual_branch": "ryan-haver/wp-qr-r1-openai",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "capacity": {
+    "observed_utc": "2026-11-03T18:20:58.693633+00:00",
+    "other_host_demand": "unknown, not zero",
+    "scope": "one bounded remaining R2 assessment; R3 and future judge separately gated, no assurance of all-stage funding",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 62,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793729399742,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800373,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400373,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793729399394,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 18,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932884,
+        "resetDescription": null
+      },
+      "updatedAt": 1793729399468,
+      "error": null
+    }
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "cache_fetched_at": "2026-11-03T18:20:57.688592500Z",
+    "prior_native_R1": "actual Astra/high, fresh session identity still required"
+  },
+  "fleet": {
+    "total": 128,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 128,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTg2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNDowOTo1MiIsImRpc3BhdGNoSWQiOiJjdHhfMmExOWI5OWI5ZGY0IiwiZGF0YWJhc2VJZCI6Njc4fX0"
+      },
+      {
+        "limit": 100,
+        "total": 128,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 121
+    },
+    "historical_retained": 6,
+    "current_other_resource": {
+      "taskId": "task_8c044cfcdce5",
+      "dispatchId": "ctx_e407d807e727",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    },
+    "accounting": "six historical and one MiniMax R2 retained resource; status not inferred as active from retention"
+  },
+  "concurrency": "at most two current workers + coordinator + protected external reservation=4, no nesting",
+  "barrier": "same frozen R2 packet and all complete R1 reports; current R2 peer reports/private traces remain forbidden",
+  "qualification_or_source_or_release_acceptance": false
+}

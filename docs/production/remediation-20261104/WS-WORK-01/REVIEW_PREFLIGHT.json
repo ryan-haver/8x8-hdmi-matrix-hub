@@ -1,0 +1,140 @@
+{
+  "observed_utc": "2026-11-04T08:08:26.253454+00:00",
+  "status": "PREPARED, no worktree/Task/Dispatch yet",
+  "job": {
+    "key": "ws-review",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "name": "wp-remediation-ws-work-01-review",
+    "branch": "remediation/ws-work-01-review",
+    "base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "report": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+    "spec": "docs/production/remediation-20261104/WS_WORK_REVIEW_TASK.md",
+    "title": "Independent WS work-component correctness and bounded authorship judgement",
+    "deps": [
+      "task_38756b76bd12"
+    ]
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T08:05:25.198170+00:00",
+    "integration_head": "ac6570ca4268bd059e2e22cc4ff394a2a04079ea",
+    "remote_equal": true,
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "fleet": {
+      "total": 139,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 139,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzEzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAxMDoyODoyNCIsImRpc3BhdGNoSWQiOiJjdHhfODNlZGZkODdmZjFmIiwiZGF0YWJhc2VJZCI6NzM3fX0"
+        },
+        {
+          "limit": 100,
+          "total": 139,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 133,
+        "retained": 6
+      }
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 7,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793779126598,
+        "error": null,
+        "age_seconds": 399
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400157,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600157,
+          "resetDescription": "5:50 AM"
+        },
+        "updatedAt": 1793779126187,
+        "error": null,
+        "age_seconds": 399
+      }
+    },
+    "selection": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "catalog_sha256": "491b99e496c4fe4a574c22e1efeeb595bc1ea3a1055209f81ed75f005c805cbc",
+      "catalog_modified_utc": "2026-11-04T08:05:17.621670+00:00"
+    },
+    "placement": "local/Zelu/win32; inspect saved host receipts, no remote dispatch",
+    "concurrency": "0 current + 1 planned reviewer + coordinator + protected external = 3 of 4; no nesting",
+    "alternatives": "Sol same family capable but Astra chosen for demonstrated async lifecycle review; Anthropic component author cannot self-review. Privacy qualification FAIL remains domain-specific; MiniMax inventory-only and Google not verified/qualified for this review. DeepSeek unavailable.",
+    "reserve": "one bounded exact-component review plus future author correction/review; future stages freshly gated; absolute provider allowance and otherhost demand unknown"
+  },
+  "source_delivery": {
+    "original": "C:\\t\\remediation-ws-work\\67-commit-hook-strict-after-env-repair",
+    "direct_exit": 0,
+    "started_utc": "2026-11-04T07:40:37.152645+00:00",
+    "finished_utc": "2026-11-04T07:55:43.382730+00:00",
+    "junit": {
+      "cases": 4132,
+      "failures": 0,
+      "errors": 0,
+      "skips": 6
+    },
+    "passed": 4126,
+    "deselected": 35,
+    "warnings": 4,
+    "route": {
+      "covered": 177,
+      "total": 177,
+      "percent": 100.0,
+      "strict": true,
+      "uncovered": []
+    },
+    "captured": {
+      "stdout.txt": {
+        "sha256": "f33a512420531dae220ef0075f6c4b418b422ce2abab6552652fe666806db961",
+        "bytes": 337
+      },
+      "stderr.txt": {
+        "sha256": "bf084525c976765f1248d9211d66398a4950c3e41e1a51d7f9183124c1f7bb85",
+        "bytes": 6386
+      },
+      "junit.xml": {
+        "sha256": "343b865eedb9e9727a42c87d5b6574ac3f38cffa5cf69594e7e0cb5a3fa33a39",
+        "bytes": 551953
+      },
+      "route-coverage.json": {
+        "sha256": "6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a",
+        "bytes": 6631
+      }
+    },
+    "prior_route_hash_equal": true,
+    "route_note": "Deterministic coverage JSON equals prior capture; fresh strict coverage independently printed by this normal hook. No new registry/evidence campaign admission."
+  },
+  "candidate_qualification": "NOT_GRANTED until allsix exact-component judgement and coordinator disposition",
+  "source_integration": false,
+  "privacy_independent_status": "FAIL; no retake or source acceptance"
+}

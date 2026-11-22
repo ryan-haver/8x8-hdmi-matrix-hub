@@ -1,0 +1,55 @@
+{
+  "observed_utc": "2026-11-03T04:12:31.207275+00:00",
+  "unit": "SW-AUDIT-01",
+  "coordinator_decision": "ACCEPT bounded current inventory documentation as routing input",
+  "author_family": "MiniMax",
+  "author_commit": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+  "author_git_blob_sha256": "d3ad3af48e7f63cfbf9752da81048da54b91df53b6871c1e779ce0e108a1ef5e",
+  "independent_review_family": "OpenAI",
+  "independent_review_commit": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+  "independent_review_git_blob_sha256": "7aa191ab0d5f8428e8970568f3e5eede282b9f28614e80f004473d8f5532166c",
+  "independent_review_verdict": "accept bounded inventory documentation",
+  "prior_review_scope": "394dd867 independently verified268structural rows/41named identities/77-29-104 transitions and priorR1-R6 corrections;577 exact-diff review preserves that provenance, not another global audit",
+  "resolved_residuals": [
+    "100basis-universe vs96primary-label census prose",
+    "legacy software_gap/disposition fields explicitly superseded; corrected fields/table authoritative",
+    "three unit-local bounded-negative phrases"
+  ],
+  "factual_erratum": "F-API-029 actual SW-API-CLIENT-02/no live declaration, original review/spec error preserved by REVIEW_INSTRUCTION_ERRATUM.json",
+  "current_primary_census": {
+    "PRESERVE": 39,
+    "RERUN-FRESH": 40,
+    "MISSING-CLIENT": 48,
+    "MISSING-ASSERT": 4,
+    "DECLARATIVE-GAP": 7,
+    "COVERAGE-UNRESOLVED": 96,
+    "PHYS-OWNER-GATE": 33,
+    "RETAINED-CHAIN-OPEN": 1
+  },
+  "canonical_counts": {
+    "features": 268,
+    "below_target": 210,
+    "stale": 96,
+    "software_targets": 147,
+    "software_numerically_at": 58,
+    "software_below": 89,
+    "V4targets": 120,
+    "V5targets": 1
+  },
+  "bounded_documentation_task_complete": true,
+  "all_semantic_source_client_assertion_proof_verified": false,
+  "all_software_package_acceptance_closed": false,
+  "source_or_feature_qualification": false,
+  "finding_or_level_changed": false,
+  "CI_freshness_or_privacy_admission": false,
+  "remaining_limits": "Unknown semantic/client/target adequacy and nondeclarative controls remain bounded intake; CI attribution/freshness/admission, retained candidate reviews and actual parallelFSEC007 failure remain their named followups; existing accepted subscopes preserved, no new scenario mandate or runtime-defect claim",
+  "integration_mapping": {
+    "author": "c15839ffcded7316ab93a87f0b9547a277411985",
+    "review": "e36a22000e927bb61449652cbef12a7314891168"
+  },
+  "history": "all original reports/negative reviews/errata/overruns/failed probes preserved; fresh reviewer CRLF representations recorded without normalizing originals",
+  "settlement": "author/reviewers released, exact task refs published/verified, complete natives and verified workspace/temp archives retained; exact worktrees read-only, no destructive cleanup",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no source/owner-gate override",
+  "owner_gates": "physical/HIL/72h/week/final-version-artifact-release remain open; original3Tron decisions stay closed",
+  "publication": "acceptance committed/pushed with exact remote/local equality receipt outside referenced commit"
+}

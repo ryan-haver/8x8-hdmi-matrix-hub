@@ -1,0 +1,127 @@
+{
+  "observed_utc": "2026-11-04T18:39:27.640656+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 3,
+  "status": "MiniMax third samepacketR3 ACTIVE; firsttwo decisions preserved/released/taskrefpublished and withheld, no adoption",
+  "actor": {
+    "task_id": "task_e486754b791b",
+    "dispatch_id": "ctx_1cd734915060",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "exact_report_base": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+    "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round3/minimax.md",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_minimax.md",
+    "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported, not relabeled observed",
+    "native_entry": {
+      "session": "ses_e5824fc0affekRFh8Qy4RQllkn",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "CLI_effort_override": "unsupported",
+      "bytes": 311867,
+      "sha256": "e22c39b1d1be25d9b967c7f4c0d9dfe0e46de0a1755a2d2a4c7a2eeb2a895cab",
+      "helper_calls_observed": false,
+      "scope": "actual native entry Task/Dispatch/directory; no competence/completion/full host census"
+    },
+    "status": "actual samepacketR3 decision active; no vote/adoption/implementation yet"
+  },
+  "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "final_packet_bytes": 616751,
+  "plan_text_sha256": "90f8459b050577acb4fd6b55e195288380a1586780dd3eba05accf2159da00bb",
+  "prewave_published_verified_head": "13859c334238ea0353c9c7b844771cb3dfb8bdee",
+  "capacity": {
+    "observed_utc": "2026-11-04T18:38:27.939642+00:00",
+    "scope": "bounded R3 same-packet explicit plan decision, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793817335185,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 27,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400792,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 3,
+        "windowMinutes": 300,
+        "resetsAt": 1793832600792,
+        "resetDescription": "3:50 PM"
+      },
+      "updatedAt": 1793817334816,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 38,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932930,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 31,
+        "windowMinutes": 300,
+        "resetsAt": 1793830434075,
+        "resetDescription": null
+      },
+      "updatedAt": 1793817334815,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 166,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 166,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDM0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMjo0ODozNyIsImRpc3BhdGNoSWQiOiJjdHhfMzJmNWYyZWNmYWJlIiwiZGF0YWJhc2VJZCI6MTMzMX19"
+      },
+      {
+        "limit": 100,
+        "total": 166,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 158,
+      "null": 1
+    },
+    "historical_retained": 6,
+    "current_owned": 1,
+    "historical_null_compatibility_no_resource": 1
+  },
+  "concurrency": "one current+coordinator+protectedexternal=3of4,max2new,no nesting",
+  "barrier": "Firsttwo R3reports/verdict/rationale withheld fromthird participant. After allthreeoriginals preserved, record actualsamehash decisions, no majority/coordinatorconsensus. Packet remains exact933166, no drift or sourcelease.",
+  "holds": "OriginalWSR03/firstauthorshipNOT_GRANTED/D6wholemixedtarget/privacyFAILs and extraattemptownerbudget/fullsourceadmission/candidateproof/HA/UI/compatibility/ownerphysicalvisual72hweekrelease remain; programadoption would notwaive them",
+  "scope": "Ownhistoricalplanningcheckout untouched, exactownR2e6f8base; onlyNEWround3report/newownedtemp. No qualification/source/ownerbudget fromvote.",
+  "next": "publish489docs/exactremoteequal then END TURN for Orca wake/no completionpoll"
+}

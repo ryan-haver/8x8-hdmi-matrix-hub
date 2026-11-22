@@ -1,0 +1,38 @@
+{
+  "observed_utc": "2026-11-04T12:29:11.363581+00:00",
+  "question": "msg_1221f2fe5a54",
+  "same_judge_task": "task_32b607a54b40",
+  "same_judge_dispatch": "ctx_aaa1ff6c95b5",
+  "candidate_commit": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+  "status": "Evidence-location response / newly discovered candidate preservation and authored-path limitations; no judge verdict yet",
+  "overwritten_outputs": "UNAVAILABLE in known coordinator preservation/owned evidence: no separate original pre-overwrite copies or immutable snapshots found/known for reused live case_c/case_g/case_h and sensitivity mode paths. Coordinator archive captured final surviving workspace/temp only after delivery; retained stdout/native/inventory hashes are not substitute original record bytes. No host-wide backup recovery or reconstructed file claimed.",
+  "search_scope": "Known coordinator final-state workspace/temp archives and candidate two owned build/temp roots; no host-wide backup claim. No snapshot/backup names found in those roots. Candidate original stdout/native/inventory retained, not substitute original written record bytes.",
+  "outside_root_files": [
+    {
+      "original_path": "C:/Users/ryanh/AppData/Local/Temp/opencode/prior-opus-assessment.md",
+      "bytes": 24631,
+      "sha256": "987f7ef802b022a03d5689264af9cdb9e30c0fb24c1ae2592783711b55ca0da8",
+      "source_mtime_utc": "2026-11-04T11:57:23.835296+00:00",
+      "actual_current_copy_verified": true,
+      "first_separate_preservation": "At this checkpoint, actual surviving files; not in prior owned workspace/temp archives or reconstructed from git/native"
+    },
+    {
+      "original_path": "C:/Users/ryanh/AppData/Local/Temp/opencode/prior-opus-judge.md",
+      "bytes": 27426,
+      "sha256": "d438aee43b0c61a50e9c50c6334fe1822f6982cf5ad28127dfd7983a9de594c6",
+      "source_mtime_utc": "2026-11-04T11:57:24.269211+00:00",
+      "actual_current_copy_verified": true,
+      "first_separate_preservation": "At this checkpoint, actual surviving files; not in prior owned workspace/temp archives or reconstructed from git/native"
+    }
+  ],
+  "private_receipt": "build/remediation-execution-20261104/recovery-waveB/minimax-closeout/evidence-location-addendum-private.json",
+  "raw_extra_copies": "Same closeout/additional-outside-root-originals; source files retained unchanged",
+  "native_creation_calls": [
+    "call_01a1a66bd620751a87f421b0",
+    "call_01a1a66bdab37109aedfb347"
+  ],
+  "scope_erratum": "Existing full archive/member/current-byte verification remains accurate for surviving state, does not establish preservation of earlier overwritten outputs or complete all-host authored writes. Historical report/packets/manifests remain immutable; this addendum records newly discovered limitation/actual additional originals.",
+  "reply": "Sent actual locations and explicitly unavailable earlier bytes to current same judge via orchestration reply; do not request candidate rewrite or new execution.",
+  "qualification": "NOT_GRANTED pending same ONE independent judge, frozen criteria/report/inputhash unchanged; no waiver, new attempt, extra judge or automatic artifact relabeling.",
+  "cleanup": "No destructive cleanup or original-byte reconstruction; retain all source/review/candidate/ignored/native/history."
+}

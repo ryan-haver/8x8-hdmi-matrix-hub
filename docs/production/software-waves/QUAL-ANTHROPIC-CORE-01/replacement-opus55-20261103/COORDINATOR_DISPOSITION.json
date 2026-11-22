@@ -1,0 +1,126 @@
+{
+  "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+  "status": "PASS",
+  "meaning": "Coordinator accepts all-six independent PASS for this model and ONLY named bounded competence domain; no source acceptance",
+  "qualification": {
+    "model": "claude-opus-5-5",
+    "family": "Anthropic",
+    "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+    "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+    "status": "PASS",
+    "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+    "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+    "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "independent_judge_family": "OpenAI",
+    "independent_judge_model": "gpt-6-astra/high",
+    "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "fresh_task_match_required": true,
+    "automatic_reservation_unlock": false
+  },
+  "frozen_rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "consensus_sha256": "d599b857a014e7d1fbb731893b527b93ea2ccb99bc3ef08dfbf03b08f6808306",
+  "axes": {
+    "provenance": {
+      "status": "pass",
+      "evidence": "Original native 166-335/473-474; all nine pinned blobs and full changed-report content; exact evaluator SHA."
+    },
+    "invariants": {
+      "status": "pass",
+      "evidence": "Original native 200-289; model 472-482, runner 467-485/553-554/620-631; original schema-valid refusal records; J1 breadth excluded."
+    },
+    "counterexamples": {
+      "status": "pass",
+      "evidence": "Full C1/C2 assertions, native 393-438, focused JUnit e2d60dcb54fdb881a18c8ad4779d87b2cccee3f26f5e54e75ae1e57286a0c112: 54/0/0/0."
+    },
+    "behavior_and_tools": {
+      "status": "pass",
+      "evidence": "Original manifests 926274ca/011d08c9/53daecd5/5727dc10, unchanged recorder 4831d299, 275 original/copy files matched, native 451/452 process limits."
+    },
+    "calibration": {
+      "status": "pass",
+      "evidence": "AUTHOR sections 8-9; original failed/partial C1/C2 histories retained; no global retry, source acceptance or private-publication claim."
+    },
+    "review_quality": {
+      "status": "pass",
+      "evidence": "F1 static/historical timing support and exact assertions; I1-I3 verified; J1 Low/J2 informational scope corrections explicit; all material execution claims corroborated."
+    }
+  },
+  "evaluator": {
+    "commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "sha256": "34074c8cd6719eb15a63729441631c82ba2112c04452e0013910516f2f0f1a00",
+    "native": {
+      "session": "f2d52957-9554-4636-917b-b83780388faa",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high explicit launch/config; native per-turn effort not exposed",
+      "bytes": 2182789,
+      "sha256": "76a5ef49087827f0874bcd8bfdf41586bceb8302e8d08bbedeb7406fc3b533aa",
+      "unassigned_helper_tools_observed": []
+    },
+    "task_id": "task_5b5162506677",
+    "dispatch_id": "ctx_5e62800cd2dc"
+  },
+  "judge": {
+    "commit": "dda63d661d143a591d6d3d82346457fb52199795",
+    "sha256": "c10d4c5c1c784528a5969769a57fb607305845f8486909f7bb5c219cf2681a1a",
+    "native": {
+      "session": "01a1a2d7-348e-75a1-8ff2-cca40f80df34",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native turn_context",
+      "bytes": 1875545,
+      "sha256": "6d0ddf7d31f89fc6003bd4bd5d23388e4ac51d8c89b27cfdfd7309c996f76672",
+      "unassigned_helper_calls_observed": []
+    },
+    "task_id": "task_ea5e42f11e94",
+    "dispatch_id": "ctx_4492909a6860"
+  },
+  "basis": "Exact reviewed report/source/rubric/packet/native identities, actual changed-content and counterexample coverage, direct original execution/byte preservation and supported bounded findings; judge rejects unsupported search breadth instead of using it as invariant proof",
+  "observations_retained": {
+    "candidate_F1": "Low point-in-time disconnected precondition limitation, static/historical recipe only; no registered TLS false pass or product defect accepted",
+    "candidate_I1_I3": "registry basis wording, redundant guard coverage and loose restart lower bound remain informational",
+    "judge_J1": "Low capped tools/tests grep cannot prove repo-wide serialization negative; universal claim rejected, not relied upon for bounded schema invariant",
+    "judge_J2": "Informational ancillary absent-conftest exit2 omitted from author error inventory; no hidden test retry",
+    "candidate_scratch": "seven known native scratch public-input/report copies separately preserved; not part of275 invocation files or complete host-write inventory"
+  },
+  "conditions_for_later_assignments": [
+    "exact model/family/route and current quota verified again",
+    "specific task fully inside eligible domain, independence from actual author and exact source/review base",
+    "new genuine Task/Dispatch/exclusive paths and accepted plan/allocation; no automatic78-reservation unlock",
+    "inspect uncapped complete search/read scope for universal claims, retain every unsuccessful inspection command",
+    "separate qualified exact-commit source review/acceptance and applicable combined pipeline still required"
+  ],
+  "not_granted": [
+    "general core review",
+    "implementation authorship qualification",
+    "authentication/privacy/UI/HA/image/physical domains",
+    "source/RV-API034/RV-WS040/RV-PRIVACY-CHAIN acceptance",
+    "finding closure or evidence/privacy admission",
+    "hardware/HIL/72-hour/week/versions/artifacts/release approval"
+  ],
+  "history": "Both original Opus4.7 FAIL dispositions and reports remain byte-identical with original attribution. Lost C1 originals stay lost. Historical FSEC007 not retried or waived. This is a distinct Opus5.5 assessment, not repaired history.",
+  "source_or_release_acceptance": false,
+  "automatic_reservation_unlock": false,
+  "current_open_project_findings_unchanged": 61,
+  "future_automatic_retry_authorized": false,
+  "attempt_budget": {
+    "planning_contributions": 9,
+    "candidate_evaluations": 1,
+    "independent_judges": 1,
+    "all_authorized_stages_completed": true,
+    "additional_attempts_authorized_by_this_record": 0
+  },
+  "preservation": "exact workers released, task refs published and exact remote heads verified; full native/workspace/temp plus known supplemental scratch originals retained; no removal/full-Git-bundle/recovery claim",
+  "unknowns": [
+    "process termination cause",
+    "complete descendant census",
+    "historical FSEC007 onset",
+    "complete host side-effect inventory"
+  ]
+}

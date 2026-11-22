@@ -1,0 +1,72 @@
+{
+  "observed_utc": "2026-11-03T05:30:57.896706+00:00",
+  "unit": "SW-FINDINGS-01",
+  "coordinator_decision": "ACCEPT bounded corrected current-delta routing documentation only",
+  "author_family": "MiniMax",
+  "current_author_commit": "a2dab11cdc871d6a98c563b019a361371a9af710",
+  "current_author_git_blob_sha256": "56989fd60a7817facde500511e6be0b05286a256679f940da07c91591af19798",
+  "independent_review_family": "OpenAI",
+  "current_independent_review": {
+    "observed_utc": "2026-11-03T05:28:35.644748+00:00",
+    "review_commit": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+    "review_base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+    "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+    "bytes": 7045,
+    "sha256": "499590ef49fffe198fe67bbc4cb885af9a5884ccbab54a7a81a97afa299cb542",
+    "task_id": "task_5016bec03442",
+    "dispatch_id": "ctx_b4174280ec27",
+    "worktree": "wp-exec-sw-findings-01-rereview02",
+    "branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+    "verdict": "accept R3/R5 bounded correction delta only",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a19fde-fbe9-78a3-8565-555b8692359a",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 557281,
+      "sha256": "168aafff9d0bc87e04cc197283bee99908f311552548e198b1d9e0b0373ae18b"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "preservation": {
+      "archive_sha256": "8de7ea656768dc6b9cbcbd53f89287c601fde64a4917ff5037393948f11072cc",
+      "archive_bytes": 206797289,
+      "regular_files": 4598,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "22fd6d10fa03bbbe7901d8c2bdca1756a1a4dbc8"
+  },
+  "review_chain": {
+    "initial": "00b7b04994a08d45961c67619d402506ba2a65a3 require_changes R1-R8",
+    "correction01": "43356a0c0d0948719bf989d7bd824631d8c89a0e accepts R1/R2/R4/R6/R7/R8, residual R3/R5",
+    "correction02": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7 accepts R3/R5; complete two-edit diff preserves all other lines"
+  },
+  "scope": "current metadata delta to historically accepted DeepSeek59row triage;12detailed+47inherited+2new,47inherited rows not re-audited; source-presence leads not behavioral proof",
+  "counts": {
+    "total": 265,
+    "open": 61,
+    "closed": 204,
+    "historical_carried_ids": 59,
+    "added_ids": [
+      "VAL-14",
+      "VAL-15"
+    ]
+  },
+  "residuals_resolved": [
+    "R3 anchored dictionary-key mechanism _SECRET_KEYS vs separate query-string _SECRET_QUERY",
+    "R5 six independent Ruff candidate tokens and existence filter, source declaration only"
+  ],
+  "bounded_delta_documentation_task_complete": true,
+  "global_report_or_package_completion": false,
+  "finding_closure": false,
+  "source_or_privacy_qualification": false,
+  "registry_or_feature_levels_changed": false,
+  "next": "Relevant accepted SEC-14/SEC-15/DEP-05 metadata slice may feed separately authorized early SW-REPO intake; actual source/CI/license/security/history proof and completion dependencies remain unsatisfied",
+  "history": "Original negative reviews, failed probes, author overruns and actual historical authorship preserved; no deadline or source-hook pass",
+  "settlement": "Authors/reviewers released; exact task refs published/verified; full natives/workspace/temp archives retained; exact worktrees read-only, no removal",
+  "core_qualification": "attempt1 FAIL/no domain; explicit owner manual-retake decision pending, no answer inferred",
+  "owner_gates": "physical/HIL/72h/week/finalrelease held/open, original3Tron decisions closed"
+}

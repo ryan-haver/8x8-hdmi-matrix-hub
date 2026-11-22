@@ -1,0 +1,108 @@
+{
+  "observed_utc": "2026-11-03T04:46:20.591724+00:00",
+  "actors": {
+    "ci_attribution": {
+      "head": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "base": "638a226a49b9cc0ead952a4a787d12c26dfcd35e",
+      "tree": "wp-exec-ev-ci-attribution",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/AUTHOR.md",
+      "sha256": "ba109a43eda015d24f8d1d33b93209711a82bcae9df829bef36f3012be44baca",
+      "task_id": "task_5fa43f7367b0",
+      "dispatch_id": "ctx_c2550304397b",
+      "session": "ses_e6062e8bdffe634RQCVgif2KlM",
+      "budget": "ten-minute target exceeded; delivery04:34:01UTC, actual history retained, no deadline-pass claim",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "git_blob_bytes": 23009,
+      "working_identity": {
+        "bytes": 23009,
+        "sha256": "ba109a43eda015d24f8d1d33b93209711a82bcae9df829bef36f3012be44baca",
+        "identical_to_git": true
+      },
+      "native_final": {
+        "session": "ses_e6062e8bdffe634RQCVgif2KlM",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 984839,
+        "sha256": "a0d07146e3bda8f8c469d93a61bd3989cbe990ada64517adbce4af316e175dd9"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending independent factual acceptance; no removal",
+      "acceptance": "pending independent OpenAI exact-commit factual review",
+      "archives": [
+        {
+          "archive_sha256": "432d02f113ac61c4f2efa9c7e0ba744c2824ae533f1ac4fe5c18170ddfd3a442",
+          "regular_files": 4674,
+          "regular_bytes": 300521408,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "518aae21fa491f28de833683f9cbcf1ea85d271eef445c90b9221df46e9a8960",
+          "regular_files": 231,
+          "regular_bytes": 1455131,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    },
+    "findings_fix01": {
+      "head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "tree": "wp-exec-sw-findings-01",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md",
+      "sha256": "dd49ef4d02a4abd2b2389cc330eb59c98ba5b59b6dbfc95d90f34515deb8d3c7",
+      "expected_bytes": 25951,
+      "task_id": "task_cd5957604678",
+      "dispatch_id": "ctx_92d5aa88ea41",
+      "session": "ses_e60630eb6ffeGn01v1VKJMqeOk",
+      "budget": "eight-minute target exceeded; about18min from first private artifact per delivery04:34:12UTC, no deadline pass",
+      "delivery_path_note": "worker_done reportPath points to ignored commit-identity receipt; actual one tracked author report verified here, not missing or substituted",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "git_blob_bytes": 25951,
+      "working_identity": {
+        "bytes": 25951,
+        "sha256": "dd49ef4d02a4abd2b2389cc330eb59c98ba5b59b6dbfc95d90f34515deb8d3c7",
+        "identical_to_git": true
+      },
+      "native_final": {
+        "session": "ses_e60630eb6ffeGn01v1VKJMqeOk",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 857172,
+        "sha256": "ed752eb061c38b6b84ce32ba9641bf085d69ad589c2b6d12c440ae0a94455fd1"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending independent factual acceptance; no removal",
+      "acceptance": "pending independent OpenAI exact-commit factual review",
+      "archives": [
+        {
+          "archive_sha256": "57fb37d8566bc9b4f24ea1a0c0ba7a81070e7bc2dda895b40bc90bdec49ffd5c",
+          "regular_files": 4631,
+          "regular_bytes": 300555413,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "177aaaa3753239ac03990352054c65f99ab3aa88e59fb26544411402b114c818",
+          "regular_files": 121,
+          "regular_bytes": 275607,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "original_integrity": {
+        "old_head": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+        "new_head": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+        "preexisting_regular_files": 4612,
+        "changed_existing_files": [
+          "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/AUTHOR.md"
+        ],
+        "all_old_private_author_files_unchanged": true
+      }
+    }
+  },
+  "acceptance": "neither report accepted yet; independent exact-commit reviews prepared",
+  "source_finding_or_freshness_qualification": false
+}

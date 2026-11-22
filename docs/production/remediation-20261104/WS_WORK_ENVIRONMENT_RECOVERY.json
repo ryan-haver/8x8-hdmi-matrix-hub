@@ -1,0 +1,38 @@
+{
+  "observed_utc": "2026-11-04T07:43:29.119352+00:00",
+  "status": "ENVIRONMENT_CAUSE_FIXED; continuation delivered, source hook success not yet observed",
+  "original_task": "task_38756b76bd12",
+  "dispatch": "ctx_14a660b697ab",
+  "failure": "Run66 normal source hook exit1:3835passed/22skipped/35deselected/one JS-lint module-resolution failure, strict177/177routes; partial run, not full pass",
+  "cause": "Coordinator omitted Node dependency setup in new worktree; NODE_PATH cannot resolve ESLint ESM imports",
+  "scope_and_fix": {
+    "observed_utc": "2026-11-04T07:39:20.379719+00:00",
+    "start_utc": "2026-11-04T07:39:17.456767+00:00",
+    "task": "task_38756b76bd12",
+    "dispatch": "ctx_14a660b697ab",
+    "cause": "Missing worktree node_modules; NODE_PATH does not resolve ESM imports",
+    "fix": "Coordinator created exact ignored worktree node_modules Junction to existing tested root node_modules after byte-normalized package/lock and actual Git blob equality checks. No install/download/root dependency edits.",
+    "link": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-01\\node_modules",
+    "target": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\node_modules",
+    "node_modules_traversal": "Future preservation must store junction metadata without traversing; root target remains protected",
+    "lint_command": [
+      "C:\\Program Files\\nodejs\\npm.CMD",
+      "run",
+      "lint:js"
+    ],
+    "direct_exit": 0,
+    "stdout_sha256": "38a07c7f0233dcd1993d6f437de5ff80c930b8b06314c1143520bafd3a69c823",
+    "stderr_sha256": "cd5ca9e3de4b9ada42211336319f8fce15ea47e43de722ad38b17564260eb963",
+    "staged_paths_unchanged": true,
+    "source_hashes": {
+      "src/rest_api/ws_request_work.py": "3bc116d88029aeecdbec5fdce7590e5d623442e37049a9bc4c7bf9489d3031c5",
+      "tests/test_ws_request_work.py": "2628c0734fa4860ba53fc30d53a246408dbc4b88fc9b2d5a9ba16c500ea7945b"
+    },
+    "one_new_hook_run": "Authorized only after this positive dependency resolution; use a new empty receipt/temp root, keep run66 failure and all original files; not a qualification retry or unchanged failed-gate rerun"
+  },
+  "same_task_continuation": {
+    "messageId": "msg_6fc35acf89a9"
+  },
+  "guard": "No Task reset/new duplicatewriter, no source/code hash change, no installs/root dependency changes; existing ignored node_modules Junction metadata must be preserved without traversal/root target mutation. Failed66 and all earlier originals retained. One new isolated strict normal hook run authorized after direct npm lint exit0; no test/hook bypass or unchanged gate retry.",
+  "source_integration_or_qualification": false
+}

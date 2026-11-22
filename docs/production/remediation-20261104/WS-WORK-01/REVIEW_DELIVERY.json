@@ -1,0 +1,192 @@
+{
+  "observed_utc": "2026-11-04T08:35:29.572457+00:00",
+  "task_id": "task_b9f4d569ee06",
+  "dispatch_id": "ctx_eae88fba1228",
+  "report_commit": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+  "report_parent": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+  "canonical_report_sha256": "6ee8bbec66ebdb7e650aa8b08e8f75026ec8580c40ed89b1a2f06e6104d85adb",
+  "correctness": "FAIL",
+  "component_acceptance": "HOLD",
+  "bounded_first_authorship": "NOT_GRANTED",
+  "axes": [
+    "FAIL",
+    "PASS",
+    "FAIL",
+    "PASS",
+    "PASS-bounded",
+    "HOLD"
+  ],
+  "findings": [
+    {
+      "id": "WSR-01",
+      "severity": "Medium",
+      "status": "blocking",
+      "issue": "Reserved/eager admission omitted from owner/application drain snapshot; four supported eager-reentrant controls report drained with live resistant work."
+    },
+    {
+      "id": "WSR-02",
+      "severity": "Low",
+      "issue": "Only admission rejects another loop; lifecycle methods contradict broader loop guarantee."
+    },
+    {
+      "id": "WSR-03",
+      "severity": "Low",
+      "issue": "Two helper scripts and commit message written outside explicit scratch lease; exact originals separately preserved, violation not waived."
+    },
+    {
+      "id": "WSR-04",
+      "severity": "Low",
+      "issue": "-X dev does not establish pytest-asyncio debug loops when plugin explicitly sets debug=False."
+    }
+  ],
+  "checks": [
+    {
+      "invocation": "01-focused",
+      "direct_exit": 0,
+      "argv": [
+        "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+        "-B",
+        "-X",
+        "dev",
+        "-W",
+        "error::RuntimeWarning",
+        "-W",
+        "error::ResourceWarning",
+        "-m",
+        "pytest",
+        "tests/test_ws_request_work.py",
+        "-vv",
+        "-p",
+        "no:tests.route_inventory",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=C:/t/remediation-ws-review/01-focused/pytest-temp",
+        "--junitxml=C:/t/remediation-ws-review/01-focused/junit.xml"
+      ],
+      "junit": {
+        "cases": 44,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      }
+    },
+    {
+      "invocation": "02-gap-probes",
+      "direct_exit": 1,
+      "argv": [
+        "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+        "-B",
+        "-X",
+        "dev",
+        "-W",
+        "error::RuntimeWarning",
+        "-W",
+        "error::ResourceWarning",
+        "build/remediation-20261104/ws-review/probe.py"
+      ],
+      "junit": null
+    },
+    {
+      "invocation": "03-docs",
+      "direct_exit": 0,
+      "argv": [
+        "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration/.venv/Scripts/python.exe",
+        "-B",
+        "build/remediation-20261104/ws-review/docs_entry.py",
+        "tests/test_core_documentation.py",
+        "tests/test_client_guides_docs.py",
+        "tests/test_openapi_and_config_docs.py",
+        "tests/test_security_docs.py",
+        "tests/test_license_and_protocol_docs.py",
+        "-v",
+        "-p",
+        "no:tests.route_inventory",
+        "-p",
+        "no:cacheprovider",
+        "--basetemp=C:/t/remediation-ws-review/03-docs/pytest-temp",
+        "--junitxml=C:/t/remediation-ws-review/03-docs/junit.xml"
+      ],
+      "junit": {
+        "cases": 489,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      }
+    },
+    {
+      "invocation": "04-staged-whitespace",
+      "direct_exit": 0,
+      "argv": [
+        "git",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "junit": null
+    },
+    {
+      "invocation": "05-report-commit",
+      "direct_exit": 0,
+      "argv": [
+        "git",
+        "-c",
+        "core.hooksPath=",
+        "commit",
+        "-m",
+        "docs(review): hold WS work component acceptance"
+      ],
+      "junit": null
+    }
+  ],
+  "native": {
+    "session": "01a1a59a-f00e-7853-ae5a-9033ade1c9c1",
+    "model": "gpt-6-astra",
+    "effort": "high native",
+    "bytes": 2728270,
+    "sha256": "39578c766c54881a1dd4faaf87aae0f3ac7471cabfc7fbba6b722934d6490366",
+    "no_helper_calls_observed": true
+  },
+  "preservation": {
+    "wp-remediation-ws-work-01-review": {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-01-review",
+      "head": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+      "branch": "remediation/ws-work-01-review",
+      "status": "?? .codex/config.toml",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\ws-review-closeout\\preservation\\wp-remediation-ws-work-01-review\\workspace.tar.gz",
+      "archive_sha256": "d0fb461cbe141bc483de8763df8ba0292040a205523ad7d06e3bce546a8cf451",
+      "archive_bytes": 207765529,
+      "regular_files": 4752,
+      "regular_bytes": 307282840,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    },
+    "external-ws-review": {
+      "workspace": "C:\\t\\remediation-ws-review",
+      "head": null,
+      "branch": null,
+      "status": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\ws-review-closeout\\preservation\\external-ws-review\\workspace.tar.gz",
+      "archive_sha256": "8fb35064a7b0c069568b78c908d863bee6ddd3f4f6c8ce3909c69f3633a08f30",
+      "archive_bytes": 85818,
+      "regular_files": 119,
+      "regular_bytes": 240737,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    }
+  },
+  "publication": {
+    "head": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+    "remote_head": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+    "branch": "remediation/ws-work-01-review",
+    "exact": true,
+    "report_bytes": 23701,
+    "canonical_sha256": "6ee8bbec66ebdb7e650aa8b08e8f75026ec8580c40ed89b1a2f06e6104d85adb",
+    "tree": "retained; no fullGitbundle/destructivecleanup"
+  },
+  "worker": "positively Orca-released, no source changes; exact tree retained, no full Git bundle or cleanup claim",
+  "disposition": "Accept independent review as blocking negative report; reject candidate correctness. No component/source acceptance, CR-01 closure, new authorship competence, automatic correction/exam retake/new judge or existing-handler lease."
+}

@@ -1,0 +1,114 @@
+{
+  "observed_utc": "2026-11-04T13:41:18.386203+00:00",
+  "task_id": "task_2baa71b16197",
+  "dispatch_id": "ctx_0c1b1f2300b7",
+  "status": "Exact reserved source re-review PASS / C01-R01 corrected / worker RELEASED / PRESERVED / exact taskref PUBLISHED",
+  "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+  "review_commit": "9817554ed6d77df8b828d6d6c2e465bb77d26707",
+  "report": "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION-REVIEW.md",
+  "report_sha256": "b2f214a9160177c49df3d5377f871b4300814259da81174810bf4e97204ee2d2",
+  "native": {
+    "session": "01a1a6ba-36c2-7122-aa93-d58a1d4418b7",
+    "model": "gpt-6-astra",
+    "effort": "high native",
+    "bytes": 1741152,
+    "sha256": "57a201c4f4a6fad366c267c8c19ae01907f48eebf886ee597200ce7e8a721748",
+    "unassigned_helpers_observed": []
+  },
+  "verified_receipts": {
+    "01-focused-debug": {
+      "exit": 0,
+      "junit": {
+        "tests": 73,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "02-audit": {
+      "exit": 0,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "03-progress": {
+      "exit": 0,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "04-evidence": {
+      "exit": 1,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "05-evidence-corrected": {
+      "exit": 1,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "06-evidence-final": {
+      "exit": 0,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "07-final-docs": {
+      "exit": 0,
+      "junit": {
+        "tests": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    },
+    "08-report-commit": {
+      "exit": 0,
+      "junit": null,
+      "file_hash_receipt_present": false,
+      "scope": "08 commit receipt contains argv/env/direct exit but no file hashes; native and exactGit commit separate evidence"
+    },
+    "09-completion": {
+      "exit": 0,
+      "junit": null,
+      "file_hash_receipt_present": true,
+      "scope": "all listed file bytes/hashes verified"
+    }
+  },
+  "preservation": [
+    {
+      "name": "wp-remediation-ws-wording-review",
+      "files": 4753,
+      "links": 0,
+      "archive_bytes": 207506967,
+      "archive_sha256": "13bb468276d9194104641969e6b6f13343a046e2aa0671ef04f5c8979037ea7a",
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "name": "ws-wording-review",
+      "files": 131,
+      "links": 0,
+      "archive_bytes": 89183,
+      "archive_sha256": "93ca60a27bd60ece208b719a4ae669aa2b2807ff81bb6a81402f2c843ee8e76d",
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "task_publication": {
+    "observed_utc": "2026-11-04T13:38:40.883570+00:00",
+    "ref": "refs/heads/remediation/ws-wording-review",
+    "local_head": "9817554ed6d77df8b828d6d6c2e465bb77d26707",
+    "remote_head": "9817554ed6d77df8b828d6d6c2e465bb77d26707",
+    "exact_equal": true,
+    "normal_push": true
+  },
+  "coordinator_disposition": "Accept bounded qualified different-family exact source review. C01-R01 corrected, runtimeASTunchanged relative qualified24c51704. C01-R02 bounded authored-write audit accepted without all-host/effort claims. C01-WR01Low reporting precision corrected by this independent report:3889of4728, per-checkchildren isolation not every metadata command, native47posthook IndexError retained. Treat originalreport as historical and this exact review as formal evidence erratum; no new runtime issue or automatic correction round.",
+  "reserve": "One product correction/re-review completed, not qualificationretake; no extra authorround now.",
+  "remaining": "Originalfirst-authorshipNOT_GRANTED/WSR03FAIL, privacyqualificationFAIL/noqualifiedfallback, D6target/wiring/CR01/owner gates remain. Componentintake next separately verified; no sourceintake from report alone.",
+  "preservation_limit": "Final survivingworkspace/temp/nativestate preserved. Commit08receipt has argv/env/directexit but no filehash list; actual native/exactGit supplies separatecommit evidence. No fullGitbundle/destructivecleanup."
+}

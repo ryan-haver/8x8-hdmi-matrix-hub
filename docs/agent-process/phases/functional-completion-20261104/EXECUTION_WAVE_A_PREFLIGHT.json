@@ -1,0 +1,172 @@
+{
+  "observed_utc": "2026-11-04T18:57:44.618593+00:00",
+  "status": "ADOPTEDprogram first executionwavePREPARED, no worktree/Task/Dispatch createdyet",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "jobs": {
+    "truth": {
+      "id": "FC-TRUTH",
+      "name": "wp-fc26-fc-truth",
+      "branch": "execution/wp-fc26-fc-truth",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "unsupported; thinking inherited",
+      "report": "docs/production/functional-completion-20261104/FC-TRUTH/INVENTORY.md",
+      "reviewer": "OpenAI codex/gpt-6.1-sol/high; Astra samefamilyreviewer fallback only againstM3inventory aftertaskfit+quota",
+      "config_source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax/opencode.json",
+      "config": "opencode.json",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "base_rule": "Exact published execution-ready integration head resolved just beforeagentfreeOrcacreate and verifiedremoteequal; substitutedfor{LAUNCH_BASE} inprivate dispatchspec",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/EXEC_FC-TRUTH.md",
+      "title": "FC-TRUTH: first adopted functional completion inventory",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "review_correction_reserve": "ONE factualauthorcorrection plusONE exactdifferentfamilyrereview afterdelivery; no source orqualificationreserve"
+    },
+    "provenance": {
+      "id": "FC-PROVENANCE",
+      "name": "wp-fc26-fc-provenance",
+      "branch": "execution/wp-fc26-fc-provenance",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "report": "docs/production/functional-completion-20261104/FC-PROVENANCE/AUDIT.md",
+      "reviewer": "MiniMax-M3/thinking inventory-fidelity review only; coordinator/nonMiniMax independentlychecksM3specificfacts beforeeligibility, no source/competencegrant",
+      "config_source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai/.codex/config.toml",
+      "config": ".codex/config.toml",
+      "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "base_rule": "Exact published execution-ready integration head resolved just beforeagentfreeOrcacreate and verifiedremoteequal; substitutedfor{LAUNCH_BASE} inprivate dispatchspec",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/EXEC_FC-PROVENANCE.md",
+      "title": "FC-PROVENANCE: first adopted functional completion inventory",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "review_correction_reserve": "ONE factualauthorcorrection plusONE exactdifferentfamilyrereview afterdelivery; no source orqualificationreserve"
+    }
+  },
+  "discovery": {
+    "observed_utc": "2026-11-04T18:53:49.657090+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "764c2befbc01a33745203f971f319b1a651eba8e",
+    "remote_equal": true,
+    "fleet": {
+      "total": 166,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 166,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDM0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMjo0ODozNyIsImRpc3BhdGNoSWQiOiJjdHhfMzJmNWYyZWNmYWJlIiwiZGF0YWJhc2VJZCI6MTMzMX19"
+        },
+        {
+          "limit": 100,
+          "total": 166,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 159,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_1cd734915060",
+          "taskId": "task_e486754b791b",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_37e0d2f0e439",
+          "taskId": "task_ae9877d75a18",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_02b138df77b6",
+          "taskId": "task_908b71effe7d",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 24,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793817711420,
+        "error": null,
+        "age_seconds": 718
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400139,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 3,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600139,
+          "resetDescription": "3:50 PM"
+        },
+        "updatedAt": 1793817711101,
+        "error": null,
+        "age_seconds": 719
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 38,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932848,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 34,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793817711206,
+        "error": null,
+        "age_seconds": 718
+      }
+    },
+    "scope": "First adopted execution wave: FC-TRUTH M3 inventory plus FC-PROVENANCE Astra factualaudit; no source or qualification attempt",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "All3R3 actualACCEPT exactly933166; first execution sameacceptedplan, M3inventory/Astranativemetadataudit domainonly. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "creation": "NewdedicatedagentfreeOrcaworktreesfirst, toinstallverifyhelper-offrouteconfigbeforegenuineworkerstart. Inheritedrepo setup(emptysetup/archive scripts, runbydefault) preserved. No rawcheckouts or silentretainedwriterreuse.",
+  "review": "M3inventory->Sol, Astranativemetadata->M3fidelity staged, coordinatornonM3verifiesM3facts; neitherreportawardscompetence orsourceacceptance",
+  "concurrency": "twonewauthors+coordinator+protectedexternal=4/no nesting",
+  "quota": "Freshsupported intendedpools beforeeachcreation/start, all3 currentcachedobservationsdated; stale/unknown requires suitableverifiedfallback or holdaffectedstep, no inventedrefreshcommand/newspend",
+  "publication": "Commit/push/adoptionandreadyrecords and verifyexactintegrationremote equality BEFOREworktreecreation/dispatch"
+}

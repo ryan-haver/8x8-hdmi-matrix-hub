@@ -1,0 +1,986 @@
+{
+  "schema_version": 1,
+  "status": "accepted planning allocation",
+  "observed_utc": "2026-11-01T07:29:05.058950+00:00",
+  "scope": "prospective program and P0 residual/P1 remainder/P2/P3/P4/P5 plan and staffing; no source qualification, implementation launch, evidence promotion or owner/release acceptance",
+  "packet": "FINAL_PACKET.json",
+  "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "coordinator_counted_as_participant": false,
+  "required_distinct_families": 3,
+  "actual_distinct_families": [
+    "OpenAI",
+    "Anthropic",
+    "MiniMax"
+  ],
+  "rounds_completed": [
+    1,
+    2,
+    3
+  ],
+  "participants": [
+    {
+      "family": "openai",
+      "round": 3,
+      "task_id": "task_90629d8df3e5",
+      "dispatch_id": "ctx_a153226a879b",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND3.md",
+      "report_commit": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "report_sha256": "b655e607ead091c4fc4804fad6bc92f06b19a3156cd3469ad50664e581bbe77e",
+      "native_session": "01a195f9-2158-7c20-b223-828ed80154ed",
+      "native_models": [
+        "gpt-6.1-sol"
+      ],
+      "native_sha256": "71fce9c8e60b30b6858c9ee3490d12081805deb74dcd37c0c8547db30e08b61c",
+      "native_effort_observation": "high native turns",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "openai",
+          "round": 1,
+          "task_id": "task_ca1f06e6d2bc",
+          "dispatch_id": "ctx_e04f56080b14",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND1.md",
+          "report_commit": "1effc39eaee20979521c2b96d9b3d6af7290bb39",
+          "report_sha256": "405a9a6d84d1327d293de18874480001bf641235760edeab421a282bd3ea7a52",
+          "native_session": "01a195bf-0f33-7a01-93fa-9e1498b34ba6",
+          "native_models": [
+            "gpt-6.1-sol"
+          ],
+          "native_sha256": "3d71f1c95883f7717f7713389a26a1e12f1136e563e736cae82795e5396d65d6",
+          "native_effort_observation": "high native turns",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "openai",
+          "round": 2,
+          "task_id": "task_ee7d6c8e10bf",
+          "dispatch_id": "ctx_ea6c27b10a28",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND2.md",
+          "report_commit": "0764221c36b06fb2993c1ddeffb5fd459c73c42f",
+          "report_sha256": "8c51c61d7a573d4b3c28515a1f0973555493de5c9ba6dc6030260b7f833bc418",
+          "native_session": "01a195e2-2c98-7732-a23b-23d35747e61b",
+          "native_models": [
+            "gpt-6.1-sol"
+          ],
+          "native_sha256": "e4866a86e0c48a96b0dd03f14b9c11e2c28680de82673a4cef66cbc99750fed1",
+          "native_effort_observation": "high native turns",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    },
+    {
+      "family": "anthropic",
+      "round": 3,
+      "task_id": "task_134d08c99333",
+      "dispatch_id": "ctx_b787493db33d",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND3.md",
+      "report_commit": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "report_sha256": "2b9ab7ce38b3d2fedf558708c93add54d0b13a93e5f7e3f54252871601c1425b",
+      "native_session": "4bdd2dfb-7519-4243-9332-19fe3db57d59",
+      "native_models": [
+        "claude-opus-4-7"
+      ],
+      "native_sha256": "1372d3beb3b9583ff43af2451865c198b7a76c1af12fc8048bf67ae194795942",
+      "native_effort_observation": "high from launch; native actual model attested",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "anthropic",
+          "round": 1,
+          "task_id": "task_7cd1706e862c",
+          "dispatch_id": "ctx_369b591f37ba",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND1.md",
+          "report_commit": "a973922ae39821e8e30e912dc59aeaddcf78f6ed",
+          "report_sha256": "faf667b39aafea74ad4d5172e75edfd23e1882dcfbbbc52e3aeab86030361217",
+          "native_session": "7ca203a2-bb53-4546-9de0-0d4f0c35c4c1",
+          "native_models": [
+            "claude-opus-4-7"
+          ],
+          "native_sha256": "1b7af7de253d06c0eccdf7a8102d47610afac3360ec86e66152abed6fe744be1",
+          "native_effort_observation": "high from launch; native actual model attested",
+          "worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "anthropic",
+          "round": 2,
+          "task_id": "task_ed036ba1631f",
+          "dispatch_id": "ctx_873c66e53a6c",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND2.md",
+          "report_commit": "ed2b0eed1fcfefd99f5fb11b516a713a18a0dd3f",
+          "report_sha256": "3a2a02f9458eab176c712bf7f58eb23746272c4553d3beacfb9f87e9be65930a",
+          "native_session": "8a31363b-769a-4902-8916-9ec947ec36ed",
+          "native_models": [
+            "claude-opus-4-7"
+          ],
+          "native_sha256": "11ce5b35a34c627aa608dbc84cc7d36caf0d387e77d526a47f22e2ff058a9a18",
+          "native_effort_observation": "high from launch; native actual model attested",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    },
+    {
+      "family": "minimax",
+      "round": 3,
+      "task_id": "task_2549113a8ba4",
+      "dispatch_id": "ctx_53a31ed6e909",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND3.md",
+      "report_commit": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "report_sha256": "3d6eb480f91e847e20b60d7993a0c965cc0ae6d7c65fb512eb1c2d3a3792acc0",
+      "native_session": "ses_e6a069847ffeULaaP2l9tyOS3r",
+      "native_models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "native_sha256": "afcc21e2021be30d9d1388bf52f521bcd0746b00383ba67ebe56f2ad340e347e",
+      "native_effort_observation": "thinking; CLI effort unsupported",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "minimax",
+          "round": 1,
+          "task_id": "task_78f4747ef78a",
+          "dispatch_id": "ctx_0fab2d28029e",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND1.md",
+          "report_commit": "800c369d852c6bf19d484999f8282375861bd842",
+          "report_sha256": "0da3837e115f3a2647535e73583fc7ed29c575963d9aaff806a1b5771027faa4",
+          "native_session": "ses_e6a49f9dcffe10Jns6KmaJJvIV",
+          "native_models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "native_sha256": "832f47ad0befe2f4035a96fe4ca9c8a40b47163d4474b4a1d0d501ce1e64933c",
+          "native_effort_observation": "thinking; CLI effort unsupported",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "minimax",
+          "round": 2,
+          "task_id": "task_3ee308c354ca",
+          "dispatch_id": "ctx_7bc6929a4372",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND2.md",
+          "report_commit": "ed4bbd934a4059dd5c750351b7d86e54b8bb0342",
+          "report_sha256": "2dec63faf29c03b57a460fff477c39a1656a784fc10ecd5880220bb063715363",
+          "native_session": "ses_e6a1dda46ffeeNBiFqFsHaIRKA",
+          "native_models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "native_sha256": "6125c2476f255cfbc29897c94323202e760d254c51c8dee18cd1569148491fc0",
+          "native_effort_observation": "thinking; CLI effort unsupported",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    }
+  ],
+  "all_nine_planning_tasks": [
+    {
+      "family": "openai",
+      "round": 1,
+      "task_id": "task_ca1f06e6d2bc",
+      "dispatch_id": "ctx_e04f56080b14",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND1.md",
+      "report_commit": "1effc39eaee20979521c2b96d9b3d6af7290bb39",
+      "report_sha256": "405a9a6d84d1327d293de18874480001bf641235760edeab421a282bd3ea7a52",
+      "native_session": "01a195bf-0f33-7a01-93fa-9e1498b34ba6",
+      "native_models": [
+        "gpt-6.1-sol"
+      ],
+      "native_sha256": "3d71f1c95883f7717f7713389a26a1e12f1136e563e736cae82795e5396d65d6",
+      "native_effort_observation": "high native turns",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+      "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+    },
+    {
+      "family": "openai",
+      "round": 2,
+      "task_id": "task_ee7d6c8e10bf",
+      "dispatch_id": "ctx_ea6c27b10a28",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND2.md",
+      "report_commit": "0764221c36b06fb2993c1ddeffb5fd459c73c42f",
+      "report_sha256": "8c51c61d7a573d4b3c28515a1f0973555493de5c9ba6dc6030260b7f833bc418",
+      "native_session": "01a195e2-2c98-7732-a23b-23d35747e61b",
+      "native_models": [
+        "gpt-6.1-sol"
+      ],
+      "native_sha256": "e4866a86e0c48a96b0dd03f14b9c11e2c28680de82673a4cef66cbc99750fed1",
+      "native_effort_observation": "high native turns",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "CHALLENGE_PACKET.json",
+      "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+    },
+    {
+      "family": "openai",
+      "round": 3,
+      "task_id": "task_90629d8df3e5",
+      "dispatch_id": "ctx_a153226a879b",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND3.md",
+      "report_commit": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "report_sha256": "b655e607ead091c4fc4804fad6bc92f06b19a3156cd3469ad50664e581bbe77e",
+      "native_session": "01a195f9-2158-7c20-b223-828ed80154ed",
+      "native_models": [
+        "gpt-6.1-sol"
+      ],
+      "native_sha256": "71fce9c8e60b30b6858c9ee3490d12081805deb74dcd37c0c8547db30e08b61c",
+      "native_effort_observation": "high native turns",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "openai",
+          "round": 1,
+          "task_id": "task_ca1f06e6d2bc",
+          "dispatch_id": "ctx_e04f56080b14",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND1.md",
+          "report_commit": "1effc39eaee20979521c2b96d9b3d6af7290bb39",
+          "report_sha256": "405a9a6d84d1327d293de18874480001bf641235760edeab421a282bd3ea7a52",
+          "native_session": "01a195bf-0f33-7a01-93fa-9e1498b34ba6",
+          "native_models": [
+            "gpt-6.1-sol"
+          ],
+          "native_sha256": "3d71f1c95883f7717f7713389a26a1e12f1136e563e736cae82795e5396d65d6",
+          "native_effort_observation": "high native turns",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "openai",
+          "round": 2,
+          "task_id": "task_ee7d6c8e10bf",
+          "dispatch_id": "ctx_ea6c27b10a28",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/openai/ROUND2.md",
+          "report_commit": "0764221c36b06fb2993c1ddeffb5fd459c73c42f",
+          "report_sha256": "8c51c61d7a573d4b3c28515a1f0973555493de5c9ba6dc6030260b7f833bc418",
+          "native_session": "01a195e2-2c98-7732-a23b-23d35747e61b",
+          "native_models": [
+            "gpt-6.1-sol"
+          ],
+          "native_sha256": "e4866a86e0c48a96b0dd03f14b9c11e2c28680de82673a4cef66cbc99750fed1",
+          "native_effort_observation": "high native turns",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "codex",
+              "model": "gpt-6.1-sol",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    },
+    {
+      "family": "anthropic",
+      "round": 1,
+      "task_id": "task_7cd1706e862c",
+      "dispatch_id": "ctx_369b591f37ba",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND1.md",
+      "report_commit": "a973922ae39821e8e30e912dc59aeaddcf78f6ed",
+      "report_sha256": "faf667b39aafea74ad4d5172e75edfd23e1882dcfbbbc52e3aeab86030361217",
+      "native_session": "7ca203a2-bb53-4546-9de0-0d4f0c35c4c1",
+      "native_models": [
+        "claude-opus-4-7"
+      ],
+      "native_sha256": "1b7af7de253d06c0eccdf7a8102d47610afac3360ec86e66152abed6fe744be1",
+      "native_effort_observation": "high from launch; native actual model attested",
+      "worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+      "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+    },
+    {
+      "family": "anthropic",
+      "round": 2,
+      "task_id": "task_ed036ba1631f",
+      "dispatch_id": "ctx_873c66e53a6c",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND2.md",
+      "report_commit": "ed2b0eed1fcfefd99f5fb11b516a713a18a0dd3f",
+      "report_sha256": "3a2a02f9458eab176c712bf7f58eb23746272c4553d3beacfb9f87e9be65930a",
+      "native_session": "8a31363b-769a-4902-8916-9ec947ec36ed",
+      "native_models": [
+        "claude-opus-4-7"
+      ],
+      "native_sha256": "11ce5b35a34c627aa608dbc84cc7d36caf0d387e77d526a47f22e2ff058a9a18",
+      "native_effort_observation": "high from launch; native actual model attested",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "CHALLENGE_PACKET.json",
+      "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+    },
+    {
+      "family": "anthropic",
+      "round": 3,
+      "task_id": "task_134d08c99333",
+      "dispatch_id": "ctx_b787493db33d",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND3.md",
+      "report_commit": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "report_sha256": "2b9ab7ce38b3d2fedf558708c93add54d0b13a93e5f7e3f54252871601c1425b",
+      "native_session": "4bdd2dfb-7519-4243-9332-19fe3db57d59",
+      "native_models": [
+        "claude-opus-4-7"
+      ],
+      "native_sha256": "1372d3beb3b9583ff43af2451865c198b7a76c1af12fc8048bf67ae194795942",
+      "native_effort_observation": "high from launch; native actual model attested",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "anthropic",
+          "round": 1,
+          "task_id": "task_7cd1706e862c",
+          "dispatch_id": "ctx_369b591f37ba",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND1.md",
+          "report_commit": "a973922ae39821e8e30e912dc59aeaddcf78f6ed",
+          "report_sha256": "faf667b39aafea74ad4d5172e75edfd23e1882dcfbbbc52e3aeab86030361217",
+          "native_session": "7ca203a2-bb53-4546-9de0-0d4f0c35c4c1",
+          "native_models": [
+            "claude-opus-4-7"
+          ],
+          "native_sha256": "1b7af7de253d06c0eccdf7a8102d47610afac3360ec86e66152abed6fe744be1",
+          "native_effort_observation": "high from launch; native actual model attested",
+          "worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "anthropic",
+          "round": 2,
+          "task_id": "task_ed036ba1631f",
+          "dispatch_id": "ctx_873c66e53a6c",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/anthropic/ROUND2.md",
+          "report_commit": "ed2b0eed1fcfefd99f5fb11b516a713a18a0dd3f",
+          "report_sha256": "3a2a02f9458eab176c712bf7f58eb23746272c4553d3beacfb9f87e9be65930a",
+          "native_session": "8a31363b-769a-4902-8916-9ec947ec36ed",
+          "native_models": [
+            "claude-opus-4-7"
+          ],
+          "native_sha256": "11ce5b35a34c627aa608dbc84cc7d36caf0d387e77d526a47f22e2ff058a9a18",
+          "native_effort_observation": "high from launch; native actual model attested",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            },
+            "effective": {
+              "agent": "claude",
+              "model": "claude-opus-4-7",
+              "effort": "high"
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    },
+    {
+      "family": "minimax",
+      "round": 1,
+      "task_id": "task_78f4747ef78a",
+      "dispatch_id": "ctx_0fab2d28029e",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND1.md",
+      "report_commit": "800c369d852c6bf19d484999f8282375861bd842",
+      "report_sha256": "0da3837e115f3a2647535e73583fc7ed29c575963d9aaff806a1b5771027faa4",
+      "native_session": "ses_e6a49f9dcffe10Jns6KmaJJvIV",
+      "native_models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "native_sha256": "832f47ad0befe2f4035a96fe4ca9c8a40b47163d4474b4a1d0d501ce1e64933c",
+      "native_effort_observation": "thinking; CLI effort unsupported",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+      "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+    },
+    {
+      "family": "minimax",
+      "round": 2,
+      "task_id": "task_3ee308c354ca",
+      "dispatch_id": "ctx_7bc6929a4372",
+      "outcome": "succeeded; assessment delivered",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND2.md",
+      "report_commit": "ed4bbd934a4059dd5c750351b7d86e54b8bb0342",
+      "report_sha256": "2dec63faf29c03b57a460fff477c39a1656a784fc10ecd5880220bb063715363",
+      "native_session": "ses_e6a1dda46ffeeNBiFqFsHaIRKA",
+      "native_models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "native_sha256": "6125c2476f255cfbc29897c94323202e760d254c51c8dee18cd1569148491fc0",
+      "native_effort_observation": "thinking; CLI effort unsupported",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "CHALLENGE_PACKET.json",
+      "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+    },
+    {
+      "family": "minimax",
+      "round": 3,
+      "task_id": "task_2549113a8ba4",
+      "dispatch_id": "ctx_53a31ed6e909",
+      "outcome": "succeeded; explicit accept for program and all prospective phases on exact final packet",
+      "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND3.md",
+      "report_commit": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "report_sha256": "3d6eb480f91e847e20b60d7993a0c965cc0ae6d7c65fb512eb1c2d3a3792acc0",
+      "native_session": "ses_e6a069847ffeULaaP2l9tyOS3r",
+      "native_models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "native_sha256": "afcc21e2021be30d9d1388bf52f521bcd0746b00383ba67ebe56f2ad340e347e",
+      "native_effort_observation": "thinking; CLI effort unsupported",
+      "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+      "launch_requested_and_effective": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "worker_state": "released before ACK",
+      "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+      "input_manifest": "FINAL_PACKET.json",
+      "input_binding": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "explicit_decisions": {
+        "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+        "program": "accept",
+        "P0_residual": "accept",
+        "P1_remainder": "accept",
+        "P2": "accept",
+        "P3": "accept",
+        "P4": "accept",
+        "P5": "accept"
+      },
+      "round_lineage": [
+        {
+          "family": "minimax",
+          "round": 1,
+          "task_id": "task_78f4747ef78a",
+          "dispatch_id": "ctx_0fab2d28029e",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND1.md",
+          "report_commit": "800c369d852c6bf19d484999f8282375861bd842",
+          "report_sha256": "0da3837e115f3a2647535e73583fc7ed29c575963d9aaff806a1b5771027faa4",
+          "native_session": "ses_e6a49f9dcffe10Jns6KmaJJvIV",
+          "native_models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "native_sha256": "832f47ad0befe2f4035a96fe4ca9c8a40b47163d4474b4a1d0d501ce1e64933c",
+          "native_effort_observation": "thinking; CLI effort unsupported",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "DRAFT_PACKET.json; invalid representation hashes corrected only by preserved INPUT_INTEGRITY_ERRATUM.json",
+          "input_binding": "all three assessed canonical Git19ee8be994eb2d4630aead8a7eec8f6a22140224; original declared CRLF hashes invalid, actual LF member hashes in erratum"
+        },
+        {
+          "family": "minimax",
+          "round": 2,
+          "task_id": "task_3ee308c354ca",
+          "dispatch_id": "ctx_7bc6929a4372",
+          "outcome": "succeeded; assessment delivered",
+          "report": "docs/agent-process/phases/execution-pinning-20261101/reports/minimax/ROUND2.md",
+          "report_commit": "ed4bbd934a4059dd5c750351b7d86e54b8bb0342",
+          "report_sha256": "2dec63faf29c03b57a460fff477c39a1656a784fc10ecd5880220bb063715363",
+          "native_session": "ses_e6a1dda46ffeeNBiFqFsHaIRKA",
+          "native_models": [
+            "minimax-coding-plan/MiniMax-M3"
+          ],
+          "native_sha256": "6125c2476f255cfbc29897c94323202e760d254c51c8dee18cd1569148491fc0",
+          "native_effort_observation": "thinking; CLI effort unsupported",
+          "worktree": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+          "launch_requested_and_effective": {
+            "requested": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            },
+            "effective": {
+              "agent": "opencode2",
+              "model": null,
+              "effort": null
+            }
+          },
+          "worker_state": "released before ACK",
+          "admitted_scope": "planning assessment/challenge/decision only, no source-review qualification",
+          "input_manifest": "CHALLENGE_PACKET.json",
+          "input_binding": "c1ed1f07795e39c5ec14a43b596941c512b72b7740d1251765ea94aed8682293"
+        }
+      ]
+    }
+  ],
+  "unresolved_material_plan_blockers": [],
+  "standing_execution_risks": [
+    "Anthropic source review remains candidate/core plus separate domain qualification; failed/unknown holds affected source only",
+    "Google exact native route/helpers/capacity unavailable; not spare review headroom",
+    "DeepSeek owner-reported credit exhausted; no spend/dispatch",
+    "Exact future bases/dependencies/leases/headroom/environment admissions resolve at wave preflight; reservations are not created workers",
+    "Physical HIL/CEC/outage/client,72h soak,week owner sign-off and final version/artifact/release gates remain open"
+  ],
+  "qualification_artifacts_granted_by_debate": [],
+  "template": false,
+  "phase_id": "prospective program plus P0_residual/P1_remainder/P2/P3/P4/P5",
+  "cycle_id": "execution-pinning-20261101",
+  "run_and_coordinator_evidence": {
+    "run": "run_37205f6095b3",
+    "coordinator": "term_15310037-f316-4fe8-9bbd-012f4e5ce38f",
+    "runtime": "9a441843-8a87-4165-bfb7-1116dd285efb",
+    "generation": 4
+  },
+  "common_input_manifest": "FINAL_PACKET.json",
+  "common_input_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "required_rounds": 3,
+  "required_distinct_underlying_families": 3,
+  "findings_and_dispositions": [
+    "RECONCILIATION_R1.md",
+    "RECONCILIATION_R2.md",
+    "INPUT_INTEGRITY_ERRATUM.json"
+  ],
+  "material_unresolved_blockers": [],
+  "missing_provider_or_round_coverage": [],
+  "final_plan_and_allocation_manifest": "FINAL_EXECUTION_PINS.json",
+  "final_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "actual_round3_decisions": [
+    {
+      "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "program": "accept",
+      "P0_residual": "accept",
+      "P1_remainder": "accept",
+      "P2": "accept",
+      "P3": "accept",
+      "P4": "accept",
+      "P5": "accept"
+    },
+    {
+      "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "program": "accept",
+      "P0_residual": "accept",
+      "P1_remainder": "accept",
+      "P2": "accept",
+      "P3": "accept",
+      "P4": "accept",
+      "P5": "accept"
+    },
+    {
+      "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+      "program": "accept",
+      "P0_residual": "accept",
+      "P1_remainder": "accept",
+      "P2": "accept",
+      "P3": "accept",
+      "P4": "accept",
+      "P5": "accept"
+    }
+  ],
+  "technical_release_status": "not_released; all source/physical/release gates retain actual status",
+  "source_reviewer_qualification_granted": false,
+  "capacity_only_global_stop": false,
+  "ready_work_within_accepted_boundaries": [
+    "qualification candidate evaluation followed by independent judge/disposition",
+    "dependency-ready bounded inventory deltas, not reopened accepted source"
+  ],
+  "wave_revalidation_references": [
+    "../../../ORCHESTRATION_PROTOCOL.md",
+    "../../../planning/software-waves/EXECUTION_PINS.json"
+  ],
+  "round2_peer_delivery_and_challenges": "All3R1 reports were available only after all independent R1 reports settled; R2 shared immutable nine-member packet. All3R2 reports and reconciliation are members of common final packet.",
+  "capacity_scope": "supported snapshots and launches preserved privately under build/execution-pinning-20261101; planning-only demand, fresh execution quota/review/fix reserve required.",
+  "round3_nonblocking_dispositions": [
+    {
+      "source": "MiniMax ROUND3",
+      "observation": "mixed package-reference and exact-unit dependency arrays",
+      "disposition": "supported by explicit complete dependency_unit_ids expansion; no missing references or cycles; no packet change needed"
+    },
+    {
+      "source": "MiniMax ROUND3",
+      "observation": "nine mapped rows have no reserved new scenario file",
+      "disposition": "existing scenario support and unit-specific acceptance may suffice; exact wave inspection decides actual required corrections; no blanket new file creation"
+    },
+    {
+      "source": "MiniMax ROUND3",
+      "observation": "SW-BUILD worker_routes_scope absent",
+      "disposition": "SW-BUILD is an Astra-authored isolated source/build package, not a coordinator-only executor; coordinator still owns shared manifests/version/integration and grants exact leases; no contradictory executor or new blocker"
+    },
+    {
+      "source": "MiniMax ROUND3",
+      "observation": "qualification row described among QUAL-gated work",
+      "disposition": "QUAL dependencies are empty and executor is candidate_evaluator_then_independent_judge; no self-dependency, cycle or pre-granted qualification. All affected source reviews remain gated."
+    }
+  ]
+}

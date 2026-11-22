@@ -1,0 +1,10 @@
+{
+  "id": "D6-target-provenance",
+  "status": "HELD / NOT_DISPATCHABLE_AS_SCOPED",
+  "target": "12ad507eb3c0b24bd896b3bf1757d03980d19696",
+  "facts": "R3 Anthropic reports and coordinator independently reads Claude Opus5.5 Co-Authored-By trailers on websocket.py commits323af8e4/c39ee8d5/dbf5349e and app.py commits323af8e4/bc3b9353. These are conflict indicators, not a replacement for actual native source-family attribution. Required non-Anthropic target/independence has NOT been established.",
+  "disposition": "Apply unchanged FINAL_PACKET D6 limits and provenance/conflict gate: HOLD the async-review candidate and WS wiring, continue independent covered source corrections. No target narrowing, authorship relabel, retake or changed family allocation at dispatch. Actual attribution or material revised target/strategy requires the stated process before a later decision.",
+  "plan_interpretation": "No material packet change or new acceptance condition: all participants accepted fail-closed provenance/qualification gates. Anthropic explicitly confirms this is nonblocking for other packages; OpenAI/MiniMax accept the same gate.",
+  "candidate_attempts_launched": 0,
+  "wiring_leases_granted": 0
+}

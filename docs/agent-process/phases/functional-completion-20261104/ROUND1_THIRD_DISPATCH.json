@@ -1,0 +1,126 @@
+{
+  "observed_utc": "2026-11-04T17:09:17.838759+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 1,
+  "status": "First two independent R1 deliveries preserved/released/taskrefs published; third independent MiniMax R1 ACTIVE",
+  "actor": {
+    "task_id": "task_cfa1b9a6672f",
+    "dispatch_id": "ctx_363592a96ee8",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "exact_report_base": "d9b575cc438f8473d96f106db03629aaa608cde5",
+    "product_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; ownhistoriccheckout prose only",
+    "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round1/minimax.md",
+    "configuration_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R1_minimax.md",
+    "packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported; not relabeled observed",
+    "native_entry": {
+      "status": "actual native MiniMax-M3/thinking exact Task/Dispatch/directory entry observed",
+      "session": "ses_e5877e364ffetA4XnicHVJnaEb",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "CLI_effort_override": "unsupported; configured native variant independently observed",
+      "bytes": 61364,
+      "sha256": "390391e79a495580246deaddc6506d4d7eb476907a6ef52454cd22d0a3fcbffb",
+      "helper_calls_observed": false,
+      "scope": "entry only, not competence/completion/full host census"
+    },
+    "status": "independent R1 planning active; no implementation/qualification/consensus"
+  },
+  "prewave_published_verified_head": "8bde6d47c3f249e627e89355ecd9f1a3116dc536",
+  "capacity": {
+    "observed_utc": "2026-11-04T17:07:54.890620+00:00",
+    "scope": "bounded independent R1 prose for threefamilyplanning, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 18,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793811799975,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 26,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400336,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 2,
+        "windowMinutes": 300,
+        "resetsAt": 1793814600336,
+        "resetDescription": "10:50 AM"
+      },
+      "updatedAt": 1793811799403,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 35,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932851,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793812424231,
+        "resetDescription": null
+      },
+      "updatedAt": 1793811799373,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 160,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 160,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzg2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yNiAyMjoyMzo1NCIsImRpc3BhdGNoSWQiOiJjdHhfYWE1MzBiNTE2OTZkIiwiZGF0YWJhc2VJZCI6MTIwM319"
+      },
+      {
+        "limit": 100,
+        "total": 160,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 7,
+      "released": 152,
+      "null": 1
+    },
+    "historical_retained": 6,
+    "current_owned": 1,
+    "historical_null_compatibility_no_resource": 1
+  },
+  "concurrency": "one current thirdR1+coordinator+protectedexternal=3of4; max2new/no nesting",
+  "barrier": "No peer R1 substantive report/recommendation shared. Preserve allthree originals before R2. Actual three R2 challenges and three explicit R3 decisions on one hashed complete final packet remain future.",
+  "holds": "No source lease/adopted strategy, exhausted privacyattempt budget remains explicit owner-pending, terminal failed qualifications and D6 exacttarget provenance remain; CR01/HA/UI/evidence/compatibility/ownerphysicalvisual72hweekrelease open",
+  "next": "publish489docs/exactremoteequality then END TURN for Orca wake; no completion polling"
+}

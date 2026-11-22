@@ -1,0 +1,120 @@
+{
+  "observed_utc": "2026-11-03T18:01:20.091487+00:00",
+  "status": "OpenAIthirdR1prepared/notlaunched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, fresh supporteddiscoveryreceipts privately retained",
+  "job": {
+    "participant": "openai",
+    "family": "OpenAI",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+    "worktree_name": "wp-qr-r1-openai",
+    "expected_branch": null,
+    "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/ROUND1_OPENAI.txt",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round1/openai.md",
+    "title": "Qualification replacement R1 independent OpenAI assessment",
+    "dependencies": [],
+    "input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+    "gate_path": [
+      "replacement_qualification",
+      "round1",
+      "openai"
+    ],
+    "stage": "planned/reserved next free slot, not launched",
+    "branch_reservation": "planning/qr-20261103-r1-openai",
+    "creation": "genuineworker-start new-top-level; returnedactualbranchmustberecorded, reservationnotassumed",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "frozen_input_sha256": "fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9",
+  "same_R1_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+  "capacity": {
+    "observed_utc": "2026-11-03T18:01:20.091487+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 61,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793728431627,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800191,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400191,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793728431271,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 11,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 24,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932893,
+        "resetDescription": null
+      },
+      "updatedAt": 1793728431100,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 125,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 125,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTc3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMzo0MTozOCIsImRpc3BhdGNoSWQiOiJjdHhfNzY3M2U1MjIyNjc3IiwiZGF0YWJhc2VJZCI6Njc1fX0"
+      },
+      {
+        "limit": 100,
+        "total": 125,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 119,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "fetched_at": "2026-11-03T18:01:10.031774700Z",
+    "supported": true
+  },
+  "independence": "new genuinefreshOpenAIworker, no currentR1peerreports or peerbasedsummary may be read. Coordinator notcounted ascontributor. Frozen technicalinputs unchanged; onlybranchbinding/WindowsOSenvguard clarified",
+  "demand": "one4min-target/<=600word independentR1assessment, oneexisting5docinvocation; OpenAIR2/R3andfuturejudge remain separatelycapacitygated/reserved. No qualificationexecution beforeactual3rounddecisions",
+  "concurrency": "one newworker+coordinator+protectedexternal3<=4, no nesting",
+  "protected": "alloriginalfailedqualifications/native/artifacts/baselines/runtime/oldworkspaces/odduntrackedhookartifact remain; no cleanup/reset/prune/forcepush",
+  "qualification_or_source_or_release_acceptance": false
+}

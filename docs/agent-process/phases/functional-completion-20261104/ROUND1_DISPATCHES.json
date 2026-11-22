@@ -1,0 +1,222 @@
+{
+  "observed_utc": "2026-11-04T16:47:33.319050+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 1,
+  "status": "OpenAI+Anthropic genuine independent R1 active; MiniMax third reserved for freedslot; NOT_ADOPTED/no implementation",
+  "actors": {
+    "openai": {
+      "task_id": "task_deec8833e817",
+      "dispatch_id": "ctx_87e7f6a55dc2",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "exact_report_base": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "source_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; own historicalcheckout prosecheckonly",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round1/openai.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R1_openai.md",
+      "packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+      "previous_writer": "positively released exact lastowner, originalreports/native/archives/taskrefs retained; no reset/checkout/sourceimport",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "01a1a774-1dd0-7193-90e8-82dfca4946e7",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 601542,
+        "sha256": "83a2b7de771dc80826dee598f4991819918aee28e7fe59d3faf72718f6600830",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "anthropic": {
+      "task_id": "task_db6cadf2bd1b",
+      "dispatch_id": "ctx_0c24940765ab",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "exact_report_base": "5097650314502686a845a714e638643d66087971",
+      "source_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; own historicalcheckout prosecheckonly",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round1/anthropic.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R1_anthropic.md",
+      "packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+      "previous_writer": "positively released exact lastowner, originalreports/native/archives/taskrefs retained; no reset/checkout/sourceimport",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "964f370f-ec4a-4ca3-8f01-eb1494ec833f",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 881900,
+        "sha256": "c9a1f07c6f12701ace5e2bb58c211b8c4e18e840aff26e06ca83fcea134632ff",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "Independent R1 PLANNING active; no recommendation/verdict/adoption/source implementation",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "same_input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+  "prewave_published_verified_head": "afe24d4d202e6a0ae0a5102b15f76fb95ea9fe22",
+  "capacity": {
+    "openai": {
+      "observed_utc": "2026-11-04T16:46:05.602281+00:00",
+      "scope": "bounded independent R1 prose for threefamilyplanning, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 17,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793810764303,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399972,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793814599972,
+          "resetDescription": "10:49 AM"
+        },
+        "updatedAt": 1793810763956,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932850,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793812424231,
+          "resetDescription": null
+        },
+        "updatedAt": 1793810763915,
+        "error": null
+      }
+    },
+    "anthropic": {
+      "observed_utc": "2026-11-04T16:46:17.954027+00:00",
+      "scope": "bounded independent R1 prose for threefamilyplanning, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 17,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793810764303,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399972,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793814599972,
+          "resetDescription": "10:49 AM"
+        },
+        "updatedAt": 1793810763956,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932850,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793812424231,
+          "resetDescription": null
+        },
+        "updatedAt": 1793810763915,
+        "error": null
+      }
+    }
+  },
+  "fleet": {
+    "total": 159,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 159,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzgxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMSAwMDoyNzo0OSIsImRpc3BhdGNoSWQiOiJjdHhfMzE0NzA5MjA2Mjc1IiwiZGF0YWJhc2VJZCI6MTEyM319"
+      },
+      {
+        "limit": 100,
+        "total": 159,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "released": 150,
+    "retained": 8,
+    "null_compatibility_no_resource": 1,
+    "historical_retained": 6,
+    "current_owned_workers": 2,
+    "compatibility_explanation": "Oldctx6cbresourceabsent/missingstatus notexitproof; actualtransferredpreviousownerctx137 positivelyreleased before reuse. No olduserowned/externalresourcecleanup."
+  },
+  "concurrency": "two currentplanningworkers+coordinator+existingprotectedexternalreservation=4of4; no nesting",
+  "barrier": "No newphasepeerR1reports/recommendations shared untilall3originals preserved/released/taskrefpublished. MiniMax samepacketafterfreedslot, thenall3actualR2peerchallenge andR3samecompletefinalpacket/hash explicitall3acceptance; no manufactured consensus.",
+  "source_scope": "Current9bproduct/CIinputs readonly, older reusedtreeproduct nevercitedascurrentsourceproof. Only own NEWround1report and ownedignored/freshtemp; originalreports/source/config retained. No implementation/qualification/owner gate launched.",
+  "privacy_budget": "Still NOT_APPROVED. Owneraskscontinueandwhatinputneeded; thisauthorizesindependentremainingwork but not implicitexhaustedbudgetexpansion. ExactoneextraOpusassessment+oneAstrajudge proposalrequires explicitowneranswer, unchanged6standards andprospectiveplan; no retake/extra judge now.",
+  "remaining": "CR01handlerunwired/D6independence, HAcredentials/UIshortcuts and remainingfunctional/evidence/softwareRC/hardware/72h/week/visual/finalreleasegatesopen despiteCI9b14success. No newspend/accounts/credentials/DeepSeek.",
+  "next": "Publish/docs489/exactremoteequal then END TURN forOrcawake; no completionpolling. Preserve/positivelysettle exactR1delivery beforethirdparticipant/peerbarrier."
+}

@@ -1,0 +1,136 @@
+{
+  "observed_utc": "2026-11-04T16:44:40.264259+00:00",
+  "status": "PREPARED / no newworker yet",
+  "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+  "bindings": {
+    "openai": {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "config": ".codex/config.toml",
+      "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "expected_initial_status": "?? .codex/config.toml",
+      "remote": "ff57e990c93d56ad4c050f399b5e49131949b647"
+    },
+    "anthropic": {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "head": "5097650314502686a845a714e638643d66087971",
+      "config": ".claude/settings.local.json",
+      "config_sha256": "53d75479d9fa111ad3e8ec185a464e3228f5be3659d540ef00fa63fcc278bdfd",
+      "expected_initial_status": "",
+      "remote": "5097650314502686a845a714e638643d66087971"
+    },
+    "minimax": {
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "head": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "config": "opencode.json",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "expected_initial_status": "",
+      "remote": "d9b575cc438f8473d96f106db03629aaa608cde5"
+    }
+  },
+  "selections": {
+    "openai": {
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round1/openai.md"
+    },
+    "anthropic": {
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base": "5097650314502686a845a714e638643d66087971",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round1/anthropic.md"
+    },
+    "minimax": {
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "unsupported; thinking inherited",
+      "base": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "branch": "planning/remediation-recovery-r1-minimax",
+      "report": "docs/agent-process/phases/functional-completion-20261104/round1/minimax.md"
+    }
+  },
+  "live_preflight": {
+    "observed_utc": "2026-11-04T16:40:10.822392+00:00",
+    "integration_head": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+    "remote_equal": true,
+    "run": "run_37205f6095b3",
+    "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+    "generation": 5,
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "fleet": {
+      "total": 157,
+      "all_pages": true,
+      "released": 150,
+      "retained": 6,
+      "null_without_resource": 1,
+      "current_owned_workers": 0
+    },
+    "historical_resource_explanation": "Original R3 ctx6cb compatibility row is now null terminal/absent resource. Missing status is not proof of exit: actual transferred ACK resource owner ctx137 positively released was independently verified. Six old retained resources/metadata remain protected; no cleanup or retrospective release claim.",
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 16,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793810257326,
+        "error": null,
+        "age_seconds": 153
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 0,
+          "windowMinutes": 300,
+          "resetsAt": 1793814600083,
+          "resetDescription": "10:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400083,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793810257063,
+        "error": null,
+        "age_seconds": 154
+      },
+      "minimax": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793812424231,
+          "resetDescription": null
+        },
+        "weekly": {
+          "usedPercent": 34,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932852,
+          "resetDescription": null
+        },
+        "updatedAt": 1793810257301,
+        "error": null,
+        "age_seconds": 154
+      }
+    },
+    "purpose": "Three-family R1 planning for remaining functional/evidence fixes, no implementation or qualification retake authority.",
+    "concurrency": "At most two new planning workers plus coordinator plus existing protected external reservation =4; no nesting.",
+    "launch_gate": "Fresh quota required again before every actual start; cached observations here are dated, not future headroom.",
+    "helper_errors": "Initial exact count assertion assumed seven retained; actual six plus one null compatibility row inspected. Subsequent inline formatting typo failed at Python parse time before execution; both remain in transcript. No worker start or source/test changes."
+  },
+  "source_policy": "Explicit ownercontinueauthorizedplanning only; extra exhaustedprivacybudget NOT approved. No implementation/retake/visual/hardware/release grant.",
+  "wave_order": "FirstOpenAI+AnthropicR1 thenMiniMaxafterfreedslot; all3R1originals preserved beforepeerchallenge. No preferredproviderwaiting ifsuitableverifiedroute ready.",
+  "catalog": "Current managedCodexcacheAstra/high, exactscopedOpus5.5/highconfig/CLI selection support, actualM3currentOpenCode2catalog/main-small-internal scopedroute; helpersoff. Beforeeachstart freshquotaandpreviouswriterresource/config/basechecks; actualnativeattestationseparate."
+}

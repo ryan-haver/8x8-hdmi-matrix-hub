@@ -1,0 +1,24 @@
+{
+  "status": "old DRAFT_PACKET metadata mismatch preserved; common R1 canonical Git content unchanged",
+  "root_cause": "coordinator Python text writes used Windows CRLF, Git existing text/eol=lf attributes committed LF; initial hashes matched working CRLF, not blob LF",
+  "frozen_git_commit": "19ee8be994eb2d4630aead8a7eec8f6a22140224",
+  "inputs": {
+    "DRAFT_EXECUTION_PINS.json": {
+      "recorded_raw_working_sha256": "73bddf6b396858618660d4aede9994e3da2aa817391d8308fae9980321c53604",
+      "actual_canonical_blob_sha256": "17bdf32dccde46a69973bb90b9d0c770480b4bf32367d0fb85c9a94e858cc2f5",
+      "crlf_expansion_reproduces_old_hash": true
+    },
+    "PROGRAM.md": {
+      "recorded_raw_working_sha256": "39de9d9e0fe2ed5a3c94a4acf64018a52a612579181677d92258ad6e27f96419",
+      "actual_canonical_blob_sha256": "0e92683a1eeda28f655200324105da67269f94f0715fa5824a905c32c0d8791d",
+      "crlf_expansion_reproduces_old_hash": true
+    },
+    "BASELINE.json": {
+      "recorded_raw_working_sha256": "e59faf7ed8790afa6ad1a4b2126e2d74a0b3593113965142128ad74bae88a563",
+      "actual_canonical_blob_sha256": "72d1aa31615cc4b2054fc5d9716703fb0ba5c81cd92b0d1418ceba2bac5dc5f9",
+      "crlf_expansion_reproduces_old_hash": true
+    }
+  },
+  "recipe_for_successors": "write exact UTF8 LF bytes with write_bytes, hash bytes, verify each SHA against committed git-show bytes and independently checked-out worker bytes before decisions",
+  "historical_baseline_reference": "BASELINE.source_commit is e2161484, not19ee; compare historical_source_hashes at their explicitly declared source commit; no rewrite of valid historical references"
+}

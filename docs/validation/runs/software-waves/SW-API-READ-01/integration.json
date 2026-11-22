@@ -1,0 +1,45 @@
+{
+  "observed_utc": "2026-10-20T17:35:37.737044+00:00",
+  "state": "independently reviewed and integrated; publication-head combined CI pending",
+  "integration_sha": "0812dfbc00418a18220a2492c83ddc052e450166",
+  "source_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+  "implementation_sha": "afe344a0e6a17392ccda90bab140284dd512267e",
+  "reviewed_candidate_sha": "3622dc9a82893981feddc2e84ae7784eca3cdede",
+  "review_tip_sha": "6385499f7f1c7dc754599a37508d14171c4ef5c7",
+  "feature": "F-API-002",
+  "accepted_review_scope": "API/source-simulator V2 only",
+  "review": {
+    "family": "DeepSeek",
+    "model": "deepseek/deepseek-v4-pro",
+    "native_variant": "default",
+    "task": "task_b62e4cdfe32e",
+    "dispatch": "ctx_0334309854fd",
+    "verdict": "accepted; no findings",
+    "tests": {
+      "focused": 81,
+      "registry_schema": 33,
+      "scenarios": 3,
+      "checks": 20
+    },
+    "formal_gate": "PASS; zero known failures; exit0;191.9seconds",
+    "released_before_ack": true
+  },
+  "integration": "normal sequential Git merge, no conflicts or material implementation change; reviewed source/registry/ledger/attributes/3record blobs byte-identical",
+  "local_combined": {
+    "documentation_registry_schema_ledger_tests": 515,
+    "ruff": "PASS",
+    "mypy": "PASS;91sourcefiles",
+    "author_normal_hook": "4041passed4skipped35deselected177/177routes",
+    "change_secret_scan": "PASS;exact97e617c2..3622range;3commits;201KB"
+  },
+  "numerical_ledger": {
+    "total": 268,
+    "below_target": 204,
+    "stale": 57,
+    "software_below_target": 83
+  },
+  "record_attribution": "3original0dd2records byte-exact;APIonly;V2;nullimage;no historical relabel",
+  "release_acceptance": false,
+  "deferred": "all other software units, actual owner visual/physical/72-hour/week field/final metadata/artifact release gates",
+  "post_publication_receipt": "private build/software-wave-planning-20261020; kept outside the commit it identifies"
+}

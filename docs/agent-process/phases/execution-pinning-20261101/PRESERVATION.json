@@ -1,0 +1,170 @@
+{
+  "workspace_preservation": [
+    {
+      "workspace": "C:\\t\\pins-20261101",
+      "head": null,
+      "branch": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\execution-pinning-20261101\\preservation\\external-pins-short-temp\\workspace.tar.gz",
+      "archive_sha256": "df05a6ccc0c9923d18477591caee6b8d23e2743692233fc3297cf900ed789ea5",
+      "archive_bytes": 861722,
+      "regular_files": 1365,
+      "regular_bytes": 1914365,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-anthropic-20261101",
+      "head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "branch": "planning/execution-pins-anthropic-20261101",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\execution-pinning-20261101\\preservation\\wp-pins-anthropic-20261101\\workspace.tar.gz",
+      "archive_sha256": "4a1cadbdc9d45d3f4c8b5398358785eeb350376c8072f40531ad3eec31eaa5d5",
+      "archive_bytes": 206746982,
+      "regular_files": 4574,
+      "regular_bytes": 297857208,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-minimax-20261101",
+      "head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "branch": "planning/execution-pins-minimax-20261101",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\execution-pinning-20261101\\preservation\\wp-pins-minimax-20261101\\workspace.tar.gz",
+      "archive_sha256": "fca81acd409f445296b1ad813437fccdb8a0bcc66628d2e699348ea34bb69f4d",
+      "archive_bytes": 206221748,
+      "regular_files": 4551,
+      "regular_bytes": 296818006,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-pins-openai-20261101",
+      "head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "branch": "planning/execution-pins-openai-20261101",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\execution-pinning-20261101\\preservation\\wp-pins-openai-20261101\\workspace.tar.gz",
+      "archive_sha256": "7e313ec2044f0758c025221dc19b458b3baa1fa9cd88cda78275a6bf280ef6f1",
+      "archive_bytes": 206163020,
+      "regular_files": 4528,
+      "regular_bytes": 296680814,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "native_final_captures": [
+    {
+      "family": "anthropic",
+      "task": "task_7cd1706e862c",
+      "dispatch": "ctx_369b591f37ba",
+      "session": "7ca203a2-bb53-4546-9de0-0d4f0c35c4c1",
+      "head": "a973922ae39821e8e30e912dc59aeaddcf78f6ed",
+      "sha256": "1b7af7de253d06c0eccdf7a8102d47610afac3360ec86e66152abed6fe744be1",
+      "bytes": 1306615,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "anthropic",
+      "task": "task_ed036ba1631f",
+      "dispatch": "ctx_873c66e53a6c",
+      "session": "8a31363b-769a-4902-8916-9ec947ec36ed",
+      "head": "ed2b0eed1fcfefd99f5fb11b516a713a18a0dd3f",
+      "sha256": "11ce5b35a34c627aa608dbc84cc7d36caf0d387e77d526a47f22e2ff058a9a18",
+      "bytes": 1250755,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "anthropic",
+      "task": "task_134d08c99333",
+      "dispatch": "ctx_b787493db33d",
+      "session": "4bdd2dfb-7519-4243-9332-19fe3db57d59",
+      "head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "sha256": "1372d3beb3b9583ff43af2451865c198b7a76c1af12fc8048bf67ae194795942",
+      "bytes": 950104,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "minimax",
+      "task": "task_78f4747ef78a",
+      "dispatch": "ctx_0fab2d28029e",
+      "session": "ses_e6a49f9dcffe10Jns6KmaJJvIV",
+      "head": "800c369d852c6bf19d484999f8282375861bd842",
+      "sha256": "832f47ad0befe2f4035a96fe4ca9c8a40b47163d4474b4a1d0d501ce1e64933c",
+      "bytes": 1116457,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "minimax",
+      "task": "task_3ee308c354ca",
+      "dispatch": "ctx_7bc6929a4372",
+      "session": "ses_e6a1dda46ffeeNBiFqFsHaIRKA",
+      "head": "ed4bbd934a4059dd5c750351b7d86e54b8bb0342",
+      "sha256": "6125c2476f255cfbc29897c94323202e760d254c51c8dee18cd1569148491fc0",
+      "bytes": 1392628,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "minimax",
+      "task": "task_2549113a8ba4",
+      "dispatch": "ctx_53a31ed6e909",
+      "session": "ses_e6a069847ffeULaaP2l9tyOS3r",
+      "head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "sha256": "afcc21e2021be30d9d1388bf52f521bcd0746b00383ba67ebe56f2ad340e347e",
+      "bytes": 568802,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "openai",
+      "task": "task_ca1f06e6d2bc",
+      "dispatch": "ctx_e04f56080b14",
+      "session": "01a195bf-0f33-7a01-93fa-9e1498b34ba6",
+      "head": "1effc39eaee20979521c2b96d9b3d6af7290bb39",
+      "sha256": "3d71f1c95883f7717f7713389a26a1e12f1136e563e736cae82795e5396d65d6",
+      "bytes": 822798,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "openai",
+      "task": "task_ee7d6c8e10bf",
+      "dispatch": "ctx_ea6c27b10a28",
+      "session": "01a195e2-2c98-7732-a23b-23d35747e61b",
+      "head": "0764221c36b06fb2993c1ddeffb5fd459c73c42f",
+      "sha256": "e4866a86e0c48a96b0dd03f14b9c11e2c28680de82673a4cef66cbc99750fed1",
+      "bytes": 715865,
+      "complete_final_transcript": true
+    },
+    {
+      "family": "openai",
+      "task": "task_90629d8df3e5",
+      "dispatch": "ctx_a153226a879b",
+      "session": "01a195f9-2158-7c20-b223-828ed80154ed",
+      "head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "sha256": "71fce9c8e60b30b6858c9ee3490d12081805deb74dcd37c0c8547db30e08b61c",
+      "bytes": 784323,
+      "complete_final_transcript": true
+    }
+  ],
+  "checks": {
+    "status": "pass",
+    "pins": 85,
+    "mapped_units": 65,
+    "features_exactly_once": 268,
+    "unique_reserved_worktrees": 170,
+    "acyclic_entry_and_completion_graph": true,
+    "disjoint_writes": true,
+    "different_families": true,
+    "future_task_ids_null": true,
+    "owner_gates_not_dispatchable": true,
+    "fixed_review_commits_exist": true,
+    "frozen_packet_and_all_members_match_committed_bytes": true,
+    "canonical_registry_ledger_and_product_source_unchanged": true
+  },
+  "docs_result": "489 passed in3.06s; route inventory/cache plugins disabled; no source qualification",
+  "docs_stdout_sha256": "ec4f935a36f5bfd9790e37f72b23df9c6f22f1fcb328ac4bee2ba84f0af7459b",
+  "docs_junit_sha256": "231b3c7d82ff138bb4dd58b761e2e4e7588bd62fd85f8ef4c871e9b390f71659",
+  "original_failed_setup": "round3-preflight-docs original stdout/JUnit preserved; missing basetemp parent, no assertions; corrected fresh run489passed3.29s",
+  "resource_disposition": "all9planning workers released beforeACK;3planning worktrees explicitly retained for amendments with no active writer;6historical retained rows protected",
+  "postcommit_git_preservation": {
+    "bundle": "build/execution-pinning-20261101/final-all-refs.bundle",
+    "receipt": "build/execution-pinning-20261101/final-publication.json",
+    "completion_requirement": "After scoped record commit, verify full bundle, independent bare recovery/fsck/all report and base heads, exact remote/local integration and3task refs; receipt is outside its referenced commit to avoid self-reference"
+  },
+  "no_cleanup": "No source workspace, branch, protected resource or evidence removed by this planning task"
+}

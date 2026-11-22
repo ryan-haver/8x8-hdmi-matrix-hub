@@ -1,0 +1,115 @@
+{
+  "observed_utc": "2026-11-03T03:30:24.534736+00:00",
+  "status": "both reviews delivered and released; EV metadata accepted, inventory requires three residual fixes",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "audit": {
+      "task_id": "task_afbc5357eb0e",
+      "dispatch_id": "ctx_c0dcf402e9f3",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview02",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview02",
+      "exact_entry_base": "ac97e1f5886d591562597b5e81c3fa410adda2f8",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f74-1e4f-7790-a9c1-171634277e45",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 718506,
+        "sha256": "f06d39aaa41987cfca90ea540a70f3d4af1f2858eb23952f4f35ea98e6d76f44"
+      },
+      "status": "delivered; released/preserved/published",
+      "report_commit": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+      "verdict": "require_changes; three residual report/metadata fixes only"
+    },
+    "preservation": {
+      "task_id": "task_cc2af79f455c",
+      "dispatch_id": "ctx_5011d343f010",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-rereview01",
+      "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-rereview01",
+      "exact_entry_base": "816755055028d37aa62c0ff62caace473288654d",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a19f74-5c84-7903-97e0-d649983b9705",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 658112,
+        "sha256": "eedf6c09c09fdb83b13b919705d3084b228b1898e35dc16fcafbd1c8a6a2588c"
+      },
+      "status": "delivered; released/preserved/published",
+      "report_commit": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+      "verdict": "accept bounded corrected negative-gap metadata only"
+    }
+  },
+  "publication_before_wave": {
+    "observed_utc": "2026-11-03T03:29:02.643977+00:00",
+    "local_head": "da6ecfce5ec0f4b84f492ad97d290736a36c7260",
+    "remote_head": "da6ecfce5ec0f4b84f492ad97d290736a36c7260",
+    "exact_equal": true,
+    "docs_tests": 489,
+    "direct_exit": 0,
+    "source_changed": false,
+    "scope": "corrected metadata records only, no accepted inventory/preservation/source proof"
+  },
+  "fleet": {
+    "total": 105,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 105,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTg4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMjowNTo1NiIsImRpc3BhdGNoSWQiOiJjdHhfNWM1MGFlYWU5NWNhIiwiZGF0YWJhc2VJZCI6NTkwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 105,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 97
+    },
+    "actively_dispatched_new": 2,
+    "historical_retained": 6,
+    "accounting": "keep-open causes two running resources to be labeled retained/user_requested; resource retention differs from assignment activity"
+  },
+  "concurrency": "max2new+coordinator+protected old external reservation=4; no nesting",
+  "review_instruction_erratum": "REVIEW_INSTRUCTION_ERRATUM.json; frozen actual F-API-029 mapping preserved, old review/spec unchanged",
+  "acceptance": "both corrections still await independent exact-commit verdict; no source/original preservation/feature pass",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no answer or authority inferred"
+}

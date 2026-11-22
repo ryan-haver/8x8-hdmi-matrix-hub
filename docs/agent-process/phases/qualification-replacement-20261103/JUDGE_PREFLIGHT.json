@@ -1,0 +1,114 @@
+{
+  "observed_utc": "2026-11-03T19:14:53.613853+00:00",
+  "status": "ONE fresh independent exact-report OpenAI judge prepared, not provisioned/dispatched",
+  "job": {
+    "participant": "judge",
+    "family": "OpenAI",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "base": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "worktree_name": "wp-exec-qual-opus55-20261103-review",
+    "expected_branch": "execution/qual-opus55-20261103-review",
+    "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/REVIEW.md",
+    "spec": "docs/agent-process/phases/qualification-replacement-20261103/tasks/JUDGE_OPUS55.txt",
+    "title": "One fresh independent judgement of Opus5.5 qualification report",
+    "dependencies": [
+      "task_5b5162506677"
+    ],
+    "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+    "stage": "prepared, not provisioned or dispatched",
+    "gate_path": [
+      "replacement_qualification",
+      "judge"
+    ],
+    "qualification_judge_budget": 1
+  },
+  "candidate_report_sha256": "34074c8cd6719eb15a63729441631c82ba2112c04452e0013910516f2f0f1a00",
+  "native_original_sha256": "76a5ef49087827f0874bcd8bfdf41586bceb8302e8d08bbedeb7406fc3b533aa",
+  "joint_capacity": {
+    "observed_utc": "2026-11-03T19:14:53.613853+00:00",
+    "source": "supported orca account list, cached usage; no absolute allowance exposed",
+    "other_host_demand": "unknown; not zero",
+    "reserve": "one remaining fresh15min-target judge; nine planning contributions and ONE candidate already completed. No extra retry/author rewrite/new judge authority. Absolute allowance and other-host demand unknown.",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 5,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800138,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400138,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793733226198,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 66,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793733226499,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 133,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 133,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTk4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNzo0NTowMiIsImRpc3BhdGNoSWQiOiJjdHhfNWVmNDhiYzExZGYzIiwiZGF0YWJhc2VJZCI6NzMwfX0"
+      },
+      {
+        "limit": 100,
+        "total": 133,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 127,
+      "retained": 6
+    },
+    "new_active": 0,
+    "historical_retained": 6
+  },
+  "catalog": {
+    "observed_utc": "2026-11-03T19:14:53.613853+00:00",
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "supported_effort": "high",
+      "cache_fetched_at": "2026-11-03T19:14:52.558061Z",
+      "native_prior_R1": "exact Astra/high attested; fresh new session still required"
+    },
+    "Anthropic": {
+      "model": "claude-opus-5-5",
+      "effort": "high supported launch/local config, native per-turn effort not exposed",
+      "native_prior_R1": "actual Opus 5.5 attested; this establishes availability, not source competence"
+    },
+    "MiniMax": {
+      "catalog_model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited, CLI override unsupported",
+      "native_prior_R1": "actual MiniMax M3 attested; routing exact config rehashed"
+    },
+    "Google": "primary unavailable; alternate alias identity/qualification/headroom not verified, not fallback",
+    "DeepSeek": "owner exhausted; forbidden dispatch or credit purchase",
+    "alternatives": "Opus 4.7 both failures retained. Sol/Astra/Luna same family/pool; MiniMax bounded prose only. No verified alternate source qualification pair."
+  },
+  "final_packet_sha256": "dfd433557c35fb974d346ba869addbaef2fe1e621dbe8e30c77760936f718b74",
+  "concurrency": "one new judge + coordinator + protected external reservation=3<=4, no nesting",
+  "no_further_attempts": "nine contributions and one candidate completed; exactly one authorized judge remains, no retry/rewrite/second judge",
+  "qualification_or_source_or_release_acceptance": false
+}

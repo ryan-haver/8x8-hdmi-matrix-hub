@@ -1,0 +1,105 @@
+{
+  "observed_utc": "2026-11-03T18:42:16.918976+00:00",
+  "status": "coordinator reasoned dispositions for all three complete R2 reports; subject to three actual R3 decisions",
+  "dispositions": [
+    {
+      "id": "D1",
+      "addresses": [
+        "all R1/R2 C1",
+        "Anthropic R2 pinned-ref amendment",
+        "MiniMax R2 pinned-bytes amendment"
+      ],
+      "decision": "ACCEPT with exact pinning",
+      "resolution": "Candidate checkout and all focused controls execute at exact caaa, judge checkout at exact evaluator report commit parent caaa. Planning snapshot is metadata, not sample. Frozen rubric/final packet/prior dispositions absent from caaa are read-only canonical Git blobs from exact published planning refs with SHA checks, never copied over sample source. Final-packet publication ref supplied in dispatch; static planning-source ref in this packet.",
+      "evidence": "Four of nine sample paths at integration is expected divergence; candidate not ancestor of planning snapshot, merge-base938. No original source-path defect inferred."
+    },
+    {
+      "id": "D2",
+      "addresses": [
+        "all C2",
+        "all C3"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Full938-to-caaa four-commit/nine-path window includes386,060769,ee3,caaa; frozen rubric source_commits is implementation shorthand. Per-path/per-commit actual inspection proof required, all three changed reports included. 386 also adds scenario/test code. Rubric bytes unchanged; causal speculation about J1 withdrawn, original R1/R2 reports preserved."
+    },
+    {
+      "id": "D3",
+      "addresses": [
+        "all C4",
+        "MiniMax R2 recurring axes"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Both prior judges OpenAI, independent of Anthropic but not two judge families. Shared failed axes are calibration and review_quality; n=2 yields no modal-probability inference. Candidate-model planning conflict disclosed without weighted votes. All three explicit same-hash R3 accepts/no material blocker required."
+    },
+    {
+      "id": "D4",
+      "addresses": [
+        "all C5",
+        "Anthropic R2 count/tool versions",
+        "OpenAI R2 publication tightening"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Command-derived actual collection/execution/JUnit populations, precise scope and blocked statuses. Historical54 focused and489 docs are expectations, not required fixed counts. Record Python/pytest versions, actual imported source/cwd/effective safe isolation flags. Label tracked-at-commit, verified task-ref-published and ignored/private separately; remote equality needed for publication. Direct exits/full streams/JUnit/argv/time/all original temp and native tool evidence retained; process cause and descendant census unknown unless directly proved. No absolute no-side-effect claims, judge cannot repair missing evaluator inspection."
+    },
+    {
+      "id": "D5",
+      "addresses": [
+        "MiniMax R2 static13+30=43 claim"
+      ],
+      "decision": "REJECT unsupported static count; ACCEPT need to derive actual population",
+      "resolution": "Read-only source arithmetic at caaa: C1=4 valid+6 invalid+1 connected+1 external+1 discovery=13. C2=11 declaration+3 runtime+21 health+1 transport+2 default/external+1 mixed+2 wrong-managed=41, total54 expected. Health list contains7 literals+4 success-comprehension values+9 matrix-comprehension values+1 HTTP503=21. No tests executed for this coordinator check. Future evaluator must collect/run actual source and report discrepancies, not force54. Preserve MiniMax43 claim and rejected disposition.",
+      "evidence": {
+        "revision": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+        "paths": [
+          "tests/validation/test_sw_api_client_02_c1.py",
+          "tests/validation/test_sw_api_client_02_c2.py"
+        ],
+        "method": "git show exact blobs, read decorators and list/comprehension populations; static arithmetic only, not current execution evidence"
+      }
+    },
+    {
+      "id": "D6",
+      "addresses": [
+        "MiniMax R2 C1 was DeepSeek-authored claim"
+      ],
+      "decision": "REJECT as attribution for in-window C1 follow-up; preserve historical DeepSeek product authorship",
+      "resolution": "C1 AUTHOR contains historical DeepSeek product-handler record, followed by 2026-10-29 declarative follow-up explicitly OpenAI gpt-6.1-sol/high Taskc0d26/ctx0f27 at base938. Window386 adds that new scenario/test with coordinator registry contribution;060769 report-only follow-up; C2ee3/caaa OpenAI. Original DeepSeek product commits predate938. Do not flatten composite report history into authorship of new validation code. OpenAI judge evaluates Anthropic competence, not acceptance of OpenAI code.",
+      "evidence": {
+        "revision": "386872316cb60130b06dd704557ae6ca1a92b5c8",
+        "path": "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+        "section": "2026-10-29 declarative assertion follow-up",
+        "task": "task_c0d26e9e563e",
+        "dispatch": "ctx_0f27082dc4eb"
+      }
+    },
+    {
+      "id": "D7",
+      "addresses": [
+        "all C6",
+        "Anthropic R2 targets not cutoffs",
+        "MiniMax R2 execution receipt"
+      ],
+      "decision": "ACCEPT with preserved deviations",
+      "resolution": "env.copy retains standard Windows OS variables; validate keys case-insensitively/using uppercase, sanitize receipts, no-I. MiniMax receipt false SystemDrive/SystemRoot flags used case-sensitive dict membership and are not proof actual variables absent. One final docs invocation after prose finalized; no cosmetic reruns. R1 Anthropic cache side effect604words, MiniMax three docs invocations, R2 Anthropic715words, OpenAI initial errors/target overrun, MiniMax target overrun remain original history. Targets not hard cutoffs or automatic axis failure. Corrections/reserve do not authorize evaluator rewrite, retake, replacement judge or extra planning contribution."
+    },
+    {
+      "id": "D8",
+      "addresses": [
+        "all C7",
+        "Anthropic R2 joint candidate/judge capacity gate"
+      ],
+      "decision": "ACCEPT",
+      "resolution": "Fresh verified Claude and OpenAI pools/reset/commitments and bounded judge reserve BEFORE candidate launch, again before judge. OpenAI fixed by frozen rubric; no verified alternate qualification pair. Unknown/below30 or insufficient headroom holds affected dispatch absent suitable verified authorized fallback; no silent substitution. R3 quota fresh at each launch, later stages re-gated. Other-host demand unknown, not zero; percentages not absolute capacity/reservations."
+    },
+    {
+      "id": "D9",
+      "addresses": [
+        "all recommendations",
+        "all remaining three R3 decisions"
+      ],
+      "decision": "ACCEPT as proposed final plan, pending actual unanimous R3 decisions",
+      "resolution": "Freeze one complete final packet with full six reports/dispositions/plan/allocation and one hash. Each real participant explicitly accept/require_changes/blocked; same final packet, no majority weighting/coordinator vote. Exactly six contributions done, three reserved; max9. Any dissent or new material blocker prevents candidate execution; no automatic additional debate round, evaluator retry or judge."
+    }
+  ],
+  "qualification_or_source_acceptance": false
+}

@@ -1,0 +1,1377 @@
+{
+  "observed_utc": "2026-11-03T21:05:53.746427+00:00",
+  "scope": "read-only recommendation, no removal executed",
+  "repo": "unfoldedcircle-orei-hdmi-matrix-integration",
+  "run": "run_37205f6095b3",
+  "integration_branch": "wp-runtime-completion",
+  "integration_head_at_audit": "714443d2d295fe9547420ad02f69cf23c90b5635",
+  "git_worktrees": 42,
+  "orca_workspaces": 43,
+  "all_orca_pages_complete": true,
+  "recommended_cleanup_count": 33,
+  "cleanup_groups": {
+    "older_completed_freshness_and_flic_metadata": 3,
+    "completed_ci_attribution_and_preservation_gap_work": 6,
+    "completed_qualification_attempts_and_judges": 6,
+    "completed_audit_findings_repository_intakes_and_reviews": 12,
+    "completed_planning_panels": 6
+  },
+  "keep_count": 7,
+  "recovery_required_count": 3,
+  "expected_orca_entries_after_verified_first_batch": 10,
+  "candidate_definition": "completed own task no longer needs a live checkout; exact deletion is conditional on remaining backup/recovery/integrity checks",
+  "required_policy": "docs/ORCHESTRATION_PROTOCOL.md#preservation-and-exact-cleanup",
+  "candidates": [
+    {
+      "name": "wp-audit-freshness-delta",
+      "group": "older_completed_freshness_and_flic_metadata",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-audit-freshness-delta",
+      "exact_branch": "ryan-haver/wp-audit-freshness-delta",
+      "exact_head": "11b09676f78acd76bd1ac47d11a8d8817e8d0624",
+      "worker_dispatches": [
+        "ctx_e973d4be3c60"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation/wp-audit-freshness-delta/manifest.json",
+          "head": "11b09676f78acd76bd1ac47d11a8d8817e8d0624",
+          "archive_sha256": "ad342c58b00a2d67be910ab86958d1ab1f6ef78b47271ce8a166135a1834da4d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4629
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/execution-pinning-20261101/round1-and-round2-preflight-full.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle",
+        "build/p1-fanout-20261028/ci-intake-full.bundle",
+        "build/p1-fanout-20261028/ci-review-correction-full.bundle",
+        "build/p1-fanout-20261028/ci-review-original-full.bundle",
+        "build/p1-fanout-20261028/fapi034-partial-full.bundle",
+        "build/p1-fanout-20261028/flic-refresh-full.bundle",
+        "build/p1-fanout-20261028/flic-review-correction-full.bundle",
+        "build/p1-fanout-20261028/flic-review-original-full.bundle",
+        "build/p1-fanout-20261028/freshness-full.bundle",
+        "build/p1-fanout-20261028/privacy-c2-full.bundle",
+        "build/p1-fanout-20261028/privacy-c3-full.bundle",
+        "build/p1-fanout-20261028/ws040-full.bundle",
+        "build/p1-round-20261031/fsec007-corrected-full.bundle",
+        "build/p1-round-20261031/fsec007-original-full.bundle",
+        "build/p1-round-20261031/round-final-full.bundle",
+        "build/p1-round-20261031/round-published-full.bundle",
+        "build/worktree-cleanup-20261031/complete-repository-before-cleanup.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution",
+      "exact_branch": "ryan-haver/wp-exec-ev-ci-attribution",
+      "exact_head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+      "worker_dispatches": [
+        "ctx_c3d0257ab154",
+        "ctx_c2550304397b"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-fixed-authors/wp-exec-ev-ci-attribution/manifest.json",
+          "head": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+          "archive_sha256": "b6d7e7434196156d0cfd168579fef9d3e4d42f51b2f2c9cc87691ebcacb3e77d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4698
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution-rereview01",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-rereview01",
+      "exact_branch": "ryan-haver/wp-exec-ev-ci-attribution-rereview01",
+      "exact_head": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+      "worker_dispatches": [
+        "ctx_67980920fabd"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ci-review01/wp-exec-ev-ci-attribution-rereview01/manifest.json",
+          "head": "79b08fd075f933ba63be908cb67707781cdd1ed4",
+          "archive_sha256": "5e081ad9e5e16b691938ec12c392f971d39c838acf08ac9c5023bd6f1c86a9d5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4620
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-ci-attribution-review",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-ci-attribution-review",
+      "exact_branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "exact_head": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+      "worker_dispatches": [
+        "ctx_a83af2c61fa3"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-reviews/wp-exec-ev-ci-attribution-review/manifest.json",
+          "head": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+          "archive_sha256": "6aaa5b7604e5f0cdea6751d2d7306b694fe01c08b85991775e04fef974fd6561",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4730
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+      "exact_branch": "execution/wp-exec-ev-preservation-gaps",
+      "exact_head": "816755055028d37aa62c0ff62caace473288654d",
+      "worker_dispatches": [
+        "ctx_f56a5a99bfee",
+        "ctx_f2864b9be31e"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ev-fix01/wp-exec-ev-preservation-gaps/manifest.json",
+          "head": "816755055028d37aa62c0ff62caace473288654d",
+          "archive_sha256": "aa77178167033a771662cc5e0e3d3727aac61d4e8cef6b875463eab6a9751a8f",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4597
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps-rereview01",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-rereview01",
+      "exact_branch": "ryan-haver/wp-exec-ev-preservation-gaps-rereview01",
+      "exact_head": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+      "worker_dispatches": [
+        "ctx_5011d343f010"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-corrected-metadata-reviews/wp-exec-ev-preservation-gaps-rereview01/manifest.json",
+          "head": "0ff12f0091d6c7e96e723fd6b840ca72b056182a",
+          "archive_sha256": "5ccb7d374df5cdb21ff11e0451dc93907cafb4e7f21fdc1129db5f96daea24c3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4577
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-ev-preservation-gaps-review",
+      "group": "completed_ci_attribution_and_preservation_gap_work",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "exact_branch": "ryan-haver/wp-exec-ev-preservation-gaps-review",
+      "exact_head": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+      "worker_dispatches": [
+        "ctx_70e7d15a49fc"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-ev-review01/wp-exec-ev-preservation-gaps-review/manifest.json",
+          "head": "abd339eda108e4d74f1a147b2f445299814e9cf9",
+          "archive_sha256": "85c147864da0bbe7e72e221b05aa75c9df82f5865ad07e570844abfaad9a6af1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4571
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01",
+      "exact_branch": "execution/wp-exec-qual-anthropic-core-01",
+      "exact_head": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "worker_dispatches": [
+        "ctx_cd0f4f2bae5c"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation/wp-exec-qual-anthropic-core-01/manifest.json",
+          "head": "97c47be3670df297b2a7ac2696350615b88846c1",
+          "archive_sha256": "cb4590afe940f8e6ac31a521d715675f711d17811c72b18315ed0e3eeefb9be1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4502
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-manual02",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+      "exact_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+      "exact_head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "worker_dispatches": [
+        "ctx_ea6771c3440b"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-manual02-evaluator/wp-exec-qual-anthropic-core-01-manual02/manifest.json",
+          "head": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+          "archive_sha256": "175c7536ce423e83051f263f9d3868a35766dbafe342467c7cd2e01c3ed56b84",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4652
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-manual02-review",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02-review",
+      "exact_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+      "exact_head": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+      "worker_dispatches": [
+        "ctx_6f1b83d8f673"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-manual02-judge/wp-exec-qual-anthropic-core-01-manual02-review/manifest.json",
+          "head": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+          "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4608
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-anthropic-core-01-review",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-review",
+      "exact_branch": "ryan-haver/wp-exec-qual-anthropic-core-01-review",
+      "exact_head": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+      "worker_dispatches": [
+        "ctx_5db4e4b62a69",
+        "ctx_f7db39e6c800"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-final-reviewers/wp-exec-qual-anthropic-core-01-review/manifest.json",
+          "head": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+          "archive_sha256": "00e1aa19579007220dbb05842d959d77e8563415b79d11c4bc2b9880bd5924d1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4605
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-opus55-20261103",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103",
+      "exact_branch": "execution/qual-opus55-20261103",
+      "exact_head": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+      "worker_dispatches": [
+        "ctx_5e62800cd2dc"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-candidate-opus55/wp-exec-qual-opus55-20261103/manifest.json",
+          "head": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+          "archive_sha256": "67bf77a89fb7e48f81a57be7a9deb69e5dcd704512c74408c788a55b9fc15943",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4788
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-qual-opus55-20261103-review",
+      "group": "completed_qualification_attempts_and_judges",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-opus55-20261103-review",
+      "exact_branch": "execution/qual-opus55-20261103-review",
+      "exact_head": "dda63d661d143a591d6d3d82346457fb52199795",
+      "worker_dispatches": [
+        "ctx_4492909a6860"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-judge-opus55/wp-exec-qual-opus55-20261103-review/manifest.json",
+          "head": "dda63d661d143a591d6d3d82346457fb52199795",
+          "archive_sha256": "bfefb25033d5b61268cbc20da95a73b5a800f54d43ab94c33020ba4717b9b710",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4609
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-audit-01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "exact_branch": "execution/wp-exec-sw-audit-01",
+      "exact_head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "worker_dispatches": [
+        "ctx_597f4ffe52bf",
+        "ctx_14d9b1569d7e",
+        "ctx_f2343717872b",
+        "ctx_a0c78df4a3b9"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-audit03/wp-exec-sw-audit-01/manifest.json",
+          "head": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+          "archive_sha256": "b68f7937d7540a1ed705e0b594e910ca49e53bac767c783ef288ab75d0674253",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4588
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview01",
+      "exact_branch": "ryan-haver/wp-exec-sw-audit-01-rereview01",
+      "exact_head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+      "worker_dispatches": [
+        "ctx_4ec26c6917ca"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-metadata-round01/wp-exec-sw-audit-01-rereview01/manifest.json",
+          "head": "d44ad2bca78dfe82c4b541e41f861c965cce2461",
+          "archive_sha256": "b0f8f0bd2e2d1ee6c05be8064dcec9712b91224b3c47cf695e6d9fa2f8785d52",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4561
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview02",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview02",
+      "exact_branch": "ryan-haver/wp-exec-sw-audit-01-rereview02",
+      "exact_head": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+      "worker_dispatches": [
+        "ctx_c0dcf402e9f3"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-corrected-metadata-reviews/wp-exec-sw-audit-01-rereview02/manifest.json",
+          "head": "394dd8670ab59bbe82a88e0188bc7d474615645b",
+          "archive_sha256": "7876b6e66b6975e6c7ae1b3de10250e5f2dd50cdedc179815df076086fd83884",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4559
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-audit-01-rereview03",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-rereview03",
+      "exact_branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+      "exact_head": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+      "worker_dispatches": [
+        "ctx_d77b1f25e526"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-afreviews/wp-exec-sw-audit-01-rereview03/manifest.json",
+          "head": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+          "archive_sha256": "ffaf62bbaac97e96e7c6ba654617d2569c0164ca400f79f9ebf0176002201ca8",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4549
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-audit-01-review",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01-review",
+      "exact_branch": "ryan-haver/wp-exec-sw-audit-01-review",
+      "exact_head": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+      "worker_dispatches": [
+        "ctx_e3e2bd49b348"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-final-reviewers/wp-exec-sw-audit-01-review/manifest.json",
+          "head": "4c2d18b8cdd3f49523e9014e498bbfd7d55601ac",
+          "archive_sha256": "25f405cec61e8268917d0ddf51f85bdf25a2c53938127a888f4d3897e2cea92a",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4546
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-findings-01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01",
+      "exact_branch": "ryan-haver/wp-exec-sw-findings-01",
+      "exact_head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "worker_dispatches": [
+        "ctx_160f933c1154",
+        "ctx_92d5aa88ea41",
+        "ctx_8f2f304eeed7"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-fixed-authors/wp-exec-sw-findings-01/manifest.json",
+          "head": "a2dab11cdc871d6a98c563b019a361371a9af710",
+          "archive_sha256": "52bf1bf8588399d21d6d93fc3983b3e6c915c1e1a02d3ec96695c33f6224f4f3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4647
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-findings-01-rereview01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview01",
+      "exact_branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+      "exact_head": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+      "worker_dispatches": [
+        "ctx_3ae35200ca22"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-cf-reviews/wp-exec-sw-findings-01-rereview01/manifest.json",
+          "head": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+          "archive_sha256": "0c3453d473a5115e058b26f6c7d4caf497880a83c0fa379523012fe3a49647ad",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4599
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-findings-01-rereview02",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-rereview02",
+      "exact_branch": "ryan-haver/wp-exec-sw-findings-01-rereview02",
+      "exact_head": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+      "worker_dispatches": [
+        "ctx_b4174280ec27"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-findings-review02/wp-exec-sw-findings-01-rereview02/manifest.json",
+          "head": "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7",
+          "archive_sha256": "8de7ea656768dc6b9cbcbd53f89287c601fde64a4917ff5037393948f11072cc",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4598
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-findings-01-review",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-findings-01-review",
+      "exact_branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "exact_head": "00b7b04994a08d45961c67619d402506ba2a65a3",
+      "worker_dispatches": [
+        "ctx_f5097c9b3ca5"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-afreviews/wp-exec-sw-findings-01-review/manifest.json",
+          "head": "00b7b04994a08d45961c67619d402506ba2a65a3",
+          "archive_sha256": "c222c55b2648c101bea951cc31ad9c79f05762bf519b669d4a6314090d2026a5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4596
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-repo-01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01",
+      "exact_branch": "ryan-haver/wp-exec-sw-repo-01",
+      "exact_head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+      "worker_dispatches": [
+        "ctx_20ac5203bd5e",
+        "ctx_e47c86a8e4ee"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-repo-correction01/wp-exec-sw-repo-01/manifest.json",
+          "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+          "archive_sha256": "88c3db7ba3152d8677196abc8f0acc5748ba71390d5f09c94650ead166aa72e3",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4642
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-repo-01-rereview01",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-rereview01",
+      "exact_branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+      "exact_head": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+      "worker_dispatches": [
+        "ctx_fb0e59b59685"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-preparation-20261103/preservation-repo-rereview01/wp-exec-sw-repo-01-rereview01/manifest.json",
+          "head": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+          "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4635
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-exec-sw-repo-01-review",
+      "group": "completed_audit_findings_repository_intakes_and_reviews",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-review",
+      "exact_branch": "ryan-haver/wp-exec-sw-repo-01-review",
+      "exact_head": "218744b088a505461f33065e672559c9edbccae3",
+      "worker_dispatches": [
+        "ctx_d29018e7a4a3"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/mvp-execution-20261102/preservation-repo-review01/wp-exec-sw-repo-01-review/manifest.json",
+          "head": "218744b088a505461f33065e672559c9edbccae3",
+          "archive_sha256": "b919ffb1adfb3e061598c23dbaad8a3a32a6399fe259792bcbc6824692793cf7",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4634
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-flic-proof-refresh",
+      "group": "older_completed_freshness_and_flic_metadata",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-refresh",
+      "exact_branch": "ryan-haver/wp-flic-proof-refresh",
+      "exact_head": "67d80ae997a988ce6d9983d541205e8ca432a57c",
+      "worker_dispatches": [
+        "ctx_33cdb9118f04"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation/wp-flic-proof-refresh/manifest.json",
+          "head": "67d80ae997a988ce6d9983d541205e8ca432a57c",
+          "archive_sha256": "106c777f5419040a345a6b4856c7549fec991b25783b4c3b0f3187ff0d27036e",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4522
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/execution-pinning-20261101/round1-and-round2-preflight-full.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle",
+        "build/p1-fanout-20261028/ci-review-correction-full.bundle",
+        "build/p1-fanout-20261028/ci-review-original-full.bundle",
+        "build/p1-fanout-20261028/fapi034-partial-full.bundle",
+        "build/p1-fanout-20261028/flic-refresh-full.bundle",
+        "build/p1-fanout-20261028/flic-review-correction-full.bundle",
+        "build/p1-fanout-20261028/flic-review-original-full.bundle",
+        "build/p1-fanout-20261028/privacy-c2-full.bundle",
+        "build/p1-fanout-20261028/privacy-c3-full.bundle",
+        "build/p1-fanout-20261028/ws040-full.bundle",
+        "build/p1-round-20261031/fsec007-corrected-full.bundle",
+        "build/p1-round-20261031/fsec007-original-full.bundle",
+        "build/p1-round-20261031/round-final-full.bundle",
+        "build/p1-round-20261031/round-published-full.bundle",
+        "build/worktree-cleanup-20261031/complete-repository-before-cleanup.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-flic-proof-review",
+      "group": "older_completed_freshness_and_flic_metadata",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-flic-proof-review",
+      "exact_branch": "ryan-haver/wp-flic-proof-review",
+      "exact_head": "19bab90f40c9aeebcbfcc6558b240f30da70f6bb",
+      "worker_dispatches": [
+        "ctx_5a3f46883ddf",
+        "ctx_6855b88f3e18"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/p1-fanout-20261028/preservation-flic-review-correction-01/wp-flic-proof-review/manifest.json",
+          "head": "19bab90f40c9aeebcbfcc6558b240f30da70f6bb",
+          "archive_sha256": "50319055600660de4b74a4ef361d8134ffcd472531187fa150805a2dde945c13",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4526
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/execution-pinning-20261101/round1-and-round2-preflight-full.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle",
+        "build/p1-fanout-20261028/fapi034-partial-full.bundle",
+        "build/p1-fanout-20261028/flic-review-correction-full.bundle",
+        "build/p1-fanout-20261028/privacy-c2-full.bundle",
+        "build/p1-fanout-20261028/privacy-c3-full.bundle",
+        "build/p1-fanout-20261028/ws040-full.bundle",
+        "build/p1-round-20261031/fsec007-corrected-full.bundle",
+        "build/p1-round-20261031/fsec007-original-full.bundle",
+        "build/p1-round-20261031/round-final-full.bundle",
+        "build/p1-round-20261031/round-published-full.bundle",
+        "build/worktree-cleanup-20261031/complete-repository-before-cleanup.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-pins-anthropic-20261101",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-anthropic-20261101",
+      "exact_branch": "planning/execution-pins-anthropic-20261101",
+      "exact_head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+      "worker_dispatches": [
+        "ctx_b787493db33d",
+        "ctx_873c66e53a6c",
+        "ctx_369b591f37ba"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-anthropic-20261101/manifest.json",
+          "head": "1b5c679db9d6d1118a6aef12acd6c8afe79065d8",
+          "archive_sha256": "4a1cadbdc9d45d3f4c8b5398358785eeb350376c8072f40531ad3eec31eaa5d5",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4574
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-pins-minimax-20261101",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-minimax-20261101",
+      "exact_branch": "planning/execution-pins-minimax-20261101",
+      "exact_head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+      "worker_dispatches": [
+        "ctx_53a31ed6e909",
+        "ctx_7bc6929a4372",
+        "ctx_0fab2d28029e"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-minimax-20261101/manifest.json",
+          "head": "54739a754edd8eaa4287a84c923c0699f3f0e90c",
+          "archive_sha256": "fca81acd409f445296b1ad813437fccdb8a0bcc66628d2e699348ea34bb69f4d",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4551
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-pins-openai-20261101",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-pins-openai-20261101",
+      "exact_branch": "planning/execution-pins-openai-20261101",
+      "exact_head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+      "worker_dispatches": [
+        "ctx_a153226a879b",
+        "ctx_ea6c27b10a28",
+        "ctx_e04f56080b14"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/execution-pinning-20261101/preservation/wp-pins-openai-20261101/manifest.json",
+          "head": "49d9cfe5aa37f57d7282665db72e2cad901f5ae9",
+          "archive_sha256": "7e313ec2044f0758c025221dc19b458b3baa1fa9cd88cda78275a6bf280ef6f1",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4528
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [
+        "build/execution-pinning-20261101/final-all-refs.bundle",
+        "build/mvp-execution-20261102/correction01-all-refs.bundle",
+        "build/mvp-execution-20261102/handover-all-refs.bundle",
+        "build/mvp-execution-20261102/review-closeout-all-refs.bundle"
+      ],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-qr-r1-anthropic",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-anthropic",
+      "exact_branch": "planning/qr-20261103-r1-anthropic",
+      "exact_head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+      "worker_dispatches": [
+        "ctx_516e9f13d9fa",
+        "ctx_8cbcabfc43d2",
+        "ctx_cf269c96096f"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-anthropic/wp-qr-r1-anthropic/manifest.json",
+          "head": "04ca6c4191ec309bb3a21b2b7447ef1e04b4fdf6",
+          "archive_sha256": "990defcdedd0f70dde2a7e8126b40cfb1218f02cb0c49c4efb840043943a1c38",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4682
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-qr-r1-minimax",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-minimax",
+      "exact_branch": "planning/qr-20261103-r1-minimax",
+      "exact_head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+      "worker_dispatches": [
+        "ctx_55dc79dcba80",
+        "ctx_e407d807e727",
+        "ctx_11e7bd819fd5"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-minimax/wp-qr-r1-minimax/manifest.json",
+          "head": "7b07bf03f5aacbfa910d80ddf05459215c7fa891",
+          "archive_sha256": "8e345a2b8d2232ff8f1bd6ee3783434eea7cfec990a36e2139170bdefde93acf",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4683
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    },
+    {
+      "name": "wp-qr-r1-openai",
+      "group": "completed_planning_panels",
+      "exact_path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qr-r1-openai",
+      "exact_branch": "ryan-haver/wp-qr-r1-openai",
+      "exact_head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+      "worker_dispatches": [
+        "ctx_48e9a1a9c523",
+        "ctx_c9e525312e2e",
+        "ctx_f2421e534169"
+      ],
+      "settlement": "all matched supervised workers released; no app-reported agents",
+      "working_tree": "tracked/untracked clean",
+      "task_ref_publication": "current exact remote head equals local head",
+      "integration": "all paths changed by final task commit have identical canonical content at current integration head; this does not accept inherited pending product source",
+      "preservation_records": [
+        {
+          "manifest": "build/qualification-route-20261103/preservation-round3-openai/wp-qr-r1-openai/manifest.json",
+          "head": "0c88c613ac8c7c7ec21cbb94bf9481db81baf3cc",
+          "archive_sha256": "a4fa332ecbe9fb8a387cbcf138e0cb5a5365d7557caee9b66e2505e32ba581c6",
+          "archive_present": true,
+          "verification_recorded": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "regular_files": 4684
+        }
+      ],
+      "existing_bundle_headers_advertising_exact_head": [],
+      "removal_ready_now": false,
+      "remaining_checks": [
+        "fresh full task-history Git bundle, bundle verify and recovery checkout resolving exact head",
+        "verify full current tracked/untracked/relevant ignored file bytes against preservation and preserve any additions/native artifacts",
+        "reconfirm released state/no new writer and exact remote/local task head immediately before removal",
+        "remove this exact Orca-owned workspace through Orca; preserve remote and recovery refs; no broad pruning"
+      ],
+      "technical_scope_note": "retiring completed checkout does not admit Flic/privacy evidence, close findings or accept source"
+    }
+  ],
+  "keep": [
+    {
+      "name": "integration workspace",
+      "path": "C:/scripts/unfoldedcircle-orei-hdmi-matrix-integration",
+      "branch": "wp-runtime-completion",
+      "reason": "current coordinator/integration and private runtime/unrelated hook artifact protected"
+    },
+    {
+      "name": "wp-api-client-02-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-client-02-c1",
+      "head": "060769b724e7a546b8df22eac82f3b288d9bbbe8",
+      "branch": "ryan-haver/wp-api-client-02-c1",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-api-client-02-c2",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-client-02-c2",
+      "head": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "branch": "ryan-haver/wp-api-client-02-c2",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-api-read-03-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-api-read-03-c1",
+      "head": "1fbfee112cc503ffa273c19dc565092d01fe2d6b",
+      "branch": "ryan-haver/wp-api-read-03-c1",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-API-READ-03-C1/FSEC007_BROWSER_REFRESH.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c1",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c1",
+      "head": "11f305b16c4c95e27682d13df4b02c8de33354d7",
+      "branch": "ryan-haver/wolffish",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C1/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c2",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c2",
+      "head": "615d3c8403b237dd117c8032697c9b58895f9217",
+      "branch": "ryan-haver/wp-sec-data-02-c2",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C2/AUTHOR.md"
+      ]
+    },
+    {
+      "name": "wp-sec-data-02-c3",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sec-data-02-c3",
+      "head": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "branch": "ryan-haver/wp-sec-data-02-c3",
+      "reason": "pending unintegrated API/client/validation or privacy/redaction source/evidence review chain; preserve current workspace",
+      "integration_final_report_differences": [
+        "docs/production/software-waves/SW-SEC-DATA-02-C3/AUTHOR.md"
+      ]
+    }
+  ],
+  "recovery": [
+    {
+      "name": "wp-ev02-name-review",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-ev02-name-review",
+      "reason": "historical completed Dispatches still retain resources with unverifiable missing-status liveness; no exit inference or destructive removal",
+      "dispatches": [
+        {
+          "taskId": "task_c339a58870e0",
+          "dispatchId": "ctx_0f509ee13c00",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        },
+        {
+          "taskId": "task_850114b80411",
+          "dispatchId": "ctx_42a2e7a0a189",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        },
+        {
+          "taskId": "task_515977753dd0",
+          "dispatchId": "ctx_15fe6f7a06be",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wp-sw-api-root",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-sw-api-root",
+      "reason": "historical completed Dispatches still retain resources with unverifiable missing-status liveness; no exit inference or destructive removal",
+      "dispatches": [
+        {
+          "taskId": "task_3853c93e69ef",
+          "dispatchId": "ctx_41f75bc23079",
+          "terminalState": "retained",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "liveness": {
+            "verdict": "unverifiable",
+            "reason": "missing_status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "wp-runtime-persistence-wiring",
+      "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-runtime-persistence-wiring",
+      "reason": "Orca entry/folder remains with previous EBUSY removal error, but absent from Git worktree registry; requires exact managed recovery, not blind folder deletion",
+      "folder_exists": true
+    }
+  ],
+  "fleet": {
+    "total": 134,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 134,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMjAxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODowMDoxOSIsImRpc3BhdGNoSWQiOiJjdHhfZTAxY2NhMTNiNWZlIiwiZGF0YWJhc2VJZCI6NzMxfX0"
+      },
+      {
+        "limit": 100,
+        "total": 134,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 128,
+      "retained": 6
+    }
+  },
+  "retained_resources_warning": "six historical retained rows are not six active workers; specific unverifiable resources remain protected",
+  "publication_and_cleanup": "No branch/worktree removal or bulk prune performed by this assessment; later cleanup retains exact task refs and original failed/private evidence"
+}

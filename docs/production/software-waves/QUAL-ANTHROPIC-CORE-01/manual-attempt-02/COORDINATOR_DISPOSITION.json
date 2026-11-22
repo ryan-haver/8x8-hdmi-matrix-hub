@@ -1,0 +1,92 @@
+{
+  "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+  "status": "FAIL",
+  "pin": "QUAL-ANTHROPIC-CORE-01",
+  "attempt": 2,
+  "candidate_model": "claude-opus-4-7/high",
+  "candidate_family": "Anthropic",
+  "evaluator_report_commit": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+  "independent_judgement_commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+  "independent_judge_family": "OpenAI",
+  "independent_judge_model": "gpt-6-astra/high",
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "candidate_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "per_axis_verdicts": {
+    "provenance": "fail",
+    "invariants": "pass",
+    "counterexamples": "pass",
+    "behavior_and_tools": "pass",
+    "calibration": "fail",
+    "review_quality": "fail"
+  },
+  "qualified_domains": [],
+  "mandatory_rule": "everyaxis must pass; provenance/calibration/review_quality fail, no bounded domain granted",
+  "material_findings": {
+    "J1": "060769 is in required four-commit window; evaluator claimed outside/notreviewed and actual tooltrace lacks allthree changed source reports/fullnine-path diff. Independentjudge inspection cannot retroactively repair missing evaluator coverage",
+    "J2": "Claimedpublished/shipped sidecar is ignored/private, exactreportcommit tracks onlyAUTHOR; no publishedproof or privacyclearance",
+    "J3": "Docs parent has106files, notone; actualF-API-034population fourrecords includingtwo blockedcontrols, notsix; evidence scope materially misstated"
+  },
+  "verified_strengths": "54focused/489docs originaldirectexits/JUnit/logidentities and all283externalfilebytes corroborated, zero mismatch; invariants/counterexamples/behavior_and_tools pass. Improvednewcapture does not repair originalattempt1lostbytes or grantqualification",
+  "other_limits": "Minor11vs12declaration/fivevsfourcounterfactual countslips, -I effectivePythonsettings explanation, numericexit1 versus unprovedterminationcause and absolute sideeffect claim calibrated byjudge; no new product-source defect established",
+  "first_attempt": {
+    "status": "FAIL",
+    "evaluator": "97c47be3670df297b2a7ac2696350615b88846c1",
+    "judge": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+    "disposition_sha256_unchanged": "4a9f1da611d201cce70d17c2149a1e52441338da1a97241c2f3567929200d0fd"
+  },
+  "owner_approved_attempt_and_judge_consumed": true,
+  "further_retry_authorized": false,
+  "automatic_author_rewrite_or_new_judgement_authorized": false,
+  "source_acceptance_granted": false,
+  "review_admission": "No qualified domain; RV-API034/RV-WS040/RV-PRIVACY-CHAIN and dependentsourceacceptance remainheld until a suitable actual eligible qualified different-family route is established",
+  "source_rejection": "This is evaluation-quality FAIL, not rejection/acceptance of candidateproductsource and not a newlyestablishedproductdefect",
+  "judge_settlement": {
+    "observed_utc": "2026-11-03T17:34:10.902069+00:00",
+    "review_commit": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+    "review_base": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+    "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/REVIEW.md",
+    "bytes": 18514,
+    "sha256": "23f0676cdbcb3cda998b8ef284199da1e57d99fc5c8a9281995bcaac884678e2",
+    "task_id": "task_c8b55f48fcff",
+    "dispatch_id": "ctx_6f1b83d8f673",
+    "worktree": "wp-exec-qual-anthropic-core-01-manual02-review",
+    "branch": "ryan-haver/wp-exec-qual-anthropic-core-01-manual02-review",
+    "verdict": "FAIL mandatoryprovenance/calibration/review_quality; invariants/counterexamples/behavior_and_tools PASS, no qualified domain",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a1a26f-1348-71e3-94e0-e1a0c5e66e0e",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 1088133,
+      "sha256": "b7e23d43d24c1ce22f14275fee2454711629629c12973e7634f2f992b9ea8754"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "integration_commit": "a87df0927d857ae1bf40687b0e9180bb8ab7de3f",
+    "archives": [
+      {
+        "archive_sha256": "5f2342ca74e679eb5b4a9b3fa06bded1071d2e1e690ac6a543ceb20725678f6b",
+        "archive_bytes": 206071336,
+        "regular_files": 4608,
+        "regular_bytes": 295604926,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      {
+        "archive_sha256": "628223a8a01683b3f12eaafd09d8f31b11e357ffa863cdf3d31367b716e6c5f7",
+        "archive_bytes": 67537,
+        "regular_files": 106,
+        "regular_bytes": 167143,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    ]
+  },
+  "evaluator_settlement": "released; fullnative/workspace/temp verifiedpreserved and exacttaskrefpublished, currentretainedreadonly",
+  "cleanup": "all relevant exactworktrees explicitly retainedreadonly, no destructivecleanup",
+  "independent_preparation": "boundedinventory/findings/CIattribution/preservation-gap/repositoryearlyintake documentation accepted only; Flic/HA checklist prepared without execution/signoff",
+  "owner_gates": "original3Tronclosed; privacy/source/physical/HIL/72h/week/finalversion/artifactrelease held/open; all61findings unchanged",
+  "publication": "scopeddisposition committed/pushed with exactremote/local equality receiptoutside referencedcommit"
+}

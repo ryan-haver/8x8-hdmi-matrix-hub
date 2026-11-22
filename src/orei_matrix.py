@@ -25,11 +25,13 @@ status read. Only when that health read fails too is the link marked lost.
 import asyncio
 import copy
 import datetime
+import inspect
 import json
 import logging
 import os
 import random
 import re
+import socket
 import ssl
 import time
 from collections.abc import Awaitable, Callable
@@ -38,11 +40,12 @@ from enum import IntEnum, StrEnum
 from typing import Any, TypeVar
 
 import aiohttp
+from aiohttp.abc import AbstractResolver
 from pyee.asyncio import AsyncIOEventEmitter
 
 # Import Telnet client for CEC and cable detection
 try:
-    from ._task_supervisor import cancel_and_wait, create_supervised_task
+    from ._task_supervisor import create_supervised_task
     from .device_codes import (
         CEC_INPUT_COMMANDS,
         CEC_OUTPUT_COMMANDS,
@@ -65,9 +68,16 @@ try:
     from .device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from .telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
+    from .telnet_client import (
+        CecOutcome,
+        MatrixStatus,
+        TelnetClient,
+        TelnetState,
+        resolve_matrix_endpoints,
+        validate_matrix_target_syntax,
+    )
 except ImportError:
-    from _task_supervisor import cancel_and_wait, create_supervised_task  # type: ignore[no-redef]
+    from _task_supervisor import create_supervised_task  # type: ignore[no-redef]
     from device_codes import (  # type: ignore[no-redef]
         CEC_INPUT_COMMANDS,
         CEC_OUTPUT_COMMANDS,
@@ -90,7 +100,14 @@ except ImportError:
     from device_codes import (
         LCD_TIMEOUT_MODES as DEVICE_LCD_MODES,
     )
-    from telnet_client import CecOutcome, MatrixStatus, TelnetClient, TelnetState
+    from telnet_client import (  # type: ignore[no-redef]
+        CecOutcome,
+        MatrixStatus,
+        TelnetClient,
+        TelnetState,
+        resolve_matrix_endpoints,
+        validate_matrix_target_syntax,
+    )
 
 _LOG = logging.getLogger(__name__)
 
@@ -137,6 +154,29 @@ def _matrix_tls_policy() -> bool | ssl.SSLContext | aiohttp.Fingerprint:
     if ca_cert:
         return ssl.create_default_context(cafile=ca_cert)
     return os.environ.get("OREI_VERIFY_SSL", "false").lower() == "true"
+
+
+class _ValidatedMatrixResolver(AbstractResolver):
+    """Resolve matrix hostnames once per connect and enforce SSRF destination policy."""
+
+    async def resolve(self, host: str, port: int = 0, family: int = socket.AF_UNSPEC) -> list[Any]:
+        effective_port = port if port > 0 else 443
+        addresses = await resolve_matrix_endpoints(host, effective_port, family=family)
+        return [
+            {
+                "hostname": host,
+                "host": str(addr),
+                "port": effective_port,
+                "family": socket.AF_INET if addr.version == 4 else socket.AF_INET6,
+                "proto": socket.IPPROTO_TCP,
+                "flags": socket.AI_NUMERICHOST | socket.AI_NUMERICSERV,
+            }
+            for addr in addresses
+        ]
+
+    async def close(self) -> None:
+        return None
+
 
 # Connection retry configuration
 MAX_RETRIES = int(os.environ.get("OREI_MAX_RETRIES", "5"))
@@ -360,6 +400,7 @@ class OreiMatrix:
         #: ``not_found`` (the name does not resolve), ``refused`` (no connection), ``other``; None after success.
         self.login_failure: str | None = None
         self._session: aiohttp.ClientSession | None = None
+        self._owned_session: Any = None
         self._state = ConnectionState.DISCONNECTED
         # Typed as Any: pyee annotates event names as `str`, but this codebase
         # keys events by the `Events` IntEnum (any hashable works at runtime).
@@ -375,6 +416,7 @@ class OreiMatrix:
         self._retry_count = 0
         self._reconnect_task: asyncio.Task | None = None
         self._intentional_disconnect = False
+        self._disconnect_task: asyncio.Task[None] | None = None
         # Single-flight connect / re-login (BE-11): concurrent callers await
         # the attempt already in progress.
         self._connect_task: asyncio.Future[bool] | None = None
@@ -416,6 +458,9 @@ class OreiMatrix:
         self._status_cache_ttl = float(os.environ.get("OREI_STATUS_CACHE_TTL", "3.0"))
         self._cache_generation = 0
         self._inflight: dict[str, tuple[int, asyncio.Future[Any]]] = {}
+        # The join map can replace an older cache generation while its fetch
+        # is still running. Keep lifetime ownership separately from sharing.
+        self._fetch_tasks: set[asyncio.Future[Any]] = set()
 
         self._output_status_cache: dict[str, Any] | None = None
         self._output_status_cache_time: float = 0.0
@@ -488,7 +533,7 @@ class OreiMatrix:
         For entry points whose first ``connect()`` failed (matrix offline at
         startup). No-op when connected or already reconnecting.
         """
-        if self.connected:
+        if self.connected or self._disconnect_pending():
             return
         self._intentional_disconnect = False
         self._set_state(ConnectionState.BACKOFF)
@@ -549,6 +594,8 @@ class OreiMatrix:
         This is called automatically after HTTP authentication succeeds.
         Telnet failure is non-fatal - HTTP-only operation is supported.
         """
+        if self._intentional_disconnect:
+            return False
         if self._telnet and self._telnet.connected:
             return True
 
@@ -556,6 +603,8 @@ class OreiMatrix:
         # reconnect loop) before replacing it, or it keeps running and
         # reconnecting in the background.
         await self._dispose_telnet()
+        if self._intentional_disconnect:
+            return False
 
         client: TelnetClient | None = None
         try:
@@ -665,6 +714,11 @@ class OreiMatrix:
 
         :return: True if connection successful
         """
+        if self._disconnect_pending():
+            return False
+        # Only an explicit connect/start may reopen an intentionally closed
+        # transport. Reads and command retries do not clear this fence.
+        self._intentional_disconnect = False
         task = self._connect_task
         if task is None or task.done():
             task = asyncio.ensure_future(self._connect_once())
@@ -689,23 +743,47 @@ class OreiMatrix:
 
     async def _connect_once(self) -> bool:
         """One login attempt, then Telnet. Used through :meth:`connect`."""
-        self._intentional_disconnect = False
+        if self._intentional_disconnect:
+            return False
         reconnecting = self._reconnect_task is not None and not self._reconnect_task.done()
         self._set_state(ConnectionState.CONNECTING)
         try:
             protocol = "https" if self.use_https else "http"
             _LOG.info("Connecting to OREI Matrix at %s://%s:%d", protocol, self.host, self.port)
+            validate_matrix_target_syntax(self.host, self.port)
+
+            if self._session is not None and self._session is self._owned_session:
+                prior_session = self._session
+                self._session = None
+                self._owned_session = None
+                close_fn = getattr(prior_session, "close", None)
+                if callable(close_fn):
+                    try:
+                        maybe_coro = close_fn()
+                        if inspect.isawaitable(maybe_coro):
+                            await maybe_coro
+                    except Exception as close_ex:
+                        _LOG.warning("Error closing previous HTTP session: %s", close_ex)
 
             # A fingerprint takes precedence over a custom CA; both opt in to TLS verification.
             if not self._session:
+                resolver = _ValidatedMatrixResolver()
                 if self.use_https:
                     tls_policy = _matrix_tls_policy()
-                    connector = aiohttp.TCPConnector(ssl=tls_policy)
+                    connector = aiohttp.TCPConnector(
+                        ssl=tls_policy,
+                        resolver=resolver,
+                        use_dns_cache=False,
+                    )
                     if tls_policy is False:
                         _LOG.warning("SSL verification disabled for matrix connection")
                 else:
-                    connector = None
+                    connector = aiohttp.TCPConnector(
+                        resolver=resolver,
+                        use_dns_cache=False,
+                    )
                 self._session = aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar(), connector=connector)
+                self._owned_session = self._session
 
             _LOG.debug("Authenticating with matrix...")
             logged_in = await self._login()
@@ -716,6 +794,8 @@ class OreiMatrix:
             self.events.emit(Events.ERROR, str(ex))
             logged_in = False
 
+        if self._intentional_disconnect:
+            return False
         if not logged_in:
             self._set_state(ConnectionState.BACKOFF if reconnecting else ConnectionState.DISCONNECTED)
             return False
@@ -778,6 +858,8 @@ class OreiMatrix:
 
     async def _relogin(self) -> bool:
         """Re-authenticate once (single-flight) after the session was lost."""
+        if self._intentional_disconnect:
+            return False
         task = self._relogin_task
         if task is None or task.done():
             task = asyncio.ensure_future(self._login())
@@ -799,9 +881,15 @@ class OreiMatrix:
             return _HttpResult("transport", error="No HTTP session")
         _LOG.debug("Sending POST to %s: %s", self._url(), payload if payload.get("comhead") != "login" else "login")
         async with self._command_lock:
+            if self._intentional_disconnect:
+                return _HttpResult("transport", error="Matrix intentionally disconnected")
             try:
+                validate_matrix_target_syntax(self.host, self.port)
                 async with session.post(
-                    self._url(), json=payload, timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT)
+                    self._url(),
+                    json=payload,
+                    timeout=aiohttp.ClientTimeout(total=HTTP_TIMEOUT),
+                    allow_redirects=False,
                 ) as response:
                     status = response.status
                     # Matrix returns text/plain, so read as text then parse JSON
@@ -847,13 +935,61 @@ class OreiMatrix:
         Intentional: no reconnect is scheduled afterwards.
         """
         self._intentional_disconnect = True
-        await cancel_and_wait(self._reconnect_task, "matrix_reconnect")
-        self._reconnect_task = None
-        for attr in ("_connect_task", "_relogin_task"):
-            pending = getattr(self, attr)
-            if isinstance(pending, asyncio.Task):
-                await cancel_and_wait(pending, attr)
-            setattr(self, attr, None)
+        task = self._disconnect_task
+        if task is None or task.done():
+            task = asyncio.create_task(self._disconnect_once(), name="matrix_disconnect")
+            self._disconnect_task = task
+
+        # A cancelled waiter must not abandon resource cleanup or cancel it
+        # for another disconnect caller. Defer its cancellation until the
+        # bounded, matrix-owned cleanup has actually settled.
+        cancelled = False
+        while not task.done():
+            try:
+                await asyncio.shield(task)
+            except asyncio.CancelledError:
+                cancelled = True
+        task.result()
+        if cancelled:
+            raise asyncio.CancelledError
+
+    def _disconnect_pending(self) -> bool:
+        """Also fence reopening after a bounded drain reports stuck work."""
+        return (
+            self._disconnect_task is not None and not self._disconnect_task.done()
+        ) or (
+            self._intentional_disconnect
+            and any(not task.done() for task in self._owned_transport_tasks())
+        )
+
+    def _owned_transport_tasks(self) -> set[asyncio.Future[Any]]:
+        return self._fetch_tasks | {
+            task for task in (self._reconnect_task, self._connect_task, self._relogin_task)
+            if task is not None
+        }
+
+    async def _disconnect_once(self) -> None:
+        # Fence first, then cancel every generation together. In particular a
+        # nested cable/output fetch must not outlive its cancelled poller.
+        owned = {task for task in self._owned_transport_tasks() if not task.done()}
+        for task in owned:
+            task.cancel()
+        pending: set[asyncio.Future[Any]] = set()
+        try:
+            if owned:
+                _, pending = await asyncio.wait(owned, timeout=2.0)
+        finally:
+            await self._dispose_transport()
+            for attr in ("_reconnect_task", "_connect_task", "_relogin_task"):
+                task = getattr(self, attr)
+                if task is None or task.done():
+                    setattr(self, attr, None)
+        if pending:
+            # Keep references and the disconnect fence; never claim a drain
+            # succeeded or permit a new session while old work is still live.
+            raise TimeoutError("Matrix transport tasks did not stop during disconnect")
+
+    async def _dispose_transport(self) -> None:
 
         # Disconnect Telnet first
         await self._dispose_telnet()
@@ -890,13 +1026,17 @@ class OreiMatrix:
         self._last_error = f"Matrix rejected '{comhead}' (result={result!r})"
         return False
 
+    def invalidate_preset_cache(self) -> None:
+        """Expire slot readback without fetching slots or changing write generations."""
+        self._preset_cache = None
+
     def _invalidate_status_caches(self) -> None:
         self._cache_generation += 1
         self._status_cache = None
         self._output_status_cache = None
         self._input_status_cache = None
         self._cable_status_cache = None
-        self._preset_cache = None
+        self.invalidate_preset_cache()
 
     async def _send_command(self, command: dict, retry_on_failure: bool = True) -> tuple[bool, dict | None]:
         """
@@ -919,6 +1059,8 @@ class OreiMatrix:
         :param retry_on_failure: Whether to re-login and retry once on a session failure
         :return: Tuple of (success, response_dict)
         """
+        if self._intentional_disconnect:
+            return False, None
         if not self._session or not self.connected:
             _LOG.warning("No session or not connected, attempting to connect...")
             if not await self.connect():
@@ -1306,8 +1448,9 @@ class OreiMatrix:
             return self._status_cache.copy()
         if force_refresh:
             # A caller wants the matrix as it is now (e.g. a /ws get_status):
-            # the next preset catalog read goes to the matrix as well.
-            self._preset_cache = None
+            # subsequent preset and CEC enable decisions must read it as well.
+            self.invalidate_preset_cache()
+            self.clear_cec_cache()
         return (await self._single_flight("status", self._fetch_status)).copy()
 
     async def _fetch_status(self) -> dict[str, Any]:
@@ -1355,6 +1498,8 @@ class OreiMatrix:
         generation) starts its own fetch instead of joining one that may have
         read the old state.
         """
+        if self._intentional_disconnect:
+            raise asyncio.CancelledError
         generation = self._cache_generation
         entry = self._inflight.get(key)
         if entry is not None and entry[0] == generation and not entry[1].done():
@@ -1362,8 +1507,12 @@ class OreiMatrix:
         else:
             task = asyncio.ensure_future(fetch())
             self._inflight[key] = (generation, task)
+            self._fetch_tasks.add(task)
 
             def _forget(done: asyncio.Future, key: str = key) -> None:
+                self._fetch_tasks.discard(done)
+                if not done.cancelled():
+                    done.exception()  # retrieve failures even if every waiter left
                 current = self._inflight.get(key)
                 if current is not None and current[1] is done:
                     del self._inflight[key]

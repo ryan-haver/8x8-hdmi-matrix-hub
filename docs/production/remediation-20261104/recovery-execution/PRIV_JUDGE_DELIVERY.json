@@ -1,0 +1,130 @@
+{
+  "observed_utc": "2026-11-04T12:55:48.038536+00:00",
+  "task_id": "task_32b607a54b40",
+  "dispatch_id": "ctx_aaa1ff6c95b5",
+  "worker_outcome": "succeeded: actual judgment delivered, NOT a failed launch",
+  "assessment": "FAIL / NOT_QUALIFIED",
+  "axes": {
+    "provenance": "PASS",
+    "dataflow_invariants": "FAIL",
+    "counterexamples": "PASS",
+    "behavior_and_tools": "FAIL",
+    "calibration": "FAIL",
+    "review_quality": "FAIL"
+  },
+  "qualification_granted": false,
+  "candidate_commit": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+  "source_tip": "5385325722a39e6dd766352489f828f5e54b56d5",
+  "judge_report_commit": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb",
+  "report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/REVIEW.md",
+  "report_sha256": "adb4d2b5a4a00364add15c549e32ade7f30c82212ebd596c4fb9e02987d0ef5a",
+  "native": {
+    "session": "01a1a67f-592d-7202-b8dc-3e9ffce10f86",
+    "model": "gpt-6-astra",
+    "effort": "high native",
+    "bytes": 4734634,
+    "sha256": "32427d325377cc258c5604b3160cfd8c0a87230eff33877793af7f84fd159c2b",
+    "unassigned_helpers_observed": []
+  },
+  "actual_checks": {
+    "j01-inputs": {
+      "exit": 0,
+      "junit": []
+    },
+    "j02-boundaries": {
+      "exit": 0,
+      "junit": []
+    },
+    "j03-writer-negative": {
+      "exit": 1,
+      "junit": []
+    },
+    "j04-originals": {
+      "exit": 0,
+      "junit": []
+    },
+    "j05-layout": {
+      "exit": 1,
+      "junit": []
+    },
+    "j06-source-native": {
+      "exit": 0,
+      "junit": []
+    },
+    "j07-ha-boundaries": {
+      "exit": 0,
+      "junit": [
+        {
+          "file": "junit.xml",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "j08-source-checks": {
+      "exit": 0,
+      "junit": []
+    },
+    "j09-docs": {
+      "exit": 0,
+      "junit": [
+        {
+          "file": "junit.xml",
+          "tests": 489,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "j10-final-audit": {
+      "exit": 0,
+      "junit": []
+    },
+    "j11-delivery": {
+      "exit": 0,
+      "junit": []
+    }
+  },
+  "release": "positively released; completed judgment and released resource projection independently verified",
+  "preservation": [
+    {
+      "name": "priv-m3-judge",
+      "files": 164,
+      "links": 0,
+      "archive_sha256": "d158768121811717b4f33be1f21dc0faade6df6a5e8fe6225b5d1edb48d753ee",
+      "archive_bytes": 97246,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "name": "wp-recovery-privacy-m3-judge",
+      "files": 4515,
+      "links": 0,
+      "archive_sha256": "5b1f85a5d4b47c0e4ddd2c3d146245b0680c83a4c7f49e51701d38b8adf05c35",
+      "archive_bytes": 206647892,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "task_publication": {
+    "observed_utc": "2026-11-04T12:52:09.900430+00:00",
+    "ref": "refs/heads/qualification/recovery-privacy-m3-judge",
+    "local_head": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb",
+    "remote_head": "1b2b7c5f0ff868c5367a8d2c014807f86e61d1cb",
+    "exact_equal": true,
+    "normal_push": true
+  },
+  "coordinator_disposition": "Accept exact negative judgment and preserve all actual provenance/failures. Mandatory all6PASS not met; no narrow automatic partial qualification. No candidate rewrite/retry/extra judge or same-family source acceptance. One authorized M3candidate/judge pair exhausted; prior Opus attempt remains historical FAIL.",
+  "findings": "Useful real F1Low public-field masking introduced by C4 (notC1) is retained as source-finding input. False whole-record persistence and model-dispatch claims, missing claimed C1-C3 semantic reads, unproved named-default persistence in p11, overwritten original outputs and authored outside-root exports substantiate four failed axes. Counterexamples receive actual partial credit without retroactively imposing nonzero-exit convention.",
+  "privacy_next": "Qualified different-family full-chain source review/reportquality evaluation HELD; no qualified fallback currently verified. No original-author privacy correction reserve consumed or source intake/admission from unqualified assessment. Any exhausted competence attempt expansion remains owner-only; do not route around with new task/model alias.",
+  "alternatives_discovery": {
+    "Gemini_CLI": "Installed but supported quota status unavailable: OAuth disabled in settings; no enable/login/accountchange attempted",
+    "Antigravity": "Reported quota statusok, weekly used80/remaining20, sessionused8. Below30needs suitable verifiedqualifiedfallback; no such privacy reviewer. Underlying alias/helper identity unresolved in existing localpolicy. agyCLIpresent/helpread, no inference of qualified independence/access from catalog/alias.",
+    "OpenAI": "86%weeklyremaining, actual privacy source authorfamily cannot independently accept its own source",
+    "Anthropic": "75%weeklyremaining, prior bounded privacy competenceFAIL cannot selfpromote; scoped API-refusal review competence unchanged",
+    "MiniMax": "66%weeklyremaining, actual newprivacy domainFAIL unchanged; planning/inventory history not qualification",
+    "DeepSeek": "Owner exhaustedcredit/unavailable, no dispatch/spend."
+  },
+  "remaining": "WS-C01 runtime reviewPASS with C01-R01 wordingOPEN, D6target/wiringHELD, API034M-1/WS040/combined/evidence/HA/visual/hardware/72h/week/finalartifact/version/release gates remain. No fullGitbundle/destructivecleanup."
+}

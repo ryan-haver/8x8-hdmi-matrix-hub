@@ -30,8 +30,8 @@ class KeyboardShortcuts {
         KeyboardShortcuts.register('3', 'Switch to Outputs view', () => {
             document.querySelector('[data-tab="outputs"]')?.click();
         });
-        KeyboardShortcuts.register('4', 'Switch to Scenes view', () => {
-            document.querySelector('[data-tab="scenes"]')?.click();
+        KeyboardShortcuts.register('4', 'Switch to Profiles view', () => {
+            document.querySelector('[data-tab="profiles"]')?.click();
         });
 
         // Actions
@@ -39,9 +39,8 @@ class KeyboardShortcuts {
             window.profileEditor?.openNew();
         });
         KeyboardShortcuts.register('s', 'Open settings', () => {
-            if (window.settingsPanel) {
-                window.settingsPanel.toggle();
-            }
+            // The General settings drawer: the settings surface the side menu opens.
+            window.generalDrawer?.toggle();
         });
         KeyboardShortcuts.register('r', 'Refresh status', () => {
             if (window.app) {
@@ -164,8 +163,13 @@ class KeyboardShortcuts {
         };
         
         const id = KeyboardShortcuts.keyToId(parsed);
-        const shortcut = KeyboardShortcuts.shortcuts.get(id);
-        
+        let shortcut = KeyboardShortcuts.shortcuts.get(id);
+        if (!shortcut && parsed.shift && parsed.key.length === 1 && !/[a-z0-9]/.test(parsed.key)) {
+            // A symbol typed with Shift ("?" is Shift+/ on most layouts) is the
+            // shortcut registered for that symbol: Shift only produced the character.
+            shortcut = KeyboardShortcuts.shortcuts.get(KeyboardShortcuts.keyToId({ ...parsed, shift: false }));
+        }
+
         if (shortcut) {
             e.preventDefault();
             shortcut.handler(e);

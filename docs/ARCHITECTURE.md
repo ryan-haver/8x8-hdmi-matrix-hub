@@ -1,11 +1,12 @@
 # Architecture
 
-The shipped runtime starts `OreiMatrix` and `RestApiServer` directly from
-`run.py`; UC mode invokes `src/driver.py` in the same process through `runpy`.
-`src/hub/core/matrix_service.py`, `src/hub/domain/action_runner.py`, the
-integration loader and persistence migrations are implemented framework
-libraries with pending runtime wiring. OpenAPI generation is connected to the
-REST app at `/api/openapi.json` and `/api/docs`.
+`run.py` is a compatibility entry point to `hub.cli`; the installed
+`orei-matrix-driver` console command uses the same asynchronous composition
+root. Core and UC modes share one `OreiMatrix` client, `MatrixService`,
+persistence barrier, REST server,
+event state and action runner. UC is an optional adapter, not the legacy
+`src/driver.py` runtime. OpenAPI and Swagger are served at `/api/openapi.json`
+and `/api/docs`.
 
 The [feature registry](validation/features.yaml) and [ledger](validation/LEDGER.md)
 record proof levels. The release hardware campaign has no completed V4/V5
@@ -13,58 +14,48 @@ records yet; see [the validation report](validation/VALIDATION_REPORT.md).
 
 ---
 
-## 1. Shipped runtime — what `python run.py` actually does
+## 1. Runtime — what `python run.py` actually does
 
 ```
-                  ┌─────────────────────────────────────┐
-                  │           web/  (Focused UI: /ui,   │
-                  │           /kiosk, PWA, /manifest.json)│
-                  └────────────────┬────────────────────┘
-                                   │ REST + /ws
-                                   ▼
-                  ┌─────────────────────────────────────┐
-                  │  src/rest_api/  (22 modules)          │
-                  │  src/rest_api/app.py::create_rest_app│
-                  │  src/rest_api/RestApiServer.start    │  ← actually instantiated
-                  └────────────────┬────────────────────┘
-                                   ▼
-                  ┌─────────────────────────────────────┐
-                  │  src/orei_matrix.py  OreiMatrix      │  ← the matrix client
-                  │  src/telnet_client.py                │     (HTTPS + Telnet)
-                  └────────────────┬────────────────────┘
-                                   ▼
-                           ┌───────────────┐
-                           │  OREI Matrix  │
-                           │  HTTPS : 443  │
-                           │  Telnet : 23  │
-                           └───────────────┘
+             run.py / orei-matrix-driver
+                         │
+                         ▼
+        hub.cli → startup storage migration barrier
+                         │
+                         ▼
+   IntegrationLoader + ActionRunner + MatrixService
+                         │ shared client
+                         ▼
+        REST API + WebSocket + optional adapters
+                         │
+                         ▼
+              OreiMatrix → OREI Matrix
 ```
 
 ### Entry points
 
 | Mode                        | What runs                                                       | Where                                          |
 | --------------------------- | --------------------------------------------------------------- | ---------------------------------------------- |
-| `UC_ENABLED` unset / `false` | `python run.py` → `run_core()` → `OreiMatrix(...)` and `RestApiServer(host, port)`. REST API, `/ui`, `/kiosk`, `/ws` listen on `API_PORT` (default `8080`). | `run.py::run_core` (line ~266 onward)        |
-| `UC_ENABLED=true`           | `python run.py` → `run_uc()` → `runpy.run_path("src/driver.py", run_name="__main__")`. The legacy UC driver loads `driver.json`, starts the integration's WebSocket on `9095`, and runs the same `OreiMatrix` + `RestApiServer` underneath. | `run.py::run_uc`; `src/driver.py`             |
+| `UC_ENABLED` unset / `false` | `python run.py` or `orei-matrix-driver` → shared runtime composition. REST API, `/ui`, `/kiosk`, `/ws` listen on `API_PORT` (default `8080`); UC is not imported. | `hub.cli`, `hub.runtime.composition` |
+| `UC_ENABLED=true`           | The same composition adds the Remote adapter and its SDK WebSocket (default `9095`) alongside REST. | `hub.runtime.integrations`, `hub.integrations.unfolded_circle` |
 
-Both branches start `RestApiServer` straight from `src/rest_api/`,
-**not** from `hub.integrations.IntegrationLoader` and **not** through
-`hub.core.MatrixService`. The hub framework classes are not in the
-imports of either path. This is the line between "shipped" and
-"framework library" that this document watches.
+Both modes instantiate `RestApiServer` with the shared runtime, which owns
+`MatrixService`, `ActionRunner`, `HubClientLocal`, and the enabled
+`IntegrationLoader`. REST health/UI starts before the runtime's initial matrix
+connect. `src/driver.py` remains a legacy reference and is not started.
 
 ### Persistence — shipped path
 
-The shipped runtime persists data through `src/persistence.py` (and the
-hand-rolled `system_shortcuts.json → shortcuts.json` rename and the
-`scene_manager.py` + `device_settings.py` + `themes.py` + `ui.py`
-managers in `src/rest_api/`), **not** through
-`src/hub/persistence/migrations.py`. `hub.persistence` is a framework
-library that ships the file-versioning machinery; it is intentionally
-not yet what `OreiMatrix` state or the existing JSON stores call. The
-`tests/test_hub_persistence_openapi_env.py` exercises the
-framework's migrations in isolation; that is not the same thing as
-saying every persisted JSON today is `schema_version`-wrapped.
+`hub.persistence.startup.prepare_runtime_storage()` runs before managers,
+REST stores or Flic are constructed. It migrates supported legacy files with
+backups and blocks writes when inputs are corrupt, ambiguous, unsafe or from
+a future schema. Managed JSON files carry a top-level `schema_version`; the
+current migration schema is version 2, and older files migrate through ordered
+steps after a backup. Unknown keys are retained. `src/persistence.py` still
+resolves compatible data paths
+and copies selected legacy preferences; it no longer searches other checkouts
+for catalogs. Not every managed JSON file is schema-wrapped: per-file reader
+and migration behavior is described in the storage contract below.
 
 ### OpenAPI spec — shipped path
 
@@ -85,7 +76,13 @@ Generated reference: [`docs/API_REFERENCE.md`](API_REFERENCE.md)
 
 ---
 
-## 2. Framework layer — what `src/hub/` ships, what is not yet wired
+## 2. Shared runtime and framework modules
+
+The composition is organized in `src/hub/core`, `src/hub/domain`,
+`src/hub/integrations`, and `src/hub/persistence`; these modules are active
+runtime components. The fresh integrated software campaign passed for
+`4adbc136`; its scope and limits are recorded in the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
 
 > Modules: `hub.core.event_bus`, `hub.core.matrix_service`,
 > `hub.core.models`, `hub.core.name_store`,
@@ -94,34 +91,26 @@ Generated reference: [`docs/API_REFERENCE.md`](API_REFERENCE.md)
 > `hub.integrations.hub_client_local`, `hub.integrations.hub_client_http`,
 > `hub.persistence.migrations`, `hub.openapi`, `hub.env`.
 
-The `src/hub/` package is the unification Phase 4 (WP-C3) target. The
-tests live under `tests/test_hub_*_integration.py`,
-`tests/test_hub_core_matrix_service.py`,
-`tests/test_hub_domain_action_runner.py`,
-`tests/test_hub_persistence_openapi_env.py` and
-`tests/test_hub_integrations_framework.py`, and they pass against the
-hub modules in isolation. **What is not yet wired is the rest of the
-runtime calling those classes instead of `OreiMatrix` / `RestApiServer`
-directly.** That is the next consolidation step on the WP-G1/G2 path
-and is tracked under `BE-*` / `API-*` in
-[`docs/REMEDIATION_PLAN.md`](REMEDIATION_PLAN.md).
+The runtime uses the `src/hub/` modules through the composition root. Unit
+tests continue to exercise component contracts directly; startup and
+cross-surface tests cover their wiring. The two scopes are distinct. The
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md) tracks
+fresh integrated campaign evidence for the exact candidate commit.
 
 ### `hub.core` — framework owner of matrix state
 
 #### `MatrixService` (`hub.core.matrix_service`)
 
-* **Status:** framework library; unit-tested; **not yet instantiated
-  by `run.py` or `src/driver.py`**. The shipped code path passes
-  `OreiMatrix` and `OreiMatrix.get_full_status()` straight to REST
-  handlers.
-* **Role (intended):** the *one* component that would own the matrix
-  client and the last-known snapshot, with the EventBus publishing
-  each change on a topic.
-* **Public methods (all `async`):** `switch(input, output=None)`,
-  `switch_all(input)`, `recall_preset(slot)`, `save_preset(slot)`,
-  `power_on()`, `power_off()`, `set_input_name`,
-  `set_output_name`, `set_preset_name`, `get_video_status`,
-  `get_input_status`, `get_output_status`, `get_all_cable_status`.
+* **Status:** instantiated by the shared composition as matrix state owner
+  and publisher of cached changes.
+* **Role:** owns the single matrix client and last-known snapshot. REST and
+  integrations consume the same service state through adapters.
+* **Public methods:** async `connect()`, `disconnect()`,
+  `refresh_snapshot()`, `switch(input_num, output_num=None)`,
+  `recall_preset(slot)`, `save_preset(slot)`, `set_power(on)`,
+  `rename_port(kind, port, name)`, `rename_preset(slot, name)`; synchronous
+  `snapshot()`. Raw status reads such as `get_video_status()` belong to the
+  wrapped matrix-client protocol and are used by the service to refresh state.
 * **Event topics** it is designed to publish to `EventBus` (every
   change):
 
@@ -138,21 +127,18 @@ and is tracked under `BE-*` / `API-*` in
 
 #### `MatrixModel` (`hub.core.models`)
 
-* **Status:** framework library; registry of port counts and
-  capabilities for the BK-808 (`BK808_MODEL`) and the 4-port BK-404
-  (`BK404_MODEL`). One call site in the codebase would consume it
-  (the future wiring of `MatrixService`); the shipped paths still
-  hard-code `range(1, 9)`.
+* **Status:** registry of port counts and capabilities for matrix models;
+  services consume it where capability-aware ranges apply. Other listed
+  device families remain candidates until hardware validation.
 
 #### `NameStore` (`hub.core.name_store`)
 
-* **Status:** framework library; would be the *one* store of input /
-  output / preset names. The shipped `OreiMatrix.get_all_input_names`
-  + `device_settings.json` flow performs the same role today.
+* **Status:** shared runtime store of input, output and preset names, projected
+  to REST and Remote clients from common state.
 
 #### `EventBus` (`hub.core.event_bus`)
 
-* **Status:** framework library; `subscribe(cb, topics=None)` returns
+* **Status:** runtime event bus; `subscribe(cb, topics=None)` returns
   an idempotent unsubscribe function. Sync callbacks run inside
   `publish(topic, data)`; async callbacks are scheduled as tasks.
   Failures in one subscriber do not block the others.
@@ -161,11 +147,9 @@ and is tracked under `BE-*` / `API-*` in
 
 #### `ActionRunner` (`hub.domain.action_runner`)
 
-* **Status:** framework library; unit-tested. **Not yet the dispatcher
-  used by REST handlers.** The shipped REST routes call the per-kind
-  manager directly (e.g. `apply_profile_state`, `SceneExecutor`,
-  `MacroManager`, `execute_shortcut`, `OreiMatrix.recall_preset`).
-* **Role (intended):** the *one* executor of `profile`, `scene`,
+* **Status:** shared runtime dispatcher used by REST and Remote action
+  adapters, with compatibility projections at each public surface.
+* **Role:** the executor of `profile`, `scene`,
   `macro`, `shortcut` and `preset` actions, returning the same
   `ActionRunResult` shape with the same normalised status code:
 
@@ -195,9 +179,9 @@ and is tracked under `BE-*` / `API-*` in
 
 #### `VisibilityStore` (`hub.domain.visibility`)
 
-* **Status:** framework library; would centralise `favorite` /
-  `dashboard_visible` reads and writes. The shipped REST routes write
-  these flags directly against each manager today.
+* **Status:** utility for centralizing `favorite` / `dashboard_visible` state;
+  route ownership remains manager-specific where existing REST contracts
+  require it.
 
 ### `hub.integrations` — framework opt-in surface + transport clients
 
@@ -210,120 +194,110 @@ and is tracked under `BE-*` / `API-*` in
   `start(hub)` / `stop()` / `health()` / `routes()` lifecycle, plus
   `IntegrationRegistry` (`register(name, env_flag, import_path)`)
   and `IntegrationLoader` (`load()`, `start(hub)`, `stop()`,
-  `routes()`, `health_summary()`). The loader is unit-tested under
-  `tests/test_hub_integrations_framework.py`; **it is not what
-  `run.py` invokes.** The shipped Unfolded Circle integration under
-  `src/integrations/unfolded_circle/` is a separate implementation
-  started by `src/driver.py`.
+  `routes()`, `health_summary()`). The runtime uses the loader to start
+  enabled adapters. `src/driver.py` and its legacy integration modules remain
+  in the tree as reference code but are not launched.
 * **`HubClient` (Protocol) + `HubClientLocal` + `HubClientHttp`**
   (`hub.integrations.{hub_client,hub_client_local,hub_client_http}`)
-  — the transport-independent async hub contract. Used by the Flic
-  and Home Assistant framework modules under `hub.integrations.*`. Not
-  currently inserted between `OreiMatrix` and the REST app.
+  — the transport-independent async hub contract. `HubClientLocal` connects
+  the runtime service to local integrations, while the HTTP client remains
+  available for remote integrations and tests.
 * **`src/hub/integrations/unfolded_circle/`**, **`flic/`**,
   **`homeassistant/`** — the framework modules that ship the same
-  lifecycle on top of `HubClient`. They follow `Integration`'s
-  contract and the registry would discover them by env flag; the
-  shipped UC integration in `src/integrations/unfolded_circle/` is
-  the legacy `driver.py`-driven implementation, separate from
-  `hub.integrations.unfolded_circle`.
+  lifecycle on top of `HubClient`. The shared runtime registers and loads them
+  by environment flag. The HACS component at `custom_components/hdmi_matrix/`
+  is separately installed and uses REST.
 
 ### `hub.persistence.migrations` — framework versioned JSON
 
 > Module: `hub.persistence.migrations`.
 
-* **Status:** framework library. Implements `CURRENT_SCHEMA_VERSION`,
-  per-file migration chains and atomic backups (`PER-04`). Ships
-  side-by-side with `src/persistence.py`. The shipped REST handlers
-  persist via `src/persistence.py` (no `schema_version` envelope), not
-  via `hub.persistence.migrations`.
-* **Managed file names (intended):** `scenes_v2.json`,
+* **Status:** runtime startup preparation uses migration chains and atomic
+  backups before managers or Flic are constructed. `src/persistence.py`
+  continues to resolve data paths and selected legacy preferences. Not every
+  persisted file has a schema envelope; see the startup storage contract.
+* **Managed file names:** `scenes_v2.json`,
   `profiles.json`, `cec_macros.json`, `shortcuts.json`,
   `dashboard_layout.json`, `device_settings.json`,
-  `flic_buttons.json`. Today each REST module manages its own file
-  directly.
+  `flic_buttons.json`; the legacy shortcuts filename remains supported.
 
 ### `hub.openapi` — framework contract generator
 
 > Module: `hub.openapi`.
 
-* **Status:** framework library. `build_openapi_spec(app)` introspects
+* **Status:** the REST application serves the generated document. `build_openapi_spec(app)` introspects
   the live `aiohttp.web.Application` and returns the OpenAPI 3.1
   JSON document; `validate_openapi_spec` is the structural validator.
-* **Mount points (planned):** `GET /api/openapi.json` for the raw
-  document, `GET /api/docs` for Swagger UI. Neither is wired in the
-  shipped REST app at this commit. Generation happens in the unit
-  suite (`tests/test_hub_persistence_openapi_env.py`).
+* **Mount points:** `GET /api/openapi.json` for the raw document and
+  `GET /api/docs` for Swagger UI.
 
 ### `hub.env` — framework canonical env table
 
 > Module: `hub.env`.
 
-* **Status:** framework library. Exports `CORE_ENV_VARS` and
+* **Status:** framework inventory. Exports `CORE_ENV_VARS` and
   `INTEGRATION_ENV_VARS`, the `EnvVar` dataclass, and
-  `resolve_hub_env()`. The shipped `run.py` keeps its own retired-name
-  warning table (`RETIRED_ENV`) because it has not yet been
-  re-implemented through `hub.env`.
+  `resolve_hub_env()`. Runtime parsing and alias warnings are owned by
+  `hub.cli`; the inventory is useful reference material but is not the
+  runtime source of truth.
 * **Full operator-facing table:** owned by the `wp-g2-openapi-swagger-
   config-docs` worktree as [`docs/CONFIGURATION.md`](CONFIGURATION.md).
 
 ---
 
-## 3. Opt-in env flags — what each actually does today
+## 3. Integration flags and optional imports
 
-Honest summary. The "framework default" column reflects what the
-`hub.integrations.*` module would do if it owned startup; the
-"shipped default" column reflects what `run.py` and `src/driver.py`
-do today.
+The runtime loader lazily imports each integration when enabled. A disabled
+integration creates no listener or lifecycle work. Flic defaults enabled for
+compatibility; UC and HA discovery default disabled.
 
-| Flag                  | Framework default (what the library would do)                          | Shipped behaviour                                                                                |
-| --------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `UC_ENABLED`          | register `unfolded_circle` integration; let it drive Remote 3          | `run.py` switches to `run_uc()`, which `runpy.run_path`s `src/driver.py`. The integration is the legacy driver, *not* `hub.integrations.unfolded_circle`. |
-| `FLIC_ENABLED`         | framework: opt-in flag on `FlicIntegration`; **library default `True`**; behind `IntegrationRegistry`. | `FLIC_ENABLED` is a `hub.integrations.flic` env flag, not part of the shipped startup; the REST handlers `POST /api/integrations/flic/register` and `GET /api/integrations/flic/buttons` are *always* mounted (see `src/rest_api/app.py`). |
-| `HA_DISCOVERY_ENABLED` | framework: opt-in flag on `HomeAssistantDiscoveryIntegration`; **not wired to startup**. | There is no startup code that reads `HA_DISCOVERY_ENABLED`. The HA component is the HACS install at `custom_components/hdmi_matrix/` (manual setup). |
+| Flag | Unset default | Enabled behavior | Disabled behavior |
+| --- | --- | --- | --- |
+| `UC_ENABLED` | `false` | Starts the Remote 3 SDK adapter on its configured port (9095 default). | No UC/`ucapi` import, listener or advertisement. |
+| `FLIC_ENABLED` | `true` | Loads Flic registry and registration/list routes. | Omits only Flic routes and registry lifecycle; core REST actions remain. |
+| `HA_DISCOVERY_ENABLED` | `false` | Starts optional mDNS discovery for the REST service. | No HA discovery import or Zeroconf dependency for HA. Manual HACS setup remains available. |
 
-These three rows are the ones the previous round of docs got wrong.
-The README, the changelog and this document's earlier revision said
-"set `FLIC_ENABLED=true` to start the Flic integration"; the shipped
-behaviour is different: setting `FLIC_ENABLED=false` *does not*
-disable the Flic REST handlers. Always-mounted handlers are the
-contract; the flag is framework-level state.
+Boolean spellings are trimmed and case-insensitive: `1`, `true`, `yes`, `on`
+enable; `0`, `false`, `no`, `off` disable. Unknown nonblank Flic values warn
+and retain the enabled default.
 
 ### `/api/integrations` route
 
 There is **no `/api/integrations` general route** in the shipped app.
-The only `/api/integrations/*` paths are:
+The only `/api/integrations/*` paths are Flic-specific and are mounted only
+when Flic is enabled:
 
 * `POST /api/integrations/flic/register` — Flic Hub button discovery.
 * `GET  /api/integrations/flic/buttons` — read registered Flic buttons.
 
-There is no `/api/integrations/<name>/status` and no per-integration
-health block in `/api/health`. The health endpoint returns:
+There is no `/api/integrations/<name>/status` route. `/api/health` includes
+an `integrations` lifecycle mapping under `data.integrations`; it does not
+create a separate integrations endpoint. The response also returns:
 
 * `status`, `service`, `api_version`, `version` (legacy shape),
-* `matrix` (connection summary, see `src/rest_api/core.py`).
-* `runtime` (event-loop lag, uptime, task count).
+* `matrix` (connection summary, see `src/rest_api/core.py`),
+* `runtime` (event-loop lag, uptime, task count),
+* `integrations` (integration lifecycle mapping, commonly empty when none
+  report health).
 
-This is the contract today. The framework's `IntegrationLoader.
-health_summary()` is not currently plugged in.
+The mapping is supplied by `IntegrationLoader.health_summary()` and remains
+inside the existing health response envelope.
 
 ---
 
 ## 4. Event topics — `hub.core.EventBus.STANDARD_TOPICS`
 
-The eight topics listed in §2.2.1 are part of the framework's public
-contract for any future subscriber, not part of today's shipped
-transport. They are listed here because the
+The eight topics are used by the runtime event bus and local subscribers. They
+are listed here because the
 `hub.integrations.{flic,homeassistant,unfolded_circle}` framework
 modules publish and consume them and the
 [`docs/api/websocket.schema.json`](api/websocket.schema.json) frames
 named after them; the actual REST `install_event_stream` poll uses a
 subset of those names.
 
-The `EventBus.subscribe(cb, topics=None)` signature is framework and
-is documented in `hub.core.event_bus`. There is no runtime code path
-that subscribes to it today; it is exercised by
-`tests/test_hub_core_matrix_service.py` only.
+The `EventBus.subscribe(cb, topics=None)` signature is implemented in
+`hub.core.event_bus`. Runtime services and local clients subscribe through
+this interface; WebSocket consumers receive their existing REST frame format.
 
 ---
 
@@ -375,28 +349,21 @@ that subscribes to it today; it is exercised by
 
 ---
 
-## 6. Validation status today (honest)
+## 6. Validation status and evidence provenance
 
-| Surface                                  | Today (Ledger row)                  | Why not yet a v1.0.0 claim                          |
-| ---------------------------------------- | ----------------------------------- | --------------------------------------------------- |
-| `OreiMatrix` + `RestApiServer` (shipped) | V1 unit + V2 sim                    | not (yet) the running device under a real load      |
-| `/api/...` REST contract                 | V2 + V3 (browser / HA / UC)         | not (yet) a network under load, not (yet) a real deployment host |
-| `/ws` event stream                       | V2 sim + V3 browser observer        | not (yet) on real hardware                           |
-| Focused UI (`web/`)                      | V3 (Playwright on simulator)        | not (yet) a tablet in a living room (`UI-44`)        |
-| Unfolded Circle integration (shipped)    | V3 (scripted Remote)                | not (yet) the operator's Remote 3 against a real matrix |
-| Home Assistant HACS component            | V3 (real HA container)              | not (yet) the operator's HA deployment                |
-| Flic REST handlers (`/api/integrations/flic/*`) | V3 (request replay)        | not (yet) a real Flic Hub                             |
-| `hub.core` / `hub.domain` / `hub.integrations` | V1 unit                      | framework only — runtime wiring is pending             |
-| `hub.openapi`                            | V1 unit (introspects an aiohttp app) | not yet mounted at `/api/openapi.json` or `/api/docs` |
-| `hub.persistence.migrations`             | V1 unit                              | shipped runtime persists via `src/persistence.py`    |
-| Security controls                        | V3 (all three auth configs)         | not (yet) the V4 spot check with an admin PIN         |
-| Reliability                              | V1 (fault injection on sim)         | not (yet) the 72 h soak (`HIL-D`, Phase 8 / WP-V3)     |
+The feature ledger records its own commit and freshness for each row. Earlier
+RC1 API/browser/Remote/HA/Flic records remain evidence for their recorded
+candidate; they do not validate runtime completion. The fresh integrated
+software campaign for `4adbc136` is indexed by exact commit in the
+[runtime validation index](validation/RUNTIME_VALIDATION_INDEX.md).
 
-The full row-by-row state, with the freshness of each piece of
-evidence and the open findings, is in
-[`docs/validation/LEDGER.md`](validation/LEDGER.md). The v1.0.0 tag
-will not land until the ledger says every row is at target with fresh
-evidence.
+Simulator, scripted Remote, HA-container, browser and request-replay evidence
+are limited to their exercised software paths. They do not prove physical
+matrix/TV effects, Remote or Flic device behavior, physical-LAN HA discovery,
+field recovery, or the 72-hour soak. Those owner-observed gates remain pending.
+The [feature ledger](validation/LEDGER.md) and
+[validation report](validation/VALIDATION_REPORT.md) retain feature-level and
+historical evidence.
 
 ---
 

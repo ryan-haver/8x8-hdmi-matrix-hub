@@ -13,6 +13,7 @@ import inspect
 import logging
 import time
 from collections.abc import Awaitable, Callable, Iterable
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -100,11 +101,11 @@ class EventBus:
 
     def publish(self, topic: str, data: dict[str, Any]) -> None:
         """Deliver ``data`` on ``topic`` to every matching subscriber."""
-        event = HubEvent(topic=topic, data=dict(data))
+        event = HubEvent(topic=topic, data=deepcopy(data))
         # A callback may (un)subscribe while we deliver: iterate over a copy.
         for sub in list(self._subscriptions):
             if sub.wants(topic):
-                self._deliver(sub.callback, event)
+                self._deliver(sub.callback, HubEvent(event.topic, deepcopy(event.data), event.timestamp))
 
     def _deliver(self, callback: EventCallback, event: HubEvent) -> None:
         try:
@@ -132,7 +133,23 @@ class EventBus:
         except Exception:
             _LOG.exception("Async event subscriber %r failed on %r", callback, event.topic)
 
-    async def drain(self) -> None:
+    async def drain(self, timeout: float | None = None) -> None:
         """Wait until every async delivery started so far has finished."""
+        async def finish():
+            while self._tasks:
+                await asyncio.gather(*list(self._tasks), return_exceptions=True)
+
+        if timeout is None:
+            await finish()
+            return
+        deadline = asyncio.get_running_loop().time() + timeout
         while self._tasks:
-            await asyncio.gather(*list(self._tasks))
+            remaining = max(0.0, deadline - asyncio.get_running_loop().time())
+            _, pending = await asyncio.wait(set(self._tasks), timeout=remaining)
+            if pending:
+                for task in pending:
+                    task.cancel()
+                # Give cooperative cancellations their cleanup turn without
+                # letting a subscriber extend the shutdown deadline.
+                await asyncio.sleep(0)
+                return

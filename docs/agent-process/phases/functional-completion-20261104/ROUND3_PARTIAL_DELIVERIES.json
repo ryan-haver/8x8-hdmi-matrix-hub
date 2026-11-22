@@ -1,0 +1,237 @@
+{
+  "observed_utc": "2026-11-04T18:38:03.555125+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 3,
+  "status": "First two genuine samepacket decisions preserved/released/taskrefpublished; MiniMax samehash third prepared/noTaskyet; no adoption",
+  "deliveries": {
+    "openai": {
+      "task_id": "task_908b71effe7d",
+      "dispatch_id": "ctx_02b138df77b6",
+      "head": "470c87dc87e373b5b1ff2618fb7410064b08f4ff",
+      "parent": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round3/openai.md",
+      "report_sha256": "2d13022f04e9e7692a652bf12fbd3ace3f06f5d46be3398d1d9e2d22b9f2547e",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "470c87dc87e373b5b1ff2618fb7410064b08f4ff",
+      "native": {
+        "session": "01a1a7ce-90ee-7312-bd80-c7e09d471d07",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 2421892,
+        "sha256": "a013ca82e2b096c53dae752f5d3545be64f6b0a9f57f48d25aac2f18e2867202",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-openai-r3": {
+          "archive_sha256": "656293e522418cb0f4dbbd5216dfc094d12db23e28517783c4473559b507fd77",
+          "archive_bytes": 82140,
+          "regular_files": 111,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-openai": {
+          "archive_sha256": "d63427a8e4ca015355a5ebd523b76293090eabd4d73ce7f73de10723e4d66b27",
+          "archive_bytes": 212700964,
+          "regular_files": 5181,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": {
+        "passed": 489,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "junit_sha256": "0eeaa908479e1fd4ea79bf799190848a0ee91e4dfbf26c3ce5262b3ac35d7fd6",
+        "scope": "historical prose/docs only; actualinrunorigin captures, not source/newMarkdownqualification"
+      },
+      "status": "R3 decision delivered; report/verdict/rationale withheld from remaining participant"
+    },
+    "anthropic": {
+      "task_id": "task_ae9877d75a18",
+      "dispatch_id": "ctx_37e0d2f0e439",
+      "head": "27185b5b7047a999b1a007b5ce046ccea5fdd431",
+      "parent": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round3/anthropic.md",
+      "report_sha256": "2f4d6099e540a31a153ae684528afb1989916d03e8872bd6148a2046b7df3fe8",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "27185b5b7047a999b1a007b5ce046ccea5fdd431",
+      "native": {
+        "session": "47cd76fe-4642-4b86-800f-019dc71efb4d",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high launch/config; native per-turn effort unexposed",
+        "bytes": 2232506,
+        "sha256": "253d5050e194f38c866be4af59a7775c88dfe83a79ece815dc485fd193d802fe",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-anthropic-r3": {
+          "archive_sha256": "7ac969bb4c34243c49ef1a0e6c7fe697fed9be2681488d72d2f6a5050a8841a8",
+          "archive_bytes": 76820,
+          "regular_files": 109,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-anthropic": {
+          "archive_sha256": "81300e8a6b8e05b3bdd36c38ce803fcc8424d00bb8716c4cbfcc1e29d6144ca9",
+          "archive_bytes": 208894393,
+          "regular_files": 4849,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": {
+        "passed": 489,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "junit_sha256": "4345cb8d6f24ce99f80042727f7781bac23f8f074df64b5f265033269998ea44",
+        "scope": "historical prose/docs only; actualinrunorigin captures, not source/newMarkdownqualification"
+      },
+      "status": "R3 decision delivered; report/verdict/rationale withheld from remaining participant"
+    }
+  },
+  "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "final_packet_bytes": 616751,
+  "preflight": {
+    "observed_utc": "2026-11-04T18:36:41.863556+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "5f12632f3d4b9239900794cb02ee77e842b28ee3",
+    "remote_equal": true,
+    "fleet": {
+      "total": 165,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 165,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDI2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMjo0Nzo1MyIsImRpc3BhdGNoSWQiOiJjdHhfYTUyYTFkOTZhZDA4IiwiZGF0YWJhc2VJZCI6MTMzMH19"
+        },
+        {
+          "limit": 100,
+          "total": 165,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 158,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_37e0d2f0e439",
+          "taskId": "task_ae9877d75a18",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_02b138df77b6",
+          "taskId": "task_908b71effe7d",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_02b4c54eb1fa",
+          "taskId": "task_c512bb417e83",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 23,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793817335185,
+        "error": null,
+        "age_seconds": 67
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400792,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 3,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600792,
+          "resetDescription": "3:50 PM"
+        },
+        "updatedAt": 1793817334816,
+        "error": null,
+        "age_seconds": 67
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 38,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932930,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 31,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793817334815,
+        "error": null,
+        "age_seconds": 67
+      }
+    },
+    "scope": "Third samehash R3 decision on published final933166packet, no implementation/qualification/ownerbudget",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "FirsttwoR3decisionsdelivered/released; MiniMax samepacket thirdR3pending with priorR2released. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "third": {
+    "route": "opencode2/minimax-coding-plan/MiniMax-M3/thinking; CLI effort unsupported",
+    "exact_own_R2_base": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+    "previous_dispatch": "ctx_02b4c54eb1fa completed/positivelyreleased",
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "barrier": "First two R3 report/verdict/rationale not imported/shared with third participant. Actualallthree samehash decisions still required; no majority/coordinator adoption.",
+  "holds": "No implementation/qualification/sourcelease/ownerprivacybudget/physicalvisualrelease from decisions. Current sources/private/baselines/protectedtrees unchanged, no fullGitbundle/destructivecleanup."
+}

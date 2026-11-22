@@ -1,0 +1,116 @@
+{
+  "observed_utc": "2026-11-03T04:12:31.207275+00:00",
+  "status": "prepared; no new workers/worktree created yet",
+  "accepted_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, supported live discovery privately retained",
+  "capacity": {
+    "observed_utc": "2026-11-03T04:07:06.840780+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 41,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793678632811,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 44,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 17,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932917,
+        "resetDescription": null
+      },
+      "updatedAt": 1793678632573,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 109,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 109,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTk1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMzowOTo0NiIsImRpc3BhdGNoSWQiOiJjdHhfY2RlODc1MzBiNjc1IiwiZGF0YWJhc2VJZCI6NjEzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 109,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 103,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "MiniMax": {
+      "exact_model": "minimax-coding-plan/MiniMax-M3",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "override": "OpenCode2 CLI model/effort override unsupported; inherit exact audited project routes and attest native response",
+      "helpers": "main/small/internal M3, denied unassigned providers/plugins/subagents/MCP"
+    },
+    "OpenAI": {
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "fetched_at": "2026-11-03T04:12:23.616389100Z",
+      "supported": true
+    }
+  },
+  "tasks": {
+    "findings_fix01": {
+      "base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "worktree": "existing settled wp-exec-sw-findings-01",
+      "scope": "eight exact reviewer corrections plus temporal inventory-status note;61IDs/counts unchanged, old59triage preserved",
+      "budget": "8min target, <=700new explanatory words, no global audit",
+      "author": "MiniMax-M3",
+      "independent_review": "OpenAI/Astra at resulting exact commit",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "ci_attribution": {
+      "unit": "EV-CI-ATTRIBUTION",
+      "dependencies": [],
+      "completion_dependency_unit_ids": [],
+      "worktree": "new wp-exec-ev-ci-attribution",
+      "base": "resolve exact next published integration preflight head before creation",
+      "scope": "56historical units source/covers/client/definition changes versus candidate, accepted historical own-covers equality reused, no raw re-audit or freshness promotion",
+      "budget": "10min bounded metadata mapping, <=2000words plus56unit table",
+      "author": "MiniMax-M3",
+      "independent_review": "OpenAI/Astra exact resulting report commit",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "qualification_binding": {
+    "M3": "Actual accepted CI_EVIDENCE_REVIEW.md bounded inventory/metadata competence, accepted M3freshness/EV negative-gap and SW-AUDIT author documentation; no source/security/privacy correctness qualification",
+    "OpenAI": "Actual recent bounded factual reviews577/00b7 plus earlier394/0ff, nativeAstra/high attested, no source domain qualification inferred"
+  },
+  "demand": "use reserved findings author-fix/re-review; add one boundedCIattribution author and independent factual review plus one material-fix/re-review reserve; no unbounded loops or automatic qualification retry",
+  "alternatives": "Sol actual native at-capacity event retained; Astra currently available and relevant metadata evidence. Google unknown, DeepSeek exhausted, no silent fallback/self-review.",
+  "CI_input_limit": "Old supplemental wp-ci-proof-intake units.json path absent; not proof of lost originals. Public accepted60tuple inventory/review and sourceGit objects available; derive NEW mapping metadata from historical source under accepted56/56own-covers equality, never reconstruct original records or invent hashes.",
+  "creation_exception": "agent-free Orca provisioning solely to prepare exact ignored localOpenCode2 routing before genuine worker-start, no raw Git worktree/global settings/bare agent",
+  "concurrency": "max2new+coordinator+protected old external reservation=4; no nesting",
+  "material_plan_change": false,
+  "protected": "all originals/failed evidence/natives/ignoredprivate data/baselines/old retained resources/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain, explicit owner retake decision pending; source/release gates unchanged"
+}

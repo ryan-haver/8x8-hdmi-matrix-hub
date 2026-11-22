@@ -1,0 +1,107 @@
+{
+  "status": "preflight prepared; not dispatched",
+  "owner_authority": "proceed with next steps and finish authorized development; no new owner hardware/release authority",
+  "accepted_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "integration_before_preflight": "f946418e71e9bf503826559ddbdbca39236417d3",
+  "branch": "wp-runtime-completion",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "orca": "1.4.246",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "fleet": {
+    "total": 92,
+    "retained": 6,
+    "released": 86,
+    "active": 0,
+    "all_pages": true
+  },
+  "concurrency": "coordinator1+protected old external1+max2new=4; no nesting",
+  "capacity": {
+    "observed_utc": "2026-11-03T01:05:34.323963+00:00",
+    "codex": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 38,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793667832624,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {}
+    },
+    "claude": {
+      "session": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": 1793683800352,
+        "resetDescription": "10:30 PM"
+      },
+      "weekly": {
+        "usedPercent": 19,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400352,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793667832373,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {}
+    },
+    "minimax": {
+      "session": {
+        "usedPercent": 2,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 12,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932901,
+        "resetDescription": null
+      },
+      "updatedAt": 1793667832554,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {
+        "source": "web",
+        "lastSuccessfulSource": "web"
+      }
+    },
+    "gemini": {
+      "session": null,
+      "weekly": null,
+      "updatedAt": 1793667832156,
+      "error": "Gemini CLI OAuth is disabled in settings",
+      "status": "unavailable"
+    }
+  },
+  "demand": "one bounded Claude evaluation, one M3 inventory; reserve two subsequent independent Sol reviews and one author-fix/re-review per eligible report; any failed qualification stays failed/held, not automatically retried",
+  "alternatives": "Sol/Astra same family as retained source; not its independent source reviewers. M3 bounded inventories, not core review. Google unavailable/unverified route remains held; DeepSeek exhausted. New qualified author/reviewer alternative only before writer start/after proven settled handover.",
+  "tasks": {
+    "QUAL-ANTHROPIC-CORE-01": {
+      "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "author": "claude-opus-4-7/high",
+      "independent_judge": "gpt-6.1-sol/high after report committed; bounded REST/source review competence from existing accepted records",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "SW-AUDIT-01": {
+      "base": "resolve published preflight head after documentation checks and push",
+      "author": "minimax-coding-plan/MiniMax-M3/thinking",
+      "qualification_refs": [
+        "docs/production/software-waves/SW-AUDIT-01/COORDINATOR_REVIEW.md",
+        "docs/production/software-waves/W03-CLOSE-INVENTORY/AUTHOR.md"
+      ],
+      "reviewer": "gpt-6.1-sol/high exact report factual review",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "protected": "root/private/odd hook artifact/6retained historical/user and persistence discrepancy resources/old evidence and baselines; no cleanup",
+  "placement_exception": "User standing protocol permits agent-free Orca provisioning when verified adapter/project model/helper routing must be prepared before first turn. Required for OpenCode2 main/small/internal/helper policy, also used for local Claude deny-helper setup; genuine worker-start sessions still own every task. No raw git worktree or bare agent launch."
+}

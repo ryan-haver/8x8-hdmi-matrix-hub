@@ -1,0 +1,25 @@
+# OpenAI independent round 1
+
+Recommendation: **require_changes** before qualification execution; continue planning. Opus 5.5 is a reasonable candidate hypothesis, not demonstrated replacement competence. Both Opus 4.7 FAIL dispositions remain intact: technical strengths did not compensate for mandatory evidence, provenance and calibration failures.
+
+Goal: establish only bounded Python validation-runner/model offline simulator API-refusal preparation and compatibility review competence. Exclude implementation, source acceptance, privacy/authentication, HA, hardware, release and qualification-by-planning. All 61 findings and existing release gates retain their dispositions.
+
+Entry requires three genuine providers completing three rounds, preserved independent R1 reports before sharing, and three explicit acceptances of one hashed final plan/allocation. Reconfirm unchanged caaa4faabe9ede1e3aed37d2269efd4a4d691e04 source, full 938ae30339790c361abdda6fdd01b11a4e498518 boundary and frozen six-axis rubric. The rubric's abbreviated source-commit list must not exclude actual 938→386→060769→ee3→caaa lineage. Allocate separate candidate and fresh judge worktrees, exclusive report/scratch paths, exact bases and Task/Dispatch leases; coordinator retains shared contracts, registry, ledger and integration.
+
+Require a nine-path coverage table covering all three changed reports and six registry/scenario/test/model/runner paths from INPUT_PACKET. For each, record actual inspected revisions, relevant invariants/assertions and proof references. Derive populations from the exact scope, retaining blocked records and denominators. A judge filling missing coverage cannot repair evaluator omissions.
+
+Use existing focused controls to challenge malformed/missing/connected/unconfigured responses, transport/default/delegation compatibility, external/hardware exclusion, writes and setup/cleanup/fault behavior. Preserve direct subprocess exits, full stdout/stderr, JUnit, argv, effective isolation settings, timestamps and original temporary artifacts before another invocation. Hash artifacts and distinguish tracked commit/ref publication from ignored private files. Numeric exits do not establish termination causes; observed processes do not establish a complete descendant census. Avoid unsupported -I/environment or absolute no-side-effect claims. Historical global freshness failure is not automatically a product defect; no unchanged global retry.
+
+Exit requires the independent judge to explicitly pass/hold/fail provenance, invariants, counterexamples, behavior_and_tools, calibration and review_quality at the exact evaluator report commit, citing immutable originals. Every axis must pass for coordinator consideration of the bounded domain; unknown means hold. Findings require severity, source location and reproducible support; reasoned no-finding is allowed. Preserve failure without automatic rewrite, rerun or replacement judge. Reserve correction capacity without treating that reserve as retry authority.
+
+Staffing: native Anthropic Opus 5.5/high must demonstrate tool/evidence discipline; its profile preference proves neither availability nor competence. Fresh OpenAI Astra/high fits evaluation judging given preserved substantive prior judgements, but cannot thereby accept OpenAI-authored source. Sol/Astra/Luna share one family/pool. MiniMax M3 fits bounded inventories, not established core review; Gemini remains unverified, DeepSeek unavailable. No alternate qualification pair is currently verified; require explicit revalidation rather than silent substitution.
+
+Frozen capacity reports imply Anthropic 79%, OpenAI 40%, MiniMax 76% weekly remaining, not future reservations. Refresh intended pools/reset windows and other-host demand before each stage; reserve one 15-minute candidate and one 15-minute judge plus authorized corrections. Unknown/below-30% capacity without qualified verified fallback holds the affected dispatch. Keep two-new-worker ceiling plus coordinator/protected reservation; no helpers. Missing native identity, proof preservation, coverage or unanimous final decisions blocks execution.
+
+This report uses native turn-context gpt-6-astra/high at the dispatched checkout; actual branch is ryan-haver/wp-qr-r1-openai, base d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1. No peer report or candidate source review performed.
+
+Validation: one required five-module documentation invocation passed 489 tests, direct exit 0; full logs/JUnit/argv/environment/timing retained in assigned ignored storage. These checks establish no semantic qualification or source acceptance.
+
+```json
+{"round":1,"participant_family":"OpenAI","actual_model":"gpt-6-astra","effort_or_native_limit":"high; native turn_context","frozen_input_sha256":"fc658cfb4d6223f8f7015733da95b3456192755a2daef818141fe5980dbb9bc9","recommendation":"require_changes","material_conditions":["explicit coverage/proof matrix","fresh identity/capacity/reserves","three-provider same-hash final acceptance","one candidate/one judge; no automatic retry"],"peer_reports_read":false,"source_or_qualification_acceptance":false}
+```

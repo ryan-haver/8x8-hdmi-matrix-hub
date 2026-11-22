@@ -1,0 +1,149 @@
+{
+  "observed_utc": "2026-11-04T17:29:01.839246+00:00",
+  "status": "ALL THREE independent R1 originals preserved/native captured/workers released/exact task refs published; peer barrier now OPEN for R2",
+  "input_packet_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4",
+  "source_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+  "reports": {
+    "openai": {
+      "task_id": "task_deec8833e817",
+      "dispatch_id": "ctx_87e7f6a55dc2",
+      "head": "7baf8262976772ed3de6eac7a19d5fafc7b5a1b8",
+      "parent": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/openai.md",
+      "report_sha256": "57a634bc5f25c2d6a300e1509e49fa11ed47b5545e3c60bc5d8706132fd29777",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "7baf8262976772ed3de6eac7a19d5fafc7b5a1b8",
+      "family": "OpenAI",
+      "native": {
+        "session": "01a1a774-1dd0-7193-90e8-82dfca4946e7",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 2529657,
+        "sha256": "5bb0247ae21924e47b7c9ccdf59fa982735befc55fb77baaf718bcf9a615937c",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-openai-r1": {
+          "archive_sha256": "0c8140b246ff0802765e3f338304670256d94ffe03ecf8be15738db883d6576d",
+          "archive_bytes": 68670,
+          "regular_files": 106,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-openai": {
+          "archive_sha256": "0aad9c5b22d038177c5255604e9761f86681b69561fa9b01b5f933286d8e8176",
+          "archive_bytes": 210308665,
+          "regular_files": 4993,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": {
+        "passed": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "scope": "historical checkout prose only; actual original receipt/JUnit checked, no current product qualification"
+      }
+    },
+    "anthropic": {
+      "task_id": "task_db6cadf2bd1b",
+      "dispatch_id": "ctx_0c24940765ab",
+      "head": "4ae498baa200cf17f90430f6961c8f1fecd2b8d1",
+      "parent": "5097650314502686a845a714e638643d66087971",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/anthropic.md",
+      "report_sha256": "efe8219ca416b2f46b749a621793c4e0d4efe2057fc0958916c689203c3265c1",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "4ae498baa200cf17f90430f6961c8f1fecd2b8d1",
+      "family": "Anthropic",
+      "native": {
+        "session": "964f370f-ec4a-4ca3-8f01-eb1494ec833f",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high launch/config; native per-turn effort unexposed",
+        "bytes": 2483489,
+        "sha256": "c79ed244897147927f851378f9c0512305ed9bf13688b408aaef55b1f19b4b56",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-anthropic-r1": {
+          "archive_sha256": "a926a36bb1bc28e2d35ea82882197c86c2a04b7dd67e5bee17baa375cf88670d",
+          "archive_bytes": 73019,
+          "regular_files": 106,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-anthropic": {
+          "archive_sha256": "5450d8aebd7546ffb3a067a0415f28525726a3ad7bd1895050d93c83043754a9",
+          "archive_bytes": 208225550,
+          "regular_files": 4806,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": {
+        "passed": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "scope": "historical checkout prose only; actual original receipt/JUnit checked, no current product qualification"
+      }
+    },
+    "minimax": {
+      "task_id": "task_cfa1b9a6672f",
+      "dispatch_id": "ctx_363592a96ee8",
+      "head": "32f911a576de0251b06e77a46a39681c7d7dc679",
+      "parent": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/minimax.md",
+      "report_sha256": "42bd18882437735caa278279fdf671365890d57a12c0fc0102947d13b71df653",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "32f911a576de0251b06e77a46a39681c7d7dc679",
+      "family": "MiniMax",
+      "native": {
+        "session": "ses_e5877e364ffetA4XnicHVJnaEb",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 933131,
+        "sha256": "9b21f60de8ba31da5cf73f3b1ea97ea9a7ec70e5971f619ee22d4cbb82653940",
+        "helper_calls_observed": false,
+        "scope": "native actual Task/Dispatch/directory, no all-host census"
+      },
+      "preservation": {
+        "external-minimax-r1": {
+          "archive_sha256": "1211741bd0a57c3d0c532c02cc3e30be81934ea27b7be0bd5dd778262835833d",
+          "archive_bytes": 55180120,
+          "regular_files": 119,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-minimax": {
+          "archive_sha256": "076787abbae37a18bc0d0247607701aa3c74701f3f64b287112f5929a030e268",
+          "archive_bytes": 209194066,
+          "regular_files": 4964,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": {
+        "passed": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "scope": "historical checkout prose only; actual original receipt/JUnit checked, no current product qualification"
+      }
+    }
+  },
+  "claims": "Original report proposals/conflicts/limits preserved byte-for-byte, not adopted/qualified or changed into owner gates. Metadata and original native evidence are distinct. No source/ownerbudget/hardware/release authority from delivery."
+}

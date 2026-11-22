@@ -1,0 +1,118 @@
+{
+  "observed_utc": "2026-11-04T01:33:27.375062+00:00",
+  "status": "PREPARED; no Task, Dispatch or new worktree yet",
+  "authority": "Owner proceed following MVP outstanding-work answer; existing accepted RV-API034 continuation",
+  "plan_disposition": "Covered wave split and within-family exact model rematch, not a new phase/material plan change: exact accepted source/base/nine paths, underlying Anthropic reviewer family, acceptance and ownership unchanged. Three-family accepted 20261101 pinning packet remains immutable; no invented new consensus.",
+  "pin": "RV-API034",
+  "planning_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "source_paths": [
+    "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+    "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md",
+    "docs/production/software-waves/SW-API-CLIENT-02-C2/INTAKE.md",
+    "docs/validation/features.yaml",
+    "tests/validation/scenarios/sw_api_client_02_c1.py",
+    "tests/validation/test_sw_api_client_02_c1.py",
+    "tests/validation/test_sw_api_client_02_c2.py",
+    "tools/validate/model.py",
+    "tools/validate/runner.py"
+  ],
+  "source_authorship": "OpenAI Sol6.1/high current four-commit window; earlier accepted DeepSeek product-handler work is outside this window and retains historical authorship",
+  "qualification": {
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "canonical_sha256": "d2096e6edcf63cf7ca0fc7fd8c5fd58ea45222527c59b66d6cb44fede0949e79",
+    "accepted_scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+    "source_acceptance_from_qualification": false
+  },
+  "assignment": {
+    "agent": "claude",
+    "model": "claude-opus-5-5",
+    "effort": "high",
+    "worktree_name": "wp-exec-rv-api034-review",
+    "expected_branch": "execution/wp-exec-rv-api034-review",
+    "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "report": "docs/production/software-waves/RV-API034/execution-20261101/REVIEW.md",
+    "exclusive_writable": [
+      "docs/production/software-waves/RV-API034/execution-20261101/REVIEW.md",
+      "build/software-waves/RV-API034/execution-20261101/author/**",
+      "C:/t/exec-rv-api034/**"
+    ],
+    "task_id": null,
+    "dispatch_id": null
+  },
+  "capacity": {
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400026,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 11,
+        "windowMinutes": 300,
+        "resetsAt": 1793759400026,
+        "resetDescription": "7:30 PM"
+      },
+      "updatedAt": 1793755726024,
+      "error": null,
+      "age_seconds": 281.35106201171874
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 75,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793755726420,
+      "error": null,
+      "age_seconds": 280.9550620117187
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 29,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932888,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 15,
+        "windowMinutes": 300,
+        "resetsAt": 1793758314263,
+        "resetDescription": null
+      },
+      "updatedAt": 1793755725971,
+      "error": null,
+      "age_seconds": 281.40406201171874
+    }
+  },
+  "capacity_disposition": "Anthropic77% weekly/89% session remaining at preparation, bounded one source review with one same-route re-review reserve; absolute allowance and other-host commitments unknown. OpenAI25% weekly: affected new author-fix/secondary-evaluation dispatches HELD, no qualified independent fallback verified. No OpenAI worktree created. Read-only independent Anthropic review continues under owner redistribution rule; this subwave cannot integrate/promote source or mark full RV complete until any required correction/evaluation and capacity gates are satisfied. No correction budget or future reset promised. Recheck Anthropic before creation/start and all affected routes before later dispatch.",
+  "secondary_evaluation": "Existing planned Sol/OpenAI report-quality evaluation remains reserved, not dispatched; it cannot accept OpenAI-authored source. Hold while below30% without suitable verified fallback.",
+  "corrections": "Reviewer reports only. Any findings go to actual qualified author after fresh >=30% capacity or suitable accepted verified fallback; separate author task and exact changed-commit different-family re-review. No fixes authorized to reviewer.",
+  "alternatives": "Opus4.7 failures immutable; Gemini native routing/qualification/quota unverified; MiniMax suitable bounded prose but not qualified for this source domain; DeepSeek unavailable. No silent fallback.",
+  "fleet": {
+    "total": 134,
+    "counts": {
+      "released": 128,
+      "retained": 6
+    },
+    "all_pages": true,
+    "pages": 2
+  },
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "run": "run_37205f6095b3",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local / Zelu / win32; saved SSH hosts disconnected, not fallback capacity",
+  "concurrency": "one new reviewer + coordinator + protected external reservation =3<=4; no nesting",
+  "routing": "Native Opus5.5 previously attested and scoped qualified; launch --model/--effort supported by current Orca1.4.247 and Claude help. Fresh exact Task/Dispatch/cwd assistant identity still required. Ignored local settings disable teams/Agent/Task/MCP/plugins; original managed global profile SHA102b673728c8509532e873610054b8fe4acae375755523adad0e4d769cd7ac69 unchanged.",
+  "protection": "All10 remaining Orca entries/9Git worktrees and task refs retained;6pending source trees read-only,2oldunverifiable plus stale persistence-folder unresolved. Root unrelated encoded-hook artifact/private runtime untouched. Setup hooks empty/skip for routing provision; ordinary default shell is intentional. No cleanup/release/main/tag/hardware/baseline authority.",
+  "preparation_head": "7ee23411f06e80f9c6d66303661f5dc566cb8b2e",
+  "publication": "Publish and independently verify preparation before agent-free Orca worktree routing provisioning and genuine worker-start; launch record follows."
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "phase": "remediation-recovery-20261104",
+  "wave": "B",
+  "adopted_complete_plan_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "standard": "UNCHANGED six axes/criteria frozen before C4 implementation in adopted FINAL_PACKET. This object binds actual delivered subject; no softening, retry, added judge or new assessment family.",
+  "privacy_subject": {
+    "base": "d6e78e0b6ab1dab5216443584d810a7a24af32b2",
+    "tip": "5385325722a39e6dd766352489f828f5e54b56d5",
+    "assignment_base": "2d02004d3108953a302e1a49aab9a5f24e944136",
+    "commits": [
+      "8b9f5623b3b5a12c55ed6b9da0ae59662bd6b873",
+      "11f305b16c4c95e27682d13df4b02c8de33354d7",
+      "47b0bbb86a1dfd36726e60ab2ccf24b867883160",
+      "615d3c8403b237dd117c8032697c9b58895f9217",
+      "8fc65e052954a30f89be209d2d8f04e58ac1266f",
+      "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "01ca55728d8f47076f7b1f805ece1877845546bd",
+      "5385325722a39e6dd766352489f828f5e54b56d5"
+    ],
+    "changed_paths": [
+      {
+        "path": "docs/production/software-waves/SW-SEC-DATA-02-C1/AUTHOR.md",
+        "git_blob_sha256": "dd84617b7253026ebbdefa3e7b36d6c48e76b1f6a87fe4302dcf2235dacce71a"
+      },
+      {
+        "path": "docs/production/software-waves/SW-SEC-DATA-02-C2/AUTHOR.md",
+        "git_blob_sha256": "13a0acd1cc4ef5f251671bef99229d2df0478abe85c0e03f0cfa06f56748b78e"
+      },
+      {
+        "path": "docs/production/software-waves/SW-SEC-DATA-02-C3/AUTHOR.md",
+        "git_blob_sha256": "6beb9698e884000d78d94e4f3fabbe574aaee7830fef325e9962146f3ea0372c"
+      },
+      {
+        "path": "docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md",
+        "git_blob_sha256": "b500e9b3082892cb1901ea284b3dc77c5e6cbc26b1cc5aed0540a17ee7b3b91c"
+      },
+      {
+        "path": "tests/validation/test_sw_sec_data_02_c1.py",
+        "git_blob_sha256": "84d85157fe3b433ff83960a58bf3828085b3853aa78d63e583b41d66b339eccd"
+      },
+      {
+        "path": "tests/validation/test_sw_sec_data_02_c2.py",
+        "git_blob_sha256": "2c11de0c81e91a4e2efe1af3512661cfdad867241c33e883737fa25ac30c0836"
+      },
+      {
+        "path": "tests/validation/test_sw_sec_data_02_c3.py",
+        "git_blob_sha256": "1dc874e4df9ff72667481450e21f725993940f3f995e2ec001e21429a6824840"
+      },
+      {
+        "path": "tests/validation/test_sw_sec_data_02_c4.py",
+        "git_blob_sha256": "0edfbbd1d35642547213f212c74afe8e1527517dfafa5621edc58cadb39007c4"
+      },
+      {
+        "path": "tools/validate/clients/api.py",
+        "git_blob_sha256": "535acfd685619b47523050d392a5dee3bbb62cf97fbb3df0c7d8a438598d44cb"
+      },
+      {
+        "path": "tools/validate/clients/ha.py",
+        "git_blob_sha256": "5ffd93168cd6e703158d7c63963396c20edd9cb8570dbfb200b2b2ee6e553192"
+      },
+      {
+        "path": "tools/validate/evidence.py",
+        "git_blob_sha256": "ede494c17467d98afc6c63fefc99b70e290c952ca17d1460b4e12f88fca14c85"
+      },
+      {
+        "path": "tools/validate/model.py",
+        "git_blob_sha256": "99e7da858ed9664b6d7cdfa593b4c4926ff9cd34cc79771ab986ad9c73e55636"
+      },
+      {
+        "path": "tools/validate/runner.py",
+        "git_blob_sha256": "b692d6a63f163411c3f26924e12bffe1b704560143f10c12040ecd0c75ffc9df"
+      }
+    ],
+    "actual_authorship": "OpenAI Sol6.1/high original C1-C3 plus C4. C1-C3 native attestation in prior privacy assessment closeout; C4 native full3e728f1c.. retained privately and delivery attests route. No MiniMax authorship.",
+    "added_ha_scope": "tools/validate/clients/ha.py _http/perform diagnostic/error copies explicit in adopted D7/C4 lease",
+    "assessment_axes": {
+      "subject": "Exact C4 descendant from original privacy base, criteria frozen now before implementation; source hash/path delta bound in dispatch artifact after C4 settles and before candidate start",
+      "axes": {
+        "provenance": "Verify exact full corrected chain/base/all commits/paths/authors and unchanged historical failures; actual M3/thinking Task/Dispatch/cwd/native/helper route. Bind added ha.py scope explicitly. Source attribution and evidence admission stay separate.",
+        "dataflow_invariants": "Inspect full supported credential/carrier/caller/sink path and raw/public-data preservation, including HA diagnostic lease, model/runner/evidence persistence and summary. Calling a mask helper alone does not prove safety.",
+        "counterexamples": "Meaningful independently chosen positive preservation and failure-sensitive synthetic controls using actual raw/wire/verdict/persisted-byte effects. Known public defects are inputs, not own discoveries. No novel-defect requirement; no mirror-only assertions.",
+        "behavior_and_tools": "Actual full changed source/tests/caller reads, current import origins/versions/direct child argv/exits/full output/JUnit, inherited OS isolation/fresh original temp and complete honest native/tool/output coverage. Hash/preservation is not a full semantic read. No canonical global-gate retry.",
+        "calibration": "Distinguish changed/inherited defects, supported/conditional/unproved shapes, private/public artifact exposure, actual HA harness versus product HA and physical devices; preserve skipped/failed/lost originals. Accurate severities, limitations and qualified domain only.",
+        "review_quality": "Substantive source/assertion/invariant analysis and supported findings across complete C1-C4 window, including sensitivity/compatibility/race/error paths and no factual overclaims. All six PASS required, unknown holds."
+      },
+      "standard": "Same six substantive behavioral standards as earlier privacy assessment, adapted prospectively for actual new family/complete corrected source and explicitly added HA diagnostic scope. Original Opus packet/report/verdict remain immutable. No softened safety/tools/calibration standard or forced PASS.",
+      "budget": "ONE candidate, ONE judge; separate actual qualified full-chain source review and secondary report-quality evaluation later. No automatic old/new attempt retry."
+    },
+    "task": {
+      "id": "PRIV-ASSESS",
+      "state": "Provisional FIRST new-family review-domain assessment, not source acceptance",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base_selection": "Exact settled/preserved/published PRIV-C4 descendant of 2d02004d3108953a302e1a49aab9a5f24e944136; complete review window d6e78e0b6ab1dab5216443584d810a7a24af32b2..C4",
+      "reserved_worktree": "wp-recovery-privacy-m3-assess",
+      "proposed_branch": "qualification/recovery-privacy-m3",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md"
+      ],
+      "independent_reviewer": "OpenAI gpt-6-astra/high, qualified independent review-of-review judge; not source author",
+      "acceptance": [
+        "Enumerate actual supported credential names/headers/cookies/query carriers including current_pin/current_passcode/passcode/X-Passcode, X-Admin-PIN, API keys/Authorization/tokens and HA options.api_key. Exact credential headers must not swallow public X-Admin-PIN-Policy in any casing.",
+        "Support transport-accepted tuples, header-pair collections and serialized JSON data without rejection or mutation of wire values; arbitrary mappings/prose extensions require evidence or calibrated limits. Structural/contextual masking before repr/json/truncation is primary. Opaque sensitive error text must be safely suppressed or masked before truncation; merely calling existing query-only redact(text) is not proof.",
+        "Cover Action/Response/Hub descriptions, request/client steps, actual/expected check detail, procedure, failed/blocked Outcome reasons, write_record and _write_summary, HA HTTP/perform diagnostic sinks. Hub path/query and sensitive equals both need safe display copies; reject a blanket never-redact-Hub.equals exemption.",
+        "Preserve known public shortcut data.key and password_protected fields using proven diagnostic context; keep created/unknown credential key masked, preserve integer PIN masking and wrong-type negative controls. Do not exempt all bool/None or globally replace short PIN values in public IDs/ports/timing.",
+        "Use actual loopback ApiClient/Runner/write_record/summary and HA-client options paths with synthetic markers, full byte scans across persisted JSON/summary and retained stdout/stderr/log records, raw object identity/on-wire controls and raw matched/mismatch/expected-*** verdicts. Exercise action/setup/cleanup/error/blocked paths and field/carrier/sink selective reversions with actual failing child exits.",
+        "C1-C3 tests/reports unchanged and pass. Add only C4 regression module/report. Inspect HA named-field defaults serialization and ClientState diagnostics within the leased display scope; explicitly retain any unsupported product-HA/real-client acceptance gap. No live HA/HIL claim from synthetic harness tests.",
+        "Normal source hook/full applicable core/strict route coverage, Ruff/mypy as applicable; fresh per-invocation own data/config/native TEMP/TMP/basetemp/JUnit and measured imports. Keep every failure/skip/timeout and exact raw origins; no global validation ledger/gate/canonical evidence generation in authorship work.",
+        "All six standards in privacy_assessment below. Independently enumerate carriers/sinks/callers/assertions and design meaningful positive/negative controls. Mark already-public findings as supplied inputs. No novel-bug quota, but copying/replaying supplied conclusions alone cannot qualify."
+      ],
+      "reserve": "Exactly ONE M3 candidate and ONE independent exact-report judge. FAIL/HOLD terminal for this attempt; no rewrite/retry/replacement judge or automatic family substitution.",
+      "dependencies": [
+        "PRIV-C4"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    "judge": "ONE subsequent independent gpt-6-astra/high at exact delivered assessment report. Judge evaluates all six axes, not OpenAI source self-acceptance.",
+    "known_inputs": "Prior Opus assessment FAIL, public J1/N/current_pin/HA/sink/public-data gaps and C4 catalog self-audit are supplied findings, not a demand for novel bugs or candidate discovery credit."
+  },
+  "ws_subject": {
+    "tip": "24c5170458200209836228646fdfc8784a967ad1",
+    "component_base": "460a190575e905f8350c454e63c4d570c8b560fa",
+    "correction_base": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+    "task": {
+      "id": "WS-R01",
+      "state": "After settled/preserved WS-C01",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base_selection": "Exact WS-C01 report/source commit; review whole component from 460a190575e905f8350c454e63c4d570c8b560fa and correction from 15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "reserved_worktree": "wp-remediation-ws-work-c01-review",
+      "proposed_branch": "remediation/ws-work-c01-review",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01-REVIEW.md"
+      ],
+      "independent_reviewer": "Different-family source author is Anthropic; reviewer reports and cannot fix",
+      "acceptance": [
+        "All four original eager/reentrant factory/body owner/application shapes remain supported and become committed regression cases. Before/after or selective reversion must fail/pass on truthful drain for the intended reason; no test mirrors of only counters.",
+        "Observe test-owned factory-entry/return/body/release gates and actual task liveness. A task does not yet exist during the factory-cleaner window; all_tasks alone is insufficient. Explicitly release/await every task after assertions.",
+        "Multiple nested reentrant admissions and reserve-to-task/failure/completion boundaries must be counted exactly; do not assume at most one reservation. Cover zero/small timeout, cooperative/resistant/self cleanup, waiter cancellation at both scopes, wrong-loop/no-loop/prebinding behavior, stale callbacks, factory/task-creation failures, rejected uncalled factories and other-owner progress.",
+        "Run existing44 focused cases unchanged plus new regressions, actual debug configured/asserted, meaningful selective mutants, existing WS/events/server/runtime regressions, Ruff, mypy and normal final source hook/full core with strict complete route inventory and fresh isolated original receipts.",
+        "WSR03 remains historical failure. Audit this correction own full native writes for exact-root compliance; all scripts/commit messages stay under owned roots. Correct old debug claims only in new correction report, never edit original AUTHOR/REVIEW or lost/failed originals.",
+        "Separate fields for exact corrected component correctness, original first-authorship NOT_GRANTED/HOLD, all old/new finding dispositions, and wiring HELD. No new author competence grant."
+      ],
+      "reserve": "One source review and one changed-commit re-review only if reserved material fix needed.",
+      "dependencies": [
+        "WS-C01"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    "scope": "Qualified exact component source review; original failed first-authorship/WSR03 remain, not new competence or wiring."
+  },
+  "source_acceptance": false
+}

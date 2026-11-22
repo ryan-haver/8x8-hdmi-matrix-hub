@@ -1,0 +1,170 @@
+{
+  "observed_utc": "2026-11-04T10:40:42.423394+00:00",
+  "phase": "remediation-recovery-20261104",
+  "status": "ADOPTED: three genuine families completed all3rounds and explicitly ACCEPT same complete FINAL_PACKET v1 hash",
+  "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
+  "coordinator_is_participant": false,
+  "rounds": {
+    "R1": [
+      "task_3533f742d143",
+      "task_30e8158c02a5",
+      "task_ad18152bbe0f"
+    ],
+    "R2": [
+      "task_eb1c577c2685",
+      "task_da8abc159b3e",
+      "task_24b952fffacf"
+    ],
+    "R3": [
+      "task_3c062bb9de42",
+      "task_79d0d9028045",
+      "task_dfe340b7113e"
+    ]
+  },
+  "votes": {
+    "openai": {
+      "family": "OpenAI",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "task_id": "task_3c062bb9de42",
+      "dispatch_id": "ctx_6cb8482cdd03",
+      "verdict": "ACCEPT",
+      "complete_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "report_commit": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "parent": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round3/openai.md",
+      "canonical_report_sha256": "7eb1da2f2e1bce4738e0b7b656214f208f9522be841285a44a2b564ee559436e",
+      "native": {
+        "session": "01a1a608-cf9b-7fe1-af42-24c752a8ca18",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 1557227,
+        "sha256": "e4dda223bb3e7fed48b4d7fe7011bb18a01f54c792f4636e352d513e2a7816a9",
+        "unassigned_helpers_observed": []
+      },
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "94adabdb9eb0dce09251264a69b7add8f100051c390c8f467a879c70f9da7aea"
+      },
+      "settlement": "Positively released exact owned resource; native/workspace/ignored/temp archives verified, exact task ref published",
+      "task_publication": {
+        "head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "remote_head": "ff57e990c93d56ad4c050f399b5e49131949b647",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact": true,
+        "prior_head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "prior_refs": "R1/R2remain ancestors and original archives immutable; normal fast-forward only",
+        "tree": "retained; no full Git bundle or destructive cleanup"
+      }
+    },
+    "minimax": {
+      "family": "MiniMax",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "task_id": "task_dfe340b7113e",
+      "dispatch_id": "ctx_500618559004",
+      "verdict": "ACCEPT",
+      "complete_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "report_commit": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "parent": "6671c92789d0de0590609590aeebc73772c00069",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round3/minimax.md",
+      "canonical_report_sha256": "4c1afc620abb862b87bae50984429abc2e4c8d575cbf8cae6cb70eacb9ba462a",
+      "native": {
+        "task": "task_dfe340b7113e",
+        "dispatch": "ctx_500618559004",
+        "session": "ses_e59eab66fffeTpxkIFjV21JciX",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 795623,
+        "sha256": "6fcde52fe86569332416bdfa258c7047947608ff77828db211cd34fde235c24a",
+        "unassigned_helpers_observed": [],
+        "scope": "Exact-session native capture; final planning decision only, no source qualification"
+      },
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "24efb0515cc21c504436226769ee2cd6bdef4ba6848e8ed23129108ddf9bf420"
+      },
+      "settlement": "Positively released exact owned resource; native/workspace/ignored/temp archives verified, exact task ref published",
+      "task_publication": {
+        "head": "d9b575cc438f8473d96f106db03629aaa608cde5",
+        "remote_head": "d9b575cc438f8473d96f106db03629aaa608cde5",
+        "branch": "planning/remediation-recovery-r1-minimax",
+        "exact": true,
+        "push_exit": 0,
+        "tree": "retained; no full Git bundle or cleanup",
+        "failure_receipts": "Every normal push stdout/stderr retained; no force or alias"
+      }
+    },
+    "anthropic": {
+      "family": "Anthropic",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "task_id": "task_79d0d9028045",
+      "dispatch_id": "ctx_9d313bb15f8b",
+      "verdict": "ACCEPT",
+      "complete_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+      "report_commit": "5097650314502686a845a714e638643d66087971",
+      "parent": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+      "report_path": "docs/agent-process/phases/remediation-recovery-20261104/round3/anthropic.md",
+      "canonical_report_sha256": "7c1244a326ae2635e58f53364f3e26fbd02131753732684e3594d731a2acb591",
+      "native": {
+        "session": "816774bf-9bb2-4931-95c6-942e6fe22021",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 1605581,
+        "sha256": "97dff189be19cfbba7723c31683b081605e5ee3d721da5bbf62c1327c261de0a",
+        "unassigned_helpers_observed": []
+      },
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0,
+        "junit_sha256": "8eb0fdebe8619318ddfda6df61ae28d5c2d9181f9635fc8836c5d17f13029e61"
+      },
+      "settlement": "Positively released exact owned resource; native/workspace/ignored/temp archives verified, exact task ref published",
+      "task_publication": {
+        "head": "5097650314502686a845a714e638643d66087971",
+        "remote_head": "5097650314502686a845a714e638643d66087971",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact": true,
+        "prior_head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "prior_refs": "R1/R2remain ancestors and original archives immutable; normal fast-forward only",
+        "tree": "retained; no full Git bundle or destructive cleanup"
+      }
+    }
+  },
+  "actual_provenance": "Native exact model/Task/Dispatch/worktree records independently captured; OpenAI operational publication-ACK Taska971/ctx137 is supplemental bookkeeping, NOT a vote or tenth planning contribution.",
+  "disputes": "R1/R2 original dissent, source mistakes and corrections remain byte-for-byte. R3 actual reports independently withdraw/accept chosen C4 order, drain field semantics and other dispositions. No majority/timer/coordinator-simulated consent.",
+  "binding_execution_gate": {
+    "id": "D6-target-provenance",
+    "status": "HELD / NOT_DISPATCHABLE_AS_SCOPED",
+    "target": "12ad507eb3c0b24bd896b3bf1757d03980d19696",
+    "facts": "R3 Anthropic reports and coordinator independently reads Claude Opus5.5 Co-Authored-By trailers on websocket.py commits323af8e4/c39ee8d5/dbf5349e and app.py commits323af8e4/bc3b9353. These are conflict indicators, not a replacement for actual native source-family attribution. Required non-Anthropic target/independence has NOT been established.",
+    "disposition": "Apply unchanged FINAL_PACKET D6 limits and provenance/conflict gate: HOLD the async-review candidate and WS wiring, continue independent covered source corrections. No target narrowing, authorship relabel, retake or changed family allocation at dispatch. Actual attribution or material revised target/strategy requires the stated process before a later decision.",
+    "plan_interpretation": "No material packet change or new acceptance condition: all participants accepted fail-closed provenance/qualification gates. Anthropic explicitly confirms this is nonblocking for other packages; OpenAI/MiniMax accept the same gate.",
+    "candidate_attempts_launched": 0,
+    "wiring_leases_granted": 0
+  },
+  "adoption_is_not_qualification_or_source_acceptance": true,
+  "source_next": "Wave A WS-C01 product correction and original Sol PRIV-C4 with explicit held privacy review; exact new source dispatch still needs publication, current quotas/routes/environment, exclusive leases and actual Orca authority.",
+  "preservation": "All nine planning reports/native/workspace/temp preserved; current owned workers released, exact R3refs verified. Prior failed qualifications/WSR03/lost originals and all hardware/visual/soak/week/final-release gates unchanged.",
+  "publication_history": "GitHub Internal Server Error push originals preserved. Latest prior integration checkpoint2d144551 normal third attempt now exact published; no force/reset/alias/source or docs-test retry."
+}

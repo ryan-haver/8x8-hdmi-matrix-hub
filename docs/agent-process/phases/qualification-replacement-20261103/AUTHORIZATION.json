@@ -1,0 +1,28 @@
+{
+  "observed_utc": "2026-11-03T17:47:23.285520+00:00",
+  "owner_message": "prepare and deploy",
+  "context": "reply to prepared replacement-model assessment proposal and explicit approval request",
+  "authorized_target": "deploy genuine supervised workers for prospective replacement-model planning and one candidate qualification; release deployment not inferred",
+  "proposal_sha256": "7a0e87ccb7eb5c30503fff2a536c0d23fd80ac93b6edadd56e911f18d5ab3046",
+  "planning": {
+    "families": [
+      "Anthropic",
+      "OpenAI",
+      "MiniMax"
+    ],
+    "rounds": 3,
+    "max_contributions": 9,
+    "coordinator_not_counted_as_contributor": true
+  },
+  "candidate": "claude-opus-5-5/high",
+  "max_new_evaluator_attempts": 1,
+  "max_new_independent_judges": 1,
+  "execution_prerequisites": "actual all3provider planning contributions and same-hash finalpacket decisions, fresh suitable capacity/identity/leases, source/rubric exact unchanged",
+  "source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "both_failed_Opus4_7_attempts_retained": true,
+  "further_automatic_retry": false,
+  "source_changes_or_release_approval": false,
+  "new_credit_accounts_or_credentials": false
+}

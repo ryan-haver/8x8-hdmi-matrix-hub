@@ -1,0 +1,311 @@
+{
+  "observed_utc": "2026-11-04T19:41:30.469970+00:00",
+  "phase": "functional-completion-20261104",
+  "status": "Firstexecutionreports complete/preserved/released/published; independentdifferentfamilyexactcommitreviewsACTIVE",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "prewave_published_verified_head": "add7f4eb005c6b7267fb556bd6cf3f967fe2ebb6",
+  "actors": {
+    "truth": {
+      "package": "FC-TRUTH",
+      "task_id": "task_999c32971b04",
+      "dispatch_id": "ctx_465cf8734afd",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-review",
+      "branch": "review/wp-fc26-fc-truth-review",
+      "exact_base": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+      "exclusive_report": "docs/production/functional-completion-20261104/FC-TRUTH/REVIEW.md",
+      "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-TRUTH.md",
+      "private_exactbase_spec_sha256": "8650301550c8fdeb70e16504796b1c744f8b8a212e918218afec26ee11fba719",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native exactTask/Dispatch/cwd",
+        "session": "01a1a812-249b-7020-95f5-55368c9ff2f4",
+        "models": [
+          "gpt-6.1-sol"
+        ],
+        "effort": "high native",
+        "bytes": 1459027,
+        "sha256": "cd9d3ce6cb36c89e85be76d2ee58bcf48d24471d3e7bd089eee358666834129c",
+        "helper_calls_observed": false,
+        "scope": "entry only, no competence/completion/allhostcensus"
+      },
+      "reviewer_reservation": "different-family prose/metadata fidelity review; no primary source acceptance or qualification gate",
+      "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance",
+      "dependencies": [
+        "task_ae949bd12fff"
+      ],
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "provenance": {
+      "package": "FC-PROVENANCE",
+      "task_id": "task_64e1d8cb5db6",
+      "dispatch_id": "ctx_f509f51a7c49",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance-review",
+      "branch": "review/wp-fc26-fc-provenance-review",
+      "exact_base": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+      "exclusive_report": "docs/production/functional-completion-20261104/FC-PROVENANCE/REVIEW.md",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-PROVENANCE.md",
+      "private_exactbase_spec_sha256": "9df8c5bdf550a048eb969169a43de4df948bb4c0251fae85e126160f3cfa8287",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "actual native exactTask/Dispatch/directory",
+        "session": "ses_e57edb6c8ffe9CMbDA40bgzGPR",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 369826,
+        "sha256": "83166c018862da572bb09a014f16e22dcbc3c5668c58ba5cd660d0162a346104",
+        "helper_calls_observed": false,
+        "scope": "entry only, no competence/completion/allhostcensus"
+      },
+      "reviewer_reservation": "different-family prose/metadata fidelity review; no primary source acceptance or qualification gate",
+      "status": "ACTIVE exactcommit independent factual/fidelity review only; no canonical/source/modelgateacceptance",
+      "dependencies": [
+        "task_a7ee911f3245"
+      ],
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "capacity": {
+    "truth": {
+      "provision": {
+        "observed_utc": "2026-11-04T19:37:20.551689+00:00",
+        "scope": "Reserved different-family exactcommitSoltruth/M3provenancefidelityreviews; factualauthorcorrection/rereview separatelystaged, no qualification/sourcegate",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 25,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793820785948,
+          "error": null,
+          "age_seconds": 255
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 39,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932837,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 47,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793820785749,
+          "error": null,
+          "age_seconds": 255
+        }
+      },
+      "launch": {
+        "observed_utc": "2026-11-04T19:38:41.662084+00:00",
+        "scope": "Reserved different-family exactcommitSoltruth/M3provenancefidelityreviews; factualauthorcorrection/rereview separatelystaged, no qualification/sourcegate",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 25,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793820785948,
+          "error": null,
+          "age_seconds": 336
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 39,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932837,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 47,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793820785749,
+          "error": null,
+          "age_seconds": 336
+        }
+      }
+    },
+    "provenance": {
+      "provision": {
+        "observed_utc": "2026-11-04T19:37:29.659670+00:00",
+        "scope": "Reserved different-family exactcommitSoltruth/M3provenancefidelityreviews; factualauthorcorrection/rereview separatelystaged, no qualification/sourcegate",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 25,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793820785948,
+          "error": null,
+          "age_seconds": 264
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 39,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932837,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 47,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793820785749,
+          "error": null,
+          "age_seconds": 264
+        }
+      },
+      "launch": {
+        "observed_utc": "2026-11-04T19:38:50.040234+00:00",
+        "scope": "Reserved different-family exactcommitSoltruth/M3provenancefidelityreviews; factualauthorcorrection/rereview separatelystaged, no qualification/sourcegate",
+        "unknown": "absoluteallowance and otherhostdemand unexposed; futurejudge/source/review stages separatelyfreshlygated",
+        "supported_refresh": "Orca native UI Refresh rate limits observed/read-only usage action; subsequent CLI actualupdatedAt freshness verifies effect; no account/settings/spend change",
+        "codex": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 25,
+            "windowMinutes": 10080,
+            "resetsAt": 1794378964000,
+            "resetDescription": "Tue 11:36 PM"
+          },
+          "session": null,
+          "updatedAt": 1793820785948,
+          "error": null,
+          "age_seconds": 344
+        },
+        "minimax": {
+          "status": "ok",
+          "weekly": {
+            "usedPercent": 39,
+            "windowMinutes": 10080,
+            "resetsAt": 1793823932837,
+            "resetDescription": null
+          },
+          "session": {
+            "usedPercent": 47,
+            "windowMinutes": 300,
+            "resetsAt": 1793830434075,
+            "resetDescription": null
+          },
+          "updatedAt": 1793820785749,
+          "error": null,
+          "age_seconds": 344
+        }
+      }
+    }
+  },
+  "fleet": {
+    "total": 170,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 170,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDUxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDoxNToyMyIsImRpc3BhdGNoSWQiOiJjdHhfM2Q1Y2JhMDMzMGEyIiwiZGF0YWJhc2VJZCI6MTM3Nn19"
+      },
+      {
+        "limit": 100,
+        "total": 170,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 161,
+      "null": 1
+    },
+    "historical_retained": 6,
+    "current_owned": 2,
+    "historical_null_compatibility_no_resource": 1
+  },
+  "concurrency": "two reviewers+coordinator+protectedexternal=4/max2new/no nesting; authorspositivelyreleased",
+  "source_targets": {
+    "truth": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+    "provenance": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b"
+  },
+  "staging_recovery": "BothagentfreeOrcacreations/config/specsteps succeeded; coordinatorbindinghelperthenKeyError(reviewermetadatafield). No workerstart/duplicatewriter existed. Originalhelper/errors/receipts retained; exactexistingtrees/branches/heads/config/status/shell-onlycensusverified, bindingcompletedonly, no recreation or failed-worker retry.",
+  "storage": {
+    "registration": "9e3030583fd14be69d566db18ed46bab",
+    "approx_new_payload_bytes_at_record": 37604936,
+    "new_payload_disposition": "RequiredfullGitbundles/finalnative/compactreviewreceipts retained, toolretain/finalstoragereceipt beforeturncompletion, review2026-12-04; no redundancyworkspace/buildcopies",
+    "existing_author_output_bytes": 22327843,
+    "existing_author_output_disposition": "Originalprotectedrequiredphaseevidence retainedinplace; notadoptedintodisposablepayload, no arbitrarycleanup",
+    "outside_new_review_worktrees": [
+      {
+        "worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth-review",
+        "tracked_source_logical_bytes": 305328188,
+        "config_bytes": 31,
+        "disposition": "RequiredactiveOrcareviewsourceworktree, no dependency/buildcopy or cleanupauthority; retainthroughsettlement/review, useOrcalifecycleonlylater"
+      },
+      {
+        "worktree": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance-review",
+        "tracked_source_logical_bytes": 305140783,
+        "config_bytes": 1628,
+        "disposition": "RequiredactiveOrcareviewsourceworktree, no dependency/buildcopy or cleanupauthority; retainthroughsettlement/review, useOrcalifecycleonlylater"
+      }
+    ],
+    "quarantined_bytes": 0,
+    "removed_bytes": 0,
+    "initial_publisher_limit": "Firstreviewreadydocsrun ownedbasetemp/data/config underpayload but inheritedsystemTEMP; no knownoutsideoutput identified. Subsequent publisher explicitlyredirectsTEMP/TMP/TMPDIR toownedpayload. Ownscopeinventory is notallhostwriteproof."
+  },
+  "review_scope": "SolreviewsM3inventory, M3reviewsofAstraauditfidelity only; nonM3coordinator independentlychecksM3facts, nonOpenAIcrosscheckAstra facts beforeeligibility; no selfsource/modelgateacceptance",
+  "holds": "Authorreportsnotcanonical/sourceaccepted; C2fullSHA mismatchcounterpoint passedtoreviewer; all WSNOT_GRANTED/WSR03/D6/privacyFAILs/sourceadmission/HA/UI/compatibility/ownerprivacybudget/physicalvisual72hweekrelease gatesopen",
+  "next": "publish489docs/exactremoteequality; finishregisteredstoragereceipt/retainrequiredoutputs thenENDTURN forOrcawake/no completionpoll"
+}

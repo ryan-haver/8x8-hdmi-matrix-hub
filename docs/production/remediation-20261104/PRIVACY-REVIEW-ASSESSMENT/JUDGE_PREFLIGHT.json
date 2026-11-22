@@ -1,0 +1,115 @@
+{
+  "observed_utc": "2026-11-04T07:33:45.405390+00:00",
+  "status": "ONE independent privacy-competence judge PREPARED, no Task/Dispatch/tree yet",
+  "job": {
+    "key": "privacy-judge",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "name": "wp-qual-privacy-review-20261104-judge",
+    "branch": "qualification/privacy-review-20261104-judge",
+    "base": "1a38e2851f0223627f5377fa5e32584c233e1223",
+    "report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/REVIEW.md",
+    "spec": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/JUDGE_TASK.md",
+    "title": "Independent exact-report privacy-review competence judgement",
+    "deps": [
+      "task_8b5496cdc9b2"
+    ],
+    "packet_sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+  },
+  "candidate_commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+  "candidate_report_sha256": "7b469ade0388e0de5a46051528992bfb675ba43addd871c48fdaeaf48aa01f2c",
+  "packet_binding": {
+    "scope": "Representation erratum only: previous94b28 digest binds working CRLF; canonical Git LF173270 digest differs only by CRLF normalization. Original task/packet/rubric/source content unchanged.",
+    "working_CRLF": {
+      "bytes": 8460,
+      "sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4"
+    },
+    "canonical_Git_LF": {
+      "bytes": 8308,
+      "sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8"
+    },
+    "normalization_exact_equal": true,
+    "parsed_content_exact_equal": true
+  },
+  "all_axes_unchanged": true,
+  "candidate_resource": "released/native+workspace+temp preserved/taskrefexactpublished",
+  "source_authorship": "Historical C1/C2/C3 actualnative gpt-6.1-sol/high corroborated, attribution-only not old evidence admission",
+  "qualification": "NOT_GRANTED until independent all-six exact-report judgement and coordinator disposition",
+  "source_acceptance": false,
+  "attempt_budget": "ONE candidate delivered; this ONE fresh judge remains. No automatic author rewrite/retry/new judge.",
+  "preflight": {
+    "observed_utc": "2026-11-04T07:30:47.012028+00:00",
+    "version": "1.4.247",
+    "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+    "run": {
+      "id": "run_37205f6095b3",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5
+    },
+    "fleet": {
+      "total": 138,
+      "all_pages": true,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 138,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzA3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAxMDoyNzozOCIsImRpc3BhdGNoSWQiOiJjdHhfYmIwZThhZWY1NGQyIiwiZGF0YWJhc2VJZCI6NzM2fX0"
+        },
+        {
+          "limit": 100,
+          "total": 138,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 131,
+        "retained": 7
+      }
+    },
+    "capacity": {
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400180,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 9,
+          "windowMinutes": 300,
+          "resetsAt": 1793778600180,
+          "resetDescription": "12:50 AM"
+        },
+        "updatedAt": 1793777326184,
+        "error": null,
+        "age_seconds": 121
+      },
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 5,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793777326464,
+        "error": null,
+        "age_seconds": 121
+      }
+    },
+    "WS_component": {
+      "taskId": "task_38756b76bd12",
+      "dispatchId": "ctx_14a660b697ab",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    }
+  },
+  "concurrency": "existingWScomponent+newjudge+coordinator+protectedexternal=4, no nesting",
+  "future": "No canonical fixes accepted yet; actual privacy-source review follows any qualification PASS. Existing WScandidate has separate exact-commit review reserved, not replaced by this judgement."
+}

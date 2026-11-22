@@ -1,0 +1,338 @@
+{
+  "prepared_utc": "2026-10-20T22:18:51.243401+00:00",
+  "state": "proposed candidate; exact independent final review and integration pending",
+  "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+  "submitted_author_sha": "141bffb225c8c2a5cd25f614bccf5d0ab32ec0e1",
+  "first_source_sha": "f4ffa8d15aea519934e25a8b248992ebb074fe86",
+  "original_base_sha": "51275723846e4b126ccdc48c71d1727cabca4dbc",
+  "scope": "F-SEC-007 API V2/browser V3 source simulator plus three F-API-002 API V2 refresh records; all null image digests",
+  "records": [
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.profile_wrong_pin-api.json",
+      "sha256": "728d425701ff18cb3d8a3568ff6c1a1b7c5540e7a5fca13c0f03465d58858d47",
+      "scenario": "security_hardening.profile_wrong_pin",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:11.883Z",
+        "finished": "2026-10-20T22:06:13.143Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-security_hardening.scene_wrong_pin-api.json",
+      "sha256": "491473cd81af70661b3178c392ba10b1b1a1f0037fb74ff5bbce06e1756ce095",
+      "scenario": "security_hardening.scene_wrong_pin",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:13.208Z",
+        "finished": "2026-10-20T22:06:14.106Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_allowed-api.json",
+      "sha256": "805e18d8b91869db31cf694e853e1d0270c1346fa8f007d43e92008f21117ea0",
+      "scenario": "sw_sec_auth_01.profile_allowed",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:15.056Z",
+        "finished": "2026-10-20T22:06:15.949Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-api.json",
+      "sha256": "6262ecb1712d9956d6857607ecd41060d18ca64fca4d2201c36b71eddc233dce",
+      "scenario": "sw_sec_auth_01.profile_wrong_pin",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:14.117Z",
+        "finished": "2026-10-20T22:06:15.047Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_allowed-api.json",
+      "sha256": "966ebb59ca593b730f71b775a3110b824aac45890efc06733a9fc25b9c47bb09",
+      "scenario": "sw_sec_auth_01.scene_allowed",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:16.820Z",
+        "finished": "2026-10-20T22:06:17.638Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V2-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-api.json",
+      "sha256": "ad7269d8ad41ab70f6620829fcac1872d87309b3c06346364ac9f9987bc37293",
+      "scenario": "sw_sec_auth_01.scene_wrong_pin",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:15.960Z",
+        "finished": "2026-10-20T22:06:16.812Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_allowed-browser.json",
+      "sha256": "bb11a0d6d4dc1b041815e3954f9131827c68b7fca98661c30c3ec5e4a84a5c52",
+      "scenario": "sw_sec_auth_01.profile_allowed",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:21.178Z",
+        "finished": "2026-10-20T22:06:24.056Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_locked-browser.json",
+      "sha256": "0b23b900b810af5b034e28fd002386373ea1eeeb0f1f2afd5c36cc521a5c855f",
+      "scenario": "sw_sec_auth_01.profile_locked",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:24.063Z",
+        "finished": "2026-10-20T22:06:37.956Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_per_item-browser.json",
+      "sha256": "262108106a102690121810e801f595e55c1913d975d3b54fb8f3e849203d2ac0",
+      "scenario": "sw_sec_auth_01.profile_per_item",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:37.974Z",
+        "finished": "2026-10-20T22:06:54.500Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.profile_wrong_pin-browser.json",
+      "sha256": "376b097fbd28ce2ecf83d17fd8f4f04c6edfdda6b67e282f3b88e4b19b66690d",
+      "scenario": "sw_sec_auth_01.profile_wrong_pin",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:18.118Z",
+        "finished": "2026-10-20T22:06:21.169Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_allowed-browser.json",
+      "sha256": "2546050ea4c46cbfdefb289787f26ba25517dc05fcea17e2b7113f1429b76121",
+      "scenario": "sw_sec_auth_01.scene_allowed",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:59.112Z",
+        "finished": "2026-10-20T22:07:03.306Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_locked-browser.json",
+      "sha256": "0f1789ea23b0705dcf546ebc6be5dc2fae05a8d3b8c81ae99993248cec3714f1",
+      "scenario": "sw_sec_auth_01.scene_locked",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:07:03.321Z",
+        "finished": "2026-10-20T22:07:20.625Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_per_item-browser.json",
+      "sha256": "f4c1fd58f5d1c8dabe868a453468a818be9e2b6a27ed0fb90b592232b480dadc",
+      "scenario": "sw_sec_auth_01.scene_per_item",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:07:20.652Z",
+        "finished": "2026-10-20T22:07:43.007Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01/F-SEC-007/2026-10-20-V3-2ae46e6c-sw_sec_auth_01.scene_wrong_pin-browser.json",
+      "sha256": "f455a2d767b1d441bf1518ac9c83dcff1f3265da42714449d31c67676d8062eb",
+      "scenario": "sw_sec_auth_01.scene_wrong_pin",
+      "client": "browser",
+      "level": "V3",
+      "features": [
+        "F-SEC-007"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:54.522Z",
+        "finished": "2026-10-20T22:06:59.099Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_info-api.json",
+      "sha256": "64c34c250c42c319044171ce935f85d3b32ca06b68411c40b36bc5909bfc2ad9",
+      "scenario": "contracts.api_info",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:55.643Z",
+        "finished": "2026-10-20T22:06:56.119Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root-api.json",
+      "sha256": "bcc2f9623b0af0eba8dfdd33886791f805a37d515d321e4145a775af074b3357",
+      "scenario": "contracts.api_root",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:56.193Z",
+        "finished": "2026-10-20T22:06:56.317Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-SEC-AUTH-01-api-refresh/F-API-002/2026-10-20-V2-2ae46e6c-contracts.api_root_alias-api.json",
+      "sha256": "413debb2379675a64a52e5cf4989387b7c72f3b003d22773ed0bb40f715a40e1",
+      "scenario": "contracts.api_root_alias",
+      "client": "api",
+      "level": "V2",
+      "features": [
+        "F-API-002"
+      ],
+      "source_sha": "2ae46e6c8bb9c2133371c3d93509277235e5e40e",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T22:06:56.328Z",
+        "finished": "2026-10-20T22:06:56.456Z"
+      }
+    }
+  ],
+  "auth_clients": {
+    "api": 6,
+    "browser": 8
+  },
+  "auth_checks": {
+    "pass": 108,
+    "n/a_expected_client_scoped": 6,
+    "fail": 0
+  },
+  "api_root_checks": 20,
+  "auth_screenshots": 32,
+  "original_bytes_preserved": true,
+  "registry_changed_features": [
+    {
+      "feature": "F-API-002",
+      "fields": [
+        "basis",
+        "evidence"
+      ]
+    },
+    {
+      "feature": "F-SEC-007",
+      "fields": [
+        "basis",
+        "current",
+        "evidence",
+        "interfaces"
+      ]
+    }
+  ],
+  "corrected_normal_hook": {
+    "pass": 4043,
+    "skip": 4,
+    "deselected": 35,
+    "routes_covered": 177,
+    "routes_total": 177,
+    "seconds": 1352.9
+  },
+  "wait_control": "One existing scenes.wait_edit browser case/4checks/1screenshot retained privately, not imported or used to promote F-DOM-013",
+  "retained_failures": "Both original diagnostic campaigns/audit vocabulary mistake/first source/R1calibration are preserved privately; no dirty evidence imported",
+  "images": "Source-only: no image, HIL, owner auth/LAN, soak, field or final-release qualification",
+  "ledger_and_registry_checks": "Ledgergenerationcompletedalone, followed serially by33registry/schemaPASS and assembledformalGatePASS0knownfailures",
+  "verification": {
+    "registry_schema_tests": 33,
+    "seconds": 6.15,
+    "assembled_formal_gate": "PASS;0knownfailures",
+    "ledger": {
+      "features": 268,
+      "below_target": 203,
+      "stale": 57
+    },
+    "staged_original_json_hashes": 17,
+    "png_lfs_raw_oids_sizes_verified": 32,
+    "whitespace": "OriginalCRLFretained; invocation-onlycr-at-eolcheckPASS;defaultdiagnosticpreserved"
+  }
+}

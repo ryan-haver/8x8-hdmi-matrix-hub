@@ -10,6 +10,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from .api import HubClient, HubError
+from .config_flow import stored_api_key
 from .const import CONF_API_KEY, CONF_IP_ADDRESS, CONF_PORT, DOMAIN, LOGGER, PLATFORMS
 from .coordinator import HdmiMatrixConfigEntry, HdmiMatrixCoordinator, HdmiMatrixRuntimeData
 from .services import async_setup_services
@@ -25,9 +26,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: HdmiMatrixConfigEntry) -> bool:
     """Connect to the hub, fetch the first state, and set up the platforms."""
+    _async_adopt_options_api_key(hass, entry)
     client = HubClient(
         async_get_clientsession(hass), entry.data[CONF_IP_ADDRESS], entry.data[CONF_PORT],
-        entry.options.get(CONF_API_KEY, entry.data.get(CONF_API_KEY)),
+        entry.data.get(CONF_API_KEY),
     )
 
     device: dict = {}
@@ -55,6 +57,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: HdmiMatrixConfigEntry) -
     entry.async_on_unload(coordinator.async_add_listener(_names_changed))
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
     return True
+
+
+@callback
+def _async_adopt_options_api_key(hass: HomeAssistant, entry: HdmiMatrixConfigEntry) -> None:
+    """Move an API key that earlier versions kept in the options into ``entry.data``.
+
+    The options copy took precedence over ``entry.data`` and was never updated
+    by Reconfigure, so a key entered there had no effect. It was the key in
+    use, so it is the one kept; an empty one meant "no key". Also removes an
+    empty or whitespace-only ``api_key`` left in ``entry.data`` by earlier
+    versions. Runs before the update listener is registered, so it does not
+    reload the entry.
+    """
+    api_key = stored_api_key(entry)
+    data = {key: value for key, value in entry.data.items() if key != CONF_API_KEY}
+    if api_key is not None:
+        data[CONF_API_KEY] = api_key
+    options = {key: value for key, value in entry.options.items() if key != CONF_API_KEY}
+    if data == dict(entry.data) and options == dict(entry.options):
+        return
+    hass.config_entries.async_update_entry(entry, data=data, options=options)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: HdmiMatrixConfigEntry) -> bool:

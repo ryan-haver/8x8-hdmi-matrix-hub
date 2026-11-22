@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-10-20T05:02:59.168654+00:00",
+  "owner_approval": "Explicit approval of the three existing Tron paused-frame differences in this conversation",
+  "baseline_commit": "10f788f692881edf329d247de17c5679e1dba2eb",
+  "original_failing_ci": 39305698510,
+  "original_ci_head": "95f64920220fd5269007272ed8f3cbe04604db7e",
+  "matching_records": [
+    {
+      "baseline": "tests/e2e/visual/__snapshots__/desktop/special/tron-background/paused-frame.png",
+      "original_ci_actual_sha256": "713d6daa46cf1b464f79787b49dd142dd14a74bac8af89aff553ac4937addb6a",
+      "original_ci_expected_sha256": "ad2ea3188c9b0808ae17ea81c70b238f0618e11fa751e85c2848efba102f6106",
+      "updated_baseline_equals_original_ci_actual": true,
+      "original_ci_actual_path": "build/ev01-20261020/ci-artifacts/playwright-report/test-results/visual-visual-special-tron-background-paused-frame-desktop/special/tron-background/paused-frame-actual.png"
+    },
+    {
+      "baseline": "tests/e2e/visual/__snapshots__/kiosk-tab-a11/special/tron-background/paused-frame.png",
+      "original_ci_actual_sha256": "59da11f33bf9c865bdd5dd2f54d8f743846adc5638d442285dea377ef0f67fe4",
+      "original_ci_expected_sha256": "cf068711d6f22583f42802fccaf9b257052702574b79108a68be56421c884894",
+      "updated_baseline_equals_original_ci_actual": true,
+      "original_ci_actual_path": "build/ev01-20261020/ci-artifacts/playwright-report/test-results/visual-visual-special-tron-background-paused-frame-kiosk-tab-a11/special/tron-background/paused-frame-actual.png"
+    },
+    {
+      "baseline": "tests/e2e/visual/__snapshots__/kiosk-iphone16promax/special/tron-background/paused-frame.png",
+      "original_ci_actual_sha256": "1aa3ccb6620bf89a49131c6eae1b1e721ddcf6caae7fa82fa82401858832f384",
+      "original_ci_expected_sha256": "66fa7e74b54ff0aee14176f3f3a11e13274fb6095abe17543ec7ddc67a670e0e",
+      "updated_baseline_equals_original_ci_actual": true,
+      "original_ci_actual_path": "build/ev01-20261020/ci-artifacts/playwright-report/test-results/visual-visual-special-tron-background-paused-frame-kiosk-iphone16promax/special/tron-background/paused-frame-actual.png"
+    }
+  ],
+  "passing_ci": 39365581349,
+  "scope": "Artifact identity and authorized fixture updates only; owner retains visual design decision"
+}

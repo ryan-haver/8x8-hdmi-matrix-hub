@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "phase": "qualification-replacement-20261103",
+  "round": "independent assessment input, frozen before any contributor",
+  "integration_base": "d00bf26b0bf5fca45ffed6f3e32b4cc7f5767de1",
+  "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "lineage": [
+    "938ae30339790c361abdda6fdd01b11a4e498518",
+    "386872316cb60130b06dd704557ae6ca1a92b5c8",
+    "060769b724e7a546b8df22eac82f3b288d9bbbe8",
+    "ee3f2e7f034a9ace64553e942f328dff921a1e04",
+    "caaa4faabe9ede1e3aed37d2269efd4a4d691e04"
+  ],
+  "required_nine_path_sample_scope": [
+    "docs/production/software-waves/SW-API-CLIENT-02-C1/AUTHOR.md",
+    "docs/production/software-waves/SW-API-CLIENT-02-C2/AUTHOR.md",
+    "docs/production/software-waves/SW-API-CLIENT-02-C2/INTAKE.md",
+    "docs/validation/features.yaml",
+    "tests/validation/scenarios/sw_api_client_02_c1.py",
+    "tests/validation/test_sw_api_client_02_c1.py",
+    "tests/validation/test_sw_api_client_02_c2.py",
+    "tools/validate/model.py",
+    "tools/validate/runner.py"
+  ],
+  "authorship": "C1/C2 validation followups OpenAI with coordinator registry ownership; older DeepSeek product work precedes this window. Judge of Anthropic evaluation quality is not source acceptance of OpenAI code",
+  "rubric_path": "docs/production/software-waves/MVP-EXECUTION-20261102/QUALIFICATION_RUBRIC.json",
+  "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+  "mandatory_axes": [
+    "provenance",
+    "invariants",
+    "counterexamples",
+    "behavior_and_tools",
+    "calibration",
+    "review_quality"
+  ],
+  "eligible_domain": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+  "proposed_candidate": "native Anthropic claude-opus-5-5/high, candidate/noqualifieddomain",
+  "proposed_independent_judge": "native OpenAI gpt-6-astra/high, exact evaluatorreportcommit, allsixaxes explicit",
+  "history": [
+    {
+      "attempt": 1,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "97c47be3670df297b2a7ac2696350615b88846c1",
+      "judge": "5b70c91604c427d0d0398e6c5b3fce815b35efb3",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/COORDINATOR_DISPOSITION.json"
+    },
+    {
+      "attempt": 2,
+      "model": "claude-opus-4-7/high",
+      "evaluator": "78eea1519cd4b6c8ac626b28ee45281f43623198",
+      "judge": "7548b5b7cd39a714e6e626c6226d8e49a39a14be",
+      "status": "FAIL/noqualifieddomain",
+      "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/COORDINATOR_DISPOSITION.json"
+    }
+  ],
+  "lessons_to_challenge": [
+    "Read all in-window reports/source and actual lineage, never exclude060769",
+    "Derive counts/populations from actual exact scope, including blocked records",
+    "Distinguish ignored private proof from published tracked/ref artifacts",
+    "Retain actual direct exits/stdout/stderr/JUnit/all temp and knownprocessfacts; acknowledge incomplete descendant census and unknown termination cause",
+    "Avoid -I claims about Python environment flags unless actual effective configuration proved",
+    "Plan/nativeidentity/green tests do not confer qualifiedreviewdomain/source/privacy/HA/hardware/release acceptance"
+  ],
+  "non_goals": [
+    "no implementation/test/tool/schema/registry/evidence/baseline changes",
+    "no qualifieddomain from planning",
+    "no new credit/accounts/credentials/spendpurchase",
+    "no Docker/HA/hardware/CI/runtimecampaign or release deployment"
+  ],
+  "planning_process": {
+    "round1": "All3 genuine independent assessments preserved before any peer report sharing",
+    "round2": "Each contributor reads every peer report and challenges staffing/controls with source evidence; preserve reports/dispositions",
+    "round3": "Each inspects SAME complete hashed finalplan/allocation packet and explicitly accepts/requires_changes/blocked; all3accept/no unresolvedmaterialblocker before candidateexecution",
+    "provider_count": 3,
+    "coordinator_synthesis_not_independent_contribution": true,
+    "max_panel_contributions": 9,
+    "incomplete_coverage": "provisional, never invented consensus"
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T17:47:23.285520+00:00",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740799522,
+        "resetDescription": "2:19 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966399522,
+        "resetDescription": "Fri 4:59 AM"
+      },
+      "updatedAt": 1793727648542,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 60,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793727648904,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 8,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 24,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932894,
+        "resetDescription": null
+      },
+      "updatedAt": 1793727648483,
+      "error": null
+    }
+  },
+  "capacity_policy": "Fresh>=30% intendedpool headroom and suitable qualified reserve before every actualstage. Current snapshot not wholebacklog funding. Redistribute suitable ready work; unknown/low pool holds only affecteddispatch absent verifiedfallback; no silentmodel/family swap. Otherhost commitments unknown",
+  "demand": "9 bounded prose planning contributions (R1/R2 target4min/<=600words inclJSON, R3 target2min explicitverdict), one15min candidateassessment and one15min independentjudge; later stages separatelycapacitygated, no unsupportedtoken/cost forecasts",
+  "concurrency": "max2newworkers+coordinator+protected external reservation4 total; no nesting; stagger3contributors",
+  "coordinator_only": [
+    "frozen inputs/finalplan/allocation/consensus/gate and readiness records",
+    "sharedAPIs/contracts/rootmanifests/locks/canonicalregistry/evidence/integration"
+  ],
+  "preparation_already_done": "boundedinventory/findings/CIattribution/preservation-gap/repositoryearlyintake accepted within documentation scope; Flic/HA fieldchecklist pending execution",
+  "release_gates": "original3Tronclosed; source/privacy/HIL/physicalFlic/ownerHA/72h/week/finalversion-artifactrelease unchanged, all61findings open"
+}

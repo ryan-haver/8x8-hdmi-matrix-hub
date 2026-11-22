@@ -69,8 +69,12 @@ async def test_no_connection_is_reported_as_refused_and_a_bad_name_as_not_found(
             raise socket.gaierror(socket.EAI_NONAME, "Name or service not known")
         return real_getaddrinfo(host, *args, **kwargs)
 
+    import telnet_client
+
     monkeypatch.setattr(socket, "getaddrinfo", getaddrinfo)
-    refused = orei_matrix.OreiMatrix("127.0.0.1", port=free_port(), user="Admin", password="x")
+    refused_port = free_port()
+    telnet_client.register_simulator_loopback_port(refused_port)
+    refused = orei_matrix.OreiMatrix("127.0.0.1", port=refused_port, user="Admin", password="x")
     unknown = orei_matrix.OreiMatrix("no-such-matrix.invalid", port=443, user="Admin", password="x")
     try:
         assert not await refused.connect()
@@ -80,6 +84,7 @@ async def test_no_connection_is_reported_as_refused_and_a_bad_name_as_not_found(
     finally:
         await refused.disconnect()
         await unknown.disconnect()
+        telnet_client.unregister_simulator_loopback_port(refused_port)
 
 
 def test_failure_kinds_from_transport_errors() -> None:

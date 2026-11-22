@@ -1,0 +1,178 @@
+{
+  "observed_utc": "2026-11-04T10:07:14.003230+00:00",
+  "status": "All three genuine R2 reports delivered, positively released and originals preserved; MiniMax exact task-ref publication remains held after two GitHub Internal Server Error rejections",
+  "reports": {
+    "openai": {
+      "family": "OpenAI",
+      "commit": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+      "parent": "480a27bd3e65ff657ef878abf11242be0360f735",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/openai.md",
+      "canonical_sha256": "ff24c5c725ab8f0411089ddbc9fe83f03bddc032aab56bd0a2521ccd33e3e58c",
+      "preservation": {
+        "wp-remediation-recovery-r1-openai": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-openai",
+          "head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+          "branch": "planning/remediation-recovery-r1-openai",
+          "status": "?? .codex/config.toml",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\openai-closeout\\preservation\\wp-remediation-recovery-r1-openai\\workspace.tar.gz",
+          "archive_sha256": "b92f301b34d79e34a298811afac27d8f28f94bb13d0038b4c086fc35b5f58d3d",
+          "archive_bytes": 209170360,
+          "regular_files": 4884,
+          "regular_bytes": 308063634,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-openai-r2": {
+          "workspace": "C:\\t\\remediation-recovery\\openai-r2",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\openai-closeout\\preservation\\external-openai-r2\\workspace.tar.gz",
+          "archive_sha256": "fcc6acb78073828f207668fa9755ce599b2e3d01487834517143732de6e30334",
+          "archive_bytes": 69252,
+          "regular_files": 115,
+          "regular_bytes": 172447,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "publication": {
+        "head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "remote_head": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+        "branch": "planning/remediation-recovery-r1-openai",
+        "exact": true,
+        "tree": "retained; no full Git bundle or cleanup",
+        "prior_head": "480a27bd3e65ff657ef878abf11242be0360f735",
+        "prior_R1_publication": "Prior R1commit remains ancestor, originals/archives immutable; normal fast-forward only"
+      },
+      "source_unchanged": true,
+      "status": "Genuine R2 delivered and positively released; original report/native/workspace/temp preserved. Local source/report identity verified. Publication status is separate."
+    },
+    "minimax": {
+      "family": "MiniMax",
+      "commit": "6671c92789d0de0590609590aeebc73772c00069",
+      "parent": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/minimax.md",
+      "canonical_sha256": "563e7d8672723c8890ce54c8886edc88f55aceafbbe0fd8d13b91679848b970e",
+      "preservation": {
+        "wp-remediation-recovery-r1-minimax": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-minimax",
+          "head": "6671c92789d0de0590609590aeebc73772c00069",
+          "branch": "planning/remediation-recovery-r1-minimax",
+          "status": "",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\minimax-closeout\\preservation\\wp-remediation-recovery-r1-minimax\\workspace.tar.gz",
+          "archive_sha256": "a4d109fe6af263f1064bd6ab1bd2e3f4dfe9dcc776bce18821893892ab11b697",
+          "archive_bytes": 208438714,
+          "regular_files": 4805,
+          "regular_bytes": 306251876,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-minimax-r2": {
+          "workspace": "C:\\t\\remediation-recovery\\minimax-r2",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\minimax-closeout\\preservation\\external-minimax-r2\\workspace.tar.gz",
+          "archive_sha256": "0d7cb0ef454fcd4a621a72a1882d2a2784dad9049ef7d047030ec467787a0fdf",
+          "archive_bytes": 74996,
+          "regular_files": 112,
+          "regular_bytes": 261424,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "publication": {
+        "status": "PUBLICATION_HELD: two normal fast-forward pushes rejected by GitHub Internal Server Error",
+        "local_head": "6671c92789d0de0590609590aeebc73772c00069",
+        "observed_remote_head": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+        "remote_equal": false,
+        "preservation": "Complete native/workspace/temp archives member/current bytes verified; exact local source/parent/report hash known. No deletion/force/alias branch or history rewrite.",
+        "attempts": [
+          "push-stderr.txt",
+          "push-attempt02-stderr.txt"
+        ],
+        "next": "Prepare final packet locally; normal integration publication must verify before next worker wave. Retry same task ref only after deliberate re-observation; do not repeat archive/tests or reset Orca."
+      },
+      "source_unchanged": true,
+      "status": "Genuine R2 delivered and positively released; original report/native/workspace/temp preserved. Local source/report identity verified. Publication status is separate.",
+      "checks": {
+        "docs_passed": 489,
+        "direct_exit": 0,
+        "junit_sha256": "d36f4873f45a6db09970bcf021a50d12eff8c8aaf6b766012c03677c74c568e2",
+        "original": "C:\\t\\remediation-recovery\\minimax-r2\\docs01",
+        "origin_limit": "Documentation modules/tools resolve to assigned checkout; hub editable import resolves to root src. Both committed src trees and clean working src were checked identical; do not label that hub origin as the worktree."
+      },
+      "native": {
+        "task": "task_24b952fffacf",
+        "dispatch": "ctx_67cb65bc4f6e",
+        "session": "ses_e5a182897ffeIQ74TxSBobK55y",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 1011169,
+        "sha256": "b941e39bbc5f3eab72cf2ed9f128b63df9fc53e29de6b3f97b3b5e445465523e",
+        "unassigned_helpers_observed": [],
+        "scope": "Exact-session native capture; no source qualification or final consensus"
+      }
+    },
+    "anthropic": {
+      "family": "Anthropic",
+      "commit": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+      "parent": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/anthropic.md",
+      "canonical_sha256": "0c8fb2b6dae659bd78716637af4a8cc0044d36e215644531160b7c9d414816e8",
+      "preservation": {
+        "wp-remediation-recovery-r1-anthropic": {
+          "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-recovery-r1-anthropic",
+          "head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+          "branch": "planning/remediation-recovery-r1-anthropic",
+          "status": "",
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\anthropic-closeout\\preservation\\wp-remediation-recovery-r1-anthropic\\workspace.tar.gz",
+          "archive_sha256": "49b6298d04d7448543c005806d833a1b51c060b7bf1883c26448873e6356356b",
+          "archive_bytes": 207711488,
+          "regular_files": 4775,
+          "regular_bytes": 303727295,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        },
+        "external-anthropic-r2": {
+          "workspace": "C:\\t\\remediation-recovery\\anthropic-r2",
+          "head": null,
+          "branch": null,
+          "status": null,
+          "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\recovery-planning\\round2\\anthropic-closeout\\preservation\\external-anthropic-r2\\workspace.tar.gz",
+          "archive_sha256": "cc400129bc65832050bf172c990aaee13519481933a7bfdd2933774d26913b11",
+          "archive_bytes": 99244,
+          "regular_files": 118,
+          "regular_bytes": 305421,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+          "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+        }
+      },
+      "publication": {
+        "head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "remote_head": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+        "branch": "planning/remediation-recovery-r1-anthropic",
+        "exact": true,
+        "tree": "retained; no full Git bundle or cleanup",
+        "prior_head": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+        "prior_R1_publication": "Prior R1 commit remains ancestor, originals and old archives immutable; branch advanced normally without force"
+      },
+      "source_unchanged": true,
+      "status": "Genuine R2 delivered and positively released; original report/native/workspace/temp preserved. Local source/report identity verified. Publication status is separate."
+    }
+  },
+  "original_input_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+  "R2_packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+  "barrier": "Local complete original evidence and exact Git/report identities permit synthesis. No report is called remotely published while its ref remains at R1. No destructive cleanup. Next worker wave still requires normal integration publication and exact remote/local verification.",
+  "consensus": "NOT_GRANTED; final plan below is a prospective coordinator decision packet for all three R3 votes."
+}

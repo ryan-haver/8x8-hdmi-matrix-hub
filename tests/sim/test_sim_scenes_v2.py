@@ -59,8 +59,8 @@ async def test_create_with_a_profile_step_while_profiles_exist(data_hub):
     scene = await create(data_hub, name="Game", steps=[{"type": "profile", "id": "game_day"}])
     assert scene["id"].startswith("scene_")
     assert scene["steps"] == [{"type": "profile", "id": "game_day"}]
-    # persisted
-    saved = json.loads((data_hub.data_dir / "scenes.json").read_text(encoding="utf-8"))
+    # R2 contract §4: scene_manager.SceneManager persists to scenes_v2.json.
+    saved = json.loads((data_hub.data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
     assert scene["id"] in [s["id"] for s in saved["scenes"]]
 
 
@@ -132,7 +132,7 @@ async def test_invalid_update_leaves_the_scene_unchanged(data_hub, payload):
     assert after == before
     # and the next successful save does not persist the rejected values either
     assert (await data_hub.put("/api/v2/scenes/scene_goodnight01", json={"favorite": True})).status == 200
-    saved = json.loads((data_hub.data_dir / "scenes.json").read_text(encoding="utf-8"))
+    saved = json.loads((data_hub.data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
     persisted = next(s for s in saved["scenes"] if s["id"] == "scene_goodnight01")
     assert persisted["name"] == "Good Night" and persisted["icon"] == before["icon"]
     assert persisted["steps"] == before["steps"] and persisted["password_protected"] is False
@@ -178,8 +178,35 @@ async def test_set_and_clear_an_override(data_hub):
     assert (await body(resp))["data"]["scene"]["overrides"] == {}
     resp = await data_hub.put("/api/v2/scenes/scene_goodnight01/override", json={"profile_id": "game_day"})
     assert resp.status == 400
+    # an unknown scene is 404 on every mutation route, as it is on GET, PUT and DELETE of the scene
     resp = await data_hub.put("/api/v2/scenes/nope/override", json={**override, "disabled": True})
-    assert resp.status == 400
+    assert resp.status == 404
+    assert (await data_hub.delete("/api/v2/scenes/nope/override", json=override)).status == 404
+    assert (await data_hub.delete("/api/v2/scenes/nope/steps/0")).status == 404
+
+
+@pytest.mark.parametrize("method", ["put", "delete"])
+@pytest.mark.parametrize(
+    "payload",
+    [
+        [],
+        None,
+        "text",
+        5,
+        {"profile_id": "game_day", "output_num": "three", "setting_key": "audio_mute"},
+        {"profile_id": "game_day", "output_num": None, "setting_key": "audio_mute"},
+        {"profile_id": "game_day", "output_num": True, "setting_key": "audio_mute"},
+        {"profile_id": "game_day", "output_num": 1.5, "setting_key": "audio_mute"},
+        {"profile_id": "game_day", "output_num": [3], "setting_key": "audio_mute"},
+    ],
+)
+async def test_override_with_a_bad_body_is_400_and_changes_nothing(data_hub, method, payload):
+    """A body that is not an object, or an ``output_num`` that is not a whole number, was a 500."""
+    resp = await getattr(data_hub, method)("/api/v2/scenes/scene_goodnight01/override", json=payload)
+    assert resp.status == 400, await resp.text()
+    assert (await body(resp))["success"] is False
+    scene = (await body(await data_hub.get("/api/v2/scenes/scene_goodnight01")))["data"]["scene"]
+    assert scene["overrides"] == {}
 
 
 async def test_validate_reports_conflicts(data_hub):

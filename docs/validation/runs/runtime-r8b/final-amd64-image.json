@@ -1,0 +1,9 @@
+{
+  "source_sha": "1baac3dec660f41345869c126cfca94d6731c5a0",
+  "tracked_checkout_clean": true,
+  "image": "hdmi-matrix-hub:runtime-r8b-final-amd64",
+  "image_id": "sha256:558c2677c65995598d7b06a2f1726c2a254ae1afac74b1f34060f336bac0fd8e",
+  "architecture": "amd64",
+  "version": "1.0.0rc1",
+  "scope": "Software candidate; no published tag or physical claim"
+}

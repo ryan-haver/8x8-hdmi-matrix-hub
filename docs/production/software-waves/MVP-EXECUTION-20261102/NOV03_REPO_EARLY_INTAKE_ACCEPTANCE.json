@@ -1,0 +1,148 @@
+{
+  "observed_utc": "2026-11-03T17:11:43.735413+00:00",
+  "status": "repository corrected early-intake metadata accepted; reviewerreleased/preserved/taskrefpublished",
+  "review": {
+    "observed_utc": "2026-11-03T17:10:24.963710+00:00",
+    "review_commit": "fd16638d2cfb7e1e7429a066dc89e158ba312905",
+    "review_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+    "bytes": 5461,
+    "sha256": "8caba84ce4c086134f495194ac573b4e72ab88c5f4d7491a722345b4c2bc6bf4",
+    "task_id": "task_0e44c7b07b03",
+    "dispatch_id": "ctx_fb0e59b59685",
+    "worktree": "wp-exec-sw-repo-01-rereview01",
+    "branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+    "verdict": "accept bounded R1 two-passage correction; allotherlines and prior accepted scope preserved",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 514333,
+      "sha256": "0b2778587532cf022e6c7881cd146ec80ae0a18ad455bb5f082dad29a76a3272"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "preservation": {
+      "archive_sha256": "0cbd73d5b70add172980588514235cac56dfa06eaddaedfa34d12ab3f4d8d6f9",
+      "archive_bytes": 206914073,
+      "regular_files": 4635,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "6c26cd3dc78b1771a938f2a3e42e06b53cd22191"
+  },
+  "author": {
+    "head": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+    "base": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "tree": "wp-exec-sw-repo-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "bytes": 7113,
+    "sha256": "8b1ddcce3c3f5f2007fe6abcf0f7dbbf42e1bcab3dae8f813093350f75f02890",
+    "working_identical": true,
+    "cr_bytes": 0,
+    "whole_report_whitespace_tokens": 848,
+    "task_id": "task_418b22e1e9b2",
+    "dispatch_id": "ctx_20ac5203bd5e",
+    "terminal": "released",
+    "publication": "exact task ref remote/local verified",
+    "cleanup": "exact tree retained read-only, no removal",
+    "acceptance": "unaccepted corrected submission, exact-commit independent factual re-review required",
+    "native_final": {
+      "session": "ses_e5daa9932ffeko1EzAMEboL7hv",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "bytes": 364028,
+      "sha256": "52e3ddd943321bde1010dc7f0835a85f9f382868dc13036d1a0510588b593352"
+    },
+    "budget": "3min correction target exceeded; original5min/<=700budget deviations preserved; no deadline or full-word-budget conformance",
+    "reference_precision": "Worker reported absent shared-root filename after ambiguous shorthand. Actual preflight exists at full docs/production/software-waves/MVP-EXECUTION-20261102/NOV03_REPO_CORRECTION_PREFLIGHT.json. Corrected future specs use full paths; no file loss inferred."
+  },
+  "fleet": {
+    "total": 122,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTY4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMToyODoyNCIsImRpc3BhdGNoSWQiOiJjdHhfMGUzZjAwM2VlZjQ2IiwiZGF0YWJhc2VJZCI6NjYzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 115,
+      "retained": 7
+    },
+    "historical_retained": 6,
+    "current_evaluator_resource": 1,
+    "evaluator_snapshot": {
+      "taskId": "task_1d3db0c0e0e8",
+      "dispatchId": "ctx_ea6771c3440b",
+      "terminalState": "retained",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready"
+    }
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T17:11:43.735413+00:00",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 3,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800334,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400334,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793725729421,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 58,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793725729838,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932963,
+        "resetDescription": null
+      },
+      "updatedAt": 1793725729361,
+      "error": null
+    }
+  },
+  "coordinator_disposition": "docs/production/software-waves/SW-REPO-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+  "package_or_source_or_release_acceptance": false
+}

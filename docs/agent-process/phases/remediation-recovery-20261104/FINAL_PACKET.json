@@ -1,0 +1,423 @@
+{
+  "schema": "prospective-recovery-plan/v1",
+  "created_utc": "2026-11-04T10:07:14.003230+00:00",
+  "phase": "remediation-recovery-20261104",
+  "version": 1,
+  "status": "FINAL PROSPECTIVE PLAN/ALLOCATION FOR THREE GENUINE R3 DECISIONS; NOT ADOPTED UNTIL ALL ACCEPT SAME HASH",
+  "authority": "Owner now enact the plan and remediate all findings; retain accepted P0-P5/65unit scope and current stricter compatible repository policy. No new accounts/spend/credentials, owner hardware/visual/soak/field/final-release authority.",
+  "integration_baseline": "12ad507eb3c0b24bd896b3bf1757d03980d19696",
+  "source_unchanged_floor": "e2161484459da65aee14433136a14963507b499c",
+  "accepted_program_packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "original_input_sha256": "40526f127575feead63c94058250a868e0452ccb19b5552f60be66b6b82b77dc",
+  "R2_packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+  "R2_inputs": [
+    {
+      "family": "OpenAI",
+      "commit": "949d12cae8e1fe1db7bc8ccf57dc498ba72e1ac8",
+      "parent": "480a27bd3e65ff657ef878abf11242be0360f735",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/openai.md",
+      "canonical_sha256": "ff24c5c725ab8f0411089ddbc9fe83f03bddc032aab56bd0a2521ccd33e3e58c"
+    },
+    {
+      "family": "MiniMax",
+      "commit": "6671c92789d0de0590609590aeebc73772c00069",
+      "parent": "9ed4b0c294ba3db06dc56f886e59ff2e99b3f601",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/minimax.md",
+      "canonical_sha256": "563e7d8672723c8890ce54c8886edc88f55aceafbbe0fd8d13b91679848b970e"
+    },
+    {
+      "family": "Anthropic",
+      "commit": "4b3605fdd35b5e536a73026209b5ef2ae008212e",
+      "parent": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+      "path": "docs/agent-process/phases/remediation-recovery-20261104/round2/anthropic.md",
+      "canonical_sha256": "0c8fb2b6dae659bd78716637af4a8cc0044d36e215644531160b7c9d414816e8"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D1",
+      "choice": "Adopt bounded original-author WS product correction and exact component-only review under existing remediate-all authority.",
+      "reason": "Standing protocol says reviewers report/authors fix and re-review exact material fixes; adopted sections6/8 separate covered corrections from failed-qualification retries. R2 OpenAI explicitly revised its earlier owner gate. The original first-authorship FAIL/PASS/FAIL/PASS/PASS-bounded/HOLD and WSR03 stay unchanged.",
+      "limits": "No new all-six authorship judgement, retrospective PASS, broad author grant or existing-handler lease. One initial correction delivery/review plus one explicit material product-fix/re-review reserve; no exam retry hidden in reserve."
+    },
+    {
+      "id": "D2",
+      "choice": "Keep two DrainReport fields, with an explicit component-local semantic correction: requested counts attached live tasks for which this cleanup actually requested cancellation; remaining counts all unfinished admitted work at return, including outstanding reservations and the caller itself when applicable. remaining may exceed requested; drained iff remaining==0.",
+      "reason": "Combines OpenAI R2 explicit contract and MiniMax corrected requested meaning; declines Anthropic third-field preference to keep the unwired internal interface small. Never claim a reservation was cancelled. This prospectively changes old remaining=\"of those\" wording instead of pretending it was unchanged.",
+      "limits": "Conservative immediate non-drained return when reentrant reservations/self dependence prevent useful waiting; otherwise one monotonic bounded wait and final unfinished-work recount. Do not await own settlement, hide resistant work, double-count reserve/attach transitions, require a notification state machine or create detached watchers/queues."
+    },
+    {
+      "id": "D3",
+      "choice": "Enforce bound-loop lifecycle checks before mutation; lifecycle never binds a previously unbound controller. Unbound synchronous close/begin_shutdown may run without a running loop, MUST close the relevant admission fence, and do not bind. Bound wrong-loop or no-running-loop lifecycle use raises before state/cancelling counts change.",
+      "reason": "All peers favor real enforcement over narrowing the promised boundary. MiniMax R2 \"unbound no-op\" wording is rejected: close must still prevent later admission. No thread-safety claim.",
+      "limits": "Preserve timeout validation before mutation, repeated cancellation behavior, owner locality, exception retrieval and all original factory/admission bounds. Use actual pytest-asyncio debug option plus in-test loop.get_debug assertion; old -Xdev/debug=False evidence is not relabelled."
+    },
+    {
+      "id": "D4",
+      "choice": "Perform privacy C4 original-author correction first, in a dedicated isolated tree with an explicitly HELD qualified privacy-review/acceptance gate; then assess a genuinely new family on the exact corrected tip.",
+      "reason": "The standing assignment fields permit an explicitly recorded held reviewer gate, adopted section8 holds acceptance rather than unrelated useful work, and the known supported credential defects can be corrected without inventing reviewer competence. C4-first provides a materially useful corrected-chain assessment, rather than credit for repeating only public old defects. OpenAI R2 preference to qualify before C4 is not chosen; it must explicitly decide this plan in R3.",
+      "limits": "C4 source remains unaccepted/unintegrated and no canonical privacy/security evidence is admitted until qualification PASS, separate actual full-chain review and applicable combined checks. Reserve route/headroom for candidate/judge/actual review/corrections explicitly, but do not call conditional future M3 a qualified review fallback. If author route unavailable, hold that package; no automatic Astra authorship handover that would compromise its judge role."
+    },
+    {
+      "id": "D5",
+      "choice": "Select exact MiniMax-M3/thinking via reviewed OpenCode2 route for ONE first privacy-review-domain candidate after C4; Astra/high is ONE fresh independent exact-report judge. Gemini read-only discovery may proceed independently, without blocking available bounded work.",
+      "reason": "Actual M3 native identity and adequate dated route observations exist; planning/prose work is a weak task-fit prior, NOT qualification. Google route/headroom/domain remain unverified or unavailable. This is an explicitly prospective new-family allocation, not a retry or regrade of the exhausted Opus privacy attempt.",
+      "limits": "Freeze all six behavioral standards before C4 implementation, bind exact corrected C4 hash/window/path set before candidate launch. Public findings are attributed inputs, not proof. Require independent carrier/sink/assertion reasoning and independently chosen positive/negative controls; no requirement to discover a novel bug or judge counterexamples only by unpublished findings. A FAIL/unknown holds this route with no rewrite/extra judge. PASS earns only actually demonstrated diagnostic-review scope; separate actual RV review still required."
+    },
+    {
+      "id": "D6",
+      "choice": "No immediate CR-01 wiring lease. Prepare a distinct FIRST Anthropic review-role assessment of original non-Anthropic existing WS/app/runtime lifecycle source, excluding every authored controller/correction path; judge Astra/high.",
+      "reason": "OpenAI/Anthropic correctly preserve the pre-competence existing-API lease and broader wiring-domain gap. MiniMax R2 inference that exclusion of wiring from component qualification removes author qualification is rejected. A genuinely first async-LIFECYCLE REVIEW role is distinct from the failed component-AUTHORSHIP assessment and exhausted privacy review; Anthropic R2 route A names this lawful alternative. It can support existing qualified Sol runtime authorship only if it independently earns the exact reviewer domain.",
+      "limits": "Provisional useful read-only review, not a granted qualification. Before dispatch prove exact target source is not Anthropic-authored and freeze the six domain-specific standards below; conflict-boundary excludes its own controller and corrections. No owner retake is requested/authorized. If provenance/independence or useful new scope cannot be proved, HOLD this candidate and wiring, continue other packages. After any PASS, Sol-authored wiring still needs separate exact-commit independent review; any change to the Anthropic controller returns to its author plus Astra, not Opus self-review."
+    },
+    {
+      "id": "D7",
+      "choice": "Privacy fixes include an explicit serial lease of ha.py diagnostic/error sinks in C4; product HA config_flow source is excluded. Preserve shortcut/public flags through proven display context, not global bare-key or bool/None exemptions.",
+      "reason": "Supported HA options.api_key formatting is the same diagnostic-redaction domain, but ha.py lies outside the old ten paths and must be named. Returned credential key remains secret; public data.key/password_protected and X-Admin-PIN-Policy need precise preservation. Unknown structured credential/default or ClientState relevance stays calibrated, not silently declared safe or a reproduced owner incident.",
+      "limits": "Raw transport/comparisons/ActionResult memory stay raw. Context-aware display-copy helpers/default-compatible diagnostic parameters within leased functions are permitted; no new required API arguments or external public-wire contract change. Broader shared APIs or unrelated callers need coordinator lease amendment before writing."
+    },
+    {
+      "id": "D8",
+      "choice": "Keep API034 bounded source review and its report-quality evaluation COMPLETE. Keep M-1 security freshness, broader WS040 evidence and combined holds open. Use Astra for secondary quality evaluation of future M3 privacy review, not original source author Sol.",
+      "reason": "Actual later records 12ee/c3fc govern over stale null artifact reservations. A new partial WS040 refusal-source review can be proposed only after exact earned-domain match and residual check; do not repeat completed work or call a partial slice whole-unit acceptance.",
+      "limits": "Privacy/model/runner/registry integration remains coordinator-only and sequential. No canonical security proof before source freeze, changed-commit admission, independent effect oracles and required reviewer qualification. Report-quality evaluation cannot replace different-family actual source review."
+    },
+    {
+      "id": "D9",
+      "choice": "Every future source dispatch has a concrete coordinator record of exact full base, exclusive lexical paths/functions, real Task/Dispatch, prospective acceptance, role limitations, correction reserve and pool observations. It is operational authority within the adopted plan, not an extra user permission ritual.",
+      "reason": "Owner authorized remediation; R3 adopts a prospective staffing/strategy decision. Explicit source leases avoid disguising correction as assessment. Keep author/reviewer/helper routing and task qualifications separate.",
+      "limits": "Do not launch until all three genuine R3 participants explicitly accept this SAME complete packet hash, fresh preflight/environment/qualification checks pass and prior integration checkpoint is pushed/exact verified. Planning never grants source competence or automatic retry budgets."
+    },
+    {
+      "id": "D10",
+      "choice": "Correct present-tense stale Anthropic exclusion and reconcile actual API review status through scoped coordinator documentation after adoption, preserving immutable historical instructions/records and original accepted plan hashes.",
+      "reason": "Current owner direction supersedes older exclusion, so a stale sentence is not a current provider prohibition. Do not edit old snapshots or manufacture historical consensus.",
+      "limits": "Documentation checks only for that maintenance; no phase launch, release or visual baseline from instruction edits."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "WS-C01",
+      "state": "Ready for bounded PRODUCT correction only after R3 and fresh dispatch gates",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base_selection": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "reserved_worktree": "wp-remediation-ws-work-c01",
+      "proposed_branch": "remediation/ws-work-c01",
+      "exclusive_tracked_paths": [
+        "src/rest_api/ws_request_work.py",
+        "tests/test_ws_request_work.py (additive assertions; existing assertions unchanged)",
+        "NEW docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md"
+      ],
+      "independent_reviewer": "OpenAI gpt-6-astra/high, accepted bounded async lifecycle/source review; no currently verified backup",
+      "acceptance": [
+        "All four original eager/reentrant factory/body owner/application shapes remain supported and become committed regression cases. Before/after or selective reversion must fail/pass on truthful drain for the intended reason; no test mirrors of only counters.",
+        "Observe test-owned factory-entry/return/body/release gates and actual task liveness. A task does not yet exist during the factory-cleaner window; all_tasks alone is insufficient. Explicitly release/await every task after assertions.",
+        "Multiple nested reentrant admissions and reserve-to-task/failure/completion boundaries must be counted exactly; do not assume at most one reservation. Cover zero/small timeout, cooperative/resistant/self cleanup, waiter cancellation at both scopes, wrong-loop/no-loop/prebinding behavior, stale callbacks, factory/task-creation failures, rejected uncalled factories and other-owner progress.",
+        "Run existing44 focused cases unchanged plus new regressions, actual debug configured/asserted, meaningful selective mutants, existing WS/events/server/runtime regressions, Ruff, mypy and normal final source hook/full core with strict complete route inventory and fresh isolated original receipts.",
+        "WSR03 remains historical failure. Audit this correction own full native writes for exact-root compliance; all scripts/commit messages stay under owned roots. Correct old debug claims only in new correction report, never edit original AUTHOR/REVIEW or lost/failed originals."
+      ],
+      "reserve": "One initial correction delivery + one component-only source review; one explicitly reserved material product-fix/re-review. No competence assessment or further automatic source rounds.",
+      "dependencies": [],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "WS-R01",
+      "state": "After settled/preserved WS-C01",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base_selection": "Exact WS-C01 report/source commit; review whole component from 460a190575e905f8350c454e63c4d570c8b560fa and correction from 15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "reserved_worktree": "wp-remediation-ws-work-c01-review",
+      "proposed_branch": "remediation/ws-work-c01-review",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01-REVIEW.md"
+      ],
+      "independent_reviewer": "Different-family source author is Anthropic; reviewer reports and cannot fix",
+      "acceptance": [
+        "All four original eager/reentrant factory/body owner/application shapes remain supported and become committed regression cases. Before/after or selective reversion must fail/pass on truthful drain for the intended reason; no test mirrors of only counters.",
+        "Observe test-owned factory-entry/return/body/release gates and actual task liveness. A task does not yet exist during the factory-cleaner window; all_tasks alone is insufficient. Explicitly release/await every task after assertions.",
+        "Multiple nested reentrant admissions and reserve-to-task/failure/completion boundaries must be counted exactly; do not assume at most one reservation. Cover zero/small timeout, cooperative/resistant/self cleanup, waiter cancellation at both scopes, wrong-loop/no-loop/prebinding behavior, stale callbacks, factory/task-creation failures, rejected uncalled factories and other-owner progress.",
+        "Run existing44 focused cases unchanged plus new regressions, actual debug configured/asserted, meaningful selective mutants, existing WS/events/server/runtime regressions, Ruff, mypy and normal final source hook/full core with strict complete route inventory and fresh isolated original receipts.",
+        "WSR03 remains historical failure. Audit this correction own full native writes for exact-root compliance; all scripts/commit messages stay under owned roots. Correct old debug claims only in new correction report, never edit original AUTHOR/REVIEW or lost/failed originals.",
+        "Separate fields for exact corrected component correctness, original first-authorship NOT_GRANTED/HOLD, all old/new finding dispositions, and wiring HELD. No new author competence grant."
+      ],
+      "reserve": "One source review and one changed-commit re-review only if reserved material fix needed.",
+      "dependencies": [
+        "WS-C01"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "PRIV-C4",
+      "state": "Covered original-author correction after R3; qualified privacy review and all acceptance explicitly HELD",
+      "agent": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "base_selection": "2d02004d3108953a302e1a49aab9a5f24e944136",
+      "reserved_worktree": "wp-sec-data-02-c4",
+      "proposed_branch": "remediation/privacy-c4",
+      "exclusive_tracked_paths": [
+        "tools/validate/evidence.py: credential/display-copy redaction and write_record boundary",
+        "tools/validate/clients/api.py: request/perform diagnostic/error copies, not wire semantics",
+        "tools/validate/model.py: Action/Response/Hub display methods and default-compatible context helpers",
+        "tools/validate/runner.py: display/check/procedure/Outcome/record/summary sinks only",
+        "tools/validate/clients/ha.py: _http/perform diagnostic/error bodies only; explicit added serial lease",
+        "NEW tests/validation/test_sw_sec_data_02_c4.py",
+        "NEW docs/production/software-waves/SW-SEC-DATA-02-C4/AUTHOR.md"
+      ],
+      "independent_reviewer": "HELD: prospective M3 only after PRIV-ASSESS + PRIV-JUDGE actually PASS and scope/capacity match; no qualified fallback is claimed",
+      "acceptance": [
+        "Enumerate actual supported credential names/headers/cookies/query carriers including current_pin/current_passcode/passcode/X-Passcode, X-Admin-PIN, API keys/Authorization/tokens and HA options.api_key. Exact credential headers must not swallow public X-Admin-PIN-Policy in any casing.",
+        "Support transport-accepted tuples, header-pair collections and serialized JSON data without rejection or mutation of wire values; arbitrary mappings/prose extensions require evidence or calibrated limits. Structural/contextual masking before repr/json/truncation is primary. Opaque sensitive error text must be safely suppressed or masked before truncation; merely calling existing query-only redact(text) is not proof.",
+        "Cover Action/Response/Hub descriptions, request/client steps, actual/expected check detail, procedure, failed/blocked Outcome reasons, write_record and _write_summary, HA HTTP/perform diagnostic sinks. Hub path/query and sensitive equals both need safe display copies; reject a blanket never-redact-Hub.equals exemption.",
+        "Preserve known public shortcut data.key and password_protected fields using proven diagnostic context; keep created/unknown credential key masked, preserve integer PIN masking and wrong-type negative controls. Do not exempt all bool/None or globally replace short PIN values in public IDs/ports/timing.",
+        "Use actual loopback ApiClient/Runner/write_record/summary and HA-client options paths with synthetic markers, full byte scans across persisted JSON/summary and retained stdout/stderr/log records, raw object identity/on-wire controls and raw matched/mismatch/expected-*** verdicts. Exercise action/setup/cleanup/error/blocked paths and field/carrier/sink selective reversions with actual failing child exits.",
+        "C1-C3 tests/reports unchanged and pass. Add only C4 regression module/report. Inspect HA named-field defaults serialization and ClientState diagnostics within the leased display scope; explicitly retain any unsupported product-HA/real-client acceptance gap. No live HA/HIL claim from synthetic harness tests.",
+        "Normal source hook/full applicable core/strict route coverage, Ruff/mypy as applicable; fresh per-invocation own data/config/native TEMP/TMP/basetemp/JUnit and measured imports. Keep every failure/skip/timeout and exact raw origins; no global validation ledger/gate/canonical evidence generation in authorship work."
+      ],
+      "reserve": "One author delivery; future candidate/judge + actual qualified full-chain review + one material author-fix/re-review reserved conditionally and re-gated. Source stays unintegrated. Sol route must match catalog/native; no automatic Astra handover.",
+      "dependencies": [],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "PRIV-ASSESS",
+      "state": "Provisional FIRST new-family review-domain assessment, not source acceptance",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base_selection": "Exact settled/preserved/published PRIV-C4 descendant of 2d02004d3108953a302e1a49aab9a5f24e944136; complete review window d6e78e0b6ab1dab5216443584d810a7a24af32b2..C4",
+      "reserved_worktree": "wp-recovery-privacy-m3-assess",
+      "proposed_branch": "qualification/recovery-privacy-m3",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md"
+      ],
+      "independent_reviewer": "OpenAI gpt-6-astra/high, qualified independent review-of-review judge; not source author",
+      "acceptance": [
+        "Enumerate actual supported credential names/headers/cookies/query carriers including current_pin/current_passcode/passcode/X-Passcode, X-Admin-PIN, API keys/Authorization/tokens and HA options.api_key. Exact credential headers must not swallow public X-Admin-PIN-Policy in any casing.",
+        "Support transport-accepted tuples, header-pair collections and serialized JSON data without rejection or mutation of wire values; arbitrary mappings/prose extensions require evidence or calibrated limits. Structural/contextual masking before repr/json/truncation is primary. Opaque sensitive error text must be safely suppressed or masked before truncation; merely calling existing query-only redact(text) is not proof.",
+        "Cover Action/Response/Hub descriptions, request/client steps, actual/expected check detail, procedure, failed/blocked Outcome reasons, write_record and _write_summary, HA HTTP/perform diagnostic sinks. Hub path/query and sensitive equals both need safe display copies; reject a blanket never-redact-Hub.equals exemption.",
+        "Preserve known public shortcut data.key and password_protected fields using proven diagnostic context; keep created/unknown credential key masked, preserve integer PIN masking and wrong-type negative controls. Do not exempt all bool/None or globally replace short PIN values in public IDs/ports/timing.",
+        "Use actual loopback ApiClient/Runner/write_record/summary and HA-client options paths with synthetic markers, full byte scans across persisted JSON/summary and retained stdout/stderr/log records, raw object identity/on-wire controls and raw matched/mismatch/expected-*** verdicts. Exercise action/setup/cleanup/error/blocked paths and field/carrier/sink selective reversions with actual failing child exits.",
+        "C1-C3 tests/reports unchanged and pass. Add only C4 regression module/report. Inspect HA named-field defaults serialization and ClientState diagnostics within the leased display scope; explicitly retain any unsupported product-HA/real-client acceptance gap. No live HA/HIL claim from synthetic harness tests.",
+        "Normal source hook/full applicable core/strict route coverage, Ruff/mypy as applicable; fresh per-invocation own data/config/native TEMP/TMP/basetemp/JUnit and measured imports. Keep every failure/skip/timeout and exact raw origins; no global validation ledger/gate/canonical evidence generation in authorship work.",
+        "All six standards in privacy_assessment below. Independently enumerate carriers/sinks/callers/assertions and design meaningful positive/negative controls. Mark already-public findings as supplied inputs. No novel-bug quota, but copying/replaying supplied conclusions alone cannot qualify."
+      ],
+      "reserve": "Exactly ONE M3 candidate and ONE independent exact-report judge. FAIL/HOLD terminal for this attempt; no rewrite/retry/replacement judge or automatic family substitution.",
+      "dependencies": [
+        "PRIV-C4"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "PRIV-JUDGE",
+      "state": "After PRIV-ASSESS settles",
+      "agent": "codex",
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "base_selection": "Exact delivered M3 assessment report commit and unchanged C4 source window",
+      "reserved_worktree": "wp-recovery-privacy-m3-judge",
+      "proposed_branch": "qualification/recovery-privacy-m3-judge",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/REVIEW.md"
+      ],
+      "independent_reviewer": "Judge assesses actual M3 report/native/tools against frozen criteria, not same-family OpenAI source acceptance",
+      "acceptance": [
+        "Read actual full source/caller/assertion/native/original receipt evidence and judge every mandatory axis PASS/FAIL/HOLD. No forced result, altered criteria, attribution relabel or repaired historical missing read. PASS only earns exact demonstrated diagnostic-review domain."
+      ],
+      "reserve": "ONE judge. No extra judge/regrade.",
+      "dependencies": [
+        "PRIV-ASSESS"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "RV-PRIVACY-CHAIN",
+      "state": "HELD until M3 earns exact domain and current headroom/review reserve",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "thinking inherited; CLI override unsupported",
+      "base_selection": "Exact published C4 or explicitly corrected descendant; full d6e78e0b6ab1dab5216443584d810a7a24af32b2..tip",
+      "reserved_worktree": "wp-exec-rv-privacy-chain-review",
+      "proposed_branch": "execution/wp-exec-rv-privacy-chain-review",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/software-waves/RV-PRIVACY-CHAIN/execution-20261101/REVIEW.md"
+      ],
+      "independent_reviewer": "Separate Astra/high report-quality evaluation only; M3 is the actual different-family source reviewer",
+      "acceptance": [
+        "Enumerate actual supported credential names/headers/cookies/query carriers including current_pin/current_passcode/passcode/X-Passcode, X-Admin-PIN, API keys/Authorization/tokens and HA options.api_key. Exact credential headers must not swallow public X-Admin-PIN-Policy in any casing.",
+        "Support transport-accepted tuples, header-pair collections and serialized JSON data without rejection or mutation of wire values; arbitrary mappings/prose extensions require evidence or calibrated limits. Structural/contextual masking before repr/json/truncation is primary. Opaque sensitive error text must be safely suppressed or masked before truncation; merely calling existing query-only redact(text) is not proof.",
+        "Cover Action/Response/Hub descriptions, request/client steps, actual/expected check detail, procedure, failed/blocked Outcome reasons, write_record and _write_summary, HA HTTP/perform diagnostic sinks. Hub path/query and sensitive equals both need safe display copies; reject a blanket never-redact-Hub.equals exemption.",
+        "Preserve known public shortcut data.key and password_protected fields using proven diagnostic context; keep created/unknown credential key masked, preserve integer PIN masking and wrong-type negative controls. Do not exempt all bool/None or globally replace short PIN values in public IDs/ports/timing.",
+        "Use actual loopback ApiClient/Runner/write_record/summary and HA-client options paths with synthetic markers, full byte scans across persisted JSON/summary and retained stdout/stderr/log records, raw object identity/on-wire controls and raw matched/mismatch/expected-*** verdicts. Exercise action/setup/cleanup/error/blocked paths and field/carrier/sink selective reversions with actual failing child exits.",
+        "C1-C3 tests/reports unchanged and pass. Add only C4 regression module/report. Inspect HA named-field defaults serialization and ClientState diagnostics within the leased display scope; explicitly retain any unsupported product-HA/real-client acceptance gap. No live HA/HIL claim from synthetic harness tests.",
+        "Normal source hook/full applicable core/strict route coverage, Ruff/mypy as applicable; fresh per-invocation own data/config/native TEMP/TMP/basetemp/JUnit and measured imports. Keep every failure/skip/timeout and exact raw origins; no global validation ledger/gate/canonical evidence generation in authorship work.",
+        "Separate actual qualified exact-source review after qualification PASS. Qualification report/probes may supply attributed original evidence but are not automatically promoted into source acceptance. Source authors fix, reviewer reports."
+      ],
+      "reserve": "One qualified review + one author material-fix/re-review; report-quality evaluator separate; no unqualified reserve promised.",
+      "dependencies": [
+        "PRIV-JUDGE",
+        "PRIV-C4"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "ASYNC-REVIEW-ASSESS",
+      "state": "Provisional FIRST different-role review-domain candidate; source provenance/conflict gate must pass before dispatch",
+      "agent": "claude",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "base_selection": "Immutable pre-controller-integration source 12ad507eb3c0b24bd896b3bf1757d03980d19696; prove actual target existing source is non-Anthropic before launch",
+      "reserved_worktree": "wp-recovery-ws-lifecycle-assess",
+      "proposed_branch": "qualification/recovery-ws-lifecycle-review",
+      "exclusive_tracked_paths": [
+        "NEW docs/production/remediation-20261104/WS-LIFECYCLE-REVIEW-ASSESSMENT/AUTHOR.md"
+      ],
+      "independent_reviewer": "OpenAI Astra/high ONE independent exact-report judge; not source acceptance",
+      "acceptance": [
+        "Freeze six async_review_assessment criteria below; full actual websocket/app/runtime/socket-stop caller and test inspection, meaningful real aiohttp/event-loop positive/negative lifecycle controls and original receipts.",
+        "Read-only source: src/rest_api/websocket.py, app.py and necessary hub/runtime composition/dependencies and existing lifecycle tests at pinned original-source commit. All Anthropic ws_request_work.py/correction code OUT of assessment scope; no credit for reviewing own material.",
+        "Conflict/provenance or useful genuinely new scope unproven means HOLD, not a retake relabel. PASS only earns exact demonstrated existing lifecycle REVIEW competence, not authorship, privacy, browser/kiosk or product-security review."
+      ],
+      "reserve": "Exactly ONE first review-role candidate + ONE Astra judge. No retry/extra judge or reopening prior authorship/privacy failures.",
+      "dependencies": [
+        "WS-C01 settled; do not duplicate this author while writing"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    },
+    {
+      "id": "WS-WIRING",
+      "state": "HELD until accepted component + earned conflict-free lifecycle reviewer + qualified Sol author match + explicit coordinator API lease",
+      "agent": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "base_selection": "Exact published integration containing accepted WS-C01 component and required dependencies; full base bound before creation",
+      "reserved_worktree": "wp-recovery-ws-wire",
+      "proposed_branch": "remediation/recovery-ws-wire",
+      "exclusive_tracked_paths": [
+        "Proposed serial lease only after gates: src/rest_api/websocket.py handle_websocket/_handle_command",
+        "src/rest_api/app.py create_rest_app/RestApiServer.stop lifecycle",
+        "Necessary src/hub/runtime/composition.py _stop hunks only after demonstrated need",
+        "NEW tests/test_ws_work_integration.py",
+        "NEW docs/production/remediation-20261104/WS-WIRING-01/AUTHOR.md"
+      ],
+      "independent_reviewer": "Anthropic Opus5.5/high ONLY after ASYNC-REVIEW-ASSESS independent judge PASS, actual new Sol-only diff/conflict and wiring-domain match; no qualified backup today",
+      "acceptance": [
+        "Prospective public policy: one active status request per socket, bounded app admission; every admitted get_status response derives from a read started after that request. Rejections use existing error event with fixed sanitized busy text, bounded/backpressured sending and no per-rejection unbounded task allocation. No silent coalescing or new WS event schema.",
+        "Application limit/cleanup timeouts and stop/failure contract must be explicitly bound and independently reviewed before implementation, using actual callers; no arbitrary new public config. Scope covers app/server/runtime stop ordering, dependency lifetime and truthful resistant-work reporting, owner finally cancellation, second-client service and ping.",
+        "Real aiohttp burst/pending refresh/disconnect/app/server/runtime stop and fault controls; request-work cleanup before dependent stream/runtime destruction; no false fully-drained claim. Preserve existing compatibility and all applicable core/route/registry/ledger/combined checks.",
+        "Do not edit Anthropic controller during Sol wiring. Any necessary controller fix returns to original author plus Astra exact review and fresh source gates; Opus never approves its own changes."
+      ],
+      "reserve": "Author + exact independent source review + one material author fix/re-review only after staffing gates; no immediate dispatch.",
+      "dependencies": [
+        "WS-R01 PASS/intake",
+        "ASYNC-REVIEW-ASSESS + independent judge PASS",
+        "Exact author/reviewer/provenance/API lease"
+      ],
+      "common": "All ignored/scripts/body/commit-message files and fresh native temp under unique assigned build/remediation-recovery-20261104/<id> and C:/t/remediation-recovery/<id>; root/other workspaces/private data/original reports/registry/manifests excluded. Actual Orca placement/base/Task/Dispatch/native model and current quota must be revalidated."
+    }
+  ],
+  "privacy_assessment": {
+    "subject": "Exact C4 descendant from original privacy base, criteria frozen now before implementation; source hash/path delta bound in dispatch artifact after C4 settles and before candidate start",
+    "axes": {
+      "provenance": "Verify exact full corrected chain/base/all commits/paths/authors and unchanged historical failures; actual M3/thinking Task/Dispatch/cwd/native/helper route. Bind added ha.py scope explicitly. Source attribution and evidence admission stay separate.",
+      "dataflow_invariants": "Inspect full supported credential/carrier/caller/sink path and raw/public-data preservation, including HA diagnostic lease, model/runner/evidence persistence and summary. Calling a mask helper alone does not prove safety.",
+      "counterexamples": "Meaningful independently chosen positive preservation and failure-sensitive synthetic controls using actual raw/wire/verdict/persisted-byte effects. Known public defects are inputs, not own discoveries. No novel-defect requirement; no mirror-only assertions.",
+      "behavior_and_tools": "Actual full changed source/tests/caller reads, current import origins/versions/direct child argv/exits/full output/JUnit, inherited OS isolation/fresh original temp and complete honest native/tool/output coverage. Hash/preservation is not a full semantic read. No canonical global-gate retry.",
+      "calibration": "Distinguish changed/inherited defects, supported/conditional/unproved shapes, private/public artifact exposure, actual HA harness versus product HA and physical devices; preserve skipped/failed/lost originals. Accurate severities, limitations and qualified domain only.",
+      "review_quality": "Substantive source/assertion/invariant analysis and supported findings across complete C1-C4 window, including sensitivity/compatibility/race/error paths and no factual overclaims. All six PASS required, unknown holds."
+    },
+    "standard": "Same six substantive behavioral standards as earlier privacy assessment, adapted prospectively for actual new family/complete corrected source and explicitly added HA diagnostic scope. Original Opus packet/report/verdict remain immutable. No softened safety/tools/calibration standard or forced PASS.",
+    "budget": "ONE candidate, ONE judge; separate actual qualified full-chain source review and secondary report-quality evaluation later. No automatic old/new attempt retry."
+  },
+  "async_review_assessment": {
+    "subject": "12ad507eb3c0b24bd896b3bf1757d03980d19696",
+    "role": "FIRST bounded existing WS/app/runtime lifecycle REVIEW, not failed component AUTHORSHIP or privacy review",
+    "axes": {
+      "provenance": "Exact immutable non-Anthropic target/source lineage and report/native actual Opus5.5/high launch/config/Task/Dispatch/cwd/helpers; explicitly exclude authored controller/corrections and prove new review-role scope, not failed-authorship retake.",
+      "dataflow_invariants": "Trace actual existing frame dispatch, request/reply ownership, refresh/stream/runtime dependency lifetimes, socket/writer and server/runtime stop paths, cancellation/backpressure/error and resource bounds; no source changes or controller self-review.",
+      "counterexamples": "Meaningful independently designed real aiohttp/event-loop supported pending-work/disconnect/stop/cancel/fault controls, other-client/ping preservation and independent task/device-boundary oracles; failure-sensitive controls and complete explicit task teardown. No novel-bug quota or copied-count proof.",
+      "behavior_and_tools": "Full exact source/assertion/caller reads and honest coverage, direct argv/child exits/full outputs/JUnit/current own imports and actual debug configuration where claimed, copied Windows environment/fresh own roots, preserve every original/error; no physical/LAN/global campaign or persistent implementation.",
+      "calibration": "Separate demonstrated source defects and hypotheses, original source versus authored controller, software versus hardware, useful domain competence versus source acceptance/first-authorship grant; correct scope/severity/tool claims and preserved prior failures.",
+      "review_quality": "Substantive source/caller/assertion/lifecycle reasoning with supported findings and counterfactual sensitivity. All six PASS required; conflicts or unknowns HOLD. Qualified scope must match later actual Sol wiring diff before primary review."
+    },
+    "budget": "ONE candidate, ONE fresh Astra judge; no old source acceptance or authorship grant. Source provenance/conflict/new-scope gate before any launch."
+  },
+  "rejected_or_calibrated_peer_claims": [
+    "Reject immediate Opus wiring entitlement: outside-scope wiring is not evidence of author competence and the original pre-competence existing-API lease is explicit. No qualified complete wiring pair exists today.",
+    "Reject MiniMax R2 at-most-one-reservation and unconditional no-progress proof. Coordinator AST inspection shows _admit is synchronous FunctionDef, not async def. Nested factories can re-enter across owners and hold multiple reservations; an eagerly started cleanup may suspend and allow registration to progress. Conservative reporting is selected for simplicity/truth, not that overclaim. No new runtime probe was run in planning.",
+    "Reject treating unbound close as no-op: it must close its admission fence without binding a loop.",
+    "Reject never-redact Hub.equals or literal redact(text)[:300] as blanket remedies; sensitive structured expectations and JSON/text carriers require contextual masking and actual persisted-byte oracles.",
+    "Reject mandatory novel-bug/unpublished-findings-only qualification: independent analysis and meaningful failure sensitivity are required, not existence of a new bug. Public known findings must be attributed.",
+    "Reject direct promotion of a candidate-domain report into actual qualified RV source acceptance; a separate post-PASS actual review is mandatory.",
+    "Do not repeat accepted inventories/API034 source/evaluation; only genuinely residual qualified packages consume slots. CR02/CR03 author readiness does not manufacture HA/UI reviewer competence."
+  ],
+  "wave_order": [
+    {
+      "wave": "A",
+      "after": "All3R3accept + publication + live gates",
+      "parallel": [
+        "WS-C01",
+        "PRIV-C4"
+      ],
+      "coordinator": "Current-truth documentation and read-only Gemini discovery; no active-service/credential change. Explicit held PRIV review gate, no acceptance or integration."
+    },
+    {
+      "wave": "B",
+      "after": "Both authors settled/preserved, task refs/integration records published/verified",
+      "parallel": [
+        "WS-R01",
+        "PRIV-ASSESS"
+      ],
+      "coordinator": "Verify exact corrected source bindings and unchanged frozen assessment standards; no simultaneous shared-file writers."
+    },
+    {
+      "wave": "C",
+      "after": "Actual B outcomes; re-gate capacity",
+      "parallel": [
+        "PRIV-JUDGE",
+        "One reserved WS material product correction if genuinely requested, otherwise ASYNC-REVIEW-ASSESS when provenance/conflict gate passes"
+      ],
+      "coordinator": "No duplicate author; separate reviewer-role assessment from failed authorship. A task needing that same author cannot overlap."
+    },
+    {
+      "wave": "D",
+      "after": "Actual qualification/source outcomes",
+      "work": [
+        "Separate qualified RV-PRIVACY-CHAIN then quality evaluation and any reserved source fix/re-review",
+        "ONE independent async-review judge, then only if PASS and wiring-role match: Sol wiring + Opus exact review",
+        "Sequential accepted source intake/integration and material-resolution review; privacy/API/WS shared runner/model/registry serialize"
+      ]
+    },
+    {
+      "wave": "E",
+      "after": "Actual accepted combined source freeze",
+      "work": [
+        "Candidate-bound security/browser/API/client proof, independent effects and privacy admission",
+        "Applicable complete core/Ruff/mypy/UC/supported HA/HACS/UI/browser/build/image checks, strict full route coverage and serial registry/ledger/gates",
+        "Actual HIL/72-hour/week/final-release owner gates remain open and separate"
+      ]
+    }
+  ],
+  "capacity": {
+    "maximum": "two current workers + coordinator + protected external =4; no nesting, authors/reviewers/candidates all count",
+    "routes": "OpenAI Astra/high: planning/async and diagnostic review judgement; Sol6.1/high: original privacy/core author. Anthropic Opus5.5/high: actual controller author and scoped API-refusal reviewer only until new earned role; MiniMax-M3/thinking: planning/inventory, prospective privacy candidate only. Same-family OpenAI variants do not supply independence or multiply quota.",
+    "fallbacks": "No qualified privacy/whole-wiring fallback exists today. Google route/headroom/domain unknown/unavailable, discovery does not authorize login/spend. DeepSeek excluded. No automatic model/family substitution or capacity-based qualification retry.",
+    "reserve": "R3 prose votes, then two author deliveries, exact component review, new privacy candidate/judge, separate qualified actual review/evaluation, one material fix/re-review per product package and provisional async candidate/judge/wiring reserve; percentages are dated observations, absolute allowances/other-host demand unknown. Fresh intended-pool headroom and qualification gate before EACH creation/start and natural checkpoints at least15min. Unknown/stale/<30% or insufficient route capacity requires suitable verified qualified fallback or holds only affected dispatch."
+  },
+  "environment_and_preservation": {
+    "environment": "Root existing Windows venv with actual worker source import bindings; Python3.12 does not certify3.11/HA floor. Fresh owned native temp/data/config/basetemp/JUnit per invocation, no shell return masking, actual full streams read and errors retained. Source checks use normal source hook and strict complete route inventory. Prose exception never certifies source.",
+    "Node": "Before source worktree source-hook run, coordinator verifies root/worker package+lock Git/canonical bytes and existing dependency validity; an exact ignored worktree node_modules junction may point to already tested root target. No install/download/root target writes; preserve junction as metadata without traversal.",
+    "preservation": "Settle/release owned workers promptly; preserve full native/config/ignored/artifact/ordinary+hidden temp and exact Git/patch refs. Current R1/R2 trees retained; source tasks use new dedicated trees. Full verified Git bundles and task-ref publication before any destructive Orca cleanup, never force-push/prune protected/remote resources.",
+    "publication": "Normal integration push and independent exact remote/local equality before each next wave. MiniMax R2 task ref currently held after two GitHub server errors; retain full original bytes/local exact commit and publish normally when possible, no destructive cleanup or false publication claim. A failed integration push holds new worker launch; local preparation/docs checks may continue."
+  },
+  "remaining_gates": {
+    "original_failures": "Privacy twoPASS/fourFAIL, WS correctnessFAIL/first-authorshipHOLD, WSR03, old Opus4.7 failures/lost originals immutable. API-refusal qualification remains narrow.",
+    "wiring": "HELD until accepted component, real qualified author and conflict-free new lifecycle-reviewer competence, explicit existing-API lease and exact changed-commit review. No immediate lease from this plan.",
+    "privacy": "HELD until genuine qualification + separate actual full-chain review + acceptance/admission, even if C4 authoring succeeds.",
+    "other": "API034 M1 freshness, WS040 broader browser/client/effect coverage, HA/UI qualified pairs/environments, combined proof/build/version and all owner hardware/visual/soak/field/release gates remain. No blanket completion or numerical target waiver."
+  },
+  "owner_questions": "None for the next covered product corrections, first genuinely new-domain/family assessments or read-only discovery. An exhausted-competence-attempt budget expansion remains owner-only if ever chosen later; not requested or authorized here. Prepare exact bounded choice/cite controlling rule only if required after useful alternatives fail, no automatic retakes.",
+  "adoption": "Each of three actual independent model-family participants must read this complete packet/allocation and explicitly accept SAME canonical LF SHA256 with no unresolved material blocker. Coordinator not a participant; majority/timeout/metadata not consent. Any required material revision produces a new version/hash and actual fresh same-packet decisions, preserving old reports. This planning rule does not authorize qualification retries."
+}

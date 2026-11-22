@@ -1,0 +1,268 @@
+{
+  "observed_utc": "2026-11-04T19:36:22.265368+00:00",
+  "status": "Bothfirstwaveauthorscompleted/released/preserved/published; exactcommitindependentreviewsPREPARED/noTaskyet",
+  "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "deliveries": {
+    "truth": {
+      "package": "FC-TRUTH",
+      "task_id": "task_ae949bd12fff",
+      "dispatch_id": "ctx_2caca18359bf",
+      "head": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+      "parent": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+      "sole_report": "docs/production/functional-completion-20261104/FC-TRUTH/INVENTORY.md",
+      "report_sha256": "d7a8e0e48f24b8ba8291ec75cda2bc2d830c3eaf60f141ff6c764ff1f1c6c2bd",
+      "actual_native": {
+        "session": "ses_e580f5670ffeXvlKhB9xdDSOVX",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 1460406,
+        "sha256": "7a6628f8893db0b6ee1f9dc0eac9bd70c06a7245615151fbdb77499f3e5a3126",
+        "unassigned_helper_calls_observed": false,
+        "scope": "full final native exactTask/Dispatch/directory; no allhostcensus"
+      },
+      "resource": "positivelyreleased and independentlyverified",
+      "task_ref_published_exact": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+      "full_git_bundle": {
+        "sha256": "b5445061aa0546fd475bc5d66dca959383d664fea81a49967060311649c17bb9",
+        "bytes": 14443734,
+        "verify_exit": 0,
+        "exact_head_verified": true
+      },
+      "author_evidence": {
+        "files": 151,
+        "bytes": 3831298,
+        "manifest_sha256": "1e9cf05593a9245da3f237b6119f22b5849785ce36b49f6859a7736c16fda81e",
+        "disposition": "Originalauthorbuild/temproots retainedreadonly, no redundantworkspace/buildcopy/removal; preexistingunregisteredownedoutputs are review-only undernewpolicy",
+        "review_date": "2026-12-04"
+      },
+      "checks": {
+        "passed": 489,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "junit_sha256": "63ae82718745bfdfb9762f8289105bfb96ff4897fef7b467da109bd39b3638e6",
+        "scope": "Actualonceonlyauthorcheckoutdocs, finalprose appendedafterrun; scope/UTF8/whitespace separate, no source/qualification/Markdownparserproof"
+      },
+      "status": "Authorreportdelivered/preserved/exacttaskrefpublished; independentdifferentfamilyfactualreviewPREPARED, no acceptedcanonicaledits orsource/qualificationclosure"
+    },
+    "provenance": {
+      "package": "FC-PROVENANCE",
+      "task_id": "task_a7ee911f3245",
+      "dispatch_id": "ctx_d6197cc497ff",
+      "head": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+      "parent": "a07cf94211486150fa8222c5aad43ecb9f938bf3",
+      "sole_report": "docs/production/functional-completion-20261104/FC-PROVENANCE/AUDIT.md",
+      "report_sha256": "38938a02a275981a93ed359768cfdb1c506e73310869e2c259f54ecfd5128d8e",
+      "actual_native": {
+        "session": "01a1a7f0-b71d-7af2-bd3b-d5ca0e123534",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 3334945,
+        "sha256": "971ba04a849c316901d4db853badcdad6b96d515512d5e3e8f5ca4ab6dd9db12",
+        "unassigned_helper_calls_observed": false,
+        "scope": "full final native at exactTask/Dispatch/cwd, no allhostcensus"
+      },
+      "resource": "positivelyreleased and independentlyverified",
+      "task_ref_published_exact": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+      "full_git_bundle": {
+        "sha256": "0f7c4d84185b9928d4fd31f82f3ea44d862bac7fb038155dd6c802ddb65ff175",
+        "bytes": 14418215,
+        "verify_exit": 0,
+        "exact_head_verified": true
+      },
+      "author_evidence": {
+        "files": 229,
+        "bytes": 18496545,
+        "manifest_sha256": "1eb0f7668f2742c70de2691b7db925baf253a4b7765cb7ecb73e2a823d4e8593",
+        "disposition": "Originalretainedauthorroots and registeredauthorstorage task5716404f6a5948ad95254336ae056e65 remainreadonly, no redundantworkspace/buildcopy or removal; privatepaths inmanifest",
+        "review_date": "2026-12-04"
+      },
+      "checks": {
+        "passed": 489,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "runs": 1,
+        "direct_exit": 0,
+        "junit_sha256": "5c50585e1300d8101e97f3615719cf96557823945ca753ed0148e7b071dfb499",
+        "scope": "Actualonceonlydocs/fromauthorcheckout with unchangedreport beforeafter; no source/qualification/Markdownparserproof"
+      },
+      "status": "Authorreportdelivered/preserved/exacttaskrefpublished; independentdifferentfamilyfactualreviewPREPARED, no acceptedcanonicaledits orsource/qualificationclosure"
+    }
+  },
+  "reviews": {
+    "truth": {
+      "package": "FC-TRUTH",
+      "name": "wp-fc26-fc-truth-review",
+      "branch": "review/wp-fc26-fc-truth-review",
+      "agent": "codex",
+      "model": "gpt-6.1-sol",
+      "effort": "high",
+      "base": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+      "author_report": "docs/production/functional-completion-20261104/FC-TRUTH/INVENTORY.md",
+      "author_report_sha256": "d7a8e0e48f24b8ba8291ec75cda2bc2d830c3eaf60f141ff6c764ff1f1c6c2bd",
+      "report": "docs/production/functional-completion-20261104/FC-TRUTH/REVIEW.md",
+      "config_source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-provenance/.codex/config.toml",
+      "config": ".codex/config.toml",
+      "config_sha256": "92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4",
+      "dependency": "task_ae949bd12fff",
+      "title": "FC-TRUTH: independent exact-commit factual review",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-TRUTH.md",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "review_class": "different-family prose/metadata fidelity review; no primary source acceptance or qualification gate"
+    },
+    "provenance": {
+      "package": "FC-PROVENANCE",
+      "name": "wp-fc26-fc-provenance-review",
+      "branch": "review/wp-fc26-fc-provenance-review",
+      "agent": "opencode2",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "effort": "unsupported; thinking inherited",
+      "base": "4c5c8120a27e41c8666998a6d0faeb6c758cc57b",
+      "author_report": "docs/production/functional-completion-20261104/FC-PROVENANCE/AUDIT.md",
+      "author_report_sha256": "38938a02a275981a93ed359768cfdb1c506e73310869e2c259f54ecfd5128d8e",
+      "report": "docs/production/functional-completion-20261104/FC-PROVENANCE/REVIEW.md",
+      "config_source": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-fc26-fc-truth/opencode.json",
+      "config": "opencode.json",
+      "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+      "dependency": "task_a7ee911f3245",
+      "title": "FC-PROVENANCE: independent exact-commit factual review",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-PROVENANCE.md",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "review_class": "different-family prose/metadata fidelity review; no primary source acceptance or qualification gate"
+    }
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T19:33:14.939872+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "f3bb5fd96f6fc5b24ab187f694e92194c71a5dac",
+    "remote_equal": true,
+    "fleet": {
+      "total": 168,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 168,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDQ0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMzoxMTo0OSIsImRpc3BhdGNoSWQiOiJjdHhfZTk3M2Q0YmUzYzYwIiwiZGF0YWJhc2VJZCI6MTM1NX19"
+        },
+        {
+          "limit": 100,
+          "total": 168,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 161,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_d6197cc497ff",
+          "taskId": "task_a7ee911f3245",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_2caca18359bf",
+          "taskId": "task_ae949bd12fff",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793820785948,
+        "error": null,
+        "age_seconds": 9
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399566,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 4,
+          "windowMinutes": 300,
+          "resetsAt": 1793832599566,
+          "resetDescription": "3:49 PM"
+        },
+        "updatedAt": 1793820785531,
+        "error": null,
+        "age_seconds": 9
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 39,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932837,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 47,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793820785749,
+        "error": null,
+        "age_seconds": 9
+      }
+    },
+    "scope": "Adopted FC-TRUTH/FC-PROVENANCE exactcommit independent factual reviews, no implementation or qualification attempt",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "Bothauthors delivered/released; reserved Soltruth/M3provenancefidelity reviews; source and assessment gatesheld. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "storage": {
+    "policy": "C:/Users/ryanh/.agents/policies/AGENT_STORAGE_HYGIENE.md adoptedonreload",
+    "coordinator_registration": "9e3030583fd14be69d566db18ed46bab",
+    "new_diagnostics": "registeredpayloadonly, fullGitbundles/native/compactreceipts, no workspace/build/dependencycopies",
+    "original_author_outputs": "Existingrequiredignored/temp evidence retainedreadonly in originals; hashes/memberinventoryverified withoutredundantcopy; no deletion/quarantine/Orcaworkspaceremoval",
+    "review_date": "2026-12-04"
+  },
+  "factual_counterpoint": "TruthreportC2fullidentifier differs from actual615d3c84 object: correct615d3c8403b237dd117c8032697c9b58895f9217 exists. Independentreviewmustcheck actualrefs vsreportedtranscription, originalreportimmutable; no historyrepair/sourcefetchperformed.",
+  "holds": "Allsource/qualification/candidate/privacybudget/ownerphysicalvisual72hweekrelease remain; reportsareproposalsuntilreviews/coordinatorchecksaccepted",
+  "concurrency": "two proposedreviewers+coordinator+protectedexternal=4/no nesting, authorspositivelyreleased, oldunknownresourcesprotected"
+}

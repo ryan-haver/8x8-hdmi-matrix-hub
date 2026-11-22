@@ -1,0 +1,117 @@
+{
+  "observed_utc": "2026-11-03T05:25:24.967750+00:00",
+  "status": "prepared; zero new reviewers launched",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, supported live discovery receipts retained privately",
+  "capacity": {
+    "observed_utc": "2026-11-03T05:25:24.967750+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 46,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793683377118,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 63,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 18,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932896,
+        "resetDescription": null
+      },
+      "updatedAt": 1793683377439,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 115,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 115,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDE2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDoxNDoxMiIsImRpc3BhdGNoSWQiOiJjdHhfYmVjYzhmOGE0ODZlIiwiZGF0YWJhc2VJZCI6NjM5fX0"
+      },
+      {
+        "limit": 100,
+        "total": 115,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 109,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "catalog": {
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "fetched_at": "2026-11-03T05:25:24.212296100Z",
+    "supported": true
+  },
+  "jobs": {
+    "findings_fix02": {
+      "base": "a2dab11cdc871d6a98c563b019a361371a9af710",
+      "spec": "FINDINGS_CORRECTION02_REREVIEW_TASK.txt",
+      "worktree_name": "wp-exec-sw-findings-01-rereview02",
+      "dependency": "task_37183952cac7",
+      "title": "SW-FINDINGS correction02 exact two-edit factual re-review",
+      "new_report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_02.md",
+      "gate_path": [
+        "independent_findings_delta",
+        "correction02",
+        "independent_review"
+      ],
+      "budget": "5min target; complete4insertions2deletions/context, no61row re-audit",
+      "author_family": "MiniMax",
+      "reviewer_family": "OpenAI",
+      "task_id": null,
+      "dispatch_id": null
+    },
+    "ci_fix01": {
+      "base": "b1ca1390f90652bf25fcb8ce73efb211c1b666da",
+      "spec": "CI_ATTRIBUTION_CORRECTION01_REREVIEW_TASK.txt",
+      "worktree_name": "wp-exec-ev-ci-attribution-rereview01",
+      "dependency": "task_f88cda2cf757",
+      "title": "EV-CI-ATTRIBUTION seven corrected claims exact-commit re-review",
+      "new_report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/CORRECTION_REVIEW_01.md",
+      "gate_path": [
+        "CI_attribution",
+        "correction01",
+        "independent_review"
+      ],
+      "budget": "10min target; complete R1-R7 correction/context, prior56unit proof preserved without repeat audit",
+      "author_family": "MiniMax",
+      "reviewer_family": "OpenAI",
+      "task_id": null,
+      "dispatch_id": null
+    }
+  },
+  "qualification": "Actual Astra bounded factual review43356/81ac plus577/00b7; independent of M3, no new source qualification",
+  "demand": "two bounded exact-correction reviews; precise correction/re-review reserve retained, no unlimited loops",
+  "alternatives": "Sol actual native capacity event preserved, Astra actual recent availability. Google unknown, DeepSeek exhausted, M3 cannot self-review; no silent fallback.",
+  "material_plan_change": false,
+  "concurrency": "max2new+coordinator+protected external reservation=4; no nesting",
+  "protected": "root/private runtime, old originals/failed evidence/natives/ignored artifacts/baselines/retained workspaces/odd untrackedhook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner manual-retake decision pending, no answer/approval inferred; source/physical/release gates unchanged",
+  "discovery": "Fresh cf-fixed-review status/hosts/Run/repo/inbox/allworkerpages receipts retained privately at05:18UTC; same1.4.246 runtime/gen5; cached catalog reread and quotas refreshed now; each launch checks quotas again",
+  "delivery_hash_erratum": "Original CI delivery malformed65-character digest preserved, corrected canonical64-character identity independently verified; see CF_CORRECTED_AUTHOR_DELIVERIES.json"
+}

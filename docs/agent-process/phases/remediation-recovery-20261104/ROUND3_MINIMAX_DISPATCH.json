@@ -1,0 +1,129 @@
+{
+  "observed_utc": "2026-11-04T10:23:52.732839+00:00",
+  "phase": "remediation-recovery-20261104",
+  "round": 3,
+  "status": "MiniMax third same-complete-packet decision ACTIVE; two peer deliveries preserved/released, verdicts not shared",
+  "actor": {
+    "task_id": "task_dfe340b7113e",
+    "dispatch_id": "ctx_500618559004",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-minimax",
+    "branch": "planning/remediation-recovery-r1-minimax",
+    "exact_base": "6671c92789d0de0590609590aeebc73772c00069",
+    "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round3/minimax.md",
+    "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+    "launch": {
+      "requested": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      },
+      "effective": {
+        "agent": "opencode2",
+        "model": null,
+        "effort": null
+      }
+    },
+    "turn_start": "unsupported",
+    "native_entry": {
+      "status": "actual native MiniMax M3 at exact Task/Dispatch/directory",
+      "session": "ses_e59eab66fffeTpxkIFjV21JciX",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "CLI_effort_override": "unsupported, configured route inherited",
+      "bytes": 283452,
+      "sha256": "891711f18c625e0f88ca32d8ef1eb923714f1434a3b35c65d404c885723b2c46",
+      "unassigned_helpers_observed": [],
+      "scope": "entry capture only, not source qualification/completion/descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "status": "Third genuine independent R3 same-packet decision ACTIVE; no verdict/adoption yet"
+  },
+  "packet_version": 1,
+  "complete_final_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "packet": "docs/agent-process/phases/remediation-recovery-20261104/FINAL_PACKET.json",
+  "prewave_publication": "daf7916744dc4aad5df2fa9442bcee3b8e82a97b",
+  "capacity": {
+    "observed_utc": "2026-11-04T10:22:51.693246+00:00",
+    "scope": "two bounded R3same-packet decisions now, third R3/source/qualification/review/corrections separately freshly gated; absolute allowance/otherhost demand unknown",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 12,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793787226301,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 3,
+        "windowMinutes": 300,
+        "resetsAt": 1793796600020,
+        "resetDescription": "5:50 AM"
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400020,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793787770964,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 19,
+        "windowMinutes": 300,
+        "resetsAt": 1793794421794,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932868,
+        "resetDescription": null
+      },
+      "updatedAt": 1793787226339,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 150,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 150,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzU5fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNzoxNzozMCIsImRpc3BhdGNoSWQiOiJjdHhfMDMzNDMwOTg1NGZkIiwiZGF0YWJhc2VJZCI6OTA0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 150,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 142
+    },
+    "historical_retained": 6,
+    "retained_compatibility_row_without_resource": "ctx_6cb8482cdd03 after operational ACK resource transfer; actual owner ctx_137233665e42 positively released/projection verified",
+    "current_resources": 1
+  },
+  "concurrency": "one current + coordinator + protected external =3of4; no nesting",
+  "independence": "Same full frozen packet and all complete R2 reports; no peer R3 verdicts or recommendation summaries shared. Two deliveries are not consensus.",
+  "adoption_gate": "After genuine MiniMax decision, preserve/release/task publish, then independently inspect all three exact same-hash verdicts and qualifications/held gates. Require all3actual ACCEPT without unresolved material blocker, never majority/coordinator inference.",
+  "source_scope": "Only NEW own round3 prose and owned ignored/temp in positively released existing tree at exact6671c927; configs/R1/R2/source/packet untouched. Planning grants no source competence, automatic assessment retry, API lease or release.",
+  "publication": "MiniMax R2 task-ref error resolved with verified normal same-ref fast-forward; immutable failure/hold history remains. Final packet decision/criteria/hash unchanged. No destruction.",
+  "next": "Publish/check scoped launch record and independently verify integration remote/local; end turn for Orca wake, no completion polling."
+}

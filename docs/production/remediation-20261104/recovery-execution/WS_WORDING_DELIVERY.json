@@ -1,0 +1,118 @@
+{
+  "observed_utc": "2026-11-04T13:22:32.318750+00:00",
+  "task_id": "task_c4e3c9018634",
+  "dispatch_id": "ctx_5c6661149549",
+  "status": "DELIVERED / source-boundary+AST+original receipts verified / RELEASED / PRESERVED / exact taskref PUBLISHED; reserved qualified re-review PENDING",
+  "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+  "base": "24c5170458200209836228646fdfc8784a967ad1",
+  "branch": "remediation/ws-work-c01",
+  "exclusive_paths": [
+    "src/rest_api/ws_request_work.py",
+    "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION.md"
+  ],
+  "module_blob_sha256": "3ae622fd21ca8b8c9472d0758df66bf7f674e5462ad251c8cb6417521d013449",
+  "report_blob_sha256": "5d3a1625d42aae4c24a30895680068703504c39a610cdb644cb1c730a963cb38",
+  "actual_checks": {
+    "checks": {
+      "02-prove-ast-hash": {
+        "exit": 1,
+        "junit": null
+      },
+      "03-prove-ast-hash": {
+        "exit": 0,
+        "junit": null
+      },
+      "04-ruff-ci-paths": {
+        "exit": 0,
+        "junit": null
+      },
+      "05-mypy-src": {
+        "exit": 0,
+        "junit": null
+      },
+      "06-focused-debug": {
+        "exit": 0,
+        "junit": {
+          "tests": 73,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "08-import-origin": {
+        "exit": 0,
+        "junit": null
+      },
+      "09-prove-final": {
+        "exit": 0,
+        "junit": null
+      },
+      "10-commit-hook-strict": {
+        "exit": 0,
+        "junit": {
+          "tests": 4161,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 6
+        }
+      }
+    },
+    "executable_AST_equal_ignoring_only_module_docstring": true,
+    "AST_sha256": "73ea0540fea5374108a705bac848f0c3ef619da70204c88e41d045eb0d10d5fa",
+    "tests_git_blob_exact_equal": true
+  },
+  "hook": {
+    "counts": "4155pass/6skip/35deselected/4warnings",
+    "strict_routes": "177/177",
+    "direct_exit": 0,
+    "junit_sha256": "5c536a7f5297f7dbcfdef775d2faf19e5ad48539db3e3bf700bb5327d6262765",
+    "route_json_sha256": "6f4d570ee7d899010ee1c982086130bebb882bb3323c1581e6573161ed38194a",
+    "route_copy_note": "worktree route-coverage.json bytes were identical before and after the hook, so runner did not auto-copy; copied afterwards as route-coverage-post-hook-copy.json"
+  },
+  "native": {
+    "session": "17707a12-6573-4f88-b25e-afe4bf6233c5",
+    "model": "claude-opus-5-5",
+    "effort": "high launch/local config; native per-turn unexposed",
+    "bytes": 1523472,
+    "sha256": "e3c2ee13124388f8713e415c3a19d3cab925e76346c727bfba7c29a0ba12ff0c",
+    "unassigned_helpers_observed": []
+  },
+  "preservation": [
+    {
+      "name": "wp-remediation-ws-work-c01",
+      "files": 4898,
+      "links": 1,
+      "archive_bytes": 209592417,
+      "archive_sha256": "6d7b9e0d45c7718a4f1752755e6dd6f6f13181e166ee3c35f3ceb8e3ec9df46d",
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "name": "17707a12-6573-4f88-b25e-afe4bf6233c5",
+      "files": 1,
+      "links": 0,
+      "archive_bytes": 453,
+      "archive_sha256": "43c1a2e8540e6d638b514c6f47fe33b9dc61d3b4a1439dd68944778f0dc02f6a",
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "name": "ws-wording",
+      "files": 21655,
+      "links": 1,
+      "archive_bytes": 26263071,
+      "archive_sha256": "0292f95bb09cb89522fcd9a6f9abdf2fb66a8e1bde52df913a119eaeb9ca9530",
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "preservation_scope": "Full surviving workspace incl oldowned evidence/newwording ignored/caches/config and exact Node junction metadata, own fresh temp/empty failed launch root, native transcript and observed automatic session temp artifact. Earlier archives immutable. No fullGitbundle/destructivecleanup.",
+  "task_publication": {
+    "observed_utc": "2026-11-04T13:20:37.164600+00:00",
+    "ref": "refs/heads/remediation/ws-work-c01",
+    "local_head": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+    "remote_head": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+    "exact_equal": true,
+    "normal_push": true,
+    "previous_head": "24c5170458200209836228646fdfc8784a967ad1"
+  },
+  "review": "Astra/high actual different-family changed-commit source re-review reserved. Conditional original-author fix/re-review reserve used, no automatic further rounds. No old failed first-authorship/WSR03 rewrite or privacy retry.",
+  "remaining": "No source intake/wiring/CR01closure yet; privacy qualification terminalFAIL/noqualifiedfallback, D6target/wiring/API034M1/WS040/combined and visual/HIL/72h/week/release held."
+}

@@ -3,24 +3,40 @@
 from __future__ import annotations
 
 import asyncio
+import inspect
 import logging
+from collections.abc import Callable, Mapping
 from typing import Any
 
-from .entities import CEC_COMMAND_ALIASES
+import ucapi
+
+from .entities import (
+    CEC_COMMAND_ALIASES,
+    OUTPUT_CEC_COMMAND_SET,
+    is_item_pin_blocked,
+    normalize_snapshot,
+)
 from .state import EntityStateProjector
 
 _LOG = logging.getLogger("uc.handlers")
 
-STATUS_OK = 200
-STATUS_BAD_REQUEST = 400
-STATUS_NOT_FOUND = 404
-STATUS_SERVER_ERROR = 500
-STATUS_NOT_IMPLEMENTED = 501
-STATUS_SERVICE_UNAVAILABLE = 503
+STATUS_OK = int(ucapi.StatusCodes.OK)
+STATUS_BAD_REQUEST = int(ucapi.StatusCodes.BAD_REQUEST)
+STATUS_NOT_FOUND = int(ucapi.StatusCodes.NOT_FOUND)
+STATUS_SERVER_ERROR = int(ucapi.StatusCodes.SERVER_ERROR)
+STATUS_NOT_IMPLEMENTED = int(ucapi.StatusCodes.NOT_IMPLEMENTED)
+STATUS_SERVICE_UNAVAILABLE = int(ucapi.StatusCodes.SERVICE_UNAVAILABLE)
 
 MAX_CMD_REPEAT = 20
 MAX_CMD_DELAY_MS = 5000
 DEFAULT_CMD_DELAY_MS = 0
+
+
+def _to_status_code(code: int) -> ucapi.StatusCodes:
+    try:
+        return ucapi.StatusCodes(int(code))
+    except ValueError:
+        return ucapi.StatusCodes.SERVER_ERROR
 
 
 def _bounded_non_negative_int(params: dict[str, Any], key: str, default: int, maximum: int) -> int:
@@ -74,37 +90,40 @@ class UCCommandDispatcher:
         projector: EntityStateProjector | None = None,
         *,
         port_count: int = 8,
+        on_state_diff: Callable[[dict[str, dict[str, Any]]], Any] | None = None,
     ) -> None:
         self.hub_client = hub_client
         self.projector = projector if projector is not None else EntityStateProjector(port_count=port_count)
         self.port_count = port_count
+        self.on_state_diff = on_state_diff
         self._blocked_profiles: set[str] = set()
         self._blocked_scenes: set[str] = set()
 
-    def update_pin_blocks(self, snapshot: dict[str, Any] | None) -> None:
+    def _emit_diff(self, diff: dict[str, dict[str, Any]]) -> None:
+        if diff and self.on_state_diff is not None:
+            self.on_state_diff(diff)
+
+    def update_pin_blocks(self, snapshot: Any) -> None:
         """Record PIN-protected profiles/scenes that are not allowed on the Remote (§4.2)."""
         self._blocked_profiles.clear()
         self._blocked_scenes.clear()
-        if not snapshot:
+        snap = normalize_snapshot(snapshot)
+        if not snap:
             return
+        catalog = snap.get("catalog")
+        catalog_map = catalog if isinstance(catalog, Mapping) else {}
         for key, target_set in (("profiles", self._blocked_profiles), ("scenes", self._blocked_scenes)):
-            raw = snapshot.get(key)
-            items = raw.values() if isinstance(raw, dict) else (raw if isinstance(raw, list) else [])
+            raw = snap.get(key)
+            if raw is None:
+                raw = catalog_map.get(key)
+            items = raw.values() if isinstance(raw, Mapping) else (raw if isinstance(raw, list) else [])
             for item in items:
-                if not isinstance(item, dict):
+                if not isinstance(item, Mapping):
                     continue
                 item_id = str(item.get("id") or "").strip()
                 if not item_id:
                     continue
-                has_pin = bool(
-                    item.get("has_pin")
-                    or item.get("pin_protected")
-                    or item.get("passcode_required")
-                    or item.get("pin")
-                    or item.get("passcode")
-                )
-                allow_remote = bool(item.get("allow_remote") or item.get("remote_allowed"))
-                if has_pin and not allow_remote:
+                if is_item_pin_blocked(item):
                     target_set.add(item_id)
 
     def _is_available(self) -> bool:
@@ -116,26 +135,31 @@ class UCCommandDispatcher:
             return False
         return True
 
+    def as_ucapi_handler(self) -> Callable[..., Any]:
+        """Return a command handler function suitable for ``ucapi.Entity``."""
+        return self.__call__
+
     async def __call__(
         self,
         entity: Any,
         cmd_id: str,
         params: dict[str, Any] | None = None,
         websocket: Any = None,
-    ) -> int:
+    ) -> ucapi.StatusCodes:
         entity_id = (
             entity
             if isinstance(entity, str)
             else (entity.get("entity_id") if isinstance(entity, dict) else getattr(entity, "id", ""))
         )
-        return await self.dispatch(str(entity_id), cmd_id, params)
+        code = await self.dispatch(str(entity_id), cmd_id, params)
+        return _to_status_code(code)
 
     async def handle(
         self,
         entity_id: str | Any,
         cmd_id: str,
         params: dict[str, Any] | None = None,
-    ) -> int:
+    ) -> ucapi.StatusCodes:
         """Alias for :meth:`dispatch`."""
         return await self.dispatch(entity_id, cmd_id, params)
 
@@ -144,7 +168,7 @@ class UCCommandDispatcher:
         entity_id: str | Any,
         cmd_id: str,
         params: dict[str, Any] | None = None,
-    ) -> int:
+    ) -> ucapi.StatusCodes:
         """Dispatch a command for ``entity_id`` and return an HTTP-like UC status code (`200`, `400`, `501`, `503`, `500`)."""
         if not isinstance(entity_id, str):
             entity_id = (
@@ -154,37 +178,37 @@ class UCCommandDispatcher:
             )
         try:
             if not self._is_available():
-                return STATUS_SERVICE_UNAVAILABLE
+                return _to_status_code(STATUS_SERVICE_UNAVAILABLE)
 
             if entity_id == "remote.orei_matrix":
-                return await self._handle_matrix_remote(cmd_id, params)
+                return _to_status_code(await self._handle_matrix_remote(cmd_id, params))
 
             if entity_id == "switch.matrix_power":
-                return await self._handle_matrix_power(cmd_id)
+                return _to_status_code(await self._handle_matrix_power(cmd_id))
 
             if entity_id.startswith("button.preset_"):
-                return await self._handle_preset_button(entity_id, cmd_id)
+                return _to_status_code(await self._handle_preset_button(entity_id, cmd_id))
 
             if entity_id.startswith("media_player.output_"):
-                return await self._handle_media_player(entity_id, cmd_id, params)
+                return _to_status_code(await self._handle_media_player(entity_id, cmd_id, params))
 
             if entity_id.startswith("select.output_") and entity_id.endswith("_source"):
-                return await self._handle_select_source(entity_id, cmd_id, params)
+                return _to_status_code(await self._handle_select_source(entity_id, cmd_id, params))
 
             if entity_id.startswith("remote.input_") and entity_id.endswith("_cec"):
                 port_str = entity_id.removeprefix("remote.input_").removesuffix("_cec")
-                return await self._handle_cec_remote("input", int(port_str), cmd_id, params)
+                return _to_status_code(await self._handle_cec_remote("input", int(port_str), cmd_id, params))
 
             if entity_id.startswith("remote.output_") and entity_id.endswith("_cec"):
                 port_str = entity_id.removeprefix("remote.output_").removesuffix("_cec")
-                return await self._handle_cec_remote("output", int(port_str), cmd_id, params)
+                return _to_status_code(await self._handle_cec_remote("output", int(port_str), cmd_id, params))
 
-            return STATUS_BAD_REQUEST
+            return _to_status_code(STATUS_BAD_REQUEST)
         except asyncio.CancelledError:
             raise
         except Exception:
             _LOG.exception("Unhandled exception executing %s on %s", cmd_id, entity_id)
-            return STATUS_SERVER_ERROR
+            return _to_status_code(STATUS_SERVER_ERROR)
 
     # ------------------------------------------------------------------
     # Per-entity-type handlers
@@ -212,7 +236,8 @@ class UCCommandDispatcher:
             turn_on = norm == "on"
         ok = await self._call_power(turn_on)
         if ok:
-            self.projector.record_power("switch.matrix_power", on=turn_on)
+            diff = self.projector.record_power("switch.matrix_power", on=turn_on)
+            self._emit_diff(diff)
             return STATUS_OK
         return STATUS_SERVER_ERROR
 
@@ -254,7 +279,8 @@ class UCCommandDispatcher:
                 return STATUS_BAD_REQUEST
             ok = await self._call_switch(input_num, output_num)
             if ok:
-                self.projector.apply_event("routing", {"output": output_num, "input": input_num})
+                diff = self.projector.apply_event("routing", {"output": output_num, "input": input_num})
+                self._emit_diff(diff)
                 return STATUS_OK
             return STATUS_SERVER_ERROR
 
@@ -266,7 +292,8 @@ class UCCommandDispatcher:
             cec_cmd = "POWER_ON" if turn_on else "POWER_OFF"
             ok = await self._call_send_cec("output", output_num, cec_cmd)
             if ok:
-                self.projector.record_power("output", output_num, on=turn_on)
+                diff = self.projector.record_power("output", output_num, on=turn_on)
+                self._emit_diff(diff)
                 return STATUS_OK
             return STATUS_SERVER_ERROR
 
@@ -310,20 +337,20 @@ class UCCommandDispatcher:
         elif norm == "select_last":
             input_num = self.port_count
         elif norm in ("select_next", "select_previous"):
-            current = self.projector.routed_inputs.get(output_num, 1)
+            if not hasattr(self.hub_client, "cycle_input"):
+                raise AttributeError("hub_client has no cycle_input method")
+            direction = "next" if norm == "select_next" else "previous"
             cycle = bool(params.get("cycle", True))
-            step = 1 if norm == "select_next" else -1
-            nxt = current + step
-            if cycle:
-                input_num = ((nxt - 1) % self.port_count) + 1
-            else:
-                input_num = max(1, min(self.port_count, nxt))
+            res = self.hub_client.cycle_input(direction, output_num, cycle=cycle)
+            out = await res if inspect.isawaitable(res) else res
+            return self._interpret_result(out)
         else:
             return STATUS_NOT_IMPLEMENTED
 
         ok = await self._call_switch(input_num, output_num)
         if ok:
-            self.projector.apply_event("routing", {"output": output_num, "input": input_num})
+            diff = self.projector.apply_event("routing", {"output": output_num, "input": input_num})
+            self._emit_diff(diff)
             return STATUS_OK
         return STATUS_SERVER_ERROR
 
@@ -358,6 +385,8 @@ class UCCommandDispatcher:
                 mapped = CEC_COMMAND_ALIASES.get(raw_cmd.strip().upper())
                 if mapped is None:
                     return STATUS_BAD_REQUEST
+                if port_type == "output" and mapped not in OUTPUT_CEC_COMMAND_SET:
+                    return STATUS_BAD_REQUEST
                 commands.append(mapped)
         else:
             return STATUS_NOT_IMPLEMENTED
@@ -372,7 +401,8 @@ class UCCommandDispatcher:
                 if not ok:
                     return STATUS_SERVER_ERROR
                 if cec_cmd in ("POWER_ON", "POWER_OFF"):
-                    self.projector.record_power(port_type, port_num, on=(cec_cmd == "POWER_ON"))
+                    diff = self.projector.record_power(port_type, port_num, on=(cec_cmd == "POWER_ON"))
+                    self._emit_diff(diff)
                 if hold > 0:
                     await asyncio.sleep(hold / 1000.0)
 
@@ -441,14 +471,18 @@ class UCCommandDispatcher:
         for kind, target in parsed_actions:
             if kind == "preset":
                 ok = await self._call_recall_preset(int(target))
+                if not ok:
+                    return STATUS_SERVER_ERROR
             elif kind == "route_all":
                 ok = await self._call_switch(int(target), None)
-                if ok:
-                    self.projector.apply_event("routing", {"input": int(target), "output": None})
+                if not ok:
+                    return STATUS_SERVER_ERROR
+                diff = self.projector.apply_event("routing", {"input": int(target), "output": None})
+                self._emit_diff(diff)
             else:
-                ok = await self._call_run_action(kind, str(target))
-            if not ok:
-                return STATUS_SERVER_ERROR
+                code = await self._call_run_action_status(kind, str(target))
+                if code != STATUS_OK:
+                    return code
 
         return STATUS_OK
 
@@ -456,49 +490,77 @@ class UCCommandDispatcher:
     # HubClient call adapters
     # ------------------------------------------------------------------
 
+    @staticmethod
+    def _interpret_result(out: Any) -> int:
+        if isinstance(out, Mapping):
+            if out.get("success") is True:
+                return STATUS_OK
+            status = out.get("status")
+            err = str(out.get("error") or "").lower()
+            if status in (400, 401, 403, 404) or any(
+                tok in err
+                for tok in ("pin", "passcode", "password", "protected", "forbidden", "unauthorized", "not found")
+            ):
+                return STATUS_BAD_REQUEST
+            if status == 503:
+                return STATUS_SERVICE_UNAVAILABLE
+            return STATUS_SERVER_ERROR
+        return STATUS_OK if bool(out) else STATUS_SERVER_ERROR
+
     async def _call_switch(self, input_num: int, output_num: int | None) -> bool:
         if hasattr(self.hub_client, "switch"):
             res = self.hub_client.switch(input_num, output_num)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         if output_num is None and hasattr(self.hub_client, "switch_all"):
             res = self.hub_client.switch_all(input_num)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         if output_num is not None and hasattr(self.hub_client, "switch_input"):
             res = self.hub_client.switch_input(input_num, output_num)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         raise AttributeError("hub_client has no switch method")
 
     async def _call_recall_preset(self, preset_num: int) -> bool:
         if hasattr(self.hub_client, "recall_preset"):
             res = self.hub_client.recall_preset(preset_num)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         if hasattr(self.hub_client, "run_action"):
-            res = self.hub_client.run_action("preset", preset_num)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            return (await self._call_run_action_status("preset", preset_num)) == STATUS_OK
         raise AttributeError("hub_client has no recall_preset method")
 
     async def _call_power(self, on: bool) -> bool:
         if hasattr(self.hub_client, "power"):
             res = self.hub_client.power(on)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         method_name = "power_on" if on else "power_off"
         if hasattr(self.hub_client, method_name):
             res = getattr(self.hub_client, method_name)()
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         raise AttributeError("hub_client has no power method")
 
     async def _call_send_cec(self, port_type: str, port_num: int, command: str) -> bool:
         if hasattr(self.hub_client, "send_cec"):
             res = self.hub_client.send_cec(port_type, port_num, command)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         method_name = f"send_cec_{port_type}"
         if hasattr(self.hub_client, method_name):
             res = getattr(self.hub_client, method_name)(port_num, command)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out) == STATUS_OK
         raise AttributeError("hub_client has no send_cec method")
 
-    async def _call_run_action(self, kind: str, action_id: str) -> bool:
+    async def _call_run_action_status(self, kind: str, action_id: str | int) -> int:
         if hasattr(self.hub_client, "run_action"):
             res = self.hub_client.run_action(kind, action_id)
-            return bool(await res if asyncio.iscoroutine(res) else res)
+            out = await res if asyncio.iscoroutine(res) else res
+            return self._interpret_result(out)
         raise AttributeError("hub_client has no run_action method")
+
+    async def _call_run_action(self, kind: str, action_id: str | int) -> bool:
+        return (await self._call_run_action_status(kind, action_id)) == STATUS_OK

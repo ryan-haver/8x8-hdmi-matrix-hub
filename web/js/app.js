@@ -8,6 +8,11 @@ class MatrixApp {
         this.components = {};
         this.ws = null;
         this.isInitialLoad = true; // Track if this is the first load (page refresh)
+        this._wsRouteSeq = 0;
+        this._wsStatusSeq = 0;
+        this._wsRouteAt = new Map();
+        this._statusLoadId = 0;
+        this._appliedStatusLoadId = 0;
     }
 
     /**
@@ -446,12 +451,30 @@ class MatrixApp {
         const { type, data } = msg;
 
         switch (type) {
-            case 'status':
+            case 'status': {
                 // Snapshot: sent after every (re)connect and in answer to get_status
+                const seq = ++this._wsRouteSeq;
+                this._wsStatusSeq = seq;
+                const payload = data?.data || data || {};
+                if (payload.routing && typeof payload.routing === 'object') {
+                    Object.entries(payload.routing).forEach(([output, input]) => {
+                        this._wsRouteAt.set(Number(output), { input, seq });
+                    });
+                }
+                if (Array.isArray(payload.outputs)) {
+                    payload.outputs.forEach((input, index) => {
+                        this._wsRouteAt.set(index + 1, { input, seq });
+                    });
+                }
                 state.applyStatus(data);
                 break;
+            }
 
             case 'routing_change':
+                if (data?.output !== undefined && data?.input !== undefined) {
+                    const seq = ++this._wsRouteSeq;
+                    this._wsRouteAt.set(Number(data.output), { input: data.input, seq });
+                }
                 state.setRoute(data.output, data.input);
                 break;
 
@@ -515,6 +538,77 @@ class MatrixApp {
 
             // matrix_connection: handled by MatrixWebSocket (onMatrixStatus).
             // power_change, scene_execution_error: not shown by this page yet.
+        }
+    }
+
+    /**
+     * Begin a REST status load scope (shared by loadInitialData and refresh).
+     */
+    beginStatusLoad() {
+        return {
+            loadId: ++this._statusLoadId,
+            startSeq: this._wsRouteSeq
+        };
+    }
+
+    /**
+     * Overlay WebSocket routing updates received since scope.startSeq
+     * onto both status.routing (map) and status.outputs (array) aliases.
+     */
+    mergeStatusWithWsRoutes(status, scope) {
+        if (!status || !scope) {
+            return status;
+        }
+        const wsOverrides = new Map();
+        this._wsRouteAt.forEach((entry, output) => {
+            if (entry.seq > scope.startSeq) {
+                wsOverrides.set(output, entry.input);
+            }
+        });
+        if (wsOverrides.size === 0) {
+            return status;
+        }
+        const hasEnvelope = status.data && typeof status.data === 'object';
+        const raw = hasEnvelope ? status.data : status;
+        const mergedData = { ...raw };
+
+        if (raw.routing && typeof raw.routing === 'object') {
+            mergedData.routing = { ...raw.routing };
+            wsOverrides.forEach((input, output) => {
+                mergedData.routing[output] = input;
+            });
+        }
+
+        if (Array.isArray(raw.outputs)) {
+            mergedData.outputs = [...raw.outputs];
+            wsOverrides.forEach((input, output) => {
+                if (output >= 1 && output <= mergedData.outputs.length) {
+                    mergedData.outputs[output - 1] = input;
+                }
+            });
+        }
+
+        return hasEnvelope ? { ...status, data: mergedData } : mergedData;
+    }
+
+    /**
+     * Apply a resolved REST status payload unless superseded by a newer completed REST load,
+     * preserving any WebSocket routing updates received while this load was in flight.
+     */
+    applyRestStatus(status, scope, { setErrorWhenUnavailable = false } = {}) {
+        if (scope && scope.loadId < this._appliedStatusLoadId) {
+            return;
+        }
+        if (status) {
+            if (scope) {
+                this._appliedStatusLoadId = scope.loadId;
+            }
+            state.applyStatus(this.mergeStatusWithWsRoutes(status, scope));
+        } else if (setErrorWhenUnavailable) {
+            if (!state.ui.statusLoaded && this._wsStatusSeq === 0 && this._wsRouteSeq === 0) {
+                // UI-29: the grid says the matrix is not reachable instead of a made-up routing
+                state.setStatusError('Matrix not reachable');
+            }
         }
     }
 
@@ -592,6 +686,7 @@ class MatrixApp {
             // UI-27: profiles and CEC macros come from their own routes (the
             // Profiles tab read /api/v2/scenes with the wrong response path, and
             // nothing loaded state.profiles / state.cecMacros).
+            const statusScope = this.beginStatusLoad();
             const [info, status, , inputStatus, outputStatus] = await Promise.all([
                 api.getInfo().catch(() => null),
                 api.getStatus().catch(() => null),
@@ -607,12 +702,7 @@ class MatrixApp {
                 state.applyInfo(info);
             }
 
-            if (status) {
-                state.applyStatus(status);
-            } else {
-                // UI-29: the grid says the matrix is not reachable instead of a made-up routing
-                state.setStatusError('Matrix not reachable');
-            }
+            this.applyRestStatus(status, statusScope, { setErrorWhenUnavailable: true });
 
             // Apply HDMI status data
             if (inputStatus?.data?.inputs) {
@@ -740,6 +830,7 @@ class MatrixApp {
      */
     async refresh() {
         toast.info('Refreshing...');
+        const statusScope = this.beginStatusLoad();
         
         try {
             const [status, , inputStatus, outputStatus] = await Promise.all([
@@ -752,9 +843,7 @@ class MatrixApp {
                 api.getOutputStatus().catch(() => null)
             ]);
 
-            if (status) {
-                state.applyStatus(status);
-            }
+            this.applyRestStatus(status, statusScope);
 
             // Refresh HDMI status
             if (inputStatus?.data?.inputs) {

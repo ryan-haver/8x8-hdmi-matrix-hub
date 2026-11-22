@@ -8,7 +8,7 @@ import logging
 
 from aiohttp import web
 
-from system_shortcuts import execute_shortcut
+from hub.runtime.actions import catalog_changes, run_rest_action
 
 from .utils import (
     _json_response,
@@ -105,6 +105,7 @@ async def handle_get_shortcut(request: web.Request) -> web.Response:
 # =============================================================================
 
 
+@catalog_changes
 async def handle_update_shortcut(request: web.Request) -> web.Response:
     """PUT /api/shortcuts/{key} — update label, icon, enabled, order, favorite, and dashboard flags."""
     manager = get_system_shortcut_manager()
@@ -142,6 +143,7 @@ async def handle_update_shortcut(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "updating shortcut"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_favorite(request: web.Request) -> web.Response:
     """POST /api/shortcuts/{key}/favorite — toggle the favorite flag."""
     manager = get_system_shortcut_manager()
@@ -158,6 +160,7 @@ async def handle_toggle_favorite(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "toggling shortcut favorite"), status=500)
 
 
+@catalog_changes
 async def handle_toggle_dashboard(request: web.Request) -> web.Response:
     """POST /api/shortcuts/{key}/dashboard — toggle the dashboard_visible flag."""
     manager = get_system_shortcut_manager()
@@ -193,7 +196,10 @@ async def handle_execute_shortcut(request: web.Request) -> web.Response:
 
         params = _params_from(await parse_json_object(request, allow_empty=True))
 
-        result = await execute_shortcut(sc, matrix, params)
+        run = await run_rest_action("shortcut", key, params=params)
+        result = run.data
+        if not result:
+            return _json_response(False, error=run.error, status=run.status_code)
         status = 200 if result.get("success") else 500
         return _json_response(result.get("success", False), result, status=status)
     except BadRequestError as exc:
@@ -202,6 +208,7 @@ async def handle_execute_shortcut(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "executing shortcut"), status=500)
 
 
+@catalog_changes
 async def handle_reorder_shortcuts(request: web.Request) -> web.Response:
     """PUT /api/shortcuts/reorder — bulk reorder shortcuts by key list."""
     manager = get_system_shortcut_manager()
@@ -224,6 +231,7 @@ async def handle_reorder_shortcuts(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "reordering shortcuts"), status=500)
 
 
+@catalog_changes
 async def handle_create_shortcut(request: web.Request) -> web.Response:
     """POST /api/shortcuts — create a user-defined shortcut."""
     manager = get_system_shortcut_manager()
@@ -255,6 +263,7 @@ async def handle_create_shortcut(request: web.Request) -> web.Response:
         return _json_response(False, error=safe_error_message(exc, "creating user shortcut"), status=500)
 
 
+@catalog_changes
 async def handle_delete_shortcut(request: web.Request) -> web.Response:
     """DELETE /api/shortcuts/{key} — delete a user-defined shortcut."""
     manager = get_system_shortcut_manager()

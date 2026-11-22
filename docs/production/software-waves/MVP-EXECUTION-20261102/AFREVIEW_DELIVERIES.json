@@ -1,0 +1,84 @@
+{
+  "observed_utc": "2026-11-03T04:12:31.207275+00:00",
+  "actors": {
+    "audit03": {
+      "head": "577bfe6b1475183ab0881a1f2d70a7691540e2b8",
+      "base": "f2ee085a37a40cf8e3fc67aef4bb6fec5e7ad731",
+      "tree": "wp-exec-sw-audit-01-rereview03",
+      "report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/CORRECTION_REVIEW_03.md",
+      "bytes": 6480,
+      "sha256": "7aa191ab0d5f8428e8970568f3e5eede282b9f28614e80f004473d8f5532166c",
+      "task_id": "task_d3524ee17f00",
+      "dispatch_id": "ctx_d77b1f25e526",
+      "session": "01a19f8f-91d5-74b3-8605-3440a87faf38",
+      "verdict": "accept bounded inventory documentation",
+      "actual_branch": "ryan-haver/wp-exec-sw-audit-01-rereview03",
+      "native_final": {
+        "session": "01a19f8f-91d5-74b3-8605-3440a87faf38",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 624506,
+        "sha256": "29ef74c8afc106764aa0aa0bd2fcead9236d9275756f81593211528c38375a20"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention for evidence and unresolved source dispositions; no removal",
+      "archives": [
+        {
+          "archive_sha256": "ffaf62bbaac97e96e7c6ba654617d2569c0164ca400f79f9ebf0176002201ca8",
+          "regular_files": 4549,
+          "regular_bytes": 299752797,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "e04cdc31c5266a6b69057b2bc9dd387d27700b01a4a70fcab2972d1532377d81",
+          "regular_files": 106,
+          "regular_bytes": 181542,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    },
+    "findings": {
+      "head": "00b7b04994a08d45961c67619d402506ba2a65a3",
+      "base": "f2af2f38f1ea95891de39b8e64fd0ab7826336de",
+      "tree": "wp-exec-sw-findings-01-review",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/REVIEW.md",
+      "bytes": 16381,
+      "sha256": "6468f423229750512a97ac637a113314fd654c9788a6cf2bb2be947165baeaa5",
+      "task_id": "task_14ca62be7c5f",
+      "dispatch_id": "ctx_f5097c9b3ca5",
+      "session": "01a19f8f-c5dc-78f0-9c89-4eb72483536b",
+      "verdict": "require_changes R1-R8;61IDs/counts verified, new source interpretations/calibration not accepted",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-review",
+      "native_final": {
+        "session": "01a19f8f-c5dc-78f0-9c89-4eb72483536b",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 923768,
+        "sha256": "06e4d0f3bb83e9b9fe4986d2448e5ebd3159b92e94a125a2a725c5e8d83569b6"
+      },
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention for evidence and unresolved source dispositions; no removal",
+      "archives": [
+        {
+          "archive_sha256": "c222c55b2648c101bea951cc31ad9c79f05762bf519b669d4a6314090d2026a5",
+          "regular_files": 4596,
+          "regular_bytes": 300153534,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "4216097942189097193b300b02bcd9259a95e67f46234466599809a02662b781",
+          "regular_files": 103,
+          "regular_bytes": 164426,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    }
+  },
+  "acceptance": "global inventory accepted below as bounded routing documentation; findings requires R1-R8 corrections; no source/finding qualification"
+}

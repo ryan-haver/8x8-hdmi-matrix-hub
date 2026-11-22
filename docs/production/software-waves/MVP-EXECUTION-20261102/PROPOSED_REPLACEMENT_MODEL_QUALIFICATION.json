@@ -1,0 +1,98 @@
+{
+  "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+  "status": "PROPOSAL ONLY, not authorized or dispatched",
+  "recommended_next_decision": "Authorize prospective replacement-model planning and ONE new independent qualification assessment of Anthropic claude-opus-5-5/high with a fresh OpenAI judge",
+  "why": "Two Opus4.7 assessments failed mandatory review-provenance/calibration/quality despite technical/control strengths; do not assume another model qualified or retry the failed route automatically",
+  "candidate": "claude-opus-5-5/high",
+  "underlying_family": "Anthropic",
+  "route": "native Orca agentclaude, exactmodel/high explicit; current managedprofile lists Opus5.5/high, availability/actualnativebackend must be freshlyverified, not inferred from default",
+  "current_profile_advertises_candidate": true,
+  "capacity_observation": {
+    "observed_utc": "2026-11-03T17:36:51.308169+00:00",
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740799715,
+        "resetDescription": "2:19 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966399715,
+        "resetDescription": "Fri 4:59 AM"
+      },
+      "updatedAt": 1793727197744,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 60,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793727198124,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 6,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932886,
+        "resetDescription": null
+      },
+      "updatedAt": 1793727197738,
+      "error": null
+    }
+  },
+  "capacity_limit": "observations are not wholeproposal funding; freshquota and task/review/correction demand must be checked before every actualstage; below30/unknown holds affecteddispatch absent suitable verifiedfallback",
+  "scope": {
+    "source_candidate": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "rubric_sha256": "66f37090564007afebe29cdfd095af7fa85c4321a8420016ada8633dc0563672",
+    "all_six_axes_unchanged": true,
+    "eligible_domain_unchanged": "boundedPythonvalidation-runner/modelofflineAPIrefusalpreparationandcompatibilityguards",
+    "max_new_evaluator_attempts": 1,
+    "max_new_independent_judges": 1,
+    "no_source_test_tool_registry_evidence_changes": true,
+    "no_automatic_followup_retry": true,
+    "retain_both_failed_Opus4_7_attempts": true
+  },
+  "prospective_planning_cycle": {
+    "reason": "materialreplacementmodel/staffing decision follows adopted3-provider/3-round process; no inventedretrospectiveconsensus",
+    "providers": [
+      "Anthropic candidateOpus5.5",
+      "OpenAI Astra/high",
+      "MiniMaxM3 thinking viaOpenCode2"
+    ],
+    "rounds": [
+      "independent boundedassessment of replacementroute/taskmatch",
+      "peerchallengeagainst preservedfailures/capacity/independence",
+      "explicitdecisionsonsamehashedfinalcandidateplanandallocation"
+    ],
+    "max_panel_contributions": 9,
+    "no_source_qualification_from_planning": true,
+    "incomplete_provider_coverage": "provisional; no dependentcandidateexecutionuntilactualrequireddecisions and prerequisites satisfied"
+  },
+  "execution_after_planning": "Only after actual finalpacketdecisions/freshcapacity and exactsource/path/model/native/leaseverification: ONE new candidate evaluation and ONE independent different-family exactreportjudge, sameunchangedrubric. No passpredetermined; unknown/mandatoryfailure holds/fails",
+  "operational_controls": "Read everyin-window source/report with actualfilecoverage, derive counts from exactJUnit/filesystem scopes, label ignoredprivateproof versus publishedrefs correctly, retain fullactualoutputs and direct exits, record unknownprocesscauses honestly. No newharness/sourcefix or relaxedrubric",
+  "independence": "Anthropic evaluator/OpenAI judgement of evaluationquality, not sourceacceptance/self-review of OpenAI-authored code; staffing reassessed afteractualdecision",
+  "planned_worktrees": "new dedicated planning/evaluator/judge workspaces resolvedonlyafterapprovedplan and headroom, no creationnow",
+  "new_task_ids": [],
+  "new_dispatch_ids": [],
+  "new_worktrees_created": 0,
+  "new_accounts_credentials_credit_purchase_authorized": false,
+  "hardware_ownerdeployment_or_release_authority": false,
+  "owner_decision_required": "Explicit approval for this newproposal; priorapproved ONE attempt02 and ONE judge are exhausted. No standinginstruction orwake supplies authorization"
+}

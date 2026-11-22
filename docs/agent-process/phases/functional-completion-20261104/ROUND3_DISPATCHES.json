@@ -1,0 +1,227 @@
+{
+  "observed_utc": "2026-11-04T18:26:05.551541+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 3,
+  "status": "OpenAI+Anthropic actualsamepacketR3 decision active; MiniMax samehashreserved/noTaskyet; NO VOTES/ADOPTION/SOURCE IMPLEMENTATION",
+  "actors": {
+    "openai": {
+      "task_id": "task_908b71effe7d",
+      "dispatch_id": "ctx_02b138df77b6",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "exact_report_base": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "source_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; own historicalcheckout prosecheckonly",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round3/openai.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_openai.md",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "previous_writer": "positively released exact lastowner, originalreports/native/archives/taskrefs retained; no reset/checkout/sourceimport",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "01a1a7ce-90ee-7312-bd80-c7e09d471d07",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 547221,
+        "sha256": "2de39a62dfbc37aeae400575ca86528b46b6b3290aca54bb5f25154b8287d8bb",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "anthropic": {
+      "task_id": "task_ae9877d75a18",
+      "dispatch_id": "ctx_37e0d2f0e439",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "exact_report_base": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "source_analysis_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc viaGitshow; own historicalcheckout prosecheckonly",
+      "exclusive_report": "docs/agent-process/phases/functional-completion-20261104/round3/anthropic.md",
+      "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/R3_anthropic.md",
+      "packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+      "previous_writer": "positively released exact lastowner, originalreports/native/archives/taskrefs retained; no reset/checkout/sourceimport",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "47cd76fe-4642-4b86-800f-019dc71efb4d",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 490585,
+        "sha256": "523df6fb384e856fa776de4b7c44b2279c50bcd94f8bf4985ada2113ce348e26",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "R3 explicit samepacket decision active; no vote received/adoption/implementation",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "final_packet_sha256": "933166c3925e38e748bb4b78e15bb488c90e43bb12807b2f02ffd65b7ea6f2f4",
+  "final_packet_bytes": 616751,
+  "final_plan_text_sha256": "90f8459b050577acb4fd6b55e195288380a1586780dd3eba05accf2159da00bb",
+  "prewave_published_verified_head": "79828b37c30c92b0586f113d0f25fbf362a77f61",
+  "capacity": {
+    "openai": {
+      "observed_utc": "2026-11-04T18:24:53.327122+00:00",
+      "scope": "bounded R3 same-packet explicit plan decision, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 23,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793816692338,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 26,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399938,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 2,
+          "windowMinutes": 300,
+          "resetsAt": 1793832599938,
+          "resetDescription": "3:49 PM"
+        },
+        "updatedAt": 1793816691898,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 37,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932842,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 26,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793816691836,
+        "error": null
+      }
+    },
+    "anthropic": {
+      "observed_utc": "2026-11-04T18:25:05.438043+00:00",
+      "scope": "bounded R3 same-packet explicit plan decision, later R2/R3 then actualsource/qualification/owner gates separately decided and freshlygated; absoluteallowance/otherhostdemand unknown",
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 23,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793816692338,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 26,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399938,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 2,
+          "windowMinutes": 300,
+          "resetsAt": 1793832599938,
+          "resetDescription": "3:49 PM"
+        },
+        "updatedAt": 1793816691898,
+        "error": null
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 37,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932842,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 26,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793816691836,
+        "error": null
+      }
+    }
+  },
+  "fleet": {
+    "total": 165,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 165,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDI2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOCAyMjo0Nzo1MyIsImRpc3BhdGNoSWQiOiJjdHhfYTUyYTFkOTZhZDA4IiwiZGF0YWJhc2VJZCI6MTMzMH19"
+      },
+      {
+        "limit": 100,
+        "total": 165,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 156,
+      "null": 1
+    },
+    "historical_retained": 6,
+    "current_owned": 2,
+    "historical_null_compatibility_no_resource": 1
+  },
+  "concurrency": "two current+coordinator+protectedexternal=4of4,max2new,no nesting",
+  "barrier": "All3R2originals preserved/released/taskrefs published before finalpacket/R3. All3R3 must explicitly ACCEPT same complete packet/hash, no materialblocker; requirechanges/blocked are valid actualoutcomes, notfailedlaunch or automaticconsensus. No peerR3decisions shared during ownvote.",
+  "source": "Currentproduct9b/e542 acceptedUNWIREDcomponent, ownreusedolderplanningcheckouts readonly/proseonly, onlyNEWownround3report/ownignoredtemp",
+  "scope": "Full14issues/30packages/65units scopeacceptance/currentconditionalstaffing embedded; repeated historical metadata retained in fixedsourcepinwithhash. Initial unpublished uncompactdraft76693d preserved privately, nevervoted/published; finalhash933166 governsallparticipants.",
+  "owner_budget": "ExtraOpusprivacyassessment+oneAstrajudge still pendingexplicitownerbudget; acceptingconditionalprogramdoesnotwaive that or qualifyanyrole/source",
+  "holds": "D6wholemixedtarget/WSR03/terminalprivacyFAILs/newqualifiedauthorreviewerjudge fit/HA/UI/retainedsourceadmission/candidateevidence/compatibility/ownerphysicalvisual72hweekmainartifactrelease remain",
+  "next": "publish489docs and exactremoteequal; END TURN for Orca wake/no completionpoll"
+}

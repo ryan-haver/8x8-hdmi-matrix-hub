@@ -1,0 +1,132 @@
+{
+  "observed_utc": "2026-11-03T18:26:23.433179+00:00",
+  "status": "OpenAI R2 contribution delivered/released/preserved/published; all-three barrier not complete",
+  "actor": {
+    "observed_utc": "2026-11-03T18:25:58.808822+00:00",
+    "review_commit": "1ac7d96d7000f85e072a97512f35095906d7934c",
+    "review_base": "914103e8ba5707ac203959ebf5e5c59d57a3a1c5",
+    "report": "docs/agent-process/phases/qualification-replacement-20261103/round2/openai.md",
+    "bytes": 4481,
+    "sha256": "1c68b2e8d8c10e94743f4b7e76cb8e003897b7084d01996489cbe332f587849a",
+    "task_id": "task_d065f4c36365",
+    "dispatch_id": "ctx_c9e525312e2e",
+    "worktree": "wp-qr-r1-openai",
+    "branch": "ryan-haver/wp-qr-r1-openai",
+    "verdict": "R2 peer challenge delivered; no consensus or qualification",
+    "terminal": "released",
+    "task_ref_publication": "exact remote/local verified",
+    "native_final": {
+      "session": "01a1a2a4-fd0e-7d03-91dc-be9d4c41c553",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high",
+      "bytes": 763522,
+      "sha256": "8843e98b695114c1e0d4d8de0bbf00b6a32e0bf6381941f4ebeeaaae179bab74"
+    },
+    "checks": "489 documentation tests, direct exit0 and full stdout/JUnit/temp preserved; not semantic proof",
+    "R1_original_files_rehashed_unchanged": 4668,
+    "process_history": "reported488words, four-minute target overrun and initial read/pre-pytest env-key assertion errors retained; exactly one docs invocation489/direct0; no qualification or source pass",
+    "peer_barrier": "R2 substantive conditions withheld until all three preserved",
+    "cleanup": "retain exact review tree read-only; no removal",
+    "integration_commit": "7482868dd42eba2c3516d839326f14ace1e7e585",
+    "preservation": {
+      "wp-qr-r1-openai": {
+        "archive_sha256": "18289dd6002ac905e3f0cb7ed7a0ffc9482eb73f11da19c52f5863e628af6527",
+        "archive_bytes": 207042102,
+        "regular_files": 4677,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      "external-r2-openai": {
+        "archive_sha256": "b53c0858ec4409e734780ee960b7b86bbc2902a3e827f130ee61d06546626b2b",
+        "archive_bytes": 57709,
+        "regular_files": 102,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    }
+  },
+  "frozen_input_sha256": "a1d5beb25ba6ff7b493b498c9974f8e7b4c834b2629097233b55228243d9e84c",
+  "peer_barrier": "Substantive R2 recommendations/materialconditions and peer-based synthesis remain withheld until all three R2 preserved; no final packet/consensus yet",
+  "fleet": {
+    "total": 129,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 129,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTg3fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwNTozMTowOCIsImRpc3BhdGNoSWQiOiJjdHhfNWU0NDRhYjUyODVjIiwiZGF0YWJhc2VJZCI6Njk0fX0"
+      },
+      {
+        "limit": 100,
+        "total": 129,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 122,
+      "retained": 7
+    },
+    "historical_retained": 6,
+    "MiniMax_R2": {
+      "taskId": "task_8c044cfcdce5",
+      "dispatchId": "ctx_e407d807e727",
+      "dispatchStatus": "dispatched",
+      "workerState": "ready",
+      "terminalState": "retained"
+    },
+    "new_current_retained_resources": 1
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T18:26:23.433179+00:00",
+    "other_host_demand": "unknown, not zero",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 62,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "updatedAt": 1793729399742,
+      "error": null
+    },
+    "claude": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793740800373,
+        "resetDescription": "2:20 PM"
+      },
+      "weekly": {
+        "usedPercent": 21,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400373,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "updatedAt": 1793729399394,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 18,
+        "windowMinutes": 300,
+        "resetsAt": 1793740313659,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932884,
+        "resetDescription": null
+      },
+      "updatedAt": 1793729399468,
+      "error": null
+    }
+  },
+  "qualification_or_source_or_release_acceptance": false
+}

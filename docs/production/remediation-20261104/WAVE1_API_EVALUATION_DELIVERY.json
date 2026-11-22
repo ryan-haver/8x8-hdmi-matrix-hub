@@ -1,0 +1,83 @@
+{
+  "observed_utc": "2026-11-04T07:00:21.563244+00:00",
+  "status": "ACCEPTED independent exact-report evaluation only",
+  "task_id": "task_dca414868333",
+  "dispatch_id": "ctx_8017ffe0975e",
+  "report_commit": "c3fcace6260e31d6c176f9feb6ab0dfd6ead849e",
+  "report_parent": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+  "report": "docs/production/software-waves/RV-API034/execution-20261101/EVALUATION.md",
+  "canonical_bytes": 18095,
+  "canonical_sha256": "9d3825744f43985efa65dd373778d1036891d8cd8696daca05dc70adfa0e67f4",
+  "published_task_head": "c3fcace6260e31d6c176f9feb6ab0dfd6ead849e",
+  "native": {
+    "session": "01a1a54f-4474-7943-aa42-05d86ce034ef",
+    "model": "gpt-6-astra",
+    "effort": "high native",
+    "bytes": 1516663,
+    "sha256": "1e150d8a4f2cf74ab544d5e6c8109f50a5dd2a4e9278f2e092d62af62eed342e",
+    "no_helper_calls_observed": true
+  },
+  "docs": {
+    "direct_exit": 0,
+    "junit": {
+      "tests": 489,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "original_and_copy_files": 103,
+    "all_hashes_match": true,
+    "no_runtime_or_global_gate_rerun": true
+  },
+  "archives": [
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-rv-api034-review-evaluation",
+      "head": "c3fcace6260e31d6c176f9feb6ab0dfd6ead849e",
+      "branch": "execution/wp-exec-rv-api034-review-evaluation",
+      "status": "?? .codex/config.toml",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\api-evaluation-closeout\\preservation\\wp-exec-rv-api034-review-evaluation\\workspace.tar.gz",
+      "archive_sha256": "3709a7bd3255229d03fde5dd018cac1dbbb6a47541dbbd549107875d9a442f7c",
+      "archive_bytes": 206374017,
+      "regular_files": 4686,
+      "regular_bytes": 296799036,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    },
+    {
+      "workspace": "C:\\t\\remediation-api-evaluation",
+      "head": null,
+      "branch": null,
+      "status": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\remediation-execution-20261104\\api-evaluation-closeout\\preservation\\external-api-evaluation\\workspace.tar.gz",
+      "archive_sha256": "ef5d139ebedbd5e8621873e7c004ab0063c9cc5871055e154489c1fe7ba01e4c",
+      "archive_bytes": 65680,
+      "regular_files": 103,
+      "regular_bytes": 164426,
+      "links": 0,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal",
+      "junction_restore": "Junction kind and original target/reparse metadata are in entries; tar stores link representation, not a native junction recreation."
+    }
+  ],
+  "owned_untracked_config_preserved": "31bytes SHA92207a5a69cbc0f711534664a43e3d397433bab8fbd2290226a32d5e664202f4, unmodified/unstaged",
+  "release": "positive Orca released/closed exact owned terminal",
+  "scope": "Structural/native/receipt/preservation/publication audit; accepts independent report-quality evaluation only, no source/security/privacy/phase/owner acceptance",
+  "evaluation_verdict": "accept; no blocking report-quality error",
+  "source_review": "Anthropic report12ee at sourcecaaa against938 unchanged; original qualified different-family review remains the source-review artifact",
+  "coordinator_disposition": "Accept report-quality/factual substep; no evaluator source acceptance/integration/security qualification or lost-original reconstruction. Preserve M-1 security freshness hold and privacy/combined proof/owner gates.",
+  "qualifications": [
+    {
+      "id": "E-L1",
+      "severity": "Low",
+      "disposition": "nonblocking; interpret supporting-read table as traced use rather than exhaustive unchanged helper-body reads; all consequential changed hunks and real controls were inspected"
+    },
+    {
+      "id": "E-I1",
+      "severity": "Informational",
+      "disposition": "retain jsonschema probe deprecation/PowerShell display-depth warnings; raw nested WS originals intact"
+    }
+  ],
+  "ancillary_errors": "Two private audit-parser IndexErrors retained; only parsing corrected, no runtime test/global gate retry",
+  "worker": "positively released through Orca; complete native/workspace/temp/config preserved and task ref published/exactverified; tree retained as review/evidence reference, no cleanup/new fullbundle claim",
+  "next": "Privacy-domain assessment prepared below; WS component writer still assigned, independent component review reserved at future exact delivery."
+}

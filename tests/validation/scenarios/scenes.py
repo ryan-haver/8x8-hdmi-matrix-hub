@@ -340,6 +340,37 @@ SCENARIOS = [
         ),
         covers=(*HUB_CORE, *SCENES),
     ),
+    Scenario(
+        id="scenes.override_unknown",
+        title="Setting an override on an unknown scene returns 404",
+        kind="failure",
+        features=("F-DOM-014",),
+        action=act(
+            "request",
+            method="PUT",
+            path="/api/v2/scenes/scene_nope/override",
+            json={"profile_id": "movie_night", "output": 1, "setting": "input", "override": True},
+        ),
+        expect=(
+            Response(status=404, json={"success": False}),
+            NoCommand("*"),
+            DeviceUnchanged(),
+        ),
+        covers=(*HUB_CORE, *SCENES),
+    ),
+    Scenario(
+        id="scenes.remove_step_unknown",
+        title="Removing a step from an unknown scene returns 404",
+        kind="failure",
+        features=("F-DOM-010",),
+        action=act("request", method="DELETE", path="/api/v2/scenes/scene_nope/steps/0"),
+        expect=(
+            Response(status=404, json={"success": False}),
+            NoCommand("*"),
+            DeviceUnchanged(),
+        ),
+        covers=(*HUB_CORE, *SCENES),
+    ),
 ]
 
 # API-29: a scene's profile step applies the same scaler/ARC state as recall (DI-11);

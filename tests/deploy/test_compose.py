@@ -13,6 +13,7 @@ import os
 import sys
 from collections.abc import Callable, Iterator
 from pathlib import Path
+from textwrap import dedent
 
 import pytest
 
@@ -25,6 +26,23 @@ pytestmark = pytest.mark.docker
 
 PROBE_9095 = ("import socket, sys; s = socket.socket(); s.settimeout(2); "
               "sys.exit(0 if s.connect_ex(('127.0.0.1', 9095)) == 0 else 1)")
+
+# A separate process with fresh Zeroconf sockets: neither publisher state nor
+# startup logging proves the host-network advertisement is actually resolvable.
+UC_MDNS_PROBE = dedent("""\
+    import json, sys
+    from zeroconf import IPVersion, Zeroconf
+
+    service_type = "_uc-integration._tcp.local."
+    with Zeroconf(ip_version=IPVersion.V4Only) as zc:
+        info = zc.get_service_info(service_type, f"{sys.argv[1]}.{service_type}", timeout=10000)
+        assert info is not None, "No UC mDNS service resolved on the host network"
+        print(json.dumps({
+            "name": info.name, "addresses": info.parsed_addresses(IPVersion.V4Only),
+            "port": info.port, "server": info.server,
+            "properties": {k.decode(): v.decode() for k, v in info.properties.items()},
+        }))
+    """)
 
 
 class Project:
@@ -123,7 +141,7 @@ def test_uc_compose_files_require_the_host_ip(project: Callable[..., Project]) -
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="host networking needs a Linux Docker host")
-async def test_uc_host_compose_listens_on_the_host(project: Callable[..., Project]) -> None:
+async def test_uc_host_compose_listens_on_the_host(project: Callable[..., Project], hub_image: str) -> None:
     """DEP-02 recommended variant: host networking, mDNS published, API and 9095 directly on the host."""
     if port_open("127.0.0.1", 9095):
         pytest.skip("port 9095 is in use on this host")
@@ -136,4 +154,23 @@ async def test_uc_host_compose_listens_on_the_host(project: Callable[..., Projec
     async with UcRemoteSim("ws://127.0.0.1:9095") as remote:
         meta = (await remote.get_driver_metadata())["msg_data"]
     assert "driver_url" not in meta  # discovered by mDNS, no fixed URL
-    assert "mDNS on, address 127.0.0.1" in p.container.logs()
+    observer = Container(unique("hubtest-uc-mdns-observer"), hub_image)
+    try:
+        resolved = docker(
+            "run", "--name", observer.name, "--network", "host", "--no-healthcheck",
+            hub_image, "python", "-c", UC_MDNS_PROBE, meta["driver_id"], timeout=25,
+        )
+        advertisement = json.loads(resolved.stdout)
+        assert advertisement["name"] == f"{meta['driver_id']}._uc-integration._tcp.local."
+        assert advertisement["addresses"] == ["127.0.0.1"] and advertisement["port"] == 9095
+        hostname = p.container.exec("hostname").stdout.strip().split(".")[0]
+        assert advertisement["server"] == f"{hostname}.local."
+        assert advertisement["properties"]["name"] == meta["name"]["en"]
+        assert advertisement["properties"]["ver"] == meta["version"]
+        assert advertisement["properties"]["developer"] == meta["developer"]["name"]
+        record = RECORDER.start("deploy.compose")
+        record.state_after["uc_host_advertisement"] = advertisement
+        record.image_digest = docker("image", "inspect", "-f", "{{.Id}}", hub_image).stdout.strip()
+        record.procedure.append("Separate host-network observer resolves UC mDNS address, port, server and TXT over real sockets.")
+    finally:
+        observer.remove()

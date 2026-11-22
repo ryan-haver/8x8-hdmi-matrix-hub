@@ -1,0 +1,23 @@
+{
+  "observed_utc": "2026-11-03T03:28:37.080528+00:00",
+  "status": "coordinator factual instruction erratum; historical originals unchanged",
+  "incorrect_sources": [
+    "d44ad2bca78dfe82c4b541e41f861c965cce2461 CORRECTION_REVIEW_01.md R4 parenthetical",
+    "coordinator AUDIT_CORRECTION_02_TASK.txt R4 parenthetical"
+  ],
+  "incorrect_claim": "F-API-029 belongs to SW-API-READ-03 and has a live declaration",
+  "checked_at_commit": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+  "correct_fact": {
+    "feature": "F-API-029",
+    "dispatch_unit": "SW-API-CLIENT-02",
+    "declared_client_mappings": [],
+    "registry_scenarios": [],
+    "literal_feature_match_in_declarative_scenario_sources": false
+  },
+  "scope_limit": "empty declaration metadata/literal search is not proof of absence of nondeclarative semantic/runtime controls; registry basis still names tests/e2e/smoke.spec.ts and tests/test_rest_api.py",
+  "source_hashes": {
+    "manifest_json_sha256": "6d782aa1ee8ec5471dcddcd8d1c4a1fc400c94b25c706f8867b37a6691ae9a82",
+    "features_yaml_sha256": "063755f43dcbd0b8b5990eda6b8a65bc0ae777b508cc6e45e3c8f010f2e0d11f"
+  },
+  "disposition": "Author correctly rejected this unsupported parenthetical. Maintain frozen actual mapping; re-review must verify committed facts, not enforce mistaken instruction. No plan allocation change or new product qualification."
+}

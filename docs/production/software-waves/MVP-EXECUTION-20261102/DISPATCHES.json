@@ -1,0 +1,127 @@
+{
+  "status": "two genuine workers launched; results and independent acceptance pending",
+  "observed_utc": "2026-11-03T01:14:36.539441+00:00",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "tasks": {
+    "qualification": {
+      "id": "QUAL-ANTHROPIC-CORE-01",
+      "task_id": "task_e0fda51b39e2",
+      "dispatch_id": "ctx_cd0f4f2bae5c",
+      "base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01",
+      "branch": "refs/heads/execution/wp-exec-qual-anthropic-core-01",
+      "requested_and_effective_launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "observed_native_models": [
+        "claude-opus-4-7"
+      ],
+      "native_session": "603a75fa-28c8-4888-81c7-9f4c0d40db95",
+      "native_entry_bytes": 853813,
+      "native_entry_sha256": "b540270ad4bff89774296d49b70cd375595e26a925b25fe4c2a13f01cd4558f7",
+      "lifecycle": "active; kept open only to permit coordinator preservation and explicit settlement/release on delivery; no cleanup authority",
+      "writable_report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/execution-20261101/AUTHOR.md"
+    },
+    "audit": {
+      "id": "SW-AUDIT-01",
+      "task_id": "task_45eb6e2ea9fc",
+      "dispatch_id": "ctx_a0c78df4a3b9",
+      "base": "b4a2c6e93918028e080fdc5ed3d7abedb3f14a9e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "branch": "refs/heads/execution/wp-exec-sw-audit-01",
+      "requested_and_effective_launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "observed_native_models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "native_session": "ses_e61087679ffeooXLgY4Hzkm6Us",
+      "native_entry_bytes": 246886,
+      "native_entry_sha256": "0b55bf89662ca61292407a715e5a07029fb117180ce45b2699f9f0c4e81a2d17",
+      "lifecycle": "active; kept open only to permit coordinator preservation and explicit settlement/release on delivery; no cleanup authority",
+      "writable_report": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md"
+    }
+  },
+  "source_qualification_or_integration_accepted": false,
+  "next_after_deliveries": "settle/preserve each worker, verify exact commit and scope, dispatch different-family Sol judgement/factual review, publish accepted scoped records before subsequent source-review/fix wave",
+  "orchestration_behavior": "Orca1.4.246 notifies/wakes coordinator on reports; end turn after independent starts, no mail-watch/poll loop",
+  "capacity_observation": {
+    "observed_utc": "2026-11-03T01:12:20.701913+00:00",
+    "codex": {
+      "session": null,
+      "weekly": {
+        "usedPercent": 38,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793668161342,
+      "error": null,
+      "status": "ok"
+    },
+    "claude": {
+      "session": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": 1793683799924,
+        "resetDescription": "10:29 PM"
+      },
+      "weekly": {
+        "usedPercent": 19,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966399924,
+        "resetDescription": "Fri 4:59 AM"
+      },
+      "updatedAt": 1793668160950,
+      "error": null,
+      "status": "ok"
+    },
+    "minimax": {
+      "session": {
+        "usedPercent": 4,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 12,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932899,
+        "resetDescription": null
+      },
+      "updatedAt": 1793668160957,
+      "error": null,
+      "status": "ok"
+    }
+  },
+  "launch_discrepancy": {
+    "scope": "OpenCode2 adapter launch-time --model rejected; no Task/Dispatch/writer created",
+    "rejected_request_id": "195b8af8-baae-49d6-ab4f-8dad217ac935",
+    "evidence": "original audit-start.json + complete fleet/task list saved privately; recovery guide read",
+    "resolved_route": "same model from exact ignored project configuration, no CLI effort; explicit unchanged approved route, native MiniMax-M3 independently attested",
+    "not_a_failed_worker_attempt_or_qualification_retry": true
+  }
+}

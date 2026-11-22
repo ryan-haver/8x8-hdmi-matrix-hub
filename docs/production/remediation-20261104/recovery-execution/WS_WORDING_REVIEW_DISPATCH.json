@@ -1,0 +1,93 @@
+{
+  "observed_utc": "2026-11-04T13:24:00.846728+00:00",
+  "phase": "remediation-recovery-20261104",
+  "status": "Reserved qualified different-family exact wording RE-REVIEW LAUNCHED / observed start, no verdict yet",
+  "actor": {
+    "task_id": "task_2baa71b16197",
+    "dispatch_id": "ctx_0c1b1f2300b7",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-wording-review",
+    "branch": "remediation/ws-wording-review",
+    "exact_base": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+    "exclusive_report": "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION-REVIEW.md",
+    "spec": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_TASK.md",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native model at exact Task/Dispatch/cwd",
+      "session": "01a1a6ba-36c2-7122-aa93-d58a1d4418b7",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native",
+      "bytes": 713332,
+      "sha256": "5309eed233a83b860823e64c670be7de9ca18c5e1714307aef12e069a6322e71",
+      "unassigned_helpers_observed": [],
+      "scope": "entry only; no competence/completion/descendant census"
+    },
+    "status": "ONE reserved qualified different-family exact WS wording correction RE-REVIEW active; no verdict/intake",
+    "dispatch_status": "dispatched",
+    "worker_state": "ready"
+  },
+  "source": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+  "correction_parent": "24c5170458200209836228646fdfc8784a967ad1",
+  "qualified_prior_runtime_review": "ed69708325f9e10a2ae2784179303016acbd69d0",
+  "adopted_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "prewave_published_verified_head": "4bbc26731be8942a7e29dbc712218623e063d5be",
+  "capacity": {
+    "observed_utc": "2026-11-04T13:23:02.351995+00:00",
+    "scope": "ONE reserved qualified exact WS wording correction re-review; no privacy competence retry or extra correction, source intake/combined separately gated; absolute allowances/otherhost commitments unknown",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793798026525,
+      "error": null
+    }
+  },
+  "scope": "Only NEWWORDING-CORRECTION-REVIEW.md/ownignoredtemp, source/tests/author reports readonly. Independently inspect wording truth and exact AST/tests unchanged, originalhook/native/write boundaries and calibrated limits. Prior runtimePASS not new first-authorship or privacy domain.",
+  "reserve": "Existing ONE qualifiedfinding-driven product correction/re-review used; no automatic further correction rounds. No competence retake/replacement judge or materialstrategychange.",
+  "settings": "Exact managed Codex profile/CWD effective multi_agentfalse;31byte coordinator local config unstaged/globalunchanged. Explicit/effective/native Astra/high attested separately.",
+  "fleet": {
+    "total": 157,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 157,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzcyfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAyMzowNDoyMyIsImRpc3BhdGNoSWQiOiJjdHhfYTNlZDFhOTU2MmYxIiwiZGF0YWJhc2VJZCI6MTA4NH19"
+      },
+      {
+        "limit": 100,
+        "total": 157,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 149
+    },
+    "retained_metadata": 7,
+    "current_owned": 1
+  },
+  "concurrency": "one reviewer + coordinator + protected external =3of4; no nesting",
+  "remaining": "PrivacyNOT_QUALIFIED/no verifiedqualifiedfallback and priorfailures/lostoriginals, D6target/wiring/CR01/sourceintake/combined/API034M1/WS040/owner visualHIL72hweekfinalrelease held.",
+  "next": "Preserve/release/publish exact actualreview on delivery and decide intake; fullGitbundle beforedestructivecleanup, none now. Publish launchrecords/docs489/exactremoteequal then END TURN for Orca wake, no completionpolling."
+}

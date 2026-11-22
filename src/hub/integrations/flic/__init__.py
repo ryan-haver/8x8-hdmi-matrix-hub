@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import logging
 import os
 from collections.abc import Callable, Mapping
@@ -12,7 +11,16 @@ from typing import Any
 
 from aiohttp import web
 
-from _file_io import atomic_write_json
+from hub.persistence import (
+    MigrationError,
+    SchemaVersionError,
+    block_reason,
+    flat_map_records,
+    is_write_blocked,
+    load_versioned_json,
+    save_versioned_json,
+)
+from hub.persistence.migrations import is_button_key
 from persistence import get_data_dir
 
 _LOG = logging.getLogger("hub.integrations.flic")
@@ -80,27 +88,36 @@ class FlicButtonRegistry:
         target_file = self.file_path
         if target_file.exists():
             try:
-                with open(target_file, encoding="utf-8") as f:
-                    data = json.load(f)
-                    if isinstance(data, dict):
-                        self._buttons = data
-                    elif isinstance(data, list):
-                        # Convert legacy list structure to dict
-                        self._buttons = {
-                            btn["bdaddr"]: btn
-                            for btn in data
-                            if isinstance(btn, dict) and "bdaddr" in btn
-                        }
+                raw = load_versioned_json(target_file, default=None)
+                if raw is not None:
+                    if isinstance(raw, Mapping):
+                        records = flat_map_records("flic_buttons.json", raw)
+                        self._buttons.clear()
+                        self._buttons.update(records)
+                    else:
+                        self._buttons.clear()
+                else:
+                    self._buttons.clear()
                 _LOG.info("Loaded %d registered Flic buttons from storage", len(self._buttons))
+            except (MigrationError, SchemaVersionError) as e:
+                _LOG.warning("Failed to load registered Flic buttons: %s", e)
+                self._buttons.clear()
             except Exception as e:
                 _LOG.warning("Failed to load registered Flic buttons: %s", e)
+                self._buttons.clear()
+        else:
+            self._buttons.clear()
         self._loaded = True
 
-    def save(self) -> bool:
-        """Save the in-memory registered buttons dict to persistent storage."""
+    def save(self, *, versioned: bool = True) -> bool:
+        """Save through R2; the legacy versioned keyword never disables safety."""
+        if is_write_blocked(self.file_path):
+            _LOG.error("Refusing to save %s: %s", self.file_path.name, block_reason(self.file_path))
+            return False
         try:
-            atomic_write_json(self.file_path, self._buttons, indent=4)
-            return True
+            # The legacy keyword remains accepted, but every writer uses R2's
+            # validation, extension preservation and late-file refusal boundary.
+            return save_versioned_json(self.file_path, self._buttons, indent=4)
         except Exception as e:
             _LOG.warning("Failed to save registered Flic buttons: %s", e)
             return False
@@ -114,34 +131,48 @@ class FlicButtonRegistry:
         if not isinstance(buttons, list):
             raise ValueError("Buttons payload must be a list")
 
-        previous = self._buttons.copy()
+        previous = {k: dict(v) for k, v in self._buttons.items()}
         updated = False
         for btn in buttons:
             if not isinstance(btn, dict) or "bdaddr" not in btn:
                 continue
             bdaddr = btn["bdaddr"]
+            if not isinstance(bdaddr, str) or not is_button_key(bdaddr):
+                continue
             name = btn.get("name", bdaddr)
+            serial = btn.get("serial", "")
+            if not isinstance(name, str) or not isinstance(serial, str):
+                continue
 
-            if bdaddr not in self._buttons or self._buttons[bdaddr].get("name") != name:
-                self._buttons[bdaddr] = {
-                    "bdaddr": bdaddr,
-                    "name": name,
-                    "serial": btn.get("serial", ""),
-                }
+            existing = self._buttons.get(bdaddr)
+            if existing is None or existing.get("name") != name or existing.get("serial") != serial:
+                new_btn = dict(existing) if existing else {"bdaddr": bdaddr}
+                new_btn["bdaddr"] = bdaddr
+                new_btn["name"] = name
+                new_btn["serial"] = serial
+                self._buttons[bdaddr] = new_btn
                 updated = True
 
         if updated:
             if not self.save():
-                self._buttons = previous
+                self._buttons.clear()
+                self._buttons.update(previous)
                 raise RuntimeError("Failed to save registered Flic buttons")
             _LOG.info("Registered/updated Flic buttons. Total active: %d", len(self._buttons))
 
         return len(self._buttons)
 
     def list_buttons(self) -> list[dict[str, Any]]:
-        """Return list of all registered buttons."""
+        """Return list of all registered buttons with only established public fields."""
         self.load_if_needed()
-        return list(self._buttons.values())
+        return [
+            {
+                "bdaddr": k,
+                "name": b["name"] if isinstance(b.get("name"), str) else k,
+                "serial": b["serial"] if isinstance(b.get("serial"), str) else "",
+            }
+            for k, b in self._buttons.items()
+        ]
 
     def __len__(self) -> int:
         self.load_if_needed()

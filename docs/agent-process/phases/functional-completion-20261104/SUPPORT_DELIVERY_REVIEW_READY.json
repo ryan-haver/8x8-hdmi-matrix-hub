@@ -1,0 +1,183 @@
+{
+  "observed_utc": "2026-11-04T20:48:06.592530+00:00",
+  "delivery": {
+    "observed_utc": "2026-11-04T20:46:20.622207+00:00",
+    "task_id": "task_2d9ebaaea545",
+    "dispatch_id": "ctx_982cda0c983a",
+    "head": "abb52542858845cf488a63b01f6ac619f3f38173",
+    "parent": "436af63f44d2c4200c680909221343c9d6b976ae",
+    "report": "docs/production/functional-completion-20261104/FC-SUPPORT-RUN/REPORT.md",
+    "report_sha256": "1b84fa7b25d161463906a2c157858e040cfbcb1b899e18e4995be9569d3eb79b",
+    "report_bytes": 22020,
+    "actual_native": {
+      "session": "01a1a832-66c3-7461-aaba-b388d8e1fe94",
+      "model": "gpt-6.1-sol",
+      "effort": "high native",
+      "bytes": 2666870,
+      "sha256": "ff1f482512d227c5dfee7da952dbd9a3c81cf0801096d93b2998f94800df94f8",
+      "unassigned_helper_calls_observed": false,
+      "scope": "Final exact Task/Dispatch/cwd, no all-host census"
+    },
+    "resource": "positively released; transcript captured",
+    "full_git_bundle": {
+      "bytes": 14534580,
+      "sha256": "129bf65297ad4a0c4d95bff3ab322f73203336baa5f4c88461605de3ae0d721f",
+      "verify_exit": 0,
+      "head_verified": true
+    },
+    "task_ref_published_exact": "abb52542858845cf488a63b01f6ac619f3f38173",
+    "author_evidence": {
+      "registration": "46e9b51573c14941955674ab0afe0cca",
+      "files": 17327,
+      "bytes": 143680593,
+      "unfollowed_links": 912,
+      "disposition": "Retained original registered evidence in place; no runtime asset/dependency/workspace copy",
+      "review_date": "2026-12-04"
+    },
+    "docs_check": {
+      "tests": 489,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "scope": "Original author once-only docs run; no semantic report/source/compatibility acceptance"
+    },
+    "reported_outcome": "PARTIAL: HA failures, Python3.11 lock failure, core capture errors/incomplete routes, HACS installupgrade held",
+    "review": "M3 exact-commit receipt-fidelity review pending; source/HA/packaging acceptance held",
+    "cleanup_review_rejection": "Worker reports automatic approval rejected extracted HACS removal as blocked by policy. Retained, no repeat/bypass requested. Containers settled by worker with preserved scoped receipts; independent fidelity check pending.",
+    "storage": "New coordinator output in registered6e86 payload only; originals readonly/retained, no quarantine or filesystem removal"
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T20:46:45.758119+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "b2b3ddb0e9a8e89ee82ffd0ab59024bbcac95262",
+    "remote_equal": true,
+    "fleet": {
+      "total": 172,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 172,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDYxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDoyODo1NiIsImRpc3BhdGNoSWQiOiJjdHhfODFmOGE4MzMzZjM2IiwiZGF0YWJhc2VJZCI6MTM3OX19"
+        },
+        {
+          "limit": 100,
+          "total": 172,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 164,
+        "retained": 7,
+        "null": 1
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_982cda0c983a",
+          "taskId": "task_2d9ebaaea545",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_467d7a450979",
+          "taskId": "task_5305a1b797cc",
+          "terminalState": "retained",
+          "dispatchStatus": "dispatched",
+          "workerState": "ready",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793825197660,
+        "error": null,
+        "age_seconds": 8
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400366,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 6,
+          "windowMinutes": 300,
+          "resetsAt": 1793832600366,
+          "resetDescription": "3:50 PM"
+        },
+        "updatedAt": 1793825197318,
+        "error": null,
+        "age_seconds": 8
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 1,
+          "windowMinutes": 10080,
+          "resetsAt": 1794428735069,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 59,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793825197309,
+        "error": null,
+        "age_seconds": 8
+      }
+    },
+    "scope": "Reserved exactcommit FC-SUPPORT-RUN M3 receipt-fidelity review, source/domain acceptance held",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "Support Sol author released/delivery published, M3 inventory correction still independent. M3 receipt-fidelity task fit from prior accepted29f5ba51 review; no HA/packaging acceptance. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "status": "Support report delivered PARTIAL/preserved/released/exact task ref published; M3 receipt-fidelity review PREPARED/no Task yet",
+  "review": {
+    "agent": "opencode2",
+    "model": "minimax-coding-plan/MiniMax-M3",
+    "variant": "thinking",
+    "base": "abb52542858845cf488a63b01f6ac619f3f38173",
+    "name": "wp-fc26-fc-support-run-review",
+    "branch": "review/wp-fc26-fc-support-run-review",
+    "dependency": "task_2d9ebaaea545",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REVIEW_FC-SUPPORT-RUN.md",
+    "output": "docs/production/functional-completion-20261104/FC-SUPPORT-RUN/REVIEW.md",
+    "qualification": "Bounded factual inventory fidelity from accepted29f5ba51; no HA/packaging effect acceptance"
+  },
+  "custody_exception": "Initial readonly manifest hit WinError1920 on WSL-created flic_live_stackcurrent; original helper preserved, resumed unfinished stage only recording inaccessible/reparse entries without follow/removal. 17327regularfiles/143680593bytes,912special entries. No test rerun or original rewrite.",
+  "cleanup_review_rejection": "Automatic approval rejected worker extracted-HACS removal as blocked by policy. Retained; no repeat/bypass.",
+  "holds": "HA/packaging/source/fullcore/177routes/HACS installupgrade/qualification/ownerbudget/hardwarevisual72hweekrelease unchanged",
+  "storage_registration": "6e86d613d6c64ec2aa2f29c909260b6a",
+  "review_date": "2026-12-04"
+}

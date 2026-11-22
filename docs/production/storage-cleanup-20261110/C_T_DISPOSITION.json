@@ -1,0 +1,302 @@
+{
+  "ownerDecision": "21, 2026-11-10; hub msg_01f9cead1f5f",
+  "run": "run_37205f6095b3",
+  "foldersRemoved": 34,
+  "removedLogicalBytes": 2368919531,
+  "disposableBytes": 917131492,
+  "originalEvidenceBytesPreserved": 1451788039,
+  "existingEvidenceBytesReused": 12765120,
+  "newEvidenceStoredBytes": 120314386,
+  "netLogicalReductionBeforeSmallReceipts": 2248605145,
+  "rootAbsent": true,
+  "evidenceLocation": "build/short-temp-cleanup-20261110/preservation.json (private and gitignored)",
+  "evidenceManifestSha256": "d353fee99b228c370d36d3274e34d2691c7244e44b19aee622cb45666ab8502c",
+  "preservation": "Only required original receipts, streams, JUnit, provenance inventories and one-off reproducers; existing exact copies reused, large inventories losslessly gzipped and checked by decompressed SHA256. Regenerable caches, synthetic runtime/packaging/TLS fixtures, and Git-backed source exports removed.",
+  "sourceProof": "3337 mirror files match reachable 938ae303 Git blobs (including CRLF checkout conversion);129 exported files match reachable bdcf06dc Git blobs; no unique source files.",
+  "locks": "Restart Manager found no holders. Hidden generated fixture directories caused first removal refusal; cleared reviewed temporary attributes and completed removal. No processes ended.",
+  "shortPathPolicy": "C:/tmp/unfoldedcircle-orei-hdmi-matrix-integration/<task-id>/; .owner.json first; no evidence storage there; preserve required bytes and remove task output before worker_done.",
+  "historicalRecords": "Dated source/task/plan paths and hashes remain unchanged; current policy overrides them prospectively.",
+  "documentationValidation": {
+    "passed": 489,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "sourceSuiteRun": false
+  },
+  "reviewAndPublication": "Exact policy-commit audit and publication receipt are recorded after the commit in the private evidence location; this summary does not assert either outcome.",
+  "reviewDue": "2026-12-10; stricter phase evidence holds remain",
+  "folders": [
+    {
+      "path": "C:\\t\\comprehensive-review-20261104",
+      "newRetainedBytes": 558428,
+      "removedBytes": 107772688,
+      "name": "comprehensive-review-20261104",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 558428
+    },
+    {
+      "path": "C:\\t\\coordinator-ev-fix01",
+      "newRetainedBytes": 129754,
+      "removedBytes": 331224,
+      "name": "coordinator-ev-fix01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 129754
+    },
+    {
+      "path": "C:\\t\\coordinator-metadata-round02",
+      "newRetainedBytes": 129786,
+      "removedBytes": 331256,
+      "name": "coordinator-metadata-round02",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 129786
+    },
+    {
+      "path": "C:\\t\\coordinator-records",
+      "newRetainedBytes": 6683958,
+      "removedBytes": 17059663,
+      "name": "coordinator-records",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 6683958
+    },
+    {
+      "path": "C:\\t\\exec-ev-ci-attribution",
+      "newRetainedBytes": 63691,
+      "removedBytes": 1821027,
+      "name": "exec-ev-ci-attribution",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 63691
+    },
+    {
+      "path": "C:\\t\\exec-ev-preservation-gaps",
+      "newRetainedBytes": 254764,
+      "removedBytes": 657704,
+      "name": "exec-ev-preservation-gaps",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 254764
+    },
+    {
+      "path": "C:\\t\\exec-qual-anthropic-core-01",
+      "newRetainedBytes": 201956,
+      "removedBytes": 955168,
+      "name": "exec-qual-anthropic-core-01",
+      "reusedExistingBytes": 29705,
+      "requiredOriginalBytes": 231661
+    },
+    {
+      "path": "C:\\t\\exec-rv-api034",
+      "newRetainedBytes": 38435,
+      "removedBytes": 664319,
+      "name": "exec-rv-api034",
+      "reusedExistingBytes": 72354,
+      "requiredOriginalBytes": 110789
+    },
+    {
+      "path": "C:\\t\\exec-sw-audit-01",
+      "newRetainedBytes": 816073,
+      "removedBytes": 1521218,
+      "name": "exec-sw-audit-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 816073
+    },
+    {
+      "path": "C:\\t\\exec-sw-findings-01",
+      "newRetainedBytes": 376760,
+      "removedBytes": 997551,
+      "name": "exec-sw-findings-01",
+      "reusedExistingBytes": 16381,
+      "requiredOriginalBytes": 393141
+    },
+    {
+      "path": "C:\\t\\exec-sw-repo-01",
+      "newRetainedBytes": 135323,
+      "removedBytes": 538263,
+      "name": "exec-sw-repo-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 135323
+    },
+    {
+      "path": "C:\\t\\f034-c2-20261031-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 74422867,
+      "name": "f034-c2-20261031-a",
+      "reusedExistingBytes": 89115,
+      "requiredOriginalBytes": 89115
+    },
+    {
+      "path": "C:\\t\\fsec007-20261031-a",
+      "newRetainedBytes": 529450,
+      "removedBytes": 113448075,
+      "name": "fsec007-20261031-a",
+      "reusedExistingBytes": 63691,
+      "requiredOriginalBytes": 593141
+    },
+    {
+      "path": "C:\\t\\fsec007-browser-20261031-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 101510,
+      "name": "fsec007-browser-20261031-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\mvp-astra-preflight-20261102-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "mvp-astra-preflight-20261102-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\mvp-judge-preflight-20261102-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "mvp-judge-preflight-20261102-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\mvp-next-metadata-preflight-20261102-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "mvp-next-metadata-preflight-20261102-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\mvp-preflight-20261102-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "mvp-preflight-20261102-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\mvp-review-closeout-20261102-a",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "mvp-review-closeout-20261102-a",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\p1-round-closeout-docs-01",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "p1-round-closeout-docs-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\p1-round-followup-docs-01",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "p1-round-followup-docs-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\pins-20261101",
+      "newRetainedBytes": 477428,
+      "removedBytes": 1914365,
+      "name": "pins-20261101",
+      "reusedExistingBytes": 127382,
+      "requiredOriginalBytes": 604810
+    },
+    {
+      "path": "C:\\t\\pins-final-checks-20261101",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "pins-final-checks-20261101",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\pins-preflight-docs-01",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "pins-preflight-docs-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\pins-round2-preflight-docs-01",
+      "newRetainedBytes": 0,
+      "removedBytes": 100735,
+      "name": "pins-round2-preflight-docs-01",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 0
+    },
+    {
+      "path": "C:\\t\\qr-route-20261103",
+      "newRetainedBytes": 536246,
+      "removedBytes": 2296638,
+      "name": "qr-route-20261103",
+      "reusedExistingBytes": 29705,
+      "requiredOriginalBytes": 565951
+    },
+    {
+      "path": "C:\\t\\remediation-api-evaluation",
+      "newRetainedBytes": 63691,
+      "removedBytes": 164426,
+      "name": "remediation-api-evaluation",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 63691
+    },
+    {
+      "path": "C:\\t\\remediation-functional",
+      "newRetainedBytes": 101401923,
+      "removedBytes": 1421296866,
+      "name": "remediation-functional",
+      "reusedExistingBytes": 78325,
+      "requiredOriginalBytes": 1420188781
+    },
+    {
+      "path": "C:\\t\\remediation-privacy-assessment",
+      "newRetainedBytes": 485628,
+      "removedBytes": 2810323,
+      "name": "remediation-privacy-assessment",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 485628
+    },
+    {
+      "path": "C:\\t\\remediation-privacy-judge",
+      "newRetainedBytes": 107057,
+      "removedBytes": 207792,
+      "name": "remediation-privacy-judge",
+      "reusedExistingBytes": 0,
+      "requiredOriginalBytes": 107057
+    },
+    {
+      "path": "C:\\t\\remediation-recovery",
+      "newRetainedBytes": 6599770,
+      "removedBytes": 351336813,
+      "name": "remediation-recovery",
+      "reusedExistingBytes": 2172465,
+      "requiredOriginalBytes": 8772235
+    },
+    {
+      "path": "C:\\t\\remediation-ws-review",
+      "newRetainedBytes": 139330,
+      "removedBytes": 240737,
+      "name": "remediation-ws-review",
+      "reusedExistingBytes": 672,
+      "requiredOriginalBytes": 140002
+    },
+    {
+      "path": "C:\\t\\remediation-ws-work",
+      "newRetainedBytes": 0,
+      "removedBytes": 186901433,
+      "name": "remediation-ws-work",
+      "reusedExistingBytes": 10085280,
+      "requiredOriginalBytes": 10085280
+    },
+    {
+      "path": "C:\\t\\ws-intake-20261104",
+      "newRetainedBytes": 584935,
+      "removedBytes": 80120255,
+      "name": "ws-intake-20261104",
+      "reusedExistingBytes": 45,
+      "requiredOriginalBytes": 584980
+    }
+  ]
+}

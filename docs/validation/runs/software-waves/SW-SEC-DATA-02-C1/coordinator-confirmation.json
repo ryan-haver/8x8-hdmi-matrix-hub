@@ -1,0 +1,8 @@
+{
+  "source_base": "411c66429df3b813072e736c41c3a8aa83043a70",
+  "observed_utc": "2026-10-20T23:33:00.503714+00:00",
+  "literal_admin_pin_survives_redact": true,
+  "literal_admin_pin_survives_action_description": true,
+  "original_boolean_record_sha256": "46d71bf197d652278aae4f446290abf40677ffd9f7964759cebbc74274d51f4f",
+  "scope": "synthetic only; no owner data read; no product-log qualification"
+}

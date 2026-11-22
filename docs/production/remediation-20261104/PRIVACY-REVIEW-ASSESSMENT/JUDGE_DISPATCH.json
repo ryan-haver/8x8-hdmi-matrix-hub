@@ -1,0 +1,144 @@
+{
+  "observed_utc": "2026-11-04T07:43:29.119352+00:00",
+  "status": "ONE independent exact-report privacy-competence judge ACTIVE; no verdict",
+  "actor": {
+    "task_id": "task_8c32e92975a4",
+    "dispatch_id": "ctx_8009c76be684",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-qual-privacy-review-20261104-judge",
+    "actual_branch": "qualification/privacy-review-20261104-judge",
+    "exact_base": "1a38e2851f0223627f5377fa5e32584c233e1223",
+    "exclusive_report": "docs/production/remediation-20261104/PRIVACY-REVIEW-ASSESSMENT/REVIEW.md",
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native Astra/high at exact Task/Dispatch/cwd",
+      "session": "01a1a57b-e9d1-7cc3-94ca-2408e2dfac3a",
+      "models": [
+        "gpt-6-astra"
+      ],
+      "effort": "high native",
+      "bytes": 1864549,
+      "sha256": "c77f1d8524fe63ef93814b5bbfe4459194e1f5375b5e1eccc092906be509ba80",
+      "unassigned_helper_calls_observed": [],
+      "scope": "current native capture only, not competence/completion/descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready"
+  },
+  "candidate_commit": "1a38e2851f0223627f5377fa5e32584c233e1223",
+  "canonical_packet_sha256": "1732709314f8c6639ff9e136277861abaf444075227734a0b7d9e2d38b7c4dd8",
+  "working_packet_sha256": "94b28ad847b727a005c3cd9f4bb42d79916afdab80f49f3e43a156a9559a1ce4",
+  "same_packet_content": "Exact normalization/parsed equality, original criteria unchanged",
+  "publication_before_creation": "c0c507327859eea2c9eb622b82fc639154499829",
+  "capacity": {
+    "observed_utc": "2026-11-04T07:35:22.126433+00:00",
+    "reserve": "two bounded tasks plus future independent WS component judgement/author correction/re-review; every future stage freshly gated",
+    "unknown": "absolute allowance/other-host demand not exposed",
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400180,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 9,
+        "windowMinutes": 300,
+        "resetsAt": 1793778600180,
+        "resetDescription": "12:50 AM"
+      },
+      "updatedAt": 1793777326184,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 5,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793777326464,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 139,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 139,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzEzfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAxMDoyODoyNCIsImRpc3BhdGNoSWQiOiJjdHhfODNlZGZkODdmZjFmIiwiZGF0YWJhc2VJZCI6NzM3fX0"
+      },
+      {
+        "limit": 100,
+        "total": 139,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 131
+    },
+    "historical_retained": 6,
+    "current_resources": 2
+  },
+  "concurrency": "two currentresources+coordinator+protectedexternal=4, no nesting",
+  "WS_component": {
+    "taskId": "task_38756b76bd12",
+    "dispatchId": "ctx_14a660b697ab",
+    "dispatchStatus": "dispatched",
+    "workerState": "ready",
+    "terminalState": "retained"
+  },
+  "WS_environment_recovery": {
+    "observed_utc": "2026-11-04T07:39:20.379719+00:00",
+    "start_utc": "2026-11-04T07:39:17.456767+00:00",
+    "task": "task_38756b76bd12",
+    "dispatch": "ctx_14a660b697ab",
+    "cause": "Missing worktree node_modules; NODE_PATH does not resolve ESM imports",
+    "fix": "Coordinator created exact ignored worktree node_modules Junction to existing tested root node_modules after byte-normalized package/lock and actual Git blob equality checks. No install/download/root dependency edits.",
+    "link": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-remediation-ws-work-01\\node_modules",
+    "target": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\node_modules",
+    "node_modules_traversal": "Future preservation must store junction metadata without traversing; root target remains protected",
+    "lint_command": [
+      "C:\\Program Files\\nodejs\\npm.CMD",
+      "run",
+      "lint:js"
+    ],
+    "direct_exit": 0,
+    "stdout_sha256": "38a07c7f0233dcd1993d6f437de5ff80c930b8b06314c1143520bafd3a69c823",
+    "stderr_sha256": "cd5ca9e3de4b9ada42211336319f8fce15ea47e43de722ad38b17564260eb963",
+    "staged_paths_unchanged": true,
+    "source_hashes": {
+      "src/rest_api/ws_request_work.py": "3bc116d88029aeecdbec5fdce7590e5d623442e37049a9bc4c7bf9489d3031c5",
+      "tests/test_ws_request_work.py": "2628c0734fa4860ba53fc30d53a246408dbc4b88fc9b2d5a9ba16c500ea7945b"
+    },
+    "one_new_hook_run": "Authorized only after this positive dependency resolution; use a new empty receipt/temp root, keep run66 failure and all original files; not a qualification retry or unchanged failed-gate rerun"
+  },
+  "WS_continuation_message": {
+    "messageId": "msg_6fc35acf89a9"
+  },
+  "qualification": "NOT_GRANTED; allsix independently judged or hold/fail, no automatic retry/rewrite/newjudge. No source acceptance even from later competencePASS.",
+  "judge_status_message": "Actual original hashes/receipts verified per worker checkpoint; possible current_pin supported-path gap and full-stream-read claim under independent assessment, not adjudicated here.",
+  "settings": "Coordinator-owned untracked helper-disable config retained; actual multi_agent=false verified at provision, never stage or mutate. No global account settings changed.",
+  "source_or_owner_acceptance": false,
+  "next": "Preserve/release exact workers on delivery; qualified actual source review after any qualificationPASS; WS original sameTask continues one cause-changed hook run; no duplicate writer, no terminal steering",
+  "publication": "Publish scoped launch/recovery receipts with docs checks and exact remote/local verification, end turn for Orca wake; no completion polling"
+}

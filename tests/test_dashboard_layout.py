@@ -115,6 +115,7 @@ class TestDashboardLayoutManagerInit:
             mgr = DashboardLayoutManager(Path(tmpdir))
             assert mgr.list_cards() == []
             assert json.loads((Path(tmpdir) / "dashboard_layout.json").read_text(encoding="utf-8")) == {
+                "schema_version": 2,
                 "version": 1,
                 "cards": [],
             }
@@ -158,14 +159,21 @@ class TestRetiredWidgetCards:
                 {"type": "profile", "id": "movie_night", "order": 0}
             ]
 
-    def test_a_layout_without_widget_cards_is_not_rewritten(self):
-        """Loading a layout that needs no migration leaves the file untouched."""
+    def test_prepared_layout_without_widget_cards_is_not_rewritten(self):
+        """After one schema preparation, loading a current layout makes no changes."""
+        from hub.persistence import prepare_runtime_storage
+
         with tempfile.TemporaryDirectory() as tmpdir:
             original = json.dumps({"version": 1, "cards": [{"type": "preset", "id": "2", "order": 5}]})
             path = Path(tmpdir) / "dashboard_layout.json"
             path.write_text(original, encoding="utf-8")
+            prepare_runtime_storage(config_dir=Path(tmpdir), data_dir=Path(tmpdir))
+            assert (Path(tmpdir) / "dashboard_layout.json.v0.bak").read_bytes() == original.encode("utf-8")
+            prepared = path.read_bytes()
+            modified = path.stat().st_mtime_ns
             DashboardLayoutManager(Path(tmpdir))
-            assert path.read_text(encoding="utf-8") == original
+            assert path.read_bytes() == prepared
+            assert path.stat().st_mtime_ns == modified
 
     def test_widget_card_type_is_refused(self):
         """add_card and from_dict reject the retired widget card type."""

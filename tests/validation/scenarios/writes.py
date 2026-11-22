@@ -25,6 +25,8 @@ _THEME = {
                 for i in range(1, 5)],
     "activePresetIndex": 2, "cardOpacity": 0.6, "hoverPreference": "secondary",
 }
+_NAMES = (*HUB_CORE, *DEVICE_SETTINGS, "src/persistence.py", "src/_file_io.py",
+          "tests/validation/scenarios/writes.py")
 
 
 def _write(sid, feature, method, path, payload, expected, covers, *, checks=(), setup=(), cleanup=(),
@@ -74,6 +76,27 @@ SCENARIOS = [
            checks=(Hub("/api/status", "data.output_names.8", equals="Living Room"),),
            device=(Device("outputs[7].name", equals="Living Room"), CommandSent("set output name", count=1)),
            allow=("outputs[7].name",)),
+    Scenario(
+        id="writes.input_name", title="Input rename trims the name and changes only the requested device port",
+        features=("F-API-018",), clients=("api",), targets=("sim",), writes=("names",),
+        sim_state={"inputs": {"7": {"name": "Before source"}}},
+        action=act("request", method="POST", path="/api/input/8/name", json={"name": "  Media PC  "}),
+        expect=(
+            Response(status=200, json={"success": True, "error": None, "data": {
+                "input": 8, "name": "Media PC", "message": "Input 8 renamed to 'Media PC'",
+            }}),
+            Device("inputs[7].name", equals="Media PC"),
+            Hub("/api/status", "data.input_names.8", equals="Media PC"),
+            CommandSent("set input name", {"index": 8, "name": "Media PC", "language": 0}, count=1),
+            # Also reject extra rename attempts with a different port/name payload.
+            CommandSent("set input name", count=1),
+            DeviceUnchanged(allow=("inputs[7].name",)), NoProtocolWarnings(),
+        ),
+        cleanup=(act("request", method="POST", path="/api/input/8/name", json={"name": "Input 8"}),),
+        covers=_NAMES,
+        notes="Disposable simulator and hub data; independent device state and hub readback prove the rename. "
+              "This API-only case does not establish cross-client propagation or close BE-16.",
+    ),
     _write("profile_cec", "F-API-019", "PUT", "/api/profile/movie_night/cec",
            {"cec_config": {"nav_targets": ["input:5"], "volume_targets": ["output:8"], "auto_resolved": False}},
            {"profile_id": "movie_night", "cec_config": {"nav_targets": ["input:5"], "volume_targets": ["output:8"]}},
@@ -160,3 +183,20 @@ SCENARIOS = [
         notes="Successful user shortcut deletion and disk reload are covered by tests/sim/test_sim_rest_writes.py.",
     ),
 ]
+
+for sid, path, name, error in (
+    ("input_name_invalid_port", "/api/input/9/name", "Rejected source", "Input must be between 1 and 8"),
+    ("input_name_blank", "/api/input/8/name", "  ", "Name is required"),
+):
+    SCENARIOS.append(Scenario(
+        id=f"writes.{sid}", title=f"{sid}: invalid rename leaves device and hub name unchanged",
+        features=("F-API-018",), clients=("api",), targets=("sim",), kind="failure",
+        sim_state={"inputs": {"7": {"name": "Input 8"}}},
+        action=act("request", method="POST", path=path, json={"name": name}),
+        expect=(Response(status=400, json={"success": False, "error": error, "data": None}),
+                Device("inputs[7].name", equals="Input 8"),
+                Hub("/api/status", "data.input_names.8", equals="Input 8"),
+                NoCommand("set input name"), NoCommand("*"), DeviceUnchanged(), NoProtocolWarnings()),
+        covers=_NAMES,
+        notes="Existing matrix.input_* refusal scenarios cover F-MTX-022; this case attributes API refusal to F-API-018.",
+    ))

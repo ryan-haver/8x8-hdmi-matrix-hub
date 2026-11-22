@@ -120,6 +120,7 @@ class Simulator:
         self._telnet_tasks: set[asyncio.Task] = set()
         self._background: set[asyncio.Task] = set()
         self._hang_release: asyncio.Event | None = None
+        self._registered_loopback_ports: list[int] = []
         self._ssl = server_ssl_context(("localhost", "127.0.0.1", host)) if tls else None
 
     # ================================================================ lifecycle
@@ -136,9 +137,34 @@ class Simulator:
     def control_url(self) -> str:
         return f"http://{self.host}:{self.control_port}"
 
+    def _register_loopback_ports(self) -> None:
+        if self.host not in ("127.0.0.1", "::1", "localhost"):
+            return
+        try:
+            from telnet_client import register_simulator_loopback_port
+        except ImportError:
+            return
+        for port in (self.https_port, self.telnet_port):
+            if port and port not in self._registered_loopback_ports:
+                register_simulator_loopback_port(port)
+                self._registered_loopback_ports.append(port)
+
+    def _unregister_loopback_ports(self) -> None:
+        if not self._registered_loopback_ports:
+            return
+        try:
+            from telnet_client import unregister_simulator_loopback_port
+        except ImportError:
+            self._registered_loopback_ports.clear()
+            return
+        for port in self._registered_loopback_ports:
+            unregister_simulator_loopback_port(port)
+        self._registered_loopback_ports.clear()
+
     async def start(self) -> None:
         self._hang_release = asyncio.Event()
         await self._start_device_listeners()
+        self._register_loopback_ports()
         runner = web.AppRunner(self._control_app(), access_log=None, shutdown_timeout=0.5)
         await runner.setup()
         site = web.TCPSite(runner, self.host, self.control_port)
@@ -151,15 +177,18 @@ class Simulator:
         )
 
     async def stop(self) -> None:
-        for task in list(self._background):
-            task.cancel()
-        for task in list(self._background):
-            with contextlib.suppress(asyncio.CancelledError, Exception):
-                await task
-        await self._stop_device_listeners()
-        if self._control_runner:
-            await self._control_runner.cleanup()
-            self._control_runner = None
+        try:
+            for task in list(self._background):
+                task.cancel()
+            for task in list(self._background):
+                with contextlib.suppress(asyncio.CancelledError, Exception):
+                    await task
+            await self._stop_device_listeners()
+            if self._control_runner:
+                await self._control_runner.cleanup()
+                self._control_runner = None
+        finally:
+            self._unregister_loopback_ports()
 
     async def __aenter__(self) -> Simulator:
         await self.start()

@@ -1,0 +1,42 @@
+{
+  "id": "QUAL-ANTHROPIC-CORE-01",
+  "status": "frozen before candidate evaluation; operational acceptance rubric within accepted plan",
+  "packet_sha256": "52ed758e711891ee57be0bbadb87c688333049733e697a52829cf0ba87d7b15e",
+  "review_base_sha": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "candidate_sha": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "source_commits": [
+    "386872316cb60130b06dd704557ae6ca1a92b5c8",
+    "ee3f2e7f034a9ace64553e942f328dff921a1e04"
+  ],
+  "candidate_family": "Anthropic",
+  "independent_judge_family": "OpenAI",
+  "mandatory_axes": [
+    {
+      "id": "provenance",
+      "pass": "Exact full diff and declared source/report changes inspected, original DeepSeek history distinguished, actual native route and fixed reviewed SHA attested; no different candidate or short review boundary substituted."
+    },
+    {
+      "id": "invariants",
+      "pass": "Explain appended Scenario field/default compatibility, declaration and direct runtime guards, strict boolean/HTTP/health envelope validation, supported simulator-only API failure scope, existing Telnet/external/hardware behavior, no side effects or evidence/schema weakening; identify any actual violations with source lines."
+    },
+    {
+      "id": "counterexamples",
+      "pass": "Use existing targeted controls to challenge malformed/missing/connected/unconfigured/transport/default/delegation/external/hardware/write/setup/cleanup/fault cases. Run actual focused current-candidate tests and inspect actual assertions; distinguish observed execution from static before/after analysis and historical diagnostic evidence."
+    },
+    {
+      "id": "behavior_and_tools",
+      "pass": "Exercise meaningful existing managed controls on disposable local simulator/hub only with isolated data/config/temp; actual command/exit/log/JUnit hashes and process disposition retained. No real hardware/network/external deployment or new source/test/tool deliverable."
+    },
+    {
+      "id": "calibration",
+      "pass": "Retain actual failures and limitations. Distinguish historical FSEC007 global freshness/level gate failure from demonstrated product defect; no unchanged failed global gate retry, waived acceptance, lost-original reconstruction or V3/source integration claim."
+    },
+    {
+      "id": "review_quality",
+      "pass": "Report actionable source-linked findings/severity/reproduction or reasoned no-finding within inspected boundaries. Independent judge checks factual correctness, invariant/counterexample coverage and claimed execution against immutable originals; summary or model label alone is insufficient."
+    }
+  ],
+  "decision_rule": "Independent judge must explicitly pass/hold/fail every mandatory axis with concrete evidence at exact evaluator report commit; unknown axis holds. Coordinator records final bounded competence disposition. No automatic failed-qualification retry, no source acceptance or blanket authentication/privacy/UI/HA/image/physical qualification.",
+  "eligible_domain_if_accepted": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards; additional source domains require separate actual qualification",
+  "source_acceptance_after_evaluation": "still pending separate qualified exact-commit source review and full acceptance; qualification output alone is not RV-API034 acceptance"
+}

@@ -64,15 +64,17 @@ SCENARIOS = [
     ),
     Scenario(
         id="contracts.health",
-        title="Liveness read reports the simulator connection without a device write",
+        title="Liveness read reports connection and integration health without a device write",
         kind="happy",
         features=("F-API-001",),
         targets=("sim",),
         action=act("request", method="GET", path="/api/health"),
         expect=(
-            Response(status=200, json={"success": True, "data": {"matrix": {"connected": True}}}),
+            Response(status=200, json={"success": True, "data": {
+                "matrix": {"connected": True}, "integrations": {}
+            }}),
             NoCommand("*"), DeviceUnchanged(), NoProtocolWarnings(),
         ),
-        covers=HUB_CORE,
+        covers=(*HUB_CORE, "src/hub/runtime/composition.py", "src/hub/runtime/integrations.py"),
     ),
 ]

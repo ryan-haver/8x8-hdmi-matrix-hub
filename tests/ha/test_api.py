@@ -101,3 +101,89 @@ async def test_base_url_brackets_ipv6(host: str, url: str) -> None:
     127.0.0.1, so the connection itself is not exercised here."""
     async with aiohttp.ClientSession() as session:
         assert HubClient(session, host, 8080).base_url == url
+
+
+async def test_auth_status_reads_the_bare_answer_of_the_auth_routes() -> None:
+    """``/api/auth/*`` answers a bare object: requiring ``success`` made it an error."""
+    locked = {"admin_pin_set": False, "control_pin_set": True, "session_level": "none", "device_remembered": False}
+    seen: list[str | None] = []
+
+    async def status(request: web.Request) -> web.Response:
+        key = request.headers.get("X-API-Key")
+        seen.append(key)
+        return web.json_response({**locked, "session_level": "control" if key == "ha-key" else "none"})
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", status)
+    server = TestServer(app, host="127.0.0.1")
+    await server.start_server()
+    try:
+        async with aiohttp.ClientSession() as session:
+            without = HubClient(session, "127.0.0.1", server.port)
+            wrong = HubClient(session, "127.0.0.1", server.port, "wrong-key")
+            right = HubClient(session, "127.0.0.1", server.port, "ha-key")
+
+            assert await without.auth_status() == locked
+            assert [await client.control_allowed() for client in (without, wrong, right)] == [False, False, True]
+            assert seen == [None, None, "wrong-key", "ha-key"]
+            assert not session.connector._acquired, "a response was not released"  # noqa: SLF001
+    finally:
+        await server.close()
+
+
+async def test_auth_status_errors_are_hub_errors() -> None:
+    async def missing(_request: web.Request) -> web.Response:
+        return web.Response(text="404: Not Found", status=404)
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", missing)
+    server = TestServer(app, host="127.0.0.1")
+    await server.start_server()
+    try:
+        async with aiohttp.ClientSession() as session:
+            with pytest.raises(HubResponseError) as error:
+                await HubClient(session, "127.0.0.1", server.port).auth_status()
+            assert error.value.status == 404
+    finally:
+        await server.close()
+
+
+@pytest.mark.parametrize(
+    ("content_type", "raw_body"),
+    [
+        ("text/plain", "ok"),
+        ("application/json", "null"),
+        ("application/json", "[]"),
+        ("application/json", "{}"),
+        ("application/json", '{"success": true, "data": {"control_pin_set": false}}'),
+        ("application/json", '{"control_pin_set": "false", "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": 0, "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": null, "session_level": "none"}'),
+        ("application/json", '{"control_pin_set": false}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "superuser"}'),
+        ("application/json", '{"control_pin_set": false, "session_level": 1}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "none", "admin_pin_set": "no"}'),
+        ("application/json", '{"control_pin_set": false, "session_level": "none", "device_remembered": 1}'),
+    ],
+)
+async def test_auth_status_and_control_allowed_reject_malformed_200_payloads(
+    content_type: str, raw_body: str
+) -> None:
+    """Malformed HTTP 200 answers on ``/api/auth/status`` raise ``HubResponseError`` (fail closed)."""
+
+    async def malformed(_request: web.Request) -> web.Response:
+        return web.Response(text=raw_body, content_type=content_type, status=200)
+
+    app = web.Application()
+    app.router.add_get("/api/auth/status", malformed)
+    async with TestServer(app, host="127.0.0.1") as server, aiohttp.ClientSession() as session:
+        client = HubClient(session, "127.0.0.1", server.port, "ha-key")
+        with pytest.raises(HubResponseError) as auth_err:
+            await client.auth_status()
+        assert auth_err.value.status == 200
+        with pytest.raises(HubResponseError) as ctrl_err:
+            await client.control_allowed()
+        assert ctrl_err.value.status == 200
+        connector = session.connector
+        assert connector is not None
+        assert not connector._acquired, "a response was not released"  # noqa: SLF001

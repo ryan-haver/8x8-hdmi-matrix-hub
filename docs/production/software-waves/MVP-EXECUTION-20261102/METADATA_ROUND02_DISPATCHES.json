@@ -1,0 +1,102 @@
+{
+  "observed_utc": "2026-11-03T03:03:05.157319+00:00",
+  "status": "inventory correction02 in flight; EV review delivered require_changes and released",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "publication_before_wave": "ad83291881728736ac3f0fc973169cc9f29bed38 exact live remote/local equality",
+  "actors": {
+    "correction02": {
+      "task_id": "task_4c7cf7c289ff",
+      "dispatch_id": "ctx_14d9b1569d7e",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-audit-01",
+      "actual_branch": "execution/wp-exec-sw-audit-01",
+      "exact_entry_base": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "launch": {
+        "requested": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        },
+        "effective": {
+          "agent": "opencode2",
+          "model": null,
+          "effort": null
+        }
+      },
+      "turn_start": "unsupported",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "ses_e60a60154ffe3ynfNFDflaLE6d",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "effort": "CLI override unsupported; inherited exact project routing; native thinking",
+        "bytes": 57882,
+        "sha256": "48dcc3528a166b6772f2102b6454b92d7c152631155d4af8405fbb8ac9344f9b"
+      },
+      "status": "active; no delivered/reviewed/integrated/qualified outcome claimed"
+    },
+    "preservation-review": {
+      "task_id": "task_eea6f443f108",
+      "dispatch_id": "ctx_70e7d15a49fc",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps-review",
+      "actual_branch": "ryan-haver/wp-exec-ev-preservation-gaps-review",
+      "exact_entry_base": "ed78321e51156f229507e654f0cf3faae100b935",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native assigned family/model attested at exact Task/Dispatch/cwd",
+        "session": "01a19f5a-2166-7a02-8b5a-9181fae48770",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 522495,
+        "sha256": "f8c1d02aadcf875723c0708ec2df370e7c12a96648060dac56ef6c9b0b7b1572"
+      },
+      "status": "delivered require_changes R1-R3; terminal released; full originals preserved",
+      "report_commit": "abd339eda108e4d74f1a147b2f445299814e9cf9"
+    }
+  },
+  "fleet": {
+    "total": 102,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 102,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTgwfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMTo0MDo0OSIsImRpc3BhdGNoSWQiOiJjdHhfMWQ1ODI1ZTFmNzI2IiwiZGF0YWJhc2VJZCI6NTc5fX0"
+      },
+      {
+        "limit": 100,
+        "total": 102,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "all_pages": true,
+    "terminal_counts": {
+      "retained": 8,
+      "released": 94
+    },
+    "actively_dispatched_new": 2,
+    "historical_retained": 6,
+    "accounting_note": "--keep-open labels two running worker resources retained/user_requested; this differs from assignment activity. No eight-worker claim."
+  },
+  "concurrency": "two new workers+coordinator+protected old external reservation=4; no nesting",
+  "scope": "targeted inventory corrections and independent negative-gap factual review; no source acceptance",
+  "core_qualification": "attempt1FAIL/no domain; owner manual-retake decision pending, no approval inferred or retake launched"
+}

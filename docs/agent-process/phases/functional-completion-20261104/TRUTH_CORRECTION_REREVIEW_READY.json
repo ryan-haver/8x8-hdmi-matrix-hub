@@ -1,0 +1,184 @@
+{
+  "observed_utc": "2026-11-04T21:27:56.766981+00:00",
+  "status": "Corrected FC-TRUTH preserved/released/published; reserved Sol exactcommit rereview PREPARED/no Task yet",
+  "correction_delivery": {
+    "observed_utc": "2026-11-04T21:25:48.901478+00:00",
+    "task_id": "task_5305a1b797cc",
+    "dispatch_id": "ctx_467d7a450979",
+    "head": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+    "parent": "99e72bd9ac9c592afde5fd3b110f8b56e7c3d5d4",
+    "reports": {
+      "docs/production/functional-completion-20261104/FC-TRUTH/INVENTORY.md": "dd2067cac4e91b0c3663d0d82511d7bf1856198ea68cfdb6f78dcb38980db97d",
+      "docs/production/functional-completion-20261104/FC-TRUTH/NEW CORRECTION.md": "955d1fbcbe260bc0b1b41ff134567e0e2811720d32837ea7b293e8599bea60d0"
+    },
+    "scope_note": "Literal NEW CORRECTION.md matches optional NEW CORRECTION.md phrase in dispatched spec; bounded report in leased directory, preserved exact filename; no silent rename or source edit",
+    "actual_native": {
+      "session": "ses_e57cda72cffe9x7QowabzHN723",
+      "model": "minimax-coding-plan/MiniMax-M3",
+      "variant": "thinking",
+      "bytes": 1936006,
+      "sha256": "4f79256890be46a4974b5e250867e89936187fdd7666e30a6c44cc41f4bdd4ae",
+      "helper_calls_observed": false,
+      "scope": "Final Task/Dispatch/directory only, no all-host proof"
+    },
+    "resource": "positively released, transcript captured",
+    "full_git_bundle": {
+      "bytes": 14534885,
+      "sha256": "d29c3aefd01878a47fba87b1278341961e48f1530bb3980aeae803d98dfc3cb1",
+      "verify_exit": 0,
+      "head_verified": true
+    },
+    "task_ref_published_exact": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+    "original_author_evidence": {
+      "registration": "8cf626a93e994201a7f90405627e24b9",
+      "regular_files": 137,
+      "regular_bytes": 5141798,
+      "unfollowed_links": 0,
+      "disposition": "Required original registered evidence retained in place, no redundant workspace/build/dependency copy",
+      "review_date": "2026-12-04"
+    },
+    "docs_check": {
+      "tests": 489,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "direct_exit": 0,
+      "scope": "Author correction once-only docs; no semantic report/source/feature or qualification acceptance"
+    },
+    "status": "Corrected factual package delivered/preserved/published; reserved exact Sol rereview pending, no canonical changes accepted",
+    "storage_registration": "6b6b0c08cfd64ef5997d668e0974257c"
+  },
+  "preflight": {
+    "observed_utc": "2026-11-04T21:26:30.219667+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "20a23c5aa51fed0393466ebe9458fc8639e3a819",
+    "remote_equal": true,
+    "fleet": {
+      "total": 173,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 173,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyNDY1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yOSAwMDoyOToxMSIsImRpc3BhdGNoSWQiOiJjdHhfNjg1NWI4OGYzZTE4IiwiZGF0YWJhc2VJZCI6MTM4MH19"
+        },
+        {
+          "limit": 100,
+          "total": 173,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "retained": 7,
+        "released": 165,
+        "null": 1
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_e2922f3f76f4",
+          "taskId": "task_14f236edde4f",
+          "terminalState": "retained",
+          "dispatchStatus": "dispatched",
+          "workerState": "ready",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_467d7a450979",
+          "taskId": "task_5305a1b797cc",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793827583366,
+        "error": null,
+        "age_seconds": 7
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 27,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966399832,
+          "resetDescription": "Fri 4:59 AM"
+        },
+        "session": {
+          "usedPercent": 7,
+          "windowMinutes": 300,
+          "resetsAt": 1793832599832,
+          "resetDescription": "3:49 PM"
+        },
+        "updatedAt": 1793827582819,
+        "error": null,
+        "age_seconds": 7
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 2,
+          "windowMinutes": 10080,
+          "resetsAt": 1794428735065,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 67,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793827582821,
+        "error": null,
+        "age_seconds": 7
+      }
+    },
+    "scope": "Reserved exact7996 FC-TRUTH Sol factual rereview after ONE actual-author correction; no new assessment",
+    "concurrency": "two new maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "Intended Sol report reviewer qualified by actual93bc factualreview; Astra qualified bounded prose alternative same OpenAI family vs M3 author, quota fresh separately. M3 support-fidelity review active; no new M3 dispatch or unaffected-provider headroom inference. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "review": {
+    "name": "wp-fc26-fc-truth-rereview",
+    "branch": "review/wp-fc26-fc-truth-rereview",
+    "agent": "codex",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "base": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+    "dependency": "task_5305a1b797cc",
+    "spec": "docs/agent-process/phases/functional-completion-20261104/tasks/REREVIEW_FC-TRUTH.md",
+    "output": "docs/production/functional-completion-20261104/FC-TRUTH/REREVIEW.md",
+    "fit": "Actual prior sameSol independent factual review93bc; no source/domain grant",
+    "reserve": "ONE original-author factual correction consumed; ONE exact rereview now reserved, no new assessment"
+  },
+  "canonical_acceptance": "NONE from correction delivery; root original report remains historical rejected until review accepted",
+  "storage_registration": "6b6b0c08cfd64ef5997d668e0974257c",
+  "review_date": "2026-12-04",
+  "holds": "support review active; Q/D6/WSR03/privacyFAIL/fullchain/ownerprivacybudget/hardwarevisual72hweekrelease unchanged"
+}

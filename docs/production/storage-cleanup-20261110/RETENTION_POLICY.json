@@ -1,0 +1,51 @@
+{
+  "ownerDirection": "decision23, 2026-11-10",
+  "authority": "Installed Orca SPOKE5c; hub bulletin msg_ead791f1a17b and clarification msg_d2a88a442999; missing-close-date fallback bulletin msg_9f608196bc4f",
+  "base": "89a9b43ff3b7304afa1eb51d2a26ab7d58c7e2b6",
+  "state": "Physical application completed under clean-audited52656ab5/v1 plan; this descendant corrects future member deadlines and adds explicit source-survival/drop guards; focused independent exact-SHA review required before publication.",
+  "scope": "Primary, all repo workspaces, owned build-targets/worktree-archives and Git-internal artifact storage; source/history/refs/committed records/credentials/user assets protected",
+  "memberManifest": {
+    "path": "build/retention-20261110/historical-member-retention.jsonl.gz",
+    "sha256": "c56f7891be9f743ae2c2f7b45a11e8282933d9a6887c112f56177aa51f3f0deb",
+    "bytes": 11875864,
+    "members": 239819,
+    "classOriginalBytes": {
+      "closed-work-evidence": 6146342963,
+      "source-preserved": 5834060,
+      "git-backed-source-copy": 109701903,
+      "recovery-or-worktree-archive": 26942173184,
+      "log": 204741902,
+      "rebuildable": 178080062,
+      "pinned-build-output": 20170067
+    },
+    "originalArchiveSha256": "cd7c5df163b930304c64d72450cec92593d68558543a9ee5fa5b710523f26121",
+    "originalSourceHashManifestSha256": "d1efc8df102c89580b0c2c61e0d29d683d329479949fd597564081ec4a23e034",
+    "nextMonthlyRebuildAt": "2026-11-20T23:59:59.999000+00:00",
+    "noRewriteNow": true,
+    "limits": "Native task-group completion, explicitly labelled accepted-phase bound or newest original item mtime fallback under bulletin5s after no open-reference check. No clock resets to new archive/review date. Actual source and open/credential/user-data guards remain.",
+    "phaseBoundGuard": "Accepted-phase upper bound is used only when newest original ITEM/root mtime is no later; otherwise use bulletin5s item-mtime fallback.",
+    "recoveryDropGuard": "257 recovery members default dropEligible=false until structured surviving-commit/ref/full-bundle proof and source/user/open checks are recorded. Every due member requires fresh source/ref/user/open checks."
+  },
+  "keepExceptions": {
+    "entries": 0,
+    "reason": "Missing close dates use newest original item mtime under bulletin5s; no owner-review or keep entries solely for missing dates. Actual source/user data protected by class. Owner alone renews genuine longer keeps."
+  },
+  "sharedStorage": "No repo-owned entries found in current build-targets or worktree-archives inventories; unrelated entries untouched",
+  "verification": "Applicable existing documentation checks, JSON/anchor/whitespace and independent policy/fidelity review; no source/runtime/qualification or release acceptance implied",
+  "applicationPlanSha256": "9bfb7c69f82843d227852f0ce41321535181d41d10c0fdc981b55b1c4b182065",
+  "appliedPlanPath": "build/retention-20261110/audit-v1-retention-plan.json",
+  "correctedRetentionPlanSha256": "bbb0c710ed8569021cdd0ffcc6be273022bd144ea98c1adb37b1d7fc224cf848",
+  "deadlineCorrectionReceipt": "build/retention-20261110/deadline-correction-receipt.json",
+  "physicalApplication": {
+    "pruneOriginalBytes": 21399548,
+    "verifiedCompressedBytes": 8604322,
+    "pruneArchiveSha256": "74f1b77682e0e28dd89f07fea00586eb70f322b58def43828bb0e31bca464503",
+    "pruneManifestSha256": "a9b9fc242215482a38309178c91cdbf0b8462907be8766a36ed5a106670d9d47",
+    "executionReceipt": "build/retention-20261110/application-receipt.json; first audited v1 plan hash retained separately; operations must not be repeated",
+    "state": "verified complete; all288 originals absent, zero held",
+    "purgedBytes": 118167,
+    "purgedFiles": 16,
+    "prunedFiles": 272,
+    "netPrunedReductionBytes": 12795226
+  }
+}

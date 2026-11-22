@@ -145,7 +145,7 @@ class TestHashNeverSent:
         await make_profile(client, "kids", PIN)
         saved = json.loads((data_dir / "profiles.json").read_text(encoding="utf-8"))
         stored = saved["profiles"][0]["passcode_hash"]
-        assert stored.startswith("pbkdf2_sha256$") and PIN not in stored
+        assert password.is_passcode_hash(stored) and stored != PIN
         assert password.verify_passcode(PIN, stored)
 
     async def test_scene_routes_never_return_the_hash(self, client, data_dir):
@@ -162,7 +162,7 @@ class TestHashNeverSent:
         assert resp.status == 200
         assert_no_hash(await resp.text())
 
-        saved = json.loads((data_dir / "scenes.json").read_text(encoding="utf-8"))
+        saved = json.loads((data_dir / "scenes_v2.json").read_text(encoding="utf-8"))
         assert saved["scenes"][0]["passcode_hash"].startswith("pbkdf2_sha256$")
 
     async def test_scene_reports_protection_inherited_from_a_profile(self, client):
@@ -178,6 +178,30 @@ class TestHashNeverSent:
         for view in (listed, one):
             assert (view["password_protected"], view["passcode_inherited"]) == (True, True)
             assert "passcode_hash" not in view
+
+    async def test_override_and_step_answers_report_inherited_protection(self, client):
+        """The override and step routes answered with the raw scene: an inherited PIN read as unprotected."""
+        # Arrange: a scene whose profile was protected after the scene was made
+        await make_profile(client, "kids")
+        scene = await make_scene(client, name="Kids", steps=[{"type": "profile", "id": "kids"}])
+        assert (await client.put("/api/profile/kids", json={"passcode": PIN})).status == 200
+        base = f"/api/v2/scenes/{scene['id']}"
+        override = {"profile_id": "kids", "output_num": 1, "setting_key": "audio_mute"}
+
+        # Act: each of the four mutation routes
+        answers = {
+            "set override": await client.put(f"{base}/override", json={**override, "disabled": True}),
+            "clear override": await client.delete(f"{base}/override", json=override),
+            "add step": await client.post(f"{base}/steps", json={"type": "system_action", "id": "mute_all_audio"}),
+            "remove step": await client.delete(f"{base}/steps/1"),
+        }
+
+        # Assert: the same view of the scene as GET gives
+        for route, resp in answers.items():
+            assert resp.status == 200, f"{route}: {await resp.text()}"
+            view = (await resp.json())["data"]["scene"]
+            assert (view["password_protected"], view["passcode_inherited"]) == (True, True), route
+            assert "passcode_hash" not in view, route
 
 
 # =============================================================================

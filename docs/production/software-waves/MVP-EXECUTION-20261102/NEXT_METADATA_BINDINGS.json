@@ -1,0 +1,14 @@
+{
+  "status": "EV task worktree provisioned without agent; exact base/routing verified before genuine worker-start",
+  "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+  "path": "C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-ev-preservation-gaps",
+  "base": "f2dc1dbf683d8f96200d1517b0786e3441105b36",
+  "actual_branch": "refs/heads/execution/wp-exec-ev-preservation-gaps",
+  "local_routing_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+  "source_routing": "byte-identical already native-attested M3 project main/small/internal/helper/provider policy",
+  "tracked_clean": true,
+  "source_dependencies": [],
+  "task_id": null,
+  "dispatch_id": null,
+  "core_qualification": "attempt1FAIL, no manual retake authority; metadata tasks independent"
+}

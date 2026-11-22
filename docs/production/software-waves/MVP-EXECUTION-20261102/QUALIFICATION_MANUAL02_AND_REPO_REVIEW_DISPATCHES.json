@@ -1,0 +1,145 @@
+{
+  "observed_utc": "2026-11-03T17:09:10.672181+00:00",
+  "status": "owner-approved single manual evaluation and independent repository factual re-review launched",
+  "run": "run_37205f6095b3",
+  "runtime": "35d5d4fb-e6bd-4756-9d7b-24632ba727d7",
+  "app_version": "1.4.247",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "actors": {
+    "evaluation": {
+      "task_id": "task_1d3db0c0e0e8",
+      "dispatch_id": "ctx_ea6771c3440b",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+      "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+      "exact_entry_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+      "report": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/manual-attempt-02/AUTHOR.md",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-4-7",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native Anthropic Opus4.7 attested at exact Task/Dispatch/cwd",
+        "session": "646a8df5-036f-4b59-a94a-809cbaf76015",
+        "models": [
+          "claude-opus-4-7"
+        ],
+        "effort": "high explicit supported launch and localconfig; native per-turn effort field not independently exposed",
+        "bytes": 1015598,
+        "sha256": "1f97169851ffa5345d4a47bcf2ddb01b478e1e981ba919c82b92d0c404c85668",
+        "unassigned_helper_tools_observed": [],
+        "scope": "point-in-time native trace, not complete process descendant census"
+      },
+      "status": "launched, no verdict/qualification/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    },
+    "repo_review": {
+      "task_id": "task_0e44c7b07b03",
+      "dispatch_id": "ctx_fb0e59b59685",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-sw-repo-01-rereview01",
+      "actual_branch": "ryan-haver/wp-exec-sw-repo-01-rereview01",
+      "exact_entry_base": "9f12743e882e3175e7dfbe38b60eefbfe62376f3",
+      "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/CORRECTION_REVIEW_01.md",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "native OpenAI Astra/high attested at exact Task/Dispatch/cwd",
+        "session": "01a1a261-4b41-77d2-b1a1-c190a8ada0e5",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 494039,
+        "sha256": "3c12a7063a250dd954e35c31b1c9bdfdb69e15ab83bf703989a0d1687f0cc8b8"
+      },
+      "status": "launched, no verdict/qualification/acceptance inferred",
+      "observed_dispatch_status": "dispatched",
+      "observed_worker_state": "ready"
+    }
+  },
+  "publication_before_wave": "8f36458815bea3aaf8a4acd8510685cde17c05c3",
+  "evaluation_provisioning": {
+    "observed_utc": "2026-11-03T17:06:56.823413+00:00",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-exec-qual-anthropic-core-01-manual02",
+    "exact_base": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "actual_branch": "execution/wp-exec-qual-anthropic-core-01-manual02",
+    "agent_free_creation": true,
+    "ignored_local_settings": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-qual-anthropic-core-01-manual02\\.claude\\settings.local.json",
+    "settings_sha256": "1af274ac634e6ea70da8eac4bab04c332ce43e7a31792ac05010cd56d55638b1",
+    "settings": {
+      "model": "claude-opus-4-7",
+      "effortLevel": "high",
+      "env": {
+        "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "0"
+      },
+      "permissions": {
+        "deny": [
+          "Agent",
+          "Task",
+          "TeamCreate",
+          "TeamDelete",
+          "SendMessage",
+          "mcp__*"
+        ]
+      },
+      "enabledPlugins": {},
+      "enableAllProjectMcpServers": false
+    },
+    "inherited_hook_audit": "all15hooks are Orca commands, no prompt/agent hooks, no global change",
+    "global_model_default_not_inherited": true,
+    "actual_backend_attestation": "required after genuine worker-start; config/request alone not proof",
+    "publication_before_creation": "8f36458815bea3aaf8a4acd8510685cde17c05c3"
+  },
+  "fleet": {
+    "total": 122,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMTY4fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMToyODoyNCIsImRpc3BhdGNoSWQiOiJjdHhfMGUzZjAwM2VlZjQ2IiwiZGF0YWJhc2VJZCI6NjYzfX0"
+      },
+      {
+        "limit": 100,
+        "total": 122,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 114
+    },
+    "historical_retained": 6,
+    "new_worker_resources": 2,
+    "accounting": "running keep-open resources also read retained; not eight active workers"
+  },
+  "concurrency": "max2new+coordinator+protectedexternal4, no nesting",
+  "qualification": "manualattempt02 underway, candidate remains unqualified/no domains until fresh independent OpenAI six-axis exact-report judgement and coordinator disposition; attempt1FAIL unchanged",
+  "judge": "ONE fresh Astra/high independent judge reserved after evaluator report, not launched prematurely or a sourceacceptance",
+  "further_qualification_retry_authorized": false,
+  "repository_acceptance": "corrected early intake pending R1/fullsmall-diff independent verdict, no package/source/license/security acceptance",
+  "owner_and_release_gates_unchanged": true
+}

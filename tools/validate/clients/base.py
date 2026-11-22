@@ -46,6 +46,7 @@ class ActionResult:
     status: int | None = None
     body: Any = None
     error: str | None = None
+    error_kind: str | None = None
     steps: list[str] = field(default_factory=list)
     screenshots: list[str] = field(default_factory=list)
 

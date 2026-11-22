@@ -1,0 +1,40 @@
+{
+  "observed_utc": "2026-11-03T05:45:52.469135+00:00",
+  "status": "delivered/released/preserved/published; submission unaccepted until independent review",
+  "author": {
+    "head": "be7e441a0e034fb838e44914b245f84ba2a42cbf",
+    "base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "tree": "wp-exec-sw-repo-01",
+    "actual_branch": "ryan-haver/wp-exec-sw-repo-01",
+    "report": "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "bytes": 6892,
+    "sha256": "749ee4f2029c35a4e7be617854aa739320b4590f158f9c4579773586a47f4d82",
+    "working_identical": true,
+    "cr_bytes": 0,
+    "whole_report_whitespace_tokens": 821,
+    "task_id": "task_5486db7aed82",
+    "dispatch_id": "ctx_e47c86a8e4ee",
+    "terminal": "released",
+    "publication": "exact task ref remote/local verified",
+    "cleanup": "exact tree retained read-only, no removal",
+    "acceptance": "unaccepted author submission; exact-commit independent factual review required",
+    "native_final": {
+      "session": "ses_e6019c6d9ffe4pDsmO1pQo24Xd",
+      "models": [
+        "minimax-coding-plan/MiniMax-M3"
+      ],
+      "variant": "thinking",
+      "bytes": 591613,
+      "sha256": "707c8548af2a57fa76ec3e05dac6fb38b7d6cf9fe0ce755ae5563bbd23f17dc1"
+    },
+    "budget": "5min target exceeded; worker reports683bodywords plus required JSON, whole-report count separately recorded; no deadline or full-budget-conformance pass",
+    "preservation": {
+      "archive_sha256": "d47c5f5bcd3a366d8243ba8206c37fc08387b696ee4fa12e5116e36ae2c28b9c",
+      "archive_bytes": 206916510,
+      "regular_files": 4636,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    "integration_commit": "00217291ef008c4c4bbf9d78e34013a3fcb450b2"
+  },
+  "source_security_license_qualification": false
+}

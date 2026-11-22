@@ -1,0 +1,54 @@
+{
+  "prepared_utc": "2026-10-20T17:11:04.349143+00:00",
+  "state": "prepared candidate; independent exact-commit review and integration pending",
+  "source_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+  "implementation_sha": "afe344a0e6a17392ccda90bab140284dd512267e",
+  "feature": "F-API-002",
+  "scope": "API/source simulator V2 only",
+  "records": [
+    {
+      "path": "docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_info-api.json",
+      "sha256": "d3b9973063e9f587c2003632b950405c6d9feab278dd35b552b0038bdbb35395",
+      "scenario": "contracts.api_info",
+      "source_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+      "client": "api",
+      "level": "V2",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T17:08:02.835Z",
+        "finished": "2026-10-20T17:08:03.362Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root-api.json",
+      "sha256": "5dba87ae448dd3c1d3b243f1ff1ac8c68ca3dc04fec35bfa649fb422b6c7db2f",
+      "scenario": "contracts.api_root",
+      "source_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+      "client": "api",
+      "level": "V2",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T17:08:03.421Z",
+        "finished": "2026-10-20T17:08:03.546Z"
+      }
+    },
+    {
+      "path": "docs/validation/evidence/software-waves/SW-API-READ-01/F-API-002/2026-10-20-V2-0dd2c25e-contracts.api_root_alias-api.json",
+      "sha256": "90d3f83ebd01ec8351dc8d5412d56dbe8c17e86365843fbe5ac0cd06050750d8",
+      "scenario": "contracts.api_root_alias",
+      "source_sha": "0dd2c25ea866fd56fbe6046e03f0172499b70080",
+      "client": "api",
+      "level": "V2",
+      "image_digest": null,
+      "timestamp": {
+        "started": "2026-10-20T17:08:03.559Z",
+        "finished": "2026-10-20T17:08:03.685Z"
+      }
+    }
+  ],
+  "original_bytes_preserved": true,
+  "images": "none; image_digest null",
+  "diagnostic": "Initial untracked scenario diagnostic is retained privately and excluded from accepted proof.",
+  "route_coverage": "177/177 full normal author hook; REST product/source read suite unchanged; no new product routes",
+  "formal_release_gate": "Not closed; all other gaps and external gates remain"
+}

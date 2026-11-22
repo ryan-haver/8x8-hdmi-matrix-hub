@@ -1,0 +1,8 @@
+{
+  "observed": "2026-10-19T09:31:25.669343+00:00",
+  "scope": "Metadata comparison to POST-discovery checkpoint, not proof of pre-run original contents; no private values emitted or changed",
+  "checkpoint_recorded": "2026-10-19T00:47:24.793791+00:00",
+  "files_checked": 16,
+  "presence_checks": 3,
+  "failures": []
+}

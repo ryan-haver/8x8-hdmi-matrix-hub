@@ -140,7 +140,11 @@ class Action:
     params: dict[str, Any] = field(default_factory=dict)
 
     def describe(self) -> str:
-        args = ", ".join(f"{k}={v!r}" for k, v in self.params.items())
+        # Descriptions become persisted evidence procedures, including manual auth
+        # variants. Import lazily because evidence also uses Level from this module.
+        from .evidence import redact
+
+        args = ", ".join(f"{k}={v!r}" for k, v in redact(self.params).items())
         return f"{self.intent}({args})"
 
 
@@ -174,6 +178,11 @@ INTENTS: dict[str, str] = {
     ),
     "request": "raw HTTP `method` `path` with optional `json` body (api client only)",
     "uc_command": "Remote 3 entity command `cmd_id` with optional `params` on `entity_id` (uc client only)",
+    "flic_register": "documented manual Flic button registration with `buttons` (flic replay client only)",
+    "cycle_input": "replay generated next/previous input request for `output` and `direction` (flic replay client)",
+    "volume_control": "replay generated output CEC volume request for `output` and `direction` (flic replay client)",
+    "flic_sdk_event": "execute the actual generated SDK callback for `event` and `button_registry` using Node stubs "
+                      "(flic replay client only; no physical SDK/button observation)",
     "ha_service": "Home Assistant service `domain`.`service` with `data` (ha client only)",
     "ha_config_flow": "add the hub in Home Assistant through the integration's config flow, then set "
                       "`options` through its options flow (ha client only)",
@@ -287,11 +296,18 @@ class NoProtocolWarnings(Expectation):
 
 @dataclass(frozen=True)
 class Response(Expectation):
-    """The client's HTTP response (api client only; other clients report ``n/a``)."""
+    """Client HTTP status; body and observed header checks are API-only.
+
+    Header names are case-insensitive, values exact. Masked values cannot prove
+    equality, but their observed presence still disproves absence. Header checks
+    fail when the client cannot supply a captured API exchange.
+    """
 
     status: int | tuple[int, ...] | None = None
     min_status: int | None = None
     json: dict[str, Any] | None = None  # subset match on the response body
+    headers: dict[str, str] = field(default_factory=dict)
+    absent_headers: tuple[str, ...] = ()
 
     def describe(self) -> str:
         parts = []
@@ -301,6 +317,11 @@ class Response(Expectation):
             parts.append(f"HTTP >= {self.min_status}")
         if self.json:
             parts.append(f"body contains {self.json}")
+        if self.headers:
+            # Never persist caller-supplied credential values in descriptions.
+            parts.append(f"headers equal (names: {', '.join(self.headers)})")
+        if self.absent_headers:
+            parts.append(f"headers absent: {', '.join(self.absent_headers)}")
         return "response " + " and ".join(parts)
 
 

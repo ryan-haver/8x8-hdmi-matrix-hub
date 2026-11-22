@@ -1,0 +1,48 @@
+{
+  "observed_utc": "2026-10-20T03:24:14.605196+00:00",
+  "source_sha": "bbeaae4a70752b65c131fe87f226b77c5f0e4187",
+  "authority": "Owner explicitly approved the three existing Tron paused-frame differences in this conversation",
+  "isolation": "Tracked-source export, hydrated baseline copy; root private/untracked data excluded",
+  "pinned_image": "mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27",
+  "snapshots": [
+    {
+      "path": "tests/e2e/visual/__snapshots__/desktop/special/tron-background/paused-frame.png",
+      "before_sha256": "ad2ea3188c9b0808ae17ea81c70b238f0618e11fa751e85c2848efba102f6106"
+    },
+    {
+      "path": "tests/e2e/visual/__snapshots__/kiosk-tab-a11/special/tron-background/paused-frame.png",
+      "before_sha256": "cf068711d6f22583f42802fccaf9b257052702574b79108a68be56421c884894"
+    },
+    {
+      "path": "tests/e2e/visual/__snapshots__/kiosk-iphone16promax/special/tron-background/paused-frame.png",
+      "before_sha256": "66fa7e74b54ff0aee14176f3f3a11e13274fb6095abe17543ec7ddc67a670e0e"
+    }
+  ],
+  "verification": {
+    "startTime": "2026-10-20T03:26:49.688Z",
+    "duration": 20253.278,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "after_sha256": {
+    "tests/e2e/visual/__snapshots__/desktop/special/tron-background/paused-frame.png": "713d6daa46cf1b464f79787b49dd142dd14a74bac8af89aff553ac4937addb6a",
+    "tests/e2e/visual/__snapshots__/kiosk-tab-a11/special/tron-background/paused-frame.png": "59da11f33bf9c865bdd5dd2f54d8f743846adc5638d442285dea377ef0f67fe4",
+    "tests/e2e/visual/__snapshots__/kiosk-iphone16promax/special/tron-background/paused-frame.png": "1aa3ccb6620bf89a49131c6eae1b1e721ddcf6caae7fa82fa82401858832f384"
+  },
+  "applied_to_root": true,
+  "verification_command": [
+    "node",
+    "tools/ui/run-in-container.mjs",
+    "test",
+    "--",
+    "--grep",
+    "special/tron-background/paused-frame",
+    "--project=desktop",
+    "--project=kiosk-tab-a11",
+    "--project=kiosk-iphone16promax",
+    "--no-deps",
+    "--workers=1"
+  ]
+}

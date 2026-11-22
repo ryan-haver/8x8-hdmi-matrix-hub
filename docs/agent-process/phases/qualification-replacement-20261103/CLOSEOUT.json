@@ -1,0 +1,63 @@
+{
+  "observed_utc": "2026-11-03T19:29:56.832704+00:00",
+  "phase": "qualification-replacement-20261103",
+  "status": "completed with SCOPED_PASS competence only",
+  "actual_outcomes": {
+    "planning": "three genuine families, three rounds,9actual contributions, all3accept same complete finalpacket",
+    "candidate": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "judge": "dda63d661d143a591d6d3d82346457fb52199795",
+    "six_axes": "PASS",
+    "coordinator_disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json"
+  },
+  "qualification": {
+    "model": "claude-opus-5-5",
+    "family": "Anthropic",
+    "route": "native Claude via genuine Orca supervised worker, local Zelu win32",
+    "effort": "high supported explicit launch/local config; native per-turn effort unobservable",
+    "status": "PASS",
+    "scope": "bounded Python validation-runner/model offline simulator API refusal preparation and relevant compatibility guards",
+    "role_limit": "bounded review/validation-preparation competence demonstrated; no general implementation authorship or broad core-review entitlement",
+    "evaluated_source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+    "evaluator_report_commit": "1d49014bbf4d040e56d8a709952b31a10c20232e",
+    "independent_judge_family": "OpenAI",
+    "independent_judge_model": "gpt-6-astra/high",
+    "judge_report_commit": "dda63d661d143a591d6d3d82346457fb52199795",
+    "disposition": "docs/production/software-waves/QUAL-ANTHROPIC-CORE-01/replacement-opus55-20261103/COORDINATOR_DISPOSITION.json",
+    "fresh_task_match_required": true,
+    "automatic_reservation_unlock": false
+  },
+  "fleet": {
+    "total": 134,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 134,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMjAxfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODowMDoxOSIsImRpc3BhdGNoSWQiOiJjdHhfZTAxY2NhMTNiNWZlIiwiZGF0YWJhc2VJZCI6NzMxfX0"
+      },
+      {
+        "limit": 100,
+        "total": 134,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 128,
+      "retained": 6
+    },
+    "current_active_workers": 0,
+    "historical_retained": 6,
+    "protected_external_reservation": "still unproven exit; retained/protected, not cleaned"
+  },
+  "task_refs": "candidate and judge exact remote heads independently verified",
+  "preservation": "full original native/workspace/temp plus seven known supplemental candidate scratch files verified",
+  "cleanup": "retained exact trees; no destruction or new fullbundle claim",
+  "product_source_changed": false,
+  "source_or_release_acceptance": false,
+  "qualified_reservation_ids": [],
+  "next_work": "reassess accepted task/model/worktree matches and independent source review for eligible C1/C2 validation-runner/model scope; broader privacy/API/product/WS/HA/UI domains remain separately qualified/gated",
+  "publication": "scoped records prepared; actual postpush receipt build/qualification-route-20261103/qualification-closeout-publication.json outside the commit it identifies"
+}

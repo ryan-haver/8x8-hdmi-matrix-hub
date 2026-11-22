@@ -1,0 +1,9 @@
+{
+  "version": "independent-round1",
+  "baseline_commit": "e2161484459da65aee14433136a14963507b499c",
+  "inputs": {
+    "DRAFT_EXECUTION_PINS.json": "73bddf6b396858618660d4aede9994e3da2aa817391d8308fae9980321c53604",
+    "PROGRAM.md": "39de9d9e0fe2ed5a3c94a4acf64018a52a612579181677d92258ad6e27f96419",
+    "BASELINE.json": "e59faf7ed8790afa6ad1a4b2126e2d74a0b3593113965142128ad74bae88a563"
+  }
+}

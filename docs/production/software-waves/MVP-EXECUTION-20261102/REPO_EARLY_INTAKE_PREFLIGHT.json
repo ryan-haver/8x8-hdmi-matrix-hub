@@ -1,0 +1,123 @@
+{
+  "observed_utc": "2026-11-03T05:33:04.599002+00:00",
+  "unit": "SW-REPO-01",
+  "stage": "early scoped intake only; not package completion",
+  "status": "prepared, no worktree or worker created",
+  "entry_base": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+  "entry_slice": [
+    "SEC-14",
+    "SEC-15",
+    "DEP-05"
+  ],
+  "dependency_disposition": {
+    "scope": "accepted current findings metadata for these three IDs plus preserved accepted historical SW-REPO inventory",
+    "accepted_published_commit": "61957a47cf91c504f48149a6c43a3dfea3cdd032",
+    "publication_receipt": "private cf-accepted-publication.json exact remote/local equality verified again now",
+    "current_findings_author": "a2dab11cdc871d6a98c563b019a361371a9af710",
+    "review_chain": [
+      "00b7b04994a08d45961c67619d402506ba2a65a3",
+      "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+      "ac9c4d49fd3c8fb88971c2d8fd59118e1019d7b7"
+    ],
+    "coordinator_disposition": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/COORDINATOR_DISPOSITION.json",
+    "remaining": "All SW-REPO completion dependencies and actual candidate security/license/history/hygiene/secret-scan proof remain mandatory and unsatisfied; no silent dependency deletion",
+    "coordinator_authorization": "existing scoped-intake resolver applied to these three accepted intake rows only; no source lease or phase/release approval"
+  },
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "host": "local/Zelu/win32, fresh supported discovery privately retained",
+  "catalog": {
+    "author": "minimax-coding-plan/MiniMax-M3",
+    "variant": "thinking inherited, native response must attest actual backend",
+    "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+    "helpers": "main/small/internal M3; unassigned providers/plugins/MCP/subagents denied",
+    "CLI_override": "OpenCode2 model/effort overrides unsupported",
+    "reviewer": "gpt-6-astra/high",
+    "OpenAI_fetched_at": "2026-11-03T05:32:59.299958200Z",
+    "high_supported": true
+  },
+  "capacity": {
+    "observed_utc": "2026-11-03T05:33:04.599002+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 46,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793683377118,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 63,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 18,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932896,
+        "resetDescription": null
+      },
+      "updatedAt": 1793683377439,
+      "error": null
+    }
+  },
+  "fleet": {
+    "total": 117,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 117,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMDM0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwMDo0MDo0MCIsImRpc3BhdGNoSWQiOiJjdHhfM2NkNzU5NjVhN2RlIiwiZGF0YWJhc2VJZCI6NjUyfX0"
+      },
+      {
+        "limit": 100,
+        "total": 117,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 111,
+      "retained": 6
+    },
+    "new_active": 0
+  },
+  "qualification": {
+    "author": "M3 accepted bounded historical SW-REPO b473 inventory and recent SW-AUDIT f2ee, EV negative-gap816, findingsa2dab and CIb1ca corrected prose; no source/security/legal qualification",
+    "reviewer": "OpenAI actual Astra exact-commit factual reviews433/ac9/81ac/79b08 plus inventory577; no source/security domain grant"
+  },
+  "model_reassessment": {
+    "selection": "M3 author, OpenAI/Astra independent reviewer",
+    "primary_plan": "M3/Sol families retained; Astra chosen within OpenAI based on actual recent bounded factual-review evidence and verified availability",
+    "alternatives": "Sol actual prior capacity failure retained; Anthropic core attempt1 FAIL/no domain, Google unknown headroom, DeepSeek exhausted, M3 self-review prohibited; no silent family substitution"
+  },
+  "demand": "ONE <=700word three-row author intake, 5min target; one independent exact-commit factual review plus one precise material-correction/re-review reserve, no global scans/harnesses/unbounded loop; refresh quotas before creation/dispatch and each reserved later stage, other-host commitments unknown",
+  "routing_on_capacity_change": "hold affected stage or use a separately verified suitable fallback; no spend/accounts/credentials; do not treat impending reset as current headroom",
+  "creation_exception": "Orca agent-free provisioning solely to install exact ignored audited project routing before genuine worker-start; no raw git worktree or bare agent",
+  "author_worktree": "wp-exec-sw-repo-01",
+  "review_worktree": "wp-exec-sw-repo-01-review",
+  "author_task_id": null,
+  "author_dispatch_id": null,
+  "exclusive_paths": [
+    "docs/production/software-waves/SW-REPO-01/execution-20261101/AUTHOR.md",
+    "build/software-waves/SW-REPO-01/execution-20261101/author/intake-01/**",
+    "C:/t/exec-sw-repo-01/nov02-intake01/**"
+  ],
+  "material_plan_change": false,
+  "concurrency": "one new author+coordinator+protected external reservation=3 <=4, no nesting",
+  "protected": "root/private data/failed originals/natives/ignored artifacts/visual baselines/old retained workspaces/odd untrackedhook artifact preserved; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1 FAIL/no domain; owner manual-retake choice pending; no retry/source authority",
+  "package_completion": false,
+  "source_or_feature_qualification": false
+}

@@ -1,0 +1,73 @@
+{
+  "status": "correction delivered; independent exact-commit re-review pending",
+  "observed_utc": "2026-11-03T02:36:42.548063+00:00",
+  "task_id": "task_1a5ca9009556",
+  "dispatch_id": "ctx_f2343717872b",
+  "head": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+  "parent": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+  "exact_changed_path": "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md",
+  "tracked_clean": true,
+  "worker_state": "released after accepted delivery/scope proof",
+  "task_ref_remote_exact": "refs/heads/execution/wp-exec-sw-audit-01 at981e7e4a",
+  "integrity_erratum": {
+    "commit": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+    "git_blob_bytes": 195324,
+    "git_blob_sha256": "f2870b27b3ad12a4f9e0a9d332acfab80a7d2fa23ef128e6fce193cd5d3223c2",
+    "working_bytes": 196430,
+    "working_sha256": "07c5836d89bc7d38538d329250be1e3a36a466f90fb56138ca0b76738d993875",
+    "working_crlf_count": 1106,
+    "lf_normalization_exactly_equals_git_blob": true,
+    "delivery_error": "worker called working CRLF byte count/SHA a Git blob SHA; incorrect representation label retained with this erratum, no substantive drift",
+    "correct_review_input": "exact commit981e7e4a, canonical Git blob f2870b27..."
+  },
+  "original_file_integrity": {
+    "existing_file_count": 4554,
+    "changed_existing_files": [
+      "docs/production/software-waves/SW-AUDIT-01/execution-20261101/AUTHOR.md"
+    ],
+    "only_allowed_author_report_changed": true,
+    "old_head": "13fe2ae8d423d8e43065b08a8767109e011c61c0",
+    "new_head": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+    "old_private_author_files_preserved": true
+  },
+  "native_final": {
+    "task_id": "task_1a5ca9009556",
+    "dispatch_id": "ctx_f2343717872b",
+    "session": "ses_e60d64611ffe2ov3BRBzln45dw",
+    "models": [
+      "minimax-coding-plan/MiniMax-M3"
+    ],
+    "bytes": 758878,
+    "sha256": "83b05a901b378db92a5e0d6d23ebb4a81fe5b0c80d9fb9b728eab67ae84489b3",
+    "captured_after_release": true
+  },
+  "full_workspace_temp_archives": [
+    {
+      "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-sw-audit-01",
+      "head": "981e7e4a48bce07e4dce24443d386b3e0643601a",
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation-correction-01\\wp-exec-sw-audit-01\\workspace.tar.gz",
+      "archive_sha256": "9a1f62e3cfa42399ee3e9279939708953dd40b9a23db39afef3077e2d3c60e83",
+      "regular_files": 4566,
+      "regular_bytes": 302572648,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    },
+    {
+      "workspace": "C:\\t\\exec-sw-audit-01\\nov02-correction01",
+      "head": null,
+      "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\mvp-execution-20261102\\preservation-correction-01\\external-audit-correction01\\workspace.tar.gz",
+      "archive_sha256": "c5065eb6927522c1a65c53d08c8b9c5edc840f0a3c2cfb5cba3002000d6d4604",
+      "regular_files": 107,
+      "regular_bytes": 180155,
+      "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+    }
+  ],
+  "reported_checks_not_self_acceptance": {
+    "docs_passed": 489,
+    "duration_seconds": 3.19,
+    "direct_exit": 0,
+    "self_checks": "23/23 claimed, independent factual verification pending"
+  },
+  "next": "Astra exact981e7e4a re-review ofR1-R6 using new isolated worktree and CORRECTION_REVIEW_01.md, no reset/overwrite oldreview",
+  "source_qualification": "attempt1 remainsFAIL; no retake owner decision received or inferred",
+  "parent_feature_source_acceptance": false
+}

@@ -5,17 +5,17 @@ Fixture chain (docs/audits/UC_INTEGRATION_AUDIT.md §7)::
     uc_simulator (session)   python -m tools.simulator on free ports (HTTPS, Telnet, /_sim control)
       -> sim                 SimDevice: reset to the seed state before each test; ground truth for
                              assertions (state, command log, fault injection)
-        -> uc_hub            the real hub, started the way it ships: `python run.py` in legacy mode,
-                             which runs src/driver.py (REST API + web UI + ucapi integration). Free
+        -> uc_hub            the real hub, started the way it ships: `python run.py` through hub.cli
+                             and the shared runtime (REST API + web UI + ucapi integration). Free
                              ports, UC_DISABLE_MDNS_PUBLISH=true, a temp UC_CONFIG_HOME/MATRIX_DATA_DIR
                              seeded with config_state.json (a configured install), POLLING_INTERVAL=1.
           -> uc_remote       tools.uc_remote_sim.UcRemoteSim, connected, authenticated and attached
                              like a Remote after start-up: `connect` event, get_available_entities,
                              subscribe_events for every entity.
 
-The driver runs as a subprocess because driver.py only works as ``__main__``
-(its ``api`` global is created there, UC-19) and owns its event loop and signal
-handlers. That is also the most faithful setup: nothing is imported or patched.
+The hub runs as an unmodified subprocess through the normal composition root,
+with its own event loop and signal handlers. No runtime, migration or SDK
+substitute is installed by these fixtures.
 ``uc_hub_factory`` starts more hubs, or hubs with other options (unconfigured
 for the setup flow, extra environment). The simulator is a subprocess too, so
 the driver keeps being served while a test blocks.

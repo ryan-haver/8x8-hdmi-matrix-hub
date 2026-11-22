@@ -1,0 +1,177 @@
+{
+  "observed_utc": "2026-11-04T21:47:31.232359+00:00",
+  "status": "FC-TRUTH REQUIRE_CHANGES after reserved correction/rereview; proposals not accepted; cycle exhausted",
+  "delivery": {
+    "observed_utc": "2026-11-04T21:46:24.100038+00:00",
+    "task_id": "task_ba4c0694e78e",
+    "dispatch_id": "ctx_72b222ccb718",
+    "head": "a18dea2d6f18f61117571fae22d3568cec8d4b5c",
+    "parent": "7996a080b64750da5c6de4f1e365d6fcd85c7ddc",
+    "report": "docs/production/functional-completion-20261104/FC-TRUTH/REREVIEW.md",
+    "report_sha256": "70cea38bbf299b62ba7950a66f42a9cd308c74f6c7c7686fe0b5dce477abc357",
+    "actual_native": {
+      "session": "01a1a878-42a0-78a1-88c8-fdda75996e7f",
+      "model": "gpt-6.1-sol",
+      "effort": "high native",
+      "bytes": 2556189,
+      "sha256": "042b004ec4fdefcdd5e89801ec33ca90d979c97b98609073b1d3f787dab8c2a3",
+      "helper_calls_observed": false,
+      "scope": "Final exact Task/Dispatch/cwd only, no all-host proof"
+    },
+    "resource": "positively released; transcript captured",
+    "full_git_bundle": {
+      "bytes": 14579202,
+      "sha256": "bac5e8844ffe6d596a4f36c6a320fe631b55e611157f73487368f3079852cb86",
+      "verify_exit": 0,
+      "head_verified": true
+    },
+    "task_ref_published_exact": "a18dea2d6f18f61117571fae22d3568cec8d4b5c",
+    "original_review_evidence": {
+      "registration": "911b20aa7d7f4c608a934f48486de158",
+      "regular_files": 141,
+      "regular_bytes": 1946018,
+      "unfollowed_links": 0,
+      "disposition": "Retained originals in place; no redundant workspace/build/dependency copies",
+      "review_date": "2026-12-04"
+    },
+    "docs_check": {
+      "tests": 489,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "direct_exit": 0,
+      "scope": "Once-only reviewer docs, no semantic report/source acceptance"
+    },
+    "verdict": "REQUIRE_CHANGES",
+    "supported_corrections": [
+      "R1 actual C2 identity and ancestry",
+      "R2 five S/reproduce dispositions",
+      "R4 original snapshot import diagnosis"
+    ],
+    "remaining": [
+      "R3a63no-namedlabels contradict existing named testpaths",
+      "R3b nonexistentA20functionread claim / timeout distinction / scope counts",
+      "R3c19 recorded-vs-effective baseline residuals",
+      "R3d generic residuals and uninspected semantics leave all268acceptance incomplete",
+      "LowP5API25/UI08 omitted",
+      "Lowcurrent-vs-historical delivery envelope",
+      "LowOpus privacy attempt mislabeled MiniMax-routed",
+      "Incorrect FAPI032 scenario pointer"
+    ],
+    "reserve": "ONE actual-author correction and ONE exact samequalifiedreviewer rereview both consumed; no automatic additional cycle/assessment/judge/targetnarrowing",
+    "canonical_acceptance": "HOLD proposals; package not accepted; no findings/features/caps/source gates changed",
+    "storage_registration": "57f95775056c47f3aa943f22863a8b3f"
+  },
+  "supported_facts": "R1 actualC2 identity, fiveR2source-inspection dispositions, R4originalsnapshot import correction; useful progress but no whole-package acceptance",
+  "unresolved": [
+    "R3a63no-namedlabels contradict existing named testpaths",
+    "R3b nonexistentA20functionread claim / timeout distinction / scope counts",
+    "R3c19 recorded-vs-effective baseline residuals",
+    "R3d generic residuals and uninspected semantics leave all268acceptance incomplete",
+    "LowP5API25/UI08 omitted",
+    "Lowcurrent-vs-historical delivery envelope",
+    "LowOpus privacy attempt mislabeled MiniMax-routed",
+    "Incorrect FAPI032 scenario pointer"
+  ],
+  "reserve_disposition": {
+    "actual_author_correction_consumed": 1,
+    "qualified_same_reviewer_exact_rereview_consumed": 1,
+    "automatic_further_cycle_authorized": false,
+    "further_worker_launched": false,
+    "next": "Retain unresolved map as work. Any further execution allocation/material change must follow adopted prospective decision process, with actual authorship, semantic acceptance and different-family review; no renamed task to evade reserve. Await independent support-fidelity result and continue unrelated authorized work only through its existing gates."
+  },
+  "canonical_proposals": "HOLD all package proposal application; no registry/ledger/finding/feature/cap/source change",
+  "independent_support_review": "Previously launched task_14f236edde4f/ctx_e2922f3f76f4; no delivery consumed in this turn, no completion poll or inferred exit",
+  "capacity_observation": {
+    "codex": {
+      "provider": "codex",
+      "session": null,
+      "weekly": {
+        "usedPercent": 27,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "rateLimitResetCredits": {
+        "availableCount": 2,
+        "totalEarnedCount": 0,
+        "nextExpiresAt": 1796068349636,
+        "credits": [
+          {
+            "status": "available",
+            "expiresAt": 1796068349636,
+            "grantedAt": 1793476349636
+          },
+          {
+            "status": "available",
+            "expiresAt": 1796164096174,
+            "grantedAt": 1793572096174
+          }
+        ]
+      },
+      "updatedAt": 1793827864229,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {},
+      "age_seconds": 987,
+      "dispatch_headroom_verified_now": false
+    },
+    "claude": {
+      "provider": "claude",
+      "session": {
+        "usedPercent": 7,
+        "windowMinutes": 300,
+        "resetsAt": 1793832600009,
+        "resetDescription": "3:50 PM"
+      },
+      "weekly": {
+        "usedPercent": 27,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400009,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "fableWeekly": {
+        "usedPercent": 0,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400000,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "monthly": null,
+      "extraUsage": null,
+      "updatedAt": 1793827863958,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {},
+      "age_seconds": 987,
+      "dispatch_headroom_verified_now": false
+    },
+    "minimax": {
+      "provider": "minimax",
+      "session": {
+        "usedPercent": 68,
+        "windowMinutes": 300,
+        "resetsAt": 1793830434075,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 2,
+        "windowMinutes": 10080,
+        "resetsAt": 1794428735059,
+        "resetDescription": null
+      },
+      "updatedAt": 1793827864239,
+      "error": null,
+      "status": "ok",
+      "usageMetadata": {
+        "source": "web",
+        "lastSuccessfulSource": "web"
+      },
+      "age_seconds": 987,
+      "dispatch_headroom_verified_now": false
+    }
+  },
+  "capacity_scope": "Read supported cached usage at delivery checkpoint; stale is not headroom. No creation/dispatch this turn, so no stale/low capacity exception or project-wide stop. Future affected wave requires fresh intended pool/fallback.",
+  "storage_registration": "57f95775056c47f3aa943f22863a8b3f",
+  "review_date": "2026-12-04",
+  "holds": "All model/source/Q/D6/WSR03/privacyFAIL/fullchain/ownerprivacybudget/HAHACS/Pythoncore/physicalvisual72hweekrelease unchanged"
+}

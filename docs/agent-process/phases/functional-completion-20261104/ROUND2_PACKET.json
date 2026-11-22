@@ -1,0 +1,174 @@
+{
+  "created_utc": "2026-11-04T17:29:01.839246+00:00",
+  "phase": "functional-completion-20261104",
+  "round": 2,
+  "status": "all-peer challenge input, not final plan/adoption/source or ownerbudget approval",
+  "original_input_packet": {
+    "path": "docs/agent-process/phases/functional-completion-20261104/INPUT_PACKET.json",
+    "introduced_at": "afe24d4d202e6a0ae0a5102b15f76fb95ea9fe22",
+    "canonical_git_lf_sha256": "cb6a9871fdf8a4adfb181ab1fbf3abafb6c265323c27b543ebd62f9c68857dc4"
+  },
+  "product_source_baseline": "9b783d723c81cc56ec86810b789fa31be41e75cc",
+  "reports": [
+    {
+      "family": "OpenAI",
+      "head": "7baf8262976772ed3de6eac7a19d5fafc7b5a1b8",
+      "parent": "ff57e990c93d56ad4c050f399b5e49131949b647",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/openai.md",
+      "report_sha256": "57a634bc5f25c2d6a300e1509e49fa11ed47b5545e3c60bc5d8706132fd29777"
+    },
+    {
+      "family": "Anthropic",
+      "head": "4ae498baa200cf17f90430f6961c8f1fecd2b8d1",
+      "parent": "5097650314502686a845a714e638643d66087971",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/anthropic.md",
+      "report_sha256": "efe8219ca416b2f46b749a621793c4e0d4efe2057fc0958916c689203c3265c1"
+    },
+    {
+      "family": "MiniMax",
+      "head": "32f911a576de0251b06e77a46a39681c7d7dc679",
+      "parent": "d9b575cc438f8473d96f106db03629aaa608cde5",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round1/minimax.md",
+      "report_sha256": "42bd18882437735caa278279fdf671365890d57a12c0fc0102947d13b71df653"
+    }
+  ],
+  "barrier": "Allthree independent originals/workers/native/workspace/temp/taskrefs preserved/positivelyreleased/published before root sharing. Read ALL THREE complete reports now, do not read future peer R2.",
+  "challenge_topics": [
+    "CR01 response policy: Anthropic proposes trailing fresh-read coalescing; OpenAI and MiniMax prefer explicit busy rejection with contract review. Read entire existing contract/callers, adopted recovery D1-D6, complete component/current tests and handler/app/runtime lifecycle. Decide source-backed request freshness, bounded owner/application work, rejection transport/backpressure, command latency and actual socket shutdown order. Challenge assertions that any coalescing necessarily changes component bytes or always means sharing a pre-request read, or that schema equality alone preserves documented behavior. Do not adopt either policy in advance; identify exact necessary coordinator contract lease and qualified changed-source review. Existing accepted component blobs/reviews remain exact historical facts, not automatically invalidated by unchanged surrounding wrapper code.",
+    "CR01 staffing dispute: Anthropic suggests original component author Opus wiring + Astra runtime review, avoiding held Anthropic D6 review. OpenAI/MiniMax say original first-authorship NOT_GRANTED/WSR03 and whole-target competence/independence still prevent immediate wiring. Audit actual failure/author/reviewer/attempt records, original vs corrected source reviews, complete mixed-source target and accepted fallback wording. Does any lawful existing pair actually cover this distinct wiring? If not, propose genuinely first useful domain/role assessment with exact scope/rubric/judge/native/source provenance and attempt-history audit, no relabeled failed authorship, narrowed D6, automatic retake or mere brand entitlement. A corrected component review does not silently grant original first-authorship.",
+    "CR02 HA behavior: combine wrong/missing/revoked/valid locked-hub key tests, bare JSON auth_status parser with strict existing envelope preservation, no mutating probes, options key-validation bypass, data/options effective-key precedence after reconfigure/reload, empty removal, offline/unlocked/older-hub recovery. Challenge need/scope of automatic reauth and old-version fallback against real supported HA APIs and safe auth semantics. Read consequential full tests/helpers/client/coordinator/callers. Pin fixtures source generator and serial leases; no changed API shape to avoid real contract tests.",
+    "CR03 UI behavior: correct actual visible Settings controller vs legacy modal and profiles/scenes tab, actual DOM navigation/personalized hidden tabs, shifted question mark help, editable/modifier/Escape/focus/topmost overlay. Separate minimal existing UI06 correction from CR09 source/visual/accessibility scope. Propose exact Playwright interactions/effect controls and paths, no baseline change or ownerapproval from screenshot equality. Do not call a reproduction report equivalent to qualified source review.",
+    "Authorship/independence indicators: Anthropic found historical coauthor trailers on HA and all privacy tool paths and proposes a prospective exact-change/context rule; D6 complete-target independence remains unestablished. Audit relevant native/task/history vs trailers (indicators, NOT backend proof), actual source-review acceptance boundaries, prior OpenAI chain authorship and unchanged surrounding code. Resolve real conflicts without treating any file trailer as automatic family proof or adopting a narrower rule to evade the held gate. Keep privacy whole-chain review distinct from a new bounded diff. State unresolved evidence and preserve held target if not discharged.",
+    "Authority/attempt budget disagreement: MiniMax says a first non-privacy assessment always requires owner funding and one domain PASS unlocks all CR01/02/03; compare actual owner remediate-all authority, exact exhausted-budget owner-only rule and scope-specific failed-attempt history. Establish which genuinely new first domain/role steps can proceed after adopted plan and which truly consume exhausted attempts. New model/target/task does not reset a failed scope; a narrow UI/HA/runtime PASS does not grant the other domains. Do not fabricate an owner budget restriction for routine authorized software, downloads or public advisory reads. Conversely never silently count broad continue/wakes as approval of the pending extra privacy attempt. Prepare a concrete bounded owner choice ONLY if controlling rule actually requires it.",
+    "CR08/09/10 independent lane: all reports propose truth reconciliation/browser reproduction/support-floor proof while privacy held, but differ on qualified reviewer scope and owner necessity. Pin all parser-open dispositions and per-feature proof, genuine qualification for browser/environment evidence vs mere inventory, exact HA2025.1.0/Python3.11 disposable setup and immutable image identities. Distinguish initial tests of already-claimed floors from a compatibility-policy change, and software viewport probes from actual owner-device confirmation. Routine environment provision uses existing authorization; never new spend/accounts/credentials, live hardware or baseline edits. No full source suite/canonical campaigns in this planning task.",
+    "All CR01-14/30packages/65units: reconcile actual technically ready work, qualified pairs and reserved-but-unqualified routes. Preserve real API034 bounded review/evaluation completion and M1 candidate freshness hold, retained WS040 versus new component, privacy terminal Opus/M3 FAILs and lost original-byte limits. Freeze accepted shared tool composition before expensive security/canonical evidence. Coordinator serial integration/contracts/manifests/locks/registry; 100percent routes with required REST fixtures and serial ledger generation. No unnecessary project-wide stop or claims CI14green closes defects.",
+    "Acceptance evidence/report precision: R1 prose checks used historical checkouts and some import product code, so do not say they prove a NEW Markdown file parses or executes no product behavior. Separate in-run imports from a separate post-run probe. Inspect quoted proof limits honestly, including shared-temp inventory changes not proof of who wrote, unavailable originals not reconstructed. MiniMax packet wording discrepancy: original spec resolves integration once and reads packet there; product baseline9b lacks later packet, introduced afe24 with identical hash. Preserve original interpretation and distinguish ambiguity from changed/missing content; bind new R2 packet ref unambiguously. Do not regenerate prior reports.",
+    "Final recommendation: evidence-backed package sequence with exact family/model/effort, useful author/reviewer/independent judge pairs and original conflict disclosure, exact base-selection rule/worktrees/exclusive lexical paths, acceptance/negative controls, correction/re-review reserve, live quota/other-host unknowns/checked fallback. At most2current+coordinator+protectedexternal/no nesting. Name unresolved material disagreements and only actual owner-only privacy budget/changed compatibility/visual/physical72h/week/finalrelease decisions. R3 remains a separate actual all-three decision on ONE complete hashed final plan; coordinator/majority not consensus."
+  ],
+  "preflight": {
+    "observed_utc": "2026-11-04T17:26:36.542257+00:00",
+    "runtime": "2fec76fd-347f-432a-9d0d-6bc2e47cabc4",
+    "version": "1.4.248",
+    "current": {
+      "runId": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates"
+    },
+    "run": {
+      "id": "run_37205f6095b3",
+      "objective": "Complete runtime wiring R0-R8 in isolated Orca worktrees; no Anthropic models; validate, merge and clean up; preserve pending visual/hardware release gates",
+      "coordinator_handle": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+      "consumer_generation": 5,
+      "legacy": 0,
+      "created_at": "2026-10-18T21:27:25Z",
+      "updated_at": "2026-11-03T01:06:11Z"
+    },
+    "integration_head": "adcc1542b42f42a65d4dd005ff5542417c071e16",
+    "remote_equal": true,
+    "fleet": {
+      "total": 160,
+      "pages": [
+        {
+          "limit": 100,
+          "total": 160,
+          "hasMore": true,
+          "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzg2fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yNiAyMjoyMzo1NCIsImRpc3BhdGNoSWQiOiJjdHhfYWE1MzBiNTE2OTZkIiwiZGF0YWJhc2VJZCI6MTIwM319"
+        },
+        {
+          "limit": 100,
+          "total": 160,
+          "hasMore": false,
+          "nextCursor": null
+        }
+      ],
+      "counts": {
+        "released": 153,
+        "null": 1,
+        "retained": 6
+      },
+      "owned_relevant": [
+        {
+          "dispatchId": "ctx_0c24940765ab",
+          "taskId": "task_db6cadf2bd1b",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_87e7f6a55dc2",
+          "taskId": "task_deec8833e817",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        },
+        {
+          "dispatchId": "ctx_500618559004",
+          "taskId": "task_dfe340b7113e",
+          "terminalState": "released",
+          "dispatchStatus": "completed",
+          "workerState": "succeeded",
+          "next": null
+        }
+      ]
+    },
+    "capacity": {
+      "codex": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 19,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "session": null,
+        "updatedAt": 1793813039137,
+        "error": null,
+        "age_seconds": 157
+      },
+      "claude": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 26,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400755,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "session": {
+          "usedPercent": 3,
+          "windowMinutes": 300,
+          "resetsAt": 1793814600755,
+          "resetDescription": "10:50 AM"
+        },
+        "updatedAt": 1793813038740,
+        "error": null,
+        "age_seconds": 158
+      },
+      "minimax": {
+        "status": "ok",
+        "weekly": {
+          "usedPercent": 35,
+          "windowMinutes": 10080,
+          "resetsAt": 1793823932846,
+          "resetDescription": null
+        },
+        "session": {
+          "usedPercent": 7,
+          "windowMinutes": 300,
+          "resetsAt": 1793830434075,
+          "resetDescription": null
+        },
+        "updatedAt": 1793813038800,
+        "error": null,
+        "age_seconds": 158
+      }
+    },
+    "scope": "R2 genuine all-peer challenge, source read-only; no qualification attempt or owner budget permission",
+    "concurrency": "two planned R2 maximum plus coordinator plus protected external=4; old retained and uncertain resources protected",
+    "reserve": "remaining R2/R3 and later qualified software/correction separately gated; no invented absolute budget/other-host commitments",
+    "alternatives": "OpenAI/Anthropic R1 delivered; third MiniMax genuine family planning scope. Gemini OAuth disabled/Antigravity unresolved low, DeepSeek unavailable; no source qualification inferred",
+    "protected_resources": "per REPO_CONFIG, current handoff, AGENT_ALLOCATION and actual full worktree/fleet receipts; no cleanup/reset/replacement"
+  },
+  "round_order": "OpenAI+Anthropic first, MiniMax samepacket at freedsettledslot; max2new+coordinator+protectedexternal=4",
+  "output": "Every substantive peer proposal accept/challenge/modify with exact source/policy evidence; reconsider own earlier claims and explicit limits. Consolidate practical bounded staffing/acceptance matrix, gates and unresolved disagreements. No implementation/qualification attempt or final vote."
+}

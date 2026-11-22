@@ -1,0 +1,107 @@
+{
+  "observed_utc": "2026-11-04T12:57:47.972270+00:00",
+  "phase": "remediation-recovery-20261104",
+  "status": "ONE original-author source wording correction LAUNCHED / observed start, qualified exact changed-commit review reserved",
+  "actor": {
+    "task_id": "task_c4e3c9018634",
+    "dispatch_id": "ctx_5c6661149549",
+    "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-ws-work-c01",
+    "branch": "remediation/ws-work-c01",
+    "exact_base": "24c5170458200209836228646fdfc8784a967ad1",
+    "exclusive_paths": [
+      "src/rest_api/ws_request_work.py",
+      "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION.md"
+    ],
+    "spec": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_TASK.md",
+    "launch": {
+      "requested": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "effective": {
+        "agent": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      }
+    },
+    "turn_start": "observed",
+    "native_entry": {
+      "status": "actual native Opus5.5 at exact Task/Dispatch/cwd",
+      "session": "17707a12-6573-4f88-b25e-afe4bf6233c5",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "effort": "high explicit supported launch/local config; native per-turn effort not exposed",
+      "bytes": 670495,
+      "sha256": "701c7c7f1b19788e20b278ccfae67f13460b171d6c40fc73d3c2cbf36037ca9c",
+      "unassigned_helpers_observed": [],
+      "scope": "point-in-time entry only; no competence/outcome or descendant census"
+    },
+    "dispatch_status": "dispatched",
+    "worker_state": "ready",
+    "status": "Covered original-author WS C01-R01 wording correction ACTIVE; no delivery/source acceptance or qualification"
+  },
+  "reason": "Qualified different-family review ed697083 C01-R01 Low overbroad no-progress rationale; runtimePASS remains. Explain adopted conservative immediate return accurately, not universal impossibility. Same FINAL_PACKET D2contract/strategy; no new phase/exam/qualification retry.",
+  "source_lease": "Only ws_request_work.py module DOCSTRING/_drain COMMENT and NEW WORDING-CORRECTION.md; ASTequivalence ignoring only module docstring, all existing tests/source reports unchanged. No executable edits/app/handler/private/root changes.",
+  "reserve": "Explicit existing ONE original-author product correction and qualified Astra exact changed-commit re-review opportunity used here; no automatic further corrections or qualificationbudget expansion.",
+  "previous_source_writer": "positivelyreleased exactoriginalsource; currenthead/status/config/node/package verified; original archive and taskpublication retained",
+  "prewave_published_verified_head": "85b797a403ba3f9bf4c56deb92c4ccba11042710",
+  "capacity": {
+    "observed_utc": "2026-11-04T12:56:49.447061+00:00",
+    "scope": "One bounded docstring/comment-only original-author correction plus one qualified Astra exact source re-review reserve; no privacy qualification/retake/fallback. Absolute allowance/other-host demand unknown.",
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400115,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": null,
+      "updatedAt": 1793796601418,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793796226364,
+      "error": null
+    }
+  },
+  "settings": "Same ignored local Opus5.5/high helper/team/plugin/MCP denial config and Node readonly junction verified; no global/config/package changes or target writes. Nativebackend separatelyattested, per-turneffort unexposed.",
+  "fleet": {
+    "total": 156,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 156,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzcwfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAyMzowNDoxNiIsImRpc3BhdGNoSWQiOiJjdHhfYTdhYzFhNzQ5Y2FjIiwiZGF0YWJhc2VJZCI6MTA4M319"
+      },
+      {
+        "limit": 100,
+        "total": 156,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 148
+    },
+    "retained_metadata": 7,
+    "current_owned": 1
+  },
+  "concurrency": "one author + coordinator + protected external =3of4; no nesting",
+  "privacy": "ONE M3candidate/judge terminalFAIL, noqualifiedprivacydomain or verifieddifferentfamilyfallback; priorOpusFAIL and lostoriginals immutable. No privacy retake/extrajudge/modelaliassubstitution/sourceintake/admission.",
+  "remaining": "Originalfirstauthorship/WSR03, D6target/wiring/API034M1/WS040/combined/visual/HIL/72h/week/finalartifact/version/release gates unchanged.",
+  "next": "Preserve/release/publish exact author delivery, qualified Astra changed-commit review under fresh headroom after delivery. Publish launch record/docs489/exactremoteequal and END TURN for Orca wake; no completionpolling."
+}

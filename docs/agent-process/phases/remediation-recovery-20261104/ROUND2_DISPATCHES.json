@@ -1,0 +1,184 @@
+{
+  "observed_utc": "2026-11-04T09:15:28.720886+00:00",
+  "phase": "remediation-recovery-20261104",
+  "round": 2,
+  "status": "OpenAI+Anthropic genuine all-peer challenge ACTIVE; MiniMax R2 reserved at next released slot",
+  "actors": {
+    "openai": {
+      "task_id": "task_eb1c577c2685",
+      "dispatch_id": "ctx_ff74dc578167",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-openai",
+      "branch": "planning/remediation-recovery-r1-openai",
+      "exact_base": "480a27bd3e65ff657ef878abf11242be0360f735",
+      "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/openai.md",
+      "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+      "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+      "launch": {
+        "requested": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "codex",
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "01a1a5d6-5bdc-7f21-bbc1-b9a522a729d6",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 464900,
+        "sha256": "66ce1400c0c2429b278da32169992d6727b3169117483d8f4d1b73b1c115c8db",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "R2all-peer challenge ACTIVE; no result/consensus/sourceexecution",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    },
+    "anthropic": {
+      "task_id": "task_da8abc159b3e",
+      "dispatch_id": "ctx_afe84a0eaa12",
+      "worktree_id": "2d494566-13c3-4624-b834-7e0bc340801b::C:/Users/ryanh/orca/workspaces/unfoldedcircle-orei-hdmi-matrix-integration/wp-remediation-recovery-r1-anthropic",
+      "branch": "planning/remediation-recovery-r1-anthropic",
+      "exact_base": "3e7a83a191923ff393a14a2e93801e58fa8977a3",
+      "exclusive_report": "docs/agent-process/phases/remediation-recovery-20261104/round2/anthropic.md",
+      "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+      "previous_writer": "positively Orca-released, source/R1/current head/status verified; no worktree creation/reset or config change",
+      "launch": {
+        "requested": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        },
+        "effective": {
+          "agent": "claude",
+          "model": "claude-opus-5-5",
+          "effort": "high"
+        }
+      },
+      "turn_start": "observed",
+      "native_entry": {
+        "status": "actual native model at exact Task/Dispatch/cwd",
+        "session": "7bb02dc0-492c-4cc2-b640-81f0d7fc6300",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high explicit launch/local config; native per-turn effort unexposed",
+        "bytes": 944159,
+        "sha256": "b36dd31a2474ec94627dc7a538011c73868bb52f20bb29e231cc2dfac686e39a",
+        "unassigned_helpers_observed": [],
+        "scope": "entry only; no competence/completion/descendant census"
+      },
+      "status": "R2all-peer challenge ACTIVE; no result/consensus/sourceexecution",
+      "dispatch_status": "dispatched",
+      "worker_state": "ready"
+    }
+  },
+  "packet_sha256": "25aeccfe87568ccba0e424e8bc7b21f85854fac6410a472c710af05b30ae63f7",
+  "prewave_publication": "de1e344b2f1f874159e3ffa2c1f13962e3fa92e0",
+  "capacity": {
+    "openai": {
+      "observed_utc": "2026-11-04T09:14:09.608168+00:00",
+      "scope": "two bounded R2prose contributions now, third R2/R3/source/qualification/review/corrections separately freshly gated; absolute allowance/otherhost demand unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 10,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793783626308,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600113,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400113,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793783626096,
+        "error": null
+      }
+    },
+    "anthropic": {
+      "observed_utc": "2026-11-04T09:14:16.525099+00:00",
+      "scope": "two bounded R2prose contributions now, third R2/R3/source/qualification/review/corrections separately freshly gated; absolute allowance/otherhost demand unknown",
+      "codex": {
+        "status": "ok",
+        "session": null,
+        "weekly": {
+          "usedPercent": 10,
+          "windowMinutes": 10080,
+          "resetsAt": 1794378964000,
+          "resetDescription": "Tue 11:36 PM"
+        },
+        "updatedAt": 1793783626308,
+        "error": null
+      },
+      "claude": {
+        "status": "ok",
+        "session": {
+          "usedPercent": 1,
+          "windowMinutes": 300,
+          "resetsAt": 1793796600113,
+          "resetDescription": "5:50 AM"
+        },
+        "weekly": {
+          "usedPercent": 25,
+          "windowMinutes": 10080,
+          "resetsAt": 1793966400113,
+          "resetDescription": "Fri 5:00 AM"
+        },
+        "updatedAt": 1793783626096,
+        "error": null
+      }
+    }
+  },
+  "fleet": {
+    "total": 145,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 145,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMzQ0fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0yMCAxNjozNzo0NSIsImRpc3BhdGNoSWQiOiJjdHhfNDFmNzViYzIzMDc5IiwiZGF0YWJhc2VJZCI6ODc4fX0"
+      },
+      {
+        "limit": 100,
+        "total": 145,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "retained": 8,
+      "released": 137
+    },
+    "historical_retained": 6,
+    "current_resources": 2
+  },
+  "concurrency": "two current+coordinator+protectedexternal=4, no nesting",
+  "worktrees": "Reused positively released isolated R1trees at exact ownR1commit; no new tree/reset/import/config mutation; only new ownR2report/ignored/temp",
+  "third_family": "MiniMax R2 not launched/noTask; same frozen packet/allR1peers once slot released, no next round before actual coverage",
+  "barrier": "All3R1originals preserved before sharing. R2reports must genuinely challenge all peers, then all3R2preserved before one finalcompletehashedplan/allocation R3; no consensus from majority or coordinator.",
+  "source_and_qualification": "No sourcecorrection, automatic failed-assessment continuation, additionaljudge, author/reviewer grant or wiringlease from planning. PrivacyFAIL/WSFAILandfirst-authorshipHOLD preserved.",
+  "settlement": "On delivery preserve original evidence/native/config/temp and exact taskref, release promptly; previous R1archives immutable, later R2separate. No destructive cleanup."
+}

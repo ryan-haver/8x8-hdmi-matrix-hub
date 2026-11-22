@@ -1,0 +1,83 @@
+{
+  "observed_utc": "2026-11-03T05:01:05.512701+00:00",
+  "actors": {
+    "findings_fix01": {
+      "head": "43356a0c0d0948719bf989d7bd824631d8c89a0e",
+      "base": "487a6ca7afaf65882fb490880421f0026ae59cc5",
+      "tree": "wp-exec-sw-findings-01-rereview01",
+      "report": "docs/production/software-waves/SW-FINDINGS-01/execution-20261101/CORRECTION_REVIEW_01.md",
+      "bytes": 10806,
+      "sha256": "32cc23cb699ff38ed942a9bacc627f513ec8161a6f86894cf00438b68314a4e5",
+      "task_id": "task_f76d52b72a2e",
+      "dispatch_id": "ctx_3ae35200ca22",
+      "actual_branch": "ryan-haver/wp-exec-sw-findings-01-rereview01",
+      "verdict": "require_changes R3/R5 only; other six accepted",
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending corrected-report acceptance and evidence history; no removal",
+      "native_final": {
+        "session": "01a19fbb-97a0-7da3-baf6-65d81d8f7343",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 968189,
+        "sha256": "34c4682bd92639a72dd28e07870799b23f2f1adecdab3295bac44cf6fe3d41a0"
+      },
+      "archives": [
+        {
+          "archive_sha256": "0c3453d473a5115e058b26f6c7d4caf497880a83c0fa379523012fe3a49647ad",
+          "regular_files": 4599,
+          "regular_bytes": 300243622,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "272dc39b8d99fe7d68daa09887d9f5a60a07db8d2adc3af96f13c07d79f5d9c3",
+          "regular_files": 102,
+          "regular_bytes": 100735,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    },
+    "ci_attribution": {
+      "head": "81ac391cdc07ca8885b3b2237aa467aee0625675",
+      "base": "d86b65c271cc06d95895b8abdce53e24210bc6d9",
+      "tree": "wp-exec-ev-ci-attribution-review",
+      "report": "docs/production/software-waves/EV-CI-ATTRIBUTION/execution-20261101/REVIEW.md",
+      "bytes": 15004,
+      "sha256": "f6329d6d825ed2e11cc6a7a5697a31ed853e8696c77a9372f58f42b260fbe61f",
+      "task_id": "task_e8646aacd637",
+      "dispatch_id": "ctx_a83af2c61fa3",
+      "actual_branch": "ryan-haver/wp-exec-ev-ci-attribution-review",
+      "verdict": "require_changes seven bounded reporting corrections;56core mappings verified",
+      "terminal": "released",
+      "publication": "exact task ref remote/local verified",
+      "cleanup": "read-only retention pending corrected-report acceptance and evidence history; no removal",
+      "native_final": {
+        "session": "01a19fbb-cf1e-7991-b040-862d4c2a2eeb",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high",
+        "bytes": 970661,
+        "sha256": "167ef2fface0dd3643c32d7a72c8fa5c5ad376373afaefdc6ff81af17060933a"
+      },
+      "archives": [
+        {
+          "archive_sha256": "6aaa5b7604e5f0cdea6751d2d7306b694fe01c08b85991775e04fef974fd6561",
+          "regular_files": 4730,
+          "regular_bytes": 300454658,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "archive_sha256": "920bfac4903d2aad7f6b062870f4a72a54636a4e5c8d3a2c79e780313a91b3cd",
+          "regular_files": 102,
+          "regular_bytes": 100735,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ]
+    }
+  },
+  "acceptance": "both require exact bounded prose corrections, no acceptance/admission/source/finding qualification",
+  "verified_scopes": "findings six of eight corrections accepted/61ID structure preserved;CI56tuples11covers16objectszero intersectionsnonancestorunknown-stale verified"
+}

@@ -33,7 +33,6 @@ retired Quick Actions widget as an empty card. Loading a stored layout drops
 them once and saves the result (UI-55/UI-57, owner decision 2026-10-09).
 """
 
-import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -42,6 +41,19 @@ from typing import Any
 from persistence import ensure_data_dir, get_data_dir, migrate_legacy_file
 
 _LOG = logging.getLogger("dashboard_layout")
+
+
+def _write_blocked(path) -> bool:
+    from hub.persistence.startup import is_write_blocked
+
+    return is_write_blocked(path)
+
+
+def _block_reason(path) -> str | None:
+    from hub.persistence.startup import block_reason
+
+    return block_reason(path)
+
 
 _LAYOUT_FILE = "dashboard_layout.json"
 
@@ -184,35 +196,43 @@ class DashboardLayoutManager:
 
     # ------------------------------------------------------------------ load/save
     def _ensure_loaded(self) -> None:
-        """Load from disk, seeding defaults if the file is missing or invalid."""
+        """Load validated storage; only a missing file permits defaults."""
         migrate_legacy_file(self.file_path, _LAYOUT_FILE)
         if not self.file_path.exists():
+            if _write_blocked(self.file_path):
+                _LOG.warning(
+                    "Not seeding default dashboard layout: %s",
+                    _block_reason(self.file_path),
+                )
+                return
             self._layout = _default_layout()
-            self._save()
+            if not self._save():
+                from hub.persistence import MigrationError
+
+                raise MigrationError(f"{self.file_path}: defaults could not be saved")
             return
-        try:
-            with open(self.file_path, encoding="utf-8") as fh:
-                payload = json.load(fh)
-        except (OSError, json.JSONDecodeError) as exc:
-            _LOG.warning("Failed to load dashboard_layout.json: %s — reseeding defaults", exc)
-            self._layout = _default_layout()
-            self._save()
-            return
+        from hub.persistence.migrations import load_versioned_json
+
+        payload = load_versioned_json(self.file_path)
         migrated = isinstance(payload, dict) and _drop_retired_cards(payload)
         self._layout = DashboardLayout.from_dict(payload)
-        if migrated:
+        if migrated and not _write_blocked(self.file_path):
             for i, c in enumerate(self._layout.cards):
                 c.order = i
             self._save()
 
     def _save(self) -> bool:
         """Persist the current layout to disk atomically."""
+        if _write_blocked(self.file_path):
+            _LOG.error("Refusing to save dashboard_layout.json: %s", _block_reason(self.file_path))
+            return False
         try:
             ensure_data_dir(self.data_dir)
-            from _file_io import atomic_write_json
+            from hub.persistence.migrations import save_versioned_json as atomic_write_json
+
             atomic_write_json(self.file_path, self._layout.to_dict())
             return True
-        except OSError as exc:
+        except (OSError, ValueError) as exc:
             _LOG.error("Failed to save dashboard_layout.json: %s", exc)
             return False
 

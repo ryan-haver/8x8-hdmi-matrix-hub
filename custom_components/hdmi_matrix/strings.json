@@ -6,11 +6,13 @@
         "description": "Enter the address of the HDMI Matrix hub (the Docker container that controls your OREI matrix), not the matrix itself.",
         "data": {
           "host": "Host",
-          "port": "Port"
+          "port": "Port",
+          "api_key": "API key"
         },
         "data_description": {
           "host": "IP address or host name of the hub.",
-          "port": "Port of the hub's web interface and REST API (8080 by default)."
+          "port": "Port of the hub's web interface and REST API (8080 by default).",
+          "api_key": "Only needed when the hub has a control PIN. Create a key in the hub's settings (General, Access & PINs)."
         }
       },
       "reconfigure": {
@@ -18,16 +20,20 @@
         "description": "Enter the new address of the hub that controls this matrix.",
         "data": {
           "host": "Host",
-          "port": "Port"
+          "port": "Port",
+          "api_key": "API key"
         },
         "data_description": {
           "host": "IP address or host name of the hub.",
-          "port": "Port of the hub's web interface and REST API (8080 by default)."
+          "port": "Port of the hub's web interface and REST API (8080 by default).",
+          "api_key": "Only needed when the hub has a control PIN. Leave empty to use no key."
         }
       }
     },
     "error": {
       "cannot_connect": "Cannot connect to the hub. Check the host and port, and that the hub is running.",
+      "invalid_auth": "The hub has a control PIN and did not accept this API key. Create a key in the hub's settings and enter it here.",
+      "invalid_auth_status": "The hub responded, but did not report a valid authentication status (/api/auth/status). Check that this address points to a current HDMI Matrix hub.",
       "unknown": "An unexpected error occurred."
     },
     "abort": {
@@ -41,12 +47,20 @@
       "init": {
         "title": "HDMI Matrix options",
         "data": {
-          "scan_interval": "Polling interval (seconds)"
+          "scan_interval": "Polling interval (seconds)",
+          "api_key": "API key"
         },
         "data_description": {
-          "scan_interval": "How often Home Assistant reads the matrix state from the hub (5-300 seconds)."
+          "scan_interval": "How often Home Assistant reads the matrix state from the hub (5-300 seconds).",
+          "api_key": "Only needed when the hub has a control PIN. Leave empty to use no key."
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the hub, so the new API key could not be checked.",
+      "invalid_auth": "The hub has a control PIN and did not accept this API key. Create a key in the hub's settings and enter it here.",
+      "invalid_auth_status": "The hub responded, but did not report a valid authentication status (/api/auth/status), so the new API key could not be checked.",
+      "unknown": "An unexpected error occurred."
     }
   },
   "entity": {

@@ -1,0 +1,94 @@
+{
+  "observed_utc": "2026-11-03T03:07:21.953049+00:00",
+  "status": "prepared; not yet launched",
+  "run": "run_37205f6095b3",
+  "runtime": "e8ce3460-a9d4-4897-8e4f-10a8e3cdc400",
+  "coordinator": "term_6ed8131e-3ab3-4693-8094-56cc10acd412",
+  "generation": 5,
+  "execution_host": "local/Zelu/win32; supported live host/status receipts retained",
+  "task": "EV-PRESERVATION-GAPS ordinary targeted author correction01",
+  "base": "ed78321e51156f229507e654f0cf3faae100b935",
+  "worktree": "existing wp-exec-ev-preservation-gaps, execution/wp-exec-ev-preservation-gaps",
+  "family": "MiniMax",
+  "exact_model": "minimax-coding-plan/MiniMax-M3",
+  "config_sha256": "62e6f5ab100bffe9aa802a380f3860612ba1aedf5e760ae443d5040984b18096",
+  "effort": "CLI override unsupported; inherit exact project main/small/internal M3, denied unassigned helpers/plugins/providers",
+  "independent_reviewer": "OpenAI/Astra high exact corrected commit; actual bounded factual reviewabd339 and current cataloghigh support, no core domain qualification claim",
+  "capacity": {
+    "observed_utc": "2026-11-03T03:05:36.183224+00:00",
+    "codex": {
+      "status": "ok",
+      "session": null,
+      "weekly": {
+        "usedPercent": 41,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "updatedAt": 1793675032630,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "session": {
+        "usedPercent": 26,
+        "windowMinutes": 300,
+        "resetsAt": 1793685244454,
+        "resetDescription": null
+      },
+      "weekly": {
+        "usedPercent": 15,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932917,
+        "resetDescription": null
+      },
+      "updatedAt": 1793675033516,
+      "error": null
+    }
+  },
+  "fleet": {
+    "all_pages": true,
+    "total": 102,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 102,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoxOTgwfSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOCAyMTo0MDo0OSIsImRpc3BhdGNoSWQiOiJjdHhfMWQ1ODI1ZTFmNzI2IiwiZGF0YWJhc2VJZCI6NTc5fX0"
+      },
+      {
+        "limit": 100,
+        "total": 102,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 95,
+      "retained": 7
+    },
+    "correction02": [
+      {
+        "taskId": "task_4c7cf7c289ff",
+        "dispatchId": "ctx_14d9b1569d7e",
+        "workerState": "ready",
+        "dispatchStatus": "dispatched",
+        "terminalState": "retained"
+      }
+    ]
+  },
+  "demand": "one bounded7minute M3 correction plus subsequent independent Astra re-review and already reserved material-correction capacity; inventory correction02 remains separate in-flight writer",
+  "alternatives": "Sol had real model-capacity event; Astra has recent exact native availability and bounded review evidence. Google route/headroom unverified, DeepSeek exhausted. No silent fallback.",
+  "max_concurrency": "2newworkers+coordinator+protected external reservation=4; no nesting",
+  "exclusive_paths": [
+    "docs/production/software-waves/EV-PRESERVATION-GAPS/execution-20261101/AUTHOR.md",
+    "new private author/correction-01 namespace",
+    "C:/t/exec-ev-preservation-gaps/nov02-correction01/"
+  ],
+  "acceptance": "R1-R3 corrected consistently; historical identities/negative consequences unchanged, direct docs checks and independently reviewed exact new commit, no source or original-preservation PASS",
+  "task_id": null,
+  "dispatch_id": null,
+  "protected_resources": "root/private data, old external and historical resources, original failed evidence/baselines, odd untracked hook artifact; no cleanup/reset/prune/forcepush",
+  "core_qualification": "attempt1FAIL/no domain; explicit owner retake decision pending, no approval inferred or retry launched",
+  "material_plan_change": false
+}

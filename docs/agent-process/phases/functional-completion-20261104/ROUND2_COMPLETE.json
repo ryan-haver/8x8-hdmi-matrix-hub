@@ -1,0 +1,125 @@
+{
+  "observed_utc": "2026-11-04T18:23:24.841525+00:00",
+  "status": "ALL THREE genuine all-peer R2 originals preserved/native/workspace/temp/member checks/workers positivelyreleased/exacttaskrefs published; barrier OPEN for final plan/R3",
+  "reports": {
+    "openai": {
+      "task_id": "task_482a558b4a3c",
+      "dispatch_id": "ctx_75a90276c4f0",
+      "head": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "parent": "7baf8262976772ed3de6eac7a19d5fafc7b5a1b8",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round2/openai.md",
+      "report_sha256": "d63a3e51805ef057b965054ffe51bb7b4098b7314ac51aa7e369bf18696f383e",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "ddd04f78d7da37ee1d0ae0d84cefdf5745684228",
+      "family": "OpenAI",
+      "native": {
+        "session": "01a1a79c-0359-7e72-9e52-eed763be86d2",
+        "models": [
+          "gpt-6-astra"
+        ],
+        "effort": "high native",
+        "bytes": 3482294,
+        "sha256": "d0ba9611b02bf2751853fe21c279e39fc5691f49a52674293d428a2d2426b919",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-openai-r2": {
+          "archive_sha256": "53b5bb068d645e639eefeb4585cf8ee1bde7a5367a78915564631f3e58f7e515",
+          "archive_bytes": 78019,
+          "regular_files": 107,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-openai": {
+          "archive_sha256": "87619f94f5aca394c5a22e6a1c8d6c4507a75fbcd9a0618e6d9defe10a7783f1",
+          "archive_bytes": 211444473,
+          "regular_files": 5089,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": "489 docs passed once/direct0/zero failures/errors/skips, historical checkout only. Original byte receipts preserved; no newMarkdown parser/source qualification."
+    },
+    "anthropic": {
+      "task_id": "task_a78ba6ed9dc1",
+      "dispatch_id": "ctx_0736448ea192",
+      "head": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "parent": "4ae498baa200cf17f90430f6961c8f1fecd2b8d1",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round2/anthropic.md",
+      "report_sha256": "5c8615b0d5deb6bc23298b52c33dd4d0fab4e2a17213066e78ba56f0ff53d046",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "5ab8653dc1d0f7bf3807e500945b76b888061779",
+      "family": "Anthropic",
+      "native": {
+        "session": "d947c0e5-c060-41c1-9984-6480cd580e13",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "effort": "high launch/config; native per-turn effort unexposed",
+        "bytes": 2600860,
+        "sha256": "c57260eea2023bcc8b2fac6c2015cbb6eb8ac49bba7cb0aa484d744b29815e28",
+        "unassigned_helper_calls_observed": false
+      },
+      "preservation": {
+        "external-anthropic-r2": {
+          "archive_sha256": "aae060be5bc34792cadab3e304a7e98e0c35cba0249182ae8eac9873bd34e9e6",
+          "archive_bytes": 76822,
+          "regular_files": 109,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-anthropic": {
+          "archive_sha256": "c5293ab456feb329014e09f003a40183cb034e56b7ab6c516716e6ed44fc7f19",
+          "archive_bytes": 208623044,
+          "regular_files": 4821,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": "489 docs passed once/direct0/zero failures/errors/skips, historical checkout only. Original byte receipts preserved; no newMarkdown parser/source qualification."
+    },
+    "minimax": {
+      "task_id": "task_c512bb417e83",
+      "dispatch_id": "ctx_02b4c54eb1fa",
+      "head": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+      "parent": "32f911a576de0251b06e77a46a39681c7d7dc679",
+      "sole_report": "docs/agent-process/phases/functional-completion-20261104/round2/minimax.md",
+      "report_sha256": "a881fd045d30519676a7dc0cc0047a059a60693b57e81fa353e5dda9570c5b67",
+      "resource": "positively released and independently verified",
+      "task_ref_published_exact": "e6f8df9a9c6e0f347d35b9230f30c01c3fdded4c",
+      "family": "MiniMax",
+      "native": {
+        "session": "ses_e58525cebffeeQ4LFmR3SDcX28",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "CLI_effort_override": "unsupported",
+        "bytes": 1127823,
+        "sha256": "1ad2296bed34d77dcf97cc77bbbeb4bb45accdaef35260e30131328bf6d979d4",
+        "helper_calls_observed": false,
+        "scope": "native actual Task/Dispatch/directory, no all-host census"
+      },
+      "preservation": {
+        "external-minimax-r2": {
+          "archive_sha256": "108d2c29e6737f4d16cd2fd0d792ffb9ba053e145fbac2660eb3086abed48b75",
+          "archive_bytes": 61025881,
+          "regular_files": 130,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        "wp-remediation-recovery-r1-minimax": {
+          "archive_sha256": "42c6fb17827d4cd974dc2658768d9b313ddcce44bdbcce3ee277711459490814",
+          "archive_bytes": 209657581,
+          "regular_files": 5028,
+          "links": 0,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      },
+      "checks": "489 docs passed once/direct0/zero failures/errors/skips, historical checkout only. Original byte receipts preserved; no newMarkdown parser/source qualification.",
+      "check_limits": "Separate POST-RUN probe could not import tests/tools and resolved hub to main editable install; supplementary static/sys.path inspection is not in-run measurement. Pytest completed once; runner timed out while recursively inventorying sharedTEMP, separate metadata completion retained. Contradictory meaning wording in original receipt not silently accepted; no product baseline proof/all-host attribution."
+    }
+  },
+  "r2_packet_sha256": "c37fc7200e6d6384e2b536132090c3affb2b0e98a08b95fc9e94ef8129b0e6fb",
+  "meaning": "All proposals/disagreements/errors retained; no consensus/qualification/source acceptance or owner budget from R2."
+}

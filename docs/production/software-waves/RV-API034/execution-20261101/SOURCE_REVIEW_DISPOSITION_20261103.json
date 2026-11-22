@@ -1,0 +1,278 @@
+{
+  "observed_utc": "2026-11-04T01:49:57.493094+00:00",
+  "status": "SOURCE_REVIEW_DELIVERED; RV-API034 PARTIAL / SOURCE_INTEGRATION_HOLD",
+  "pin": "RV-API034",
+  "task_id": "task_43fbf6bb49a2",
+  "dispatch_id": "ctx_4e0e187682b0",
+  "source": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+  "review_base": "938ae30339790c361abdda6fdd01b11a4e498518",
+  "report": {
+    "path": "docs/production/software-waves/RV-API034/execution-20261101/REVIEW.md",
+    "original_commit": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+    "parent": "caaa4faabe9ede1e3aed37d2269efd4a4d691e04",
+    "canonical_bytes": 23218,
+    "canonical_sha256": "145c899d9196ad672f2db014d5c7d8d8337835ca46e26973f64e15a7d18e5e17",
+    "task_ref": "execution/wp-exec-rv-api034-review",
+    "remote_head": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+    "remote_local_equal": true,
+    "root_integration": "Exact original report bytes preserved as submitted review, not implementation integration or secondary judgement."
+  },
+  "authorship": {
+    "source": "OpenAI Sol6.1/high in four-commit window; prior accepted DeepSeek handler authorship unchanged",
+    "review": "Anthropic claude-opus-5-5/high; different underlying family",
+    "native": {
+      "session": "ad131db1-c207-495f-ac80-371efd971b04",
+      "models": [
+        "claude-opus-5-5"
+      ],
+      "bytes": 2051668,
+      "sha256": "850a994c71acc1d4f845024a322ca67b1706679b01ccd506237b3f5df2a08888",
+      "helpers_observed": [],
+      "cwd_exact": true,
+      "task": "task_43fbf6bb49a2",
+      "dispatch": "ctx_4e0e187682b0",
+      "stage": "after positive worker release; original complete native copied"
+    },
+    "effort_limit": "Supported explicit launch/local config high; native per-turn effort not exposed",
+    "coordinator_audit": "Exact parent/sole-path/clean tree, actual native Task/Dispatch/cwd/model/helpers, raw direct receipts/JUnit/argv/original-temp hashes, archive bytes and remote task ref; no substitute independent source review or report-quality judgement."
+  },
+  "reviewer_verdict": "PASS for bounded runner/model/offline refusal preparation and relevant compatibility guards; no blocking logic defect or author change requested. Source integration/security/V3/parent completion explicitly not accepted.",
+  "coordinator_disposition": "Preserve and publish independent review deliverable; retain M-1 integration hold and optional observations. Full RV not marked completed because planned secondary evaluation and security freshness obligations remain. Do not reopen source implementation or silently lower evidence gates.",
+  "findings": [
+    {
+      "id": "M-1",
+      "severity": "Medium",
+      "disposition": "INTEGRATION_HOLD",
+      "summary": "At exact caaa candidate, ee3f2e7f runner/model changes make all16 F-SEC-007 V3 records stale under existing covers; freshest310d8b65 browser set was fresh at938base. Four unmatching V2 records remain fresh, hence V2<V3. Static diagnosis corroborates historical failed gate; no fresh global gate run. This is evidence freshness, not an established product-security logic defect.",
+      "next_pin": "EV-API034-SECURITY-REFRESH",
+      "authority_limit": "Reviewer has no broad security/V3 qualification; coordinator keeps hold rather than approving security or lowering registry level."
+    },
+    {
+      "id": "L-1",
+      "severity": "Low",
+      "disposition": "optional nonblocking; no demonstrated false pass",
+      "summary": "Point-in-time disconnected health snapshot does not prove durable/cause-specific disconnect; current registered TLS refusal and negative oracles remain failure-sensitive."
+    },
+    {
+      "id": "L-2",
+      "severity": "Low",
+      "disposition": "defer coordinator-owned registry prose to evidence admission, no level change",
+      "summary": "F-API-034 basis says no scenario despite added scenario link."
+    },
+    {
+      "id": "L-3",
+      "severity": "Low",
+      "disposition": "optional author followup, no source edit authorized here",
+      "summary": "C1 test docstring/scenario comment predate C2 managed preparation/shared-runner changes."
+    },
+    {
+      "id": "I-1..I-3",
+      "severity": "Informational",
+      "disposition": "retained limitations",
+      "summary": "External connected-hub blocked path lacks direct test; health precondition/procedure and env evidence limits; direct-call-only refusal arm/hardware skip wording."
+    }
+  ],
+  "controls": [
+    {
+      "label": "probe-01",
+      "returncode": 0,
+      "receipt_sha256": "6eb7f155ee769d4641f6e14fc01c89e265b21b91f47bfdff00d2ec91c0ec968f",
+      "stdout_sha256": "0cb9f1608f50f830457b714a5de93b0dc1ca3aeb557b8b8035e72859fd7aa21b",
+      "stderr_sha256": "4718567c74d61e7c9b6304de86c1930edb6fd6a6dbeff252233f41b20f0c0d6e",
+      "preserved_files": 0,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:39:07.848659+00:00",
+      "end_utc": "2026-11-04T01:39:08.366710+00:00"
+    },
+    {
+      "label": "collect-01",
+      "returncode": 0,
+      "receipt_sha256": "e4e751cdd2c38ec3cd15d0892e63a555b5f2ae3119ff2d9006ced42592b14234",
+      "stdout_sha256": "fcd8a81fc43020f8a2d918e09cfa9c17a0354b66a1b4e6b6274562427102c6b2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_files": 1,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:39:17.017716+00:00",
+      "end_utc": "2026-11-04T01:39:17.755748+00:00",
+      "collected": 54
+    },
+    {
+      "label": "focused-01",
+      "returncode": 0,
+      "receipt_sha256": "b17694494d8eb461ab5df91324bf37b0dfac53d95bd73ec1f02d6d8384843184",
+      "stdout_sha256": "2ab4be518ee355f87172ce2371fed78d935f99ed6e04c9c11286def2d1099c7c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_files": 174,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:39:23.096661+00:00",
+      "end_utc": "2026-11-04T01:40:19.257419+00:00",
+      "junit": {
+        "tests": 54,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "label": "inspect-registry-01",
+      "returncode": 0,
+      "receipt_sha256": "70d2b935069bd54647a8dd4241300f1698246a221bc961630e25904299403ea0",
+      "stdout_sha256": "876e39e119fbc4297524a4bbb522a4643ca0372e99287adfebb8a6d1cb9dc552",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_files": 0,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:41:06.194343+00:00",
+      "end_utc": "2026-11-04T01:41:06.941886+00:00"
+    },
+    {
+      "label": "inspect-fsec007-01",
+      "returncode": 0,
+      "receipt_sha256": "8cfc3e1c3de90a7b16237333c4c562adfc673d0388a7b81153eb3f5d1b969e8e",
+      "stdout_sha256": "9412725a37c0a330ea1f1763d6af62963c387c5d52b8b5209722f85f09e2d5a5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_files": 0,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:41:53.296433+00:00",
+      "end_utc": "2026-11-04T01:41:55.395007+00:00"
+    },
+    {
+      "label": "docs-01",
+      "returncode": 0,
+      "receipt_sha256": "a8e13e85b6b1489295c116562fdf6bc4294c69d9b5dcc1d81a6c88b6a9a39e36",
+      "stdout_sha256": "1e1b248b43ec01b2b20cd451caa2b3d1d7c9542ba6de3bb9c10ec58fa3c7202e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preserved_files": 103,
+      "original_and_copy_hashes_verified": true,
+      "start_utc": "2026-11-04T01:45:40.366223+00:00",
+      "end_utc": "2026-11-04T01:45:43.823087+00:00",
+      "junit": {
+        "tests": 489,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "preservation": {
+    "archives": [
+      {
+        "workspace": "C:\\Users\\ryanh\\orca\\workspaces\\unfoldedcircle-orei-hdmi-matrix-integration\\wp-exec-rv-api034-review",
+        "head": "12eeef938857bfd740854ccbaad34f9bc1b6ce36",
+        "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\api034-source-review-20261103\\preservation\\wp-exec-rv-api034-review\\workspace.tar.gz",
+        "archive_sha256": "60a208bb2fbd9f2edef75eed671ac405715d65b87433b0dcc7b81ee14d70243d",
+        "archive_bytes": 206144025,
+        "regular_files": 4803,
+        "regular_bytes": 296119228,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      },
+      {
+        "workspace": "C:\\t\\exec-rv-api034",
+        "head": null,
+        "archive": "C:\\scripts\\unfoldedcircle-orei-hdmi-matrix-integration\\build\\api034-source-review-20261103\\preservation\\external-rv-api034\\workspace.tar.gz",
+        "archive_sha256": "d74a30f952eb2a073e8a8821c40ead92d4374b81dbbb63e03fcf9652c84f4a66",
+        "archive_bytes": 146360,
+        "regular_files": 280,
+        "regular_bytes": 664319,
+        "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+      }
+    ],
+    "complete_native_bytes": 2051668,
+    "complete_native_sha256": "850a994c71acc1d4f845024a322ca67b1706679b01ccd506237b3f5df2a08888",
+    "final_wrapper_sha256": "8752b52b40b639f26bca372344a70148c0c9bef2fae91e9850b602c3abfca5fa",
+    "scope": "Private original-byte/hash-preserved workspace4803files plus external280files, full native and both temp/copy originals. Native captures private read-only inspection/receipt-script history; these are not accepted tooling deliverables. Exact tree remains retained, no cleanup or new full-bundle claim."
+  },
+  "worker_settlement": {
+    "task_outcome": "succeeded (review deliverable, not product completion)",
+    "resource_state": "released",
+    "process_action": "closed_agent_terminal",
+    "archive": {
+      "source": "transcript",
+      "status": "captured"
+    },
+    "workspace_retention": "Retain exact12ee report tree as pending secondary evaluation/evidence reference; no active writer. No destructive cleanup."
+  },
+  "fleet": {
+    "total": 135,
+    "all_pages": true,
+    "pages": [
+      {
+        "limit": 100,
+        "total": 135,
+        "hasMore": true,
+        "nextCursor": "eyJ2ZXJzaW9uIjoyLCJzbmFwc2hvdCI6eyJkYXRhYmFzZUlkIjoyMjQ1fSwiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMC0xOSAwODoxNTozOCIsImRpc3BhdGNoSWQiOiJjdHhfYTQ0MWU3YmYzZDQ2IiwiZGF0YWJhc2VJZCI6NzMyfX0"
+      },
+      {
+        "limit": 100,
+        "total": 135,
+        "hasMore": false,
+        "nextCursor": null
+      }
+    ],
+    "terminal_counts": {
+      "released": 129,
+      "retained": 6
+    },
+    "current_new_active": 0,
+    "historical_retained": 6,
+    "protected_external_reservation": "not proven exited; preserve"
+  },
+  "capacity": {
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 23,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400120,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 12,
+        "windowMinutes": 300,
+        "resetsAt": 1793759400120,
+        "resetDescription": "7:30 PM"
+      },
+      "updatedAt": 1793756756122,
+      "error": null
+    },
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 75,
+        "windowMinutes": 10080,
+        "resetsAt": 1793774164000,
+        "resetDescription": "11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793756756974,
+      "error": null
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 29,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932869,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 17,
+        "windowMinutes": 300,
+        "resetsAt": 1793758314263,
+        "resetDescription": null
+      },
+      "updatedAt": 1793756756349,
+      "error": null
+    }
+  },
+  "dispatch_disposition": "OpenAI25% weekly remains below30%, no qualified verified fallback; hold affected secondary evaluation/author correction/security-refresh author dispatches, no new worktree. Anthropic capacity alone does not prove security/V3 competence. This is not a project-wide stop; unrelated ready task-qualified packages can be rematched before their own wave.",
+  "next": {
+    "planned_pin": "EV-API034-SECURITY-REFRESH",
+    "scoped_diagnosis": "M-1 provides static onset diagnosis at caaa, not completion of refresh unit",
+    "remaining": "Separately scoped new real browser/API security proof at branch-correct post-change candidate, both original API/browser summaries and combined-input checks, qualified different-family review, privacy/admission and applicable combined pipeline. Preserve historical failed gate and lost originals; never import nonancestor WS proof or retry unchanged failed gate.",
+    "prerequisites": "Finish planned report-quality evaluation; verify exact security-task author/reviewer qualification and fresh capacity/correction reserve; choose exact source candidate and exclusive evidence paths before launch. Existing Opus scoped runner qualification is not broad security entitlement.",
+    "no_new_dispatch": true
+  },
+  "source_changed": false,
+  "acceptance_limits": "No source integration, feature promotion, security regression claim, privacy/client/HIL/72h/week/finalversion/artifact release acceptance; original three Tron approvals unchanged.61existingfinding records preserved; M-1 is retained review observation, not silently a new canonical registered product bug.",
+  "publication": "Scoped prose/report checks and normal integration push plus independent exact remote/local verification follow. Postpush receipt private outside this commit."
+}

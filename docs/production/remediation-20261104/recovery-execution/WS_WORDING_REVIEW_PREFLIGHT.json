@@ -1,0 +1,76 @@
+{
+  "observed_utc": "2026-11-04T13:22:32.318750+00:00",
+  "status": "PREPARED / no worktree/newTask/Dispatch yet",
+  "job": {
+    "name": "wp-remediation-ws-wording-review",
+    "branch": "remediation/ws-wording-review",
+    "base": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+    "agent": "codex",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "title": "WS C01-R01 reserved exact wording correction re-review",
+    "report": "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION-REVIEW.md",
+    "spec": "docs/production/remediation-20261104/recovery-execution/WS_WORDING_REVIEW_TASK.md",
+    "deps": [
+      "task_c4e3c9018634"
+    ],
+    "packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e"
+  },
+  "capacity": {
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 14,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793798026525,
+      "error": null,
+      "age_seconds": 412
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400096,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": 1793814600096,
+        "resetDescription": "10:50 AM"
+      },
+      "updatedAt": 1793798289437,
+      "error": null,
+      "age_seconds": 150
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932849,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 1,
+        "windowMinutes": 300,
+        "resetsAt": 1793812424231,
+        "resetDescription": null
+      },
+      "updatedAt": 1793798026216,
+      "error": null,
+      "age_seconds": 413
+    }
+  },
+  "reviewer": "Qualified Astra/high underlyingOpenAI distinct from Anthropic actualsource; no verifiedbackup. Not a privacyqualification attempt.",
+  "reserve": "ONE explicitlyreserved correction/re-review; author delivered, re-reviewnext. No newruntimecontract/strategy/phase/attempt expansion.",
+  "fleet": "all156rows/twopages149released/sevenmetadata/0current",
+  "concurrency": "one plannedreviewer + coordinator + protectedexternal=3of4,no nesting",
+  "source_preservation": "Exactauthornormalhook/AST/unchangedtests/clean2pathdiff verified, source/fullnative/ownedtemporaryorigins preserved and published source78295ecd, oldarchivehistoryimmutable.",
+  "gates": "PrivacyNOT_QUALIFIED and noqualifiedfallback, D6/wiring/sourceintake/combined/owner gatesunchanged. Publishcheckpoint/docs489/exactremoteequal beforecreation/start; capacityregatedbeforeeach."
+}

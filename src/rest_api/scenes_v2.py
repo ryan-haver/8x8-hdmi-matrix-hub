@@ -29,6 +29,7 @@ from typing import Any
 
 from aiohttp import web
 
+from hub.runtime.actions import catalog_changes, pin_response, run_rest_action
 from password import (
     PIN_CLEAR,
     PIN_SET,
@@ -63,47 +64,6 @@ def _get_scene_manager() -> "SceneManager":
     if _phase8_scene_manager is None:
         raise RuntimeError("Phase8 SceneManager not initialized")
     return _phase8_scene_manager
-
-
-class _PasscodeCheckedSceneManager:
-    """
-    The SceneManager as the executor sees it once the REST layer has checked
-    the passcode of ``scene_id`` (with the attempt limiter, off the event
-    loop): the executor's own synchronous re-check would run PBKDF2 on the
-    event loop again (SEC-06), so it is answered from that result.
-    """
-
-    def __init__(self, manager: SceneManager, scene_id: str):
-        self._manager = manager
-        self._scene_id = scene_id
-
-    def verify_passcode(self, scene_id: str, passcode: str) -> bool:
-        if scene_id == self._scene_id:
-            return True
-        return self._manager.verify_passcode(scene_id, passcode)
-
-    def __getattr__(self, name: str) -> Any:
-        return getattr(self._manager, name)
-
-
-def _get_executor(passcode_checked_scene: str | None = None):
-    from persistence import get_data_dir
-    from rest_api.utils import get_macro_manager, get_system_shortcut_manager
-    from scene_execution import SceneExecutor
-    from system_shortcuts import SystemShortcutManager as SystemActionManager
-
-    # The hub's shortcut manager (the one the shortcut routes edit); a private
-    # instance only when the REST layer was not set up with one.
-    sam = get_system_shortcut_manager() or SystemActionManager(get_data_dir())
-    scene_manager: Any = _get_scene_manager()
-    if passcode_checked_scene is not None:
-        scene_manager = _PasscodeCheckedSceneManager(scene_manager, passcode_checked_scene)
-    return SceneExecutor(
-        scene_manager=scene_manager,
-        profile_manager=_get_profile_manager(),
-        system_action_manager=sam,
-        macro_manager=get_macro_manager(),
-    )
 
 
 def _get_profile_manager():
@@ -150,6 +110,16 @@ def _scene_dict(mgr: SceneManager, scene: Scene, profiles_map: dict[str, Any]) -
     result["password_protected"] = mgr.is_scene_password_protected(scene.id, profiles_map)
     result["passcode_inherited"] = mgr.is_passcode_inherited(scene.id, profiles_map)
     return result
+
+
+def _output_number(value: Any) -> int:
+    """``output_num`` of an override body as an int; anything that is not a whole number is a ValueError (400)."""
+    if isinstance(value, bool) or not isinstance(value, int | str):
+        raise ValueError("output_num must be an integer")
+    try:
+        return int(value)
+    except ValueError:
+        raise ValueError("output_num must be an integer") from None
 
 
 def _pin_key(scene_id: str) -> str:
@@ -249,13 +219,6 @@ def _parse_overrides(raw: Any) -> dict[str, dict[int, dict[str, bool]]]:
     return overrides
 
 
-def _execution_status(result: Any) -> int:
-    """HTTP status of a scene run (API-08): 200 all steps succeeded, 207 some did, 500 none did."""
-    if result.success:
-        return 200
-    return 207 if result.steps_completed > 0 else 500
-
-
 async def _json_response(success: bool, data: dict = None, error: str = None, status: int = 200) -> web.Response:
     """Helper to build a standard JSON response."""
     body: dict[str, Any] = {"success": success}
@@ -289,6 +252,7 @@ async def handle_list_scenes(request: web.Request) -> web.Response:
         return await _json_response(False, error=str(e), status=500)
 
 
+@catalog_changes
 async def handle_create_scene(request: web.Request) -> web.Response:
     """POST /api/v2/scenes — create a new scene."""
     try:
@@ -346,6 +310,7 @@ async def handle_get_scene(request: web.Request) -> web.Response:
         return await _json_response(False, error=str(e), status=500)
 
 
+@catalog_changes
 async def handle_update_scene(request: web.Request) -> web.Response:
     """PUT /api/v2/scenes/{scene_id} — update a scene."""
     try:
@@ -415,6 +380,7 @@ async def handle_update_scene(request: web.Request) -> web.Response:
         return await _json_response(False, error=str(e), status=500)
 
 
+@catalog_changes
 async def handle_delete_scene(request: web.Request) -> web.Response:
     """DELETE /api/v2/scenes/{scene_id} — delete a scene."""
     try:
@@ -467,33 +433,13 @@ async def handle_execute_scene(request: web.Request) -> web.Response:
         if mgr.get_scene(scene_id) is None:
             return await _json_response(False, error="Scene not found", status=404)
 
-        # Own or inherited PIN, checked under the attempt limiter with PBKDF2
-        # off the event loop (SEC-04, SEC-06 / F-SEC-007)
-        passcode_checked = None
-        profiles_map = _all_profiles_map()
-        if mgr.is_scene_password_protected(scene_id, profiles_map):
-            denied = await _check_scene_pin(mgr, scene_id, passcode, profiles_map)
-            if denied is not None:
-                return denied
-            passcode_checked = scene_id
-
-        executor = _get_executor(passcode_checked)
-        result = await executor.execute_scene(scene_id, matrix, passcode=passcode)
-
-        if not result.success and result.error in ("passcode_required", "invalid_passcode"):
-            return await _json_response(
-                False,
-                {
-                    "error": result.error,
-                    "scene_id": scene_id,
-                    "requires_scene_passcode": True,
-                },
-                status=403,
-            )
-
-        # API-08: the answer says what happened - 200 every step succeeded,
-        # 207 some did (per-step results in data.step_results), 500 none did.
-        return await _json_response(result.success, result.to_dict(), status=_execution_status(result))
+        result = await run_rest_action("scene", scene_id, passcode=passcode)
+        denied = pin_response(result)
+        if denied is not None:
+            return denied
+        if "scene_id" not in result.data:
+            return await _json_response(False, error=result.error, status=result.status_code)
+        return await _json_response(result.success, result.data, status=result.status_code)
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -555,6 +501,7 @@ async def handle_validate_scene(request: web.Request) -> web.Response:
 # =============================================================================
 
 
+@catalog_changes
 async def handle_set_override(request: web.Request) -> web.Response:
     """
     PUT /api/v2/scenes/{scene_id}/override — set a per-profile output override.
@@ -566,26 +513,33 @@ async def handle_set_override(request: web.Request) -> web.Response:
         data = await request.json()
         mgr = _get_scene_manager()
 
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.set_override(
             scene_id,
             profile_id=data["profile_id"],
-            output_num=int(data["output_num"]),
+            output_num=_output_number(data["output_num"]),
             setting_key=data["setting_key"],
             disabled=bool(data.get("disabled", True)),
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except KeyError as e:
         return await _json_response(False, error=f"Missing field: {e}", status=400)
+    except ValueError as e:
+        return await _json_response(False, error=str(e), status=400)
     except Exception as e:
         _LOG.error("Error setting override: %s", e)
         return await _json_response(False, error=str(e), status=500)
 
 
+@catalog_changes
 async def handle_clear_override(request: web.Request) -> web.Response:
     """
     DELETE /api/v2/scenes/{scene_id}/override — remove an override.
@@ -597,20 +551,26 @@ async def handle_clear_override(request: web.Request) -> web.Response:
         data = await request.json()
         mgr = _get_scene_manager()
 
+        if not isinstance(data, dict):
+            return await _json_response(False, error="Body must be a JSON object", status=400)
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.clear_override(
             scene_id,
             profile_id=data["profile_id"],
-            output_num=int(data["output_num"]),
+            output_num=_output_number(data["output_num"]),
             setting_key=data["setting_key"],
         )
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except KeyError as e:
         return await _json_response(False, error=f"Missing field: {e}", status=400)
+    except ValueError as e:
+        return await _json_response(False, error=str(e), status=400)
     except Exception as e:
         _LOG.error("Error clearing override: %s", e)
         return await _json_response(False, error=str(e), status=500)
@@ -621,6 +581,7 @@ async def handle_clear_override(request: web.Request) -> web.Response:
 # =============================================================================
 
 
+@catalog_changes
 async def handle_add_step(request: web.Request) -> web.Response:
     """
     POST /api/v2/scenes/{scene_id}/steps — add a step to a scene.
@@ -654,7 +615,7 @@ async def handle_add_step(request: web.Request) -> web.Response:
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except json.JSONDecodeError:
         return await _json_response(False, error="Invalid JSON body", status=400)
     except Exception as e:
@@ -662,6 +623,7 @@ async def handle_add_step(request: web.Request) -> web.Response:
         return await _json_response(False, error=str(e), status=500)
 
 
+@catalog_changes
 async def handle_remove_step(request: web.Request) -> web.Response:
     """
     DELETE /api/v2/scenes/{scene_id}/steps/{index} — remove step at index.
@@ -671,11 +633,13 @@ async def handle_remove_step(request: web.Request) -> web.Response:
         index = int(request.match_info["index"])
         mgr = _get_scene_manager()
 
+        if mgr.get_scene(scene_id) is None:
+            return await _json_response(False, error="Scene not found", status=404)
         scene, err = mgr.remove_step(scene_id, index)
         if err:
             return await _json_response(False, error=err, status=400)
 
-        return await _json_response(True, {"scene": scene.to_dict()})
+        return await _json_response(True, {"scene": _scene_dict(mgr, scene, _all_profiles_map())})
     except (ValueError, KeyError) as e:
         return await _json_response(False, error=f"Invalid index: {e}", status=400)
     except Exception as e:

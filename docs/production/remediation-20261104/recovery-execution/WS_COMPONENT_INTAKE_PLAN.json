@@ -1,0 +1,118 @@
+{
+  "observed_utc": "2026-11-04T13:41:57.285555+00:00",
+  "status": "PREPARED coordinator intake, product files not yet copied",
+  "authority": "Owner enact comprehensive remediation; adopted recovery plan sequential accepted-package intake after exact qualified different-family review; this independent unwired component passes original whole-component and final wording review. No newphase/worker/model/wiringlease/release.",
+  "phase": "remediation-recovery-20261104",
+  "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+  "qualified_reviews": [
+    "ed69708325f9e10a2ae2784179303016acbd69d0",
+    "9817554ed6d77df8b828d6d6c2e465bb77d26707"
+  ],
+  "mapped_source_files": [
+    {
+      "path": "src/rest_api/ws_request_work.py",
+      "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "git_blob_sha256": "3ae622fd21ca8b8c9472d0758df66bf7f674e5462ad251c8cb6417521d013449",
+      "git_blob_id": "145845f493627c98bdf37bc7a6028798b014dd7c",
+      "mapping": "Copy exact Git blob bytes as NEW files only; verify Git blob equality after staging and after commit. No conflict resolution, ref reset or source rewriting."
+    },
+    {
+      "path": "tests/test_ws_request_work.py",
+      "source_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "git_blob_sha256": "69ac419d6513888831239816e5a7c2dd20e6a5654bafe7d506e3719fdb619776",
+      "git_blob_id": "2b697a48c471cc24bddf80e946f75add9cde3843",
+      "mapping": "Copy exact Git blob bytes as NEW files only; verify Git blob equality after staging and after commit. No conflict resolution, ref reset or source rewriting."
+    }
+  ],
+  "historical_report_imports": [
+    {
+      "path": "docs/production/remediation-20261104/WS-WORK-01/AUTHOR.md",
+      "exact_commit": "15c069bdeb3a9ace37bf68033812ff72659bfbd1",
+      "git_blob_sha256": "028d80071084a988f47e07272785a8ec72940a8302808c907f1b57beea8c24fc",
+      "newly_imported": false,
+      "meaning": "Existing exact original bytes preserved without normalization; new imports exact GitLF. Historical failures/overclaims retained; latest qualified correction/review errata govern."
+    },
+    {
+      "path": "docs/production/remediation-20261104/WS-WORK-01/REVIEW.md",
+      "exact_commit": "1cc442207d54b0ad1c5887f6c4e9d5d17b7c8b19",
+      "git_blob_sha256": "6ee8bbec66ebdb7e650aa8b08e8f75026ec8580c40ed89b1a2f06e6104d85adb",
+      "newly_imported": false,
+      "meaning": "Existing exact original bytes preserved without normalization; new imports exact GitLF. Historical failures/overclaims retained; latest qualified correction/review errata govern."
+    },
+    {
+      "path": "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01.md",
+      "exact_commit": "24c5170458200209836228646fdfc8784a967ad1",
+      "git_blob_sha256": "16d4f3d4e81b8d6cef2fecd345d1bba330ec6024c3322e697a9299f956ac90f6",
+      "newly_imported": true,
+      "meaning": "Existing exact original bytes preserved without normalization; new imports exact GitLF. Historical failures/overclaims retained; latest qualified correction/review errata govern."
+    },
+    {
+      "path": "docs/production/remediation-20261104/WS-WORK-01/WORDING-CORRECTION.md",
+      "exact_commit": "78295ecdf8c47e330786e10eb8e00136c2025b7d",
+      "git_blob_sha256": "5d3a1625d42aae4c24a30895680068703504c39a610cdb644cb1c730a963cb38",
+      "newly_imported": true,
+      "meaning": "Existing exact original bytes preserved without normalization; new imports exact GitLF. Historical failures/overclaims retained; latest qualified correction/review errata govern."
+    }
+  ],
+  "integration_branch": "wp-runtime-completion",
+  "remote": "origin",
+  "product_baseline_before_intake": "e2161484459da65aee14433136a14963507b499c",
+  "boundaries": "Only two new exact reviewed component/test files enter product tree. All existing handlers/app/events/runtime/contracts/registry/manifests/locks/privacy source remain unchanged. Module remains UNWIRED; it is not imported by product consumers. No route/handler change or feature evidence claim, hence no registry/REST simulator route update or ledger generation in this intake.",
+  "combined_checks": "Pre-run private/root protection inventory; CI mypy src/; existing focused73 with actualasyncio-debug/importorigin and no sharedroute plugin; NORMAL configured source commit hook with Ruff CIpaths + full applicable core, strict100% actualrouteinventory, isolated own data/config/nativeTEMP/basetemp/JUnit, no sourcehook bypass. Verify exact reviewed blobs/stage/diff before and after; preserved private/root status unchanged after. Existing UC/HA/UI/build/physical qualification not inferred from this unwired isolated package and remain gates.",
+  "documentation_check": "This pureprose preparation checkpoint uses docs489 only and normalpush/exactremoteverify before source mutation. After two-source-file intake, old source-unchanged prose publisher is invalid; subsequent metadata publisher must pin exact new accepted-source baseline and confirm unchanged source code across its docscommit.",
+  "concurrency": "all157rows/two pages150released/sevenmetadata/0current; coordinator+protectedexternal=2of4, no workers launched.",
+  "capacity": {
+    "codex": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 15,
+        "windowMinutes": 10080,
+        "resetsAt": 1794378964000,
+        "resetDescription": "Tue 11:36 PM"
+      },
+      "session": null,
+      "updatedAt": 1793798926334,
+      "error": null,
+      "age_seconds": 656
+    },
+    "claude": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 25,
+        "windowMinutes": 10080,
+        "resetsAt": 1793966400130,
+        "resetDescription": "Fri 5:00 AM"
+      },
+      "session": {
+        "usedPercent": 0,
+        "windowMinutes": 300,
+        "resetsAt": 1793814600130,
+        "resetDescription": "10:50 AM"
+      },
+      "updatedAt": 1793798926107,
+      "error": null,
+      "age_seconds": 657
+    },
+    "minimax": {
+      "status": "ok",
+      "weekly": {
+        "usedPercent": 34,
+        "windowMinutes": 10080,
+        "resetsAt": 1793823932848,
+        "resetDescription": null
+      },
+      "session": {
+        "usedPercent": 1,
+        "windowMinutes": 300,
+        "resetsAt": 1793812424231,
+        "resetDescription": null
+      },
+      "updatedAt": 1793798926022,
+      "error": null,
+      "age_seconds": 657
+    }
+  },
+  "protection": "Do not touch encodeduntrackedhook artifacts/private rootdata/config/rootruntimeJSON/.env or unrelated edits. Snapshot before checks; isolate tests from actual runtime. No restores to disguise changes, no destructivecleanup or newcredentials/spend.",
+  "publication": "Only normal integrationbranch push after applicable combined pass, independent exactremote/local equality; no main/tag/release or deploy. Postpush receipt private, no endless selfhash commit cycle.",
+  "remaining": "D6sourceindependence/WSwiring/CR01, privacyqualifiedreview/admission, API034M1/WS040/fullcombinedfeatureproof, realHA/visual/HIL/72h/week/finalartifact/version/release remain."
+}

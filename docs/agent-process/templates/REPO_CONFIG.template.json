@@ -1,0 +1,79 @@
+{
+  "template": true,
+  "process_version": "1.0.0",
+  "adaptation_status": "uninitialized",
+  "observed_utc": null,
+  "repository": {
+    "root": null,
+    "project_name": null,
+    "integration_branch": null,
+    "remote_name": null,
+    "remote_url_redacted": null,
+    "git_common_directory": null,
+    "source_of_bindings": [],
+    "publication_authorization": "unknown"
+  },
+  "orchestration": {
+    "adapter": "Orca",
+    "resolved_executable": null,
+    "execution_host": null,
+    "installed_version": null,
+    "runtime_id": null,
+    "existing_run_id": null,
+    "coordinator_handle": null,
+    "coordinator_generation": null,
+    "binding_evidence": null,
+    "max_active_workers": 3,
+    "max_nested_workers": 0,
+    "adoption_creates_run_or_workers": false
+  },
+  "planning": {
+    "debate_minimum_distinct_families": 3,
+    "debate_rounds": 3,
+    "capacity_limited_debate_status": "provisional",
+    "missing_provider_does_not_stop_unrelated_ready_work": true,
+    "reassess_models_every_phase_and_wave": true,
+    "unplanned_material_change_requires_fresh_cycle": true
+  },
+  "model_policy": {
+    "candidate_families_to_assess": ["OpenAI", "Google", "MiniMax", "DeepSeek"],
+    "assess_new_relevant_candidates": true,
+    "excluded_underlying_families": ["Anthropic"],
+    "exclusion_basis": "Supplied owner preference; reconcile current target-user instructions explicitly.",
+    "unknown_alias_identity": "unverified_not_independent_capacity",
+    "preferred_models_with_scope_and_evidence": [],
+    "independent_review_requires_different_family": true,
+    "qualification_history_imported_from_source_repo": false
+  },
+  "capacity": {
+    "monitoring_owner": "active_coordinator",
+    "supported_usage_sources": [],
+    "cadence_seconds": null,
+    "cadence_rationale": null,
+    "additional_checks": ["before_dispatch", "worker_checkpoint", "quota_or_rate_limit_event"],
+    "below_30_percent_is": "task_sizing_signal_not_ban",
+    "unknown_quota_policy": "bounded_monitored_existing_authorized_route_no_new_spend",
+    "review_and_correction_reserve_policy": null,
+    "other_host_commitments": "unknown",
+    "persistent_monitor_status": "not_implemented_by_this_kit"
+  },
+  "protected_resources": [],
+  "coordinator_only_paths": [],
+  "environment_requirements": [],
+  "verification_commands": [],
+  "readiness": {
+    "authoritative_paths": [],
+    "current_values": null,
+    "change_requires_actual_qualifying_execution_and_independent_acceptance": true
+  },
+  "record_paths": {
+    "handoff": "docs/agent-process/state/HANDOFF.md",
+    "model_catalog": "docs/agent-process/state/MODEL_CATALOG.json",
+    "capacity_ledger": "docs/agent-process/state/CAPACITY.jsonl",
+    "allocation_ledger": "docs/agent-process/state/ALLOCATION.md",
+    "phase_records_root": "docs/agent-process/phases",
+    "archive_root": null
+  },
+  "adoption_conflicts_and_unknowns": [],
+  "phase_execution_status": "not_started_by_adoption"
+}

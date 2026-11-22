@@ -1,0 +1,413 @@
+{
+  "observed_utc": "2026-11-04T12:18:05.039603+00:00",
+  "phase": "remediation-recovery-20261104",
+  "wave": "B",
+  "status": "Both workers DELIVERED / RELEASED / PRESERVED / exact taskrefs PUBLISHED; WS qualified component review PASS, MiniMax privacy qualification NOT_GRANTED pending ONE judge",
+  "actors": {
+    "openai": {
+      "report_commit": "ed69708325f9e10a2ae2784179303016acbd69d0",
+      "source_parent": "24c5170458200209836228646fdfc8784a967ad1",
+      "report": "docs/production/remediation-20261104/WS-WORK-01/CORRECTION-01-REVIEW.md",
+      "report_sha256": "118159251a37ed65ba4afdf2c468eded9dff8bef45f8021f767b89f9354708ef",
+      "native": {
+        "session": "01a1a667-cced-7b92-b3fe-600fcd82611b",
+        "model": "gpt-6-astra",
+        "effort": "high native",
+        "bytes": 3080155,
+        "sha256": "81eed9e9ede860a7b07645fd7244ea6ea36f6c2fa3cc06a65f884f5586523706",
+        "unassigned_helpers_observed": []
+      },
+      "actual_checks": {
+        "01-focused-debug": {
+          "exit": 0,
+          "counts": {
+            "tests": 73,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "02-provenance-audit": {
+          "exit": 0,
+          "counts": null
+        },
+        "03-independent-current": {
+          "exit": 0,
+          "counts": null
+        },
+        "04-independent-baseline": {
+          "exit": 1,
+          "counts": null
+        },
+        "05-independent-omit-reserved": {
+          "exit": 1,
+          "counts": null
+        },
+        "06-independent-loop-noop": {
+          "exit": 1,
+          "counts": null
+        },
+        "07-evidence-views": {
+          "exit": 0,
+          "counts": null
+        },
+        "08-final-docs": {
+          "exit": 0,
+          "counts": {
+            "tests": 489,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "09-final-audit": {
+          "exit": 0,
+          "counts": null
+        }
+      },
+      "positive_release": true,
+      "preservation": [
+        {
+          "name": "wp-remediation-ws-work-c01-review",
+          "files": 4855,
+          "links": 0,
+          "archive_sha256": "7b48c885b8a5da29495b187682bace516b3e60a3dbcc5296cb9d44cb809bb3ca",
+          "archive_bytes": 207709432,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "name": "ws-r01",
+          "files": 140,
+          "links": 0,
+          "archive_sha256": "a6b8de353f2e9207497e19b57150da54604ce2cdedcfe0ea8e8c0a9e0344e709",
+          "archive_bytes": 110312,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "task_publication": {
+        "observed_utc": "2026-11-04T12:13:21.156357+00:00",
+        "ref": "refs/heads/remediation/ws-work-c01-review",
+        "local_head": "ed69708325f9e10a2ae2784179303016acbd69d0",
+        "remote_head": "ed69708325f9e10a2ae2784179303016acbd69d0",
+        "exact_equal": true,
+        "normal_push": true
+      },
+      "boundary": "Only NEW report tracked; product/source/tests unchanged, coordinator scoped config retained unstaged/ignored. Full original ignored/temp/native and failed/superseded probes preserved; no fullGitbundle/destructivecleanup.",
+      "task_id": "task_dbebfdfebb1c",
+      "dispatch_id": "ctx_ecdde4971dc6",
+      "coordinator_disposition": "Accept qualified different-family exact component REVIEW PASS at24c51704 with nonblocking observations; no source integration/combined acceptance/wiring or original author competence granted",
+      "findings": {
+        "C01-R01": "OPEN nonblocking Low wording: early return is conservative adopted policy, not a universal impossibility theorem. Queue original-author wording correction at an explicitly gated later package; no runtime defect demonstrated, no source edit now, future material reserve not automatically spent.",
+        "C01-R02": "BOUNDED limitation: exact authored paths inspected; automatic artifacts disclosed/preserved; no all-host filesystem/effort attestation claimed. Not a new product defect or waiver of original WSR03."
+      },
+      "component_correctness": "PASS at exact24c51704",
+      "first_authorship": "NOT_GRANTED / HOLD",
+      "WSR03": "historical FAIL",
+      "wiring": "HELD"
+    },
+    "minimax": {
+      "report_commit": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+      "source_parent": "5385325722a39e6dd766352489f828f5e54b56d5",
+      "report": "docs/production/remediation-20261104/PRIVACY-M3-ASSESSMENT/AUTHOR.md",
+      "report_sha256": "a06c1334b0e65d942078ece13a20979f56a4f2cb5e58b00a54f1c42acdfcfd0d",
+      "native": {
+        "session": "ses_e5998016fffe3emviWZx9eKO2h",
+        "models": [
+          "minimax-coding-plan/MiniMax-M3"
+        ],
+        "variant": "thinking",
+        "bytes": 1642596,
+        "sha256": "c19d45451cc7eeb4a9041a64ef6457783f58137a7563c8476e68029912827741",
+        "unassigned_helpers_observed": [],
+        "scope": "full original native; semantic coverage/claims judged independently at frozen report"
+      },
+      "actual_checks": {
+        "checks": {
+          "p01-carriers": {
+            "exit": 0,
+            "stdout_bytes": 96378,
+            "stderr_bytes": 0
+          },
+          "p01b-carriers": {
+            "exit": 0,
+            "stdout_bytes": 79362,
+            "stderr_bytes": 0
+          },
+          "p02-live": {
+            "exit": 0,
+            "stdout_bytes": 25076,
+            "stderr_bytes": 0
+          },
+          "p02b-live": {
+            "exit": 0,
+            "stdout_bytes": 21464,
+            "stderr_bytes": 0
+          },
+          "p03-live-profile": {
+            "exit": 0,
+            "stdout_bytes": 6902,
+            "stderr_bytes": 0
+          },
+          "p03b-live-profile": {
+            "exit": 0,
+            "stdout_bytes": 10830,
+            "stderr_bytes": 100
+          },
+          "p04-live-verdicts": {
+            "exit": 0,
+            "stdout_bytes": 10661,
+            "stderr_bytes": 138
+          },
+          "p05-changed-scope": {
+            "exit": 0,
+            "stdout_bytes": 3505,
+            "stderr_bytes": 0
+          },
+          "p06-baseline": {
+            "exit": 1,
+            "stdout_bytes": 1576,
+            "stderr_bytes": 0
+          },
+          "p06-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 2143
+          },
+          "p06-no-error-suppression": {
+            "exit": 1,
+            "stdout_bytes": 1634,
+            "stderr_bytes": 0
+          },
+          "p06-no-mask": {
+            "exit": 0,
+            "stdout_bytes": 1721,
+            "stderr_bytes": 0
+          },
+          "p06-no-public-exception": {
+            "exit": 1,
+            "stdout_bytes": 1636,
+            "stderr_bytes": 0
+          },
+          "p06-no-query-mask": {
+            "exit": 1,
+            "stdout_bytes": 1686,
+            "stderr_bytes": 0
+          },
+          "p06-no-writer-boundary": {
+            "exit": 1,
+            "stdout_bytes": 1675,
+            "stderr_bytes": 0
+          },
+          "p06b-baseline": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06b-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 2149
+          },
+          "p06b-no-error-suppression": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06b-no-mask": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06b-no-public-exception": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06b-no-query-mask": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06b-no-writer-boundary": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1427
+          },
+          "p06c-baseline": {
+            "exit": 0,
+            "stdout_bytes": 1891,
+            "stderr_bytes": 0
+          },
+          "p06c-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 2149
+          },
+          "p06c-no-error-suppression": {
+            "exit": 1,
+            "stdout_bytes": 1949,
+            "stderr_bytes": 0
+          },
+          "p06c-no-mask": {
+            "exit": 0,
+            "stdout_bytes": 2121,
+            "stderr_bytes": 0
+          },
+          "p06c-no-public-exception": {
+            "exit": 0,
+            "stdout_bytes": 2032,
+            "stderr_bytes": 0
+          },
+          "p06c-no-query-mask": {
+            "exit": 0,
+            "stdout_bytes": 2001,
+            "stderr_bytes": 0
+          },
+          "p06c-no-writer-boundary": {
+            "exit": 0,
+            "stdout_bytes": 1990,
+            "stderr_bytes": 0
+          },
+          "p06d-baseline": {
+            "exit": 0,
+            "stdout_bytes": 1909,
+            "stderr_bytes": 0
+          },
+          "p06d-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1346
+          },
+          "p06d-no-error-suppression": {
+            "exit": 0,
+            "stdout_bytes": 2076,
+            "stderr_bytes": 0
+          },
+          "p06d-no-mask": {
+            "exit": 0,
+            "stdout_bytes": 2139,
+            "stderr_bytes": 0
+          },
+          "p06d-no-public-exception": {
+            "exit": 0,
+            "stdout_bytes": 2050,
+            "stderr_bytes": 0
+          },
+          "p06d-no-query-mask": {
+            "exit": 0,
+            "stdout_bytes": 2019,
+            "stderr_bytes": 0
+          },
+          "p06d-no-writer-boundary": {
+            "exit": 0,
+            "stdout_bytes": 2008,
+            "stderr_bytes": 0
+          },
+          "p06e-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1326
+          },
+          "p06f-mask-all": {
+            "exit": 1,
+            "stdout_bytes": 0,
+            "stderr_bytes": 1364
+          },
+          "p06g-mask-all": {
+            "exit": 0,
+            "stdout_bytes": 2377,
+            "stderr_bytes": 0
+          },
+          "p07-raw-vs-persisted": {
+            "exit": 0,
+            "stdout_bytes": 6789,
+            "stderr_bytes": 0
+          },
+          "p08-origins": {
+            "exit": 0,
+            "stdout_bytes": 4038,
+            "stderr_bytes": 415
+          },
+          "p09-c1c4-tests": {
+            "exit": 0,
+            "stdout_bytes": 184,
+            "stderr_bytes": 0
+          },
+          "p10-blocked": {
+            "exit": 0,
+            "stdout_bytes": 889,
+            "stderr_bytes": 0
+          },
+          "p11-ha-harness": {
+            "exit": 0,
+            "stdout_bytes": 3584,
+            "stderr_bytes": 0
+          },
+          "p12-provenance": {
+            "exit": 0,
+            "stdout_bytes": 8194,
+            "stderr_bytes": 0
+          },
+          "p13-docs": {
+            "exit": 0,
+            "stdout_bytes": 588,
+            "stderr_bytes": 0
+          }
+        },
+        "junit_counts": {
+          "p09-tests-results.xml": {
+            "tests": 136,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "p13-docs-results.xml": {
+            "tests": 489,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "scope": "Verifies actual direct exits/hashes/JUnit only; adequacy and any exit-zero sensitivity claims remain for exact-report judge"
+      },
+      "positive_release": true,
+      "preservation": [
+        {
+          "name": "priv-m3-assess",
+          "files": 845,
+          "links": 0,
+          "archive_sha256": "a0d88eeef9c805f442e2907c8354009196d0295c264eb9d583731b1dea9a39cc",
+          "archive_bytes": 370122,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        },
+        {
+          "name": "wp-recovery-privacy-m3-assess",
+          "files": 4628,
+          "links": 0,
+          "archive_sha256": "daca2f66b8c5718bab628844a378860736c909904a1b4a5f46d8770282fb0fad",
+          "archive_bytes": 205942842,
+          "verification": "all members/types/bytes/links and final source/head/status verified; no link traversal"
+        }
+      ],
+      "task_publication": {
+        "observed_utc": "2026-11-04T12:16:08.458073+00:00",
+        "ref": "refs/heads/qualification/recovery-privacy-m3",
+        "local_head": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+        "remote_head": "f3a783b497786b36a08f302a9cd2fd7249526c35",
+        "exact_equal": true,
+        "normal_push": true
+      },
+      "boundary": "Only NEW report tracked; product/source/tests unchanged, coordinator scoped config retained unstaged/ignored. Full original ignored/temp/native and failed/superseded probes preserved; no fullGitbundle/destructivecleanup.",
+      "task_id": "task_eef2d2e8f289",
+      "dispatch_id": "ctx_b6947db9e4fd",
+      "coordinator_disposition": "Delivered FIRST candidate report, all6self recommendations not qualification. Exactly ONE independent Astra judge next; no candidate rewrite/retry/extra judge.",
+      "qualification_granted": false,
+      "source_acceptance": false,
+      "findings": "F1 reported Low public admin_pin_set/control_pin_set/pin_order masking; F2/F3Info/error-fidelity/latent-mutant robustness and F4-F6 scope claims pending actual judge/source review. No automatic author correction or bug closure from candidate report."
+    }
+  },
+  "original_packet_sha256": "f8fe93c8e673c2341b36ba93c2d0920bdd04af42c12b69daac12fae191ed103e",
+  "subject_packet_sha256": "7a6256111da21e71aee2f3ad315a646f7e3b6e088c45a3d4ee18dcf222c66763",
+  "preservation": "Byte-for-byte original reports imported, complete actual native and own ignored/temp archives retained outside workers; fullGitbundles not made, trees retained, no destructivecleanup.",
+  "remaining": "No source intake/canonical qualification; D6/wiring/owner gates unchanged; qualified privacy judge then separate actual review/evaluation still required."
+}

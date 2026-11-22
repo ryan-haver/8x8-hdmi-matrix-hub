@@ -1,0 +1,12 @@
+{
+  "scope": "Supplemental external-image tests have no in-process route instrumentation; this non-strict zero-count output is not full-suite coverage",
+  "actual_targeted_output": "build\\runtime-completion\\after-r8b\\r8-image-targeted-route-inventory.json",
+  "source_suite_log": "build\\runtime-completion\\after-r8b\\final-source-rerun.log",
+  "verified_full_source": {
+    "covered": 177,
+    "total": 177,
+    "strict": true
+  },
+  "correction": "Future helper invocations disable tests.route_inventory for the four external-image cases; the currently executing script already completed that step. No source tests, route handlers or coverage oracles changed.",
+  "raw_original_full_inventory": "Not separately retained before supplemental overwrite; full original strict-core coverage remains recorded in its log, independent CI log and passing full-core result. No synthetic replacement was written."
+}

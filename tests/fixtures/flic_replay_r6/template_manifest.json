@@ -1,0 +1,92 @@
+{
+  "description": "Authoritative Flic request and SDK templates from integrations-drawer.js, api-copy.js, and docs/FLIC_SETUP.md",
+  "source_files": [
+    "web/js/components/integrations-drawer.js",
+    "web/js/utils/api-copy.js",
+    "docs/FLIC_SETUP.md"
+  ],
+  "pre_fix_templates": {
+    "preset": {
+      "method": "POST",
+      "path_template": "/api/preset/{preset}",
+      "body": null,
+      "headers": {}
+    },
+    "profile": {
+      "method": "POST",
+      "path_template": "/api/profile/{profile_id}/recall",
+      "body": null,
+      "headers": {}
+    },
+    "switch_all": {
+      "method": "POST",
+      "path_template": "/api/input/{input}",
+      "body": null,
+      "headers": {},
+      "expected_status": 404,
+      "defect": "Known defect: POST /api/input/{n} targets an absent route"
+    },
+    "switch_output": {
+      "method": "POST",
+      "path_template": "/api/output/{output}/source",
+      "body_template": {"input": "{input}"},
+      "headers": {"Content-Type": "application/json"}
+    },
+    "cycle_input": {
+      "method": "POST",
+      "path_template": "/api/input/{direction}?output={output}",
+      "body": null,
+      "headers": {}
+    },
+    "volume_control": {
+      "method": "POST",
+      "path_template": "/api/cec/output/{output}/{action}",
+      "body": null,
+      "headers": {}
+    },
+    "power": {
+      "method": "POST",
+      "path_template": "/api/power/{power_state}",
+      "body": null,
+      "headers": {}
+    },
+    "cec": {
+      "method": "POST",
+      "path_template": "/api/cec/{target_type}/{port}/{command}",
+      "body": null,
+      "headers": {}
+    },
+    "sdk_register": {
+      "method": "POST",
+      "path_template": "/api/integrations/flic/register",
+      "body_template": {"buttons": [{"name": "{name}", "bdaddr": "{bdaddr}", "serial": "{serial}"}]},
+      "headers": {"Content-Type": "application/json"}
+    }
+  },
+  "post_fix_templates": {
+    "switch_all": {
+      "method": "POST",
+      "path_template": "/api/switch",
+      "body_template": {"input": "{input}"},
+      "headers": {"Content-Type": "application/json"},
+      "expected_status": 200,
+      "resolution": "Narrow generator change: uses existing supported POST /api/switch with JSON body"
+    }
+  },
+  "auth_variants": {
+    "keyless": {
+      "description": "Default drawer behavior emits no credentials",
+      "headers": {},
+      "query_param": null
+    },
+    "api_key_header": {
+      "description": "Documented manual X-API-Key header variant",
+      "header_name": "X-API-Key",
+      "headers_template": {"X-API-Key": "{key}"}
+    },
+    "api_key_query": {
+      "description": "Documented manual ?key= query parameter variant (&key= if query string already exists)",
+      "query_param": "key"
+    }
+  }
+}

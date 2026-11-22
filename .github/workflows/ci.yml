@@ -444,14 +444,11 @@ jobs:
           out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
           echo "E2E_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
 
-      # Report-only until the web/ code is cleaned up (Phase 5): both commands
-      # fail only on findings above the checked-in baselines.
-      - name: ESLint (non-blocking)
-        continue-on-error: true
+      # Blocking UI lint checks against the checked-in baselines.
+      - name: ESLint
         run: npm run lint:js
 
-      - name: Stylelint (non-blocking)
-        continue-on-error: true
+      - name: Stylelint
         run: npm run lint:css
 
       - name: Smoke + visual tests
