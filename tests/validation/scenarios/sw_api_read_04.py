@@ -33,10 +33,6 @@ def exchange(name, *, config="", origin=None, method="GET", allow=None, host=Non
     absent = ("Access-Control-Allow-Credentials",)
     if not allow:
         absent += ("Access-Control-Allow-Origin",)
-    if status == 403:
-        # The earlier security guard rejects a cross-origin write before CORS.
-        expected = {}
-        absent += tuple(CORS_HEADERS)
     return Scenario(
         id=f"sw_api_read_04.{name}", title=f"CORS: {name.replace('_', ' ')}",
         features=("F-API-031",), clients=("api",), targets=("sim",), covers=COVERS,

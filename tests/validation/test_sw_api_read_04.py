@@ -165,18 +165,19 @@ async def test_global_middleware_topology_and_representative_preflight(aiohttp_c
 
 def test_real_runner_negative_headers_are_failed_evidence(tmp_path):
     positive = SCENARIOS[0]
+    denied = discover()["sw_api_read_04.default_denied_mutation"]
     wrong = replace(positive, id="sw_api_read_04.negative_wrong_value",
                     expect=(Response(status=200, headers={"Vary": "wrong"}),))
     unexpected = replace(positive, id="sw_api_read_04.negative_unexpected_presence",
                          expect=(Response(status=200, absent_headers=("Vary",)),))
     runner = Runner(RunOptions(target="sim", clients=("api",), out_dir=tmp_path))
-    asyncio.run(runner.run([positive, wrong, unexpected]))
+    asyncio.run(runner.run([positive, denied, wrong, unexpected]))
     assert [(o.status, o.gate) for o in runner.outcomes] == [
-        ("pass", "ok"), ("fail", "regression"), ("fail", "regression"),
+        ("pass", "ok"), ("pass", "ok"), ("fail", "regression"), ("fail", "regression"),
     ]
     validator = jsonschema.Draft202012Validator(json.loads(SCHEMA_PATH.read_text(encoding="utf-8")))
     records = list(iter_records([tmp_path / "evidence"]))
-    assert len(records) == 3
+    assert len(records) == 4
     for record in records:
         validator.validate(record.data)
         assert record.data["level"] == "V2"
