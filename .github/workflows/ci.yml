@@ -603,8 +603,10 @@ jobs:
           out=$(bash tools/ui/container-setup.sh | tee /dev/stderr)
           echo "VALIDATE_PYTHON=${out##*E2E_PYTHON=}" >> "$GITHUB_ENV"
 
-      - name: Verify locked validation dependencies
-        run: '"$VALIDATE_PYTHON" -m pip check'
+      - name: Install the hub and verify locked validation dependencies
+        run: |
+          "$VALIDATE_PYTHON" -m pip install --no-deps --no-build-isolation -e .
+          "$VALIDATE_PYTHON" -m pip check
 
       - name: Run scenarios (simulator, api + browser + uc)
         run: >-
